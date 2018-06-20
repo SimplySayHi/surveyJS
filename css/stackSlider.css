@@ -1,0 +1,339 @@
+.js .st-stack-raw {
+	display: none;
+}
+
+.st-wrapper {
+	width: 100%;
+    height: auto;
+	position: relative;
+	margin: 0 auto;
+    padding: 40px 0 0;
+    overflow: hidden;
+}
+
+.st-stack {
+	position: absolute;
+	height: 10px;
+	bottom: 0px;
+	background-image: url(../images/gradient.png);
+	background-image: -webkit-linear-gradient(top, #fff 50%, #e7ae38 50%);
+	background-image: -moz-linear-gradient(top, #fff 50%, #e7ae38 50%);
+	background-image: -o-linear-gradient(top, #fff 50%, #e7ae38 50%);
+	background-image: -ms-linear-gradient(top, #fff 50%, #e7ae38 50%);
+	background-image: linear-gradient(to bottom, #fff 50%, #e7ae38 50%);
+	-webkit-background-size: 5px 5px;
+	-moz-background-size: 5px 5px;
+	background-size: 5px 5px;
+	background-position: bottom center;
+}
+
+.st-stack:before {
+	content: '';
+	position: absolute;
+	width: 140%;
+	left: -20%;
+	bottom: -10px;
+	height: 20px;
+	z-index: -1;
+	background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
+	background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
+	background: -o-radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
+	background: -ms-radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
+	background: radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
+}
+
+.st-stack-left {
+	left: 0px;
+}
+
+.st-stack-right {
+	right: 0px;
+}
+
+.st-wrapper .st-title {
+    color: #fff;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -40px;
+    padding: 0;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 1000px;
+    text-align: center;
+    background-color: #06d6a0;
+    z-index: 2;
+}
+
+.st-wrapper nav {
+	position: absolute;
+	width: 100%;
+    top: 20px;
+	left: 0;
+	text-align: center;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+    z-index: 3;
+}
+
+.st-wrapper .st-container {
+    position: relative;
+    -webkit-transition: all 0.4s linear;
+    -moz-transition: all 0.4s linear;
+    -o-transition: all 0.4s linear;
+    transition: all 0.4s linear;
+    z-index: 1;
+}
+
+.st-wrapper nav span {
+	color: transparent;
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	left: 50%;
+	top: 0;
+	cursor: pointer;
+}
+
+.st-wrapper nav span:first-child {
+	margin-left: -90px;
+}
+
+.st-wrapper nav span:last-child {
+	margin-left: 50px;
+}
+
+.st-wrapper nav span:before {
+	font-family: 'Glyphicons Halflings';
+    font-size: 20px;
+	font-style: normal;
+	speak: none;
+	font-weight: normal;
+	line-height: 1;
+	font-size: 20px;
+	line-height: 40px;
+	text-align: center;
+	-webkit-font-smoothing: antialiased;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	color: #fff;
+	background-color: #ef476f;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.st-wrapper nav span:first-child:before {
+	content: "\e079";
+}
+
+.st-wrapper nav span:last-child:before {
+	content: "\e080";
+}
+
+.st-wrapper nav span:hover:before {
+	color: #ffd166;
+}
+
+.st-wrapper .st-item {
+    -webkit-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    -moz-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    -o-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    -ms-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    
+    -webkit-transform-origin: 50% 0;
+    -moz-transform-origin: 50% 0;
+    -ms-transform-origin: 50% 0;
+    -o-transform-origin: 50% 0;
+    transform-origin: 50% 0;
+    
+    -webkit-transform-style : preserve-3d;
+	-moz-transform-style : preserve-3d;
+	-o-transform-style : preserve-3d;
+	-ms-transform-style : preserve-3d;
+	transform-style : preserve-3d;
+    
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-o-backface-visibility: hidden;
+	-ms-backface-visibility: hidden;
+	backface-visibility: hidden;
+    
+    -webkit-transition: all 0.4s linear;
+    -moz-transition: all 0.4s linear;
+    -o-transition: all 0.4s linear;
+    transition: all 0.4s linear;
+    
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 600px;
+    opacity: 0;
+    z-index: -1;
+}
+
+.st-wrapper .st-item.st-center {
+    opacity: 1;
+    -webkit-transform: rotate(0deg) translateX(-50%) rotateX(0deg);
+    -moz-transform: rotate(0deg) translateX(-50%) rotateX(0deg);
+    -o-transform: rotate(0deg) translateX(-50%) rotateX(0deg);
+    -ms-transform: rotate(0deg) translateX(-50%) rotateX(0deg);
+    transform: rotate(0deg) translateX(-50%) rotateX(0deg);
+    z-index: 10;
+}
+
+.st-wrapper .st-item.st-leftflow-in {
+     -webkit-transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
+    -moz-transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
+    -o-transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
+    -ms-transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
+    transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.st-wrapper .st-item.st-rightflow-in {
+    -webkit-transform: rotate(90deg) translateX(-50%) rotateX(0deg);
+    -moz-transform: rotate(90deg) translateX(-50%) rotateX(0deg);
+    -o-transform: rotate(90deg) translateX(-50%) rotateX(0deg);
+    -ms-transform: rotate(90deg) translateX(-50%) rotateX(0deg);
+    transform: rotate(90deg) translateX(-50%) rotateX(0deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.st-wrapper .st-item.st-left,
+.st-wrapper .st-item.st-leftflow {
+    -webkit-transform: rotate(90deg) translateX(-50%) rotateX(90deg);
+    -moz-transform: rotate(90deg) translateX(-50%) rotateX(90deg);
+    -o-transform: rotate(90deg) translateX(-50%) rotateX(90deg);
+    -ms-transform: rotate(90deg) translateX(-50%) rotateX(90deg);
+    transform: rotate(90deg) translateX(-50%) rotateX(90deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.st-wrapper .st-item.st-right,
+.st-wrapper .st-item.st-rightflow {
+    -webkit-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    -moz-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    -o-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    -ms-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.st-wrapper .st-item.st-leftflow-in,
+.st-wrapper .st-item.st-rightflow-in {
+    transition-duration: 0.001s !important;
+}
+
+/*.st-wrapper .st-item.st-rightflow,
+.st-wrapper .st-item.st-leftflow,*/
+.st-wrapper .st-item.st-center {
+	opacity: 1;
+}
+
+.survey-cards .st-wrapper .st-item {
+    -webkit-transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    -moz-transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    -o-transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    -ms-transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    
+    -webkit-transition: opacity 0.45s linear, -webkit-transform 0.3s linear;
+    -moz-transition: opacity 0.45s linear, -moz-transform 0.3s linear;
+    -o-transition: opacity 0.45s linear, -o-transform 0.3s linear;
+    transition: opacity 0.45s linear, transform 0.3s linear;
+}
+
+.survey-cards .st-wrapper .st-item.st-center {
+    transition-delay: 0.15s;
+    opacity: 1;
+    -webkit-transform: translateX(-50%) rotate(0deg) rotateY(0deg);
+    -moz-transform: translateX(-50%) rotate(0deg) rotateY(0deg);
+    -o-transform: translateX(-50%) rotate(0deg) rotateY(0deg);
+    -ms-transform: translateX(-50%) rotate(0deg) rotateY(0deg);
+    transform: translateX(-50%) rotate(0deg) rotateY(0deg);
+}
+
+.survey-cards .st-wrapper .st-item.st-leftflow-in {
+    -webkit-transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    -moz-transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    -o-transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    -ms-transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.survey-cards .st-wrapper .st-item.st-rightflow-in {
+    -webkit-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    -moz-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    -o-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    -ms-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.survey-cards .st-wrapper .st-item.st-leftflow {
+    -webkit-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    -moz-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    -o-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    -ms-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.survey-cards .st-wrapper .st-item.st-left {
+    transition-duration: 0.15s;
+    -webkit-transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
+    -moz-transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
+    -o-transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
+    -ms-transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
+    transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.survey-cards .st-wrapper .st-item.st-rightflow {
+    -webkit-transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    -moz-transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    -o-transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    -ms-transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    transform: translateX(10%) rotate(7deg) rotateY(0deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.survey-cards .st-wrapper .st-item.st-right {
+    transition-duration: 0.15s;
+    -webkit-transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    -moz-transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    -o-transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    -ms-transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    transform: translateX(10%) rotate(7deg) rotateY(90deg);
+    pointer-events: none;
+    opacity: 0;
+}
+
+.survey-cards .st-wrapper .st-item.st-leftflow-in,
+.survey-cards .st-wrapper .st-item.st-rightflow-in {
+    transition-duration: 0.001s !important;
+}
+
+.survey-cards .st-wrapper .st-item.st-center {
+	opacity: 1;
+}

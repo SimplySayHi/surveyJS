@@ -1,0 +1,163 @@
+{
+    "result": "OK",
+    "survey": {
+        "id": 0,
+        "image": "img/survey-image.png",
+        "title": "My Survey",
+        "description": "Answer the questions",
+        "questions": [
+            {
+                "id": "1",
+                "question": "Hai animali domestici?",
+                "answers": [
+                    { "id": "1", "type": "radio", "answer": "S&igrave;" },
+                    { "id": "2", "type": "radio", "answer": "No" }
+                ],
+                "required": "",
+                "sort": 1
+            },
+            {
+                "id": "1b",
+                "question": "Hai animali domestici?",
+                "answers": [
+                    { "id": "1ba", "type": "text", "answer": "" }
+                ],
+                "required": "",
+                "sort": 2
+            },
+            {
+                "id": "2",
+                "question": "Quale &egrave; il tuo Hobby/passione?",
+                "answers": [
+                    { "id": "6", "type": "radio", "answer": "Musica", "sort": 5 },
+                    { "id": "7", "type": "radio", "answer": "Fotografia", "sort": 2 },
+                    { "id": "8", "type": "radio", "answer": "Tecnologia", "sort": 3 },
+                    { "id": "9", "type": "radio", "answer": "Games", "sort": 4 },
+                    { "id": "10", "type": "radio", "answer": "Lettura", "sort": 1 },
+                    { "id": "11", "type": "radio", "answer": "Benessere", "sort": 6 },
+                    {
+                        "id": "100", "type": "radio", "answer": "Altro...", "sort": 7
+                    }
+                ],
+                "required": "",
+                "sort": 3
+            },
+            {
+                "id": "3",
+                "question": "Se s&igrave;, specifica qui quale Sport ti piace o pratichi:",
+                "answers": [
+                    { "id": "18", "type": "textarea", "answer": "" }
+                ],
+                "sort": 4
+            },
+            {
+                "id": "4",
+                "question": "Se s&igrave;, specifica qui quale Sport ti piace o pratichi:",
+                "answers": [
+                    { "id": "18", "type": "textarea", "answer": "", "placeholder": "This is my custom placeholder..." }
+                ],
+                "sort": 5
+            },
+            {
+                "id": "5",
+                "question": "Quanto &egrave; importante che il programma fedelt&agrave;...?",
+                "answers": [
+                    { "id": "19", "type": "radio", "answer": "Sia divertente" },
+                    { "id": "20", "type": "radio", "answer": "Non richieda molto impegno di partecipazione" },
+                    {
+                        "id": "200", "type": "radio", "answer": "Altro...",
+                        "attribute": {
+                            "id": "", "type": "text", "answers": ""
+                        }
+                    }
+                ],
+                "required": "",
+                "sort": 6
+            },
+            {
+                "id": "6",
+                "question": "Quale MODALIT&Agrave; DI PARTECIPAZIONE al programma fedelt&agrave; preferisci?",
+                "answers": [
+                    {
+                        "id": "21", "type": "radio", "answer": "Sito",
+                        "nested": [
+                            { "id": "21a", "type": "radio", "answer": "Pc", "sort": 1 },
+                            { "id": "21b", "type": "radio", "answer": "Smartphone", "sort": 2 },
+                            { "id": "21c", "type": "radio", "answer": "Tablet", "sort": 3 }
+                        ], "sort": 1
+                    },
+                    {
+                        "id": "21aPlus", "type": "radio", "answer": "Sito",
+                        "attribute": [
+                            { "id": "21aa", "type": "option", "answer": "Pc", "sort": 1 },
+                            { "id": "21ba", "type": "option", "answer": "Smartphone", "sort": 2 },
+                            { "id": "21ca", "type": "option", "answer": "Tablet", "sort": 3 }
+                        ], "sort": 6
+                    },
+                    { "id": "24", "type": "radio", "answer": "App", "sort": 3 },
+                    { "id": "25", "type": "radio", "answer": "Telefonica", "sort": 4 },
+                    { "id": "26", "type": "radio", "answer": "Con utilizzo card/tessera", "sort": 5 }
+                ],
+                "required": "",
+                "sort": 7
+            },
+            {
+                "id": "7",
+                "question": "Quanto &egrave; importante che il programma fedelt&agrave; sia divertente?",
+                "answers": [
+                            { "id": "60", "type": "option", "answer": "Poco", "sort": 1 },
+                            { "id": "61", "type": "option", "answer": "Cos&igrave; cos&igrave;", "sort": 2 },
+                            { "id": "62", "type": "option", "answer": "Tanto", "sort": 3 }
+                ],
+                "sort": 8
+            },
+            {
+                "id": "8",
+                "question": "Cosa hai gradito di pi&ugrave; del programma in corso?",
+                "answers": [
+                    { "id": "43", "type": "checkbox", "answer": "Chiarezza della comunicazione", "sort": 1 },
+                    { "id": "44", "type": "checkbox", "answer": "Facilit&agrave; e modalit&agrave; di partecipazione", "sort": 2 },
+                    { "id": "45", "type": "checkbox", "answer": "Stile del programma (grafica e linguaggio)", "sort": 3 },
+                    { "id": "46", "type": "checkbox", "answer": "Durata del tempo di partecipazione", "sort": 4 },
+                    { "id": "47", "type": "checkbox", "answer": "Contenuti/premi proposti", "sort": 5 }
+                ],
+                "maxChoice": 2,
+                "required": "",
+                "sort": 9
+            },
+            {
+                "id": "9",
+                "question": "Quanto &egrave; importante che il programma fedelt&agrave; sia divertente?",
+                "answers": [
+                            { "id": "160", "type": "option", "answer": "Poco", "sort": 1 },
+                            { "id": "161", "type": "option", "answer": "Cos&igrave; cos&igrave;", "sort": 2 },
+                            { "id": "162", "type": "option", "answer": "Tanto", "sort": 3 }
+                ],
+                "required": "",
+                "sort": 10
+            },
+            {
+                "id": "10",
+                "question": "Quanto &egrave; importante che il programma fedelt&agrave; sia divertente?",
+                "answers": [
+                            { "id": "", "type": "option", "answer": "My custom first option...", "sort": 1 },
+                            { "id": "160", "type": "option", "answer": "Poco", "sort": 2 },
+                            { "id": "161", "type": "option", "answer": "Cos&igrave; cos&igrave;", "sort": 3 },
+                            { "id": "162", "type": "option", "answer": "Tanto", "sort": 4 }
+                ],
+                "required": "",
+                "sort": 11
+            },
+            {
+                "id": "22",
+                "question": "hidden-privacy",
+                "answers": [
+                            { "id": "44", "type": "radio", "answer": "Si", "sort": 1 },
+                            { "id": "45", "type": "radio", "answer": "No", "sort": 2 }
+                ],
+                "required": "",
+                "sort": 12
+            }
+        ]
+    }
+}

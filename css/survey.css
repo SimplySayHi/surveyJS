@@ -1,0 +1,71 @@
+@-webkit-keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+.icon-spin {
+  -webkit-animation: icon-spin 2s infinite linear;
+  animation: icon-spin 2s infinite linear;
+}
+
+label {
+    font-weight: inherit;
+}
+
+input:not([type]){
+    display: none;
+}
+
+.field-indent {
+    padding-left: 20px;
+}
+
+.field-no-indent {
+    padding-left: 0 !important;
+}
+
+[data-surveyjs-form] .input-group {
+    margin-left: -13px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+[data-surveyjs-form] .input-group label {
+    font-weight: inherit;
+    margin: 0;
+}
+
+.field-error-message,
+.survey-footer {
+    display: none;
+}
+
+.field-error-message > span {
+    display: none;
+}
+
+.has-error .field-error-message,
+.has-error:not(.has-error-switch) .field-error-message > span:first-child,
+.has-error-switch .field-error-message > span:last-child,
+.survey-init-success .survey-footer,
+[data-formjs-question] .input-container:not(.radio):not(.checkbox) label,
+.question-box .input-container:not(.radio):not(.checkbox) label {
+    display: block;
+}

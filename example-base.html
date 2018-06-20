@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>surveyJS</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/survey.css">
+    <link rel="stylesheet" href="css/demo.css">
+</head>
+
+<body>
+    
+    <div class="container">
+        <h1>surveyJS</h1>
+        <p>
+            This survey is generated with Javascript/jQuery.
+        </p>
+        <div class="survey-cont panel panel-primary" data-surveyjs-cont>
+            <div class="panel-heading">
+                <div class="media">
+                    <div class="media-left"><img class="survey-img" data-surveyjs-img /></div>
+                    <div class="media-body media-middle">
+                        <h3 class="survey-title panel-title" data-surveyjs-title></h3>
+                        <p class="survey-desc" data-surveyjs-desc></p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <form action="page.jsp" name="survey-form" class="survey-form" data-surveyjs-form novalidate="">
+                    <div class="survey-body questionsList clearfix" data-surveyjs-body></div>
+                    <div class="survey-footer">
+                        <div class="question-box text-right" data-formjs-question>
+                            <div class="answers-box form-group">
+                                <div class="text-left small">
+                                    L'interessato persta il consenso al trattamento dei propri dati personali per la creazione di profili e per l'analisi delle sue abitudini o scelte di consumo sulla base del dettaglio dei suoi acquisti nonch&egrave; dei dati forniti direttamente dal cliente.
+                                </div>
+                                <div class="radio radio-inline">
+                                    <label>
+                                        <input data-exclude-storage="" data-name="bind-survey-answer"/>
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <label>
+                                        <input data-exclude-storage="" data-name="bind-survey-answer"/>
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="field-error-message small">
+                                    Per proseguire &egrave; necessario selezionare una risposta.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="question-box text-right" data-formjs-question>
+                            <div class="answers-box form-group">
+                                <div class="text-left small">
+                                    Devi accettare questa condizione per sblocacre il bottone di invio del quesitonario.
+                                </div>
+                                <div class="radio radio-inline">
+                                    <label>
+                                        <input type="radio" name="prova-00" value="yeee" required="" />
+                                        <span>true</span>
+                                    </label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <label>
+                                        <input type="radio" name="prova-00" value="" required="" />
+                                        <span>false</span>
+                                    </label>
+                                </div>
+                                <div class="field-error-message small">
+                                    Per proseguire &egrave; necessario accettare.
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary center-block" disabled type="submit">SEND</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div id="modal-notification" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+                    <h4 class="modal-title">Mission complete</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="media">
+                        <div class="media-left"><img src="img/survey-image.png" class="survey-img" /></div>
+                        <div class="media-body media-middle">
+                            <h3>Congratulations!</h3>
+                            <p>
+                                You completed the survey and gained <b>100 points</b>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/vendors/jquery-1.12.4.min.js"></script>
+    <script src="js/vendors/bootstrap-3.3.7.min.js"></script>
+    <script src="js/vendors/jquery_stackslider.js"></script>
+    
+    <script src="js/modules/web_storage.js"></script>
+    <script src="js/modules/formJS.js"></script>
+    <script src="js/modules/surveyJS.js"></script>
+    
+    <!-- MINIFIED VERSION WITH ALL MODULES -->
+    <!--<script src="js/surveyJS.min.js"></script>-->
+    
+    <script type="text/javascript">
+        $(function(){
+            
+            var $extraField = $('input[name="prova-00"]'),
+                validateExtraField = function( options ){
+                    var $field = $extraField,
+                        $btn = $field.closest('form').find('[type="submit"]'),
+                        options = options || {};
+
+                    if( FORM.isValidField($field, options) ){
+                        $btn.prop('disabled', false);
+                    } else {
+                        $btn.prop('disabled', true);
+                    }
+                };
+            
+            if( $extraField.length ){
+                var options = ( $extraField.is(':checked') ? {} : {skipUIfeedback: true} );
+                validateExtraField( options );
+            }
+            
+            $extraField.on('change', function(){
+                validateExtraField();
+            });
+            
+            /* ADD A NEW LANGUAGE */
+            /*
+            var myLang = {
+                loadingBox:         '<div class="survey-loading"><i class="glyphicon glyphicon-refresh icon-spin"></i> DE Caricamento in corso...</div>',
+                selectFirstOption:  'DE Seleziona una risposta...',
+                textareaPlaceholder:'DE Scrivi la tua risposta...',
+                maxChoiceText:      'DE RISPOSTE MAX',
+                fieldErrorMessage:  'DE &Egrave; necessario rispondere.',
+                fieldErrorMessageMultiChoice:  'DE Puoi scegliere al massimo {{maxChoiceNum}} risposte.'
+            };
+            SURVEY.addLanguage( 'de', myLang );
+            */
+            
+            // SETUP FOR THE SURVEY
+            SURVEY.setup({
+                lang: 'it',
+                setJSONurl: 'json/survey.json',
+                /*inputTemplate:  '<div class="single-answer input-container {{answerType}}" data-answer-index="{{answerIndex}}">'+
+                                    '<input type="{{answerType}}" name="survey-answer-{{questionNumber}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}}/>'+
+                                    '<label for="{{answerCode}}">'+
+                                        '{{answerString}}'+
+                                    '</label>'+
+                                '</div>',*/
+                /*selectTemplate: '<div class="single-answer" data-answer-index="{{answerIndex}}">'+
+                                    '<select style="border: 3px solid green" id="{{answerCode}}" name="survey-answer-{{questionNumber}}{{addMoreName}}" class="form-control" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}>'+
+                                        '{{optionsHtml}}'+
+                                    '</select>'+
+                                '</div>',*/
+                /*selectTagCode:  '<select style="border: 3px solid green" id="{{answerCode}}" name="survey-answer-{{questionNumber}}{{addMoreName}}" class="{{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}>'+
+                                    '{{optionsHtml}}'+
+                                '</select>',*/
+                //labelTagCode: '<label for="{{answerCode}}" style="border: 3px solid green">{{answerString}}</label>',
+                //inputTagCode: '<input type="{{answerType}}" name="survey-answer-{{questionNumber}}{{addMoreName}}" class="myfield {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{attrRequiredFrom}}/>',
+                fieldOptions: {
+                    //checkDirtyField: true,
+                    //skipUIfeedback: true,
+                    //validateOnEvents: 'blur'
+                },
+                onValidation: function( data ){
+                    console.log( 'onValidation callback data: ', data );
+                    if( data.event === 'submit' ){
+                        
+                        for( var f=0; f<data.fields.length; f++ ){
+                            var obj = data.fields[f];
+                            if( !obj.result ){
+                                var $box = obj.$field.closest('[data-formjs-question]');
+                                $('html, body').animate({ scrollTop: $box.offset().top }, 400);
+                                break;
+                            }
+                        }
+                        
+                    }
+                },
+                onInitSuccess: function( data, $surveyForm ){
+                    var $surveyBody = $surveyForm.find('.survey-body'),
+                        initResult = data.result;
+                    
+                    if( initResult === 'OK' ){
+                        
+                    } else {
+                        $surveyForm.find('.survey-footer').remove();
+                        if ( initResult === 'KO' ){
+                            $surveyBody.html( '<div class="survey-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
+                        } else if( initResult === 'DONE' ) {
+                            $surveyBody.html( '<div class="survey-message">Hai gi&agrave; completato il questionario.</div>' );
+                        } else {
+                            console.log('onInitSuccess -> data.result is ', initResult);
+                        }
+                    }
+                },
+                onInitError: function( jqXHR, textStatus, errorThrown, $surveyForm ){
+                    console.log('_setJSONurl(\''+ $surveyForm.attr('action') +'\') RETURNED AN ERROR:');
+                    console.log('XHR: ', jqXHR);
+                    console.log('STATUS: ', textStatus);
+                    console.log('ERROR: ', errorThrown);
+                    
+                    $surveyForm.find('.survey-loading').html( '<div class="survey-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
+                },
+                beforeSend: function( dataJSON, $surveyForm ){
+                    console.log('dataJSON ', dataJSON);
+                    $surveyForm.find('[type="submit"]').button('loading');
+                },
+                onSubmitComplete: function( $surveyForm ){
+                    $surveyForm.find('[type="submit"]').button('reset');
+                },
+                onSubmitSuccess: function( data, $surveyForm ){
+                    if( data.result === 'OK' ){
+                        // REMOVE THE SURVEY FORM FROM THE PAGE AND PRINT A RESPONSE MESSAGE
+                        $surveyForm.parent().html( '<div class="alert alert-success" role="alert"><p><i class="glyphicon glyphicon-thumbs-up"></i> Great! You completed the mission.</p></div>' );
+
+                        // OPEN THE BOOTSTRAP MODAL TO SHOW A CONGRATULATION MESSAGE
+                        $('#modal-notification').modal('show');
+                    } else {
+                        // PRINT THE ERROR MESSAGE AFTER THE FORM
+                        $surveyForm.after( '<div class="alert alert-danger" role="alert"><p><i class="glyphicon glyphicon-exclamation-sign"></i> Generic error, please retry.</p></div>' );
+                    }
+                },
+                onSubmitError: function( jqXHR, textStatus, errorThrown, $surveyForm ){
+                    console.log('AJAX CALL FOR _sendSurvey() ( with url \''+ $surveyForm.attr('action') +'\' ) RETURNED AN ERROR:');
+                    console.log('XHR: ', jqXHR);
+                    console.log('STATUS: ', textStatus);
+                    console.log('ERROR: ', errorThrown);
+                    
+                    // PRINT THE ERROR MESSAGE AFTER THE FORM
+                    $surveyForm.after( '<div class="alert alert-danger" role="alert"><p><i class="glyphicon glyphicon-exclamation-sign"></i> Generic error, please retry.</p></div>' );
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
