@@ -1,12 +1,11 @@
 /**
- * @version     1.1.1
- * @file        formJS - for forms validation
- * @author      Valerio Di Punzio <sayhi@valeriodipunzio.com>
- * @doc         http://valeriodipunzio.com/plugins/formJS/
- * 
- * Dependencies:
- * jQuery
- *
+ * formJS
+ * -------------
+ * Version      : 1.2.0
+ * Website      : https://valeriodipunzio.com/plugins/formJS/
+ * Repo         : https://github.com/valedp88/formJS
+ * Author       : Valerio Di Punzio (@valedp88)
+ * Dependencies : jQuery
  */
 
 var FORM = (function( $ ){
@@ -24,6 +23,7 @@ var FORM = (function( $ ){
             },
             focusOnRelated:         true,
             maxFileSize:            10,
+            onPastePrevented:       null,
             onValidation:           null,
             preventPasteFields:     '[type="password"], [data-equal-to]',
             skipUIfeedback:         false,
@@ -48,7 +48,7 @@ var FORM = (function( $ ){
             
             cap: function( string ){
                 // VALID ITALIAN CAP WITH 5 DIGITS
-                return /[0-9]{5}$/.test( string );
+                return /^[0-9]{5}$/.test( string );
             },
             
             date: function( string ){
@@ -59,8 +59,9 @@ var FORM = (function( $ ){
             
             email: function( string ){
                 // EMAIL MUST BE AT LEAST ( FOR EXAMPLE ):
-                // a@a.a
-                return /(\w+)\@(\w+)\.[a-zA-Z]/.test( string );
+                // a@a.aa
+                //return /(\w+)\@(\w+)\.[a-zA-Z]/.test( string );
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/.test( string );
             },
             
             fiscalCode: function( string ){
@@ -120,8 +121,11 @@ var FORM = (function( $ ){
             },
             
             username: function( string ){
-                // USERNAME WITH LETTERS/NUMBERS AND - OR _ WITH MIN LENGTH 3 AND MAX LENGTH 24
-                return /^[a-zA-Z0-9_-]{3,24}$/.test( string );
+                // USERNAME WITH LETTERS/NUMBERS/UNDERSCORE AND . - @ WITH MIN LENGTH 3 AND MAX LENGTH 24
+                //return /^[\w\.\-\@]{3,24}$/.test( string );
+                
+                // USERNAME MUST START WITH A LETTER/NUMBER/UNDERSCORE AND CAN ALSO CONTAIN . - @ WITH MIN LENGTH 3 AND MAX LENGTH
+                return /^(?=\w)(?=[\-\.\@]?)[\w\-\.\@]{3,24}$/.test( string );
             },
             
             vatNumber: function( string ){
@@ -138,7 +142,7 @@ var FORM = (function( $ ){
         // ------------------------------------------------------------
         _fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type=button]):not([type=hidden]), select, textarea',
         
-        _validationRules = {
+        _validationRulesStrictHtml = {
             
             exactLength: function( value, validationValue ){
                 return value.length === (validationValue*1);
@@ -162,6 +166,26 @@ var FORM = (function( $ ){
                 return value >= minVal;
             }
             
+        },
+        
+        _checkDirtyField = function( $fields, cssClass ){
+            var cssClass = cssClass || defaultFieldOptions.cssClasses.dirty;
+            
+            $fields.each(function(){
+                var $field = $(this); 
+                
+                if( !$field.is('[type="checkbox"], [type="radio"]') ){
+                    if( $field.val() ){
+                        
+                        $field.addClass( cssClass );
+                        
+                    } else {
+                        
+                        $field.removeClass( cssClass );
+                        
+                    }
+                }
+            });
         },
         
         _isFieldChecked = function( $field, fieldOptions ){
@@ -230,7 +254,7 @@ var FORM = (function( $ ){
                 fieldValue = $field.val().trim();
             
             for(var val in addedValidations){
-                var extraVal = _validationRules[val]( fieldValue, addedValidations[val] );
+                var extraVal = _validationRulesStrictHtml[val]( fieldValue, addedValidations[val] );
                 if( !extraVal ){ extraValidationsResult = false; }
             }
             
@@ -263,6 +287,78 @@ var FORM = (function( $ ){
             return out;  
         },
         
+        _xhrCall = function( $form, formDataJSON, options ){
+            
+            var $btn = $form.find('[type="submit"]'),
+                ajaxOptions = {
+                    cache: false,
+                    url: $form.attr('action'),
+                    data: formDataJSON,
+                    method: $form.attr('method') || 'POST',
+                    dataType: 'json'
+                };
+            
+            if( $form.is('[enctype="multipart/form-data"]') && options.formOptions.manageFileUpload ){
+                var formDataMultipart = new FormData();
+                
+                for(var key in ajaxOptions.data){
+                    formDataMultipart.append( key, ajaxOptions.data[key] );
+                }
+                
+                $form.find('[type="file"]').each(function(idxField, field){
+                    var field = field;
+                    $.each(field.files, function(idx, file){
+                        var name = field.name+'['+ idx +']';
+                        formDataMultipart.append( name, file, file.name );
+                    });
+                });
+                
+            	ajaxOptions.contentType = false;
+            	ajaxOptions.processData = false;
+                ajaxOptions.data = formDataMultipart;
+            }
+            
+            if( $form.is('[data-ajax-settings]') ){
+                var ajaxSettings = $form.data('ajax-settings');
+                try {
+                    ajaxOptions = _mergeObjects( ajaxSettings, ajaxOptions );
+                } catch(error) {
+                    console.error('data-ajax-settings specified for ' + $form.attr('name') + ' form is not a valid JSON object!');
+                    return false;
+                }
+            }
+            
+            $.ajax( ajaxOptions )
+                .always(function( dataOrXHR, status, XHRorResponse ){
+                    $btn.prop('disabled', false);
+
+                    if( typeof options.formOptions.onSubmitComplete === 'function' ){
+
+                        var ajaxData = { dataOrXHR: dataOrXHR, status: status, XHRorResponse: XHRorResponse };
+                        options.formOptions.onSubmitComplete( ajaxData, $form );
+
+                    }
+                })
+                .done(function( data, status, response ){
+
+                    if( typeof options.formOptions.onSubmitSuccess === 'function' ){
+
+                        var ajaxData = { data: data, status: status, response: response };
+                        options.formOptions.onSubmitSuccess( ajaxData, $form );
+
+                    }
+                })
+                .fail(function( jqXHR, textStatus, errorThrown ){
+                    if( typeof options.formOptions.onSubmitError === 'function' ){
+
+                        var ajaxData = { errorThrown: errorThrown, status: textStatus, response: jqXHR };
+                        options.formOptions.onSubmitError( ajaxData, $form );
+
+                    }
+                });
+            
+        },
+        
         
         
         // ------------------------------------------------------------
@@ -270,26 +366,6 @@ var FORM = (function( $ ){
         // ------------------------------------------------------------
         addValidationRules = function( newRules ){
             validationRules = _mergeObjects( newRules, validationRules );
-        },
-        
-        checkDirtyField = function( $fields, cssClass ){
-            var cssClass = cssClass || defaultFieldOptions.cssClasses.dirty;
-            
-            $fields.each(function(){
-                var $field = $(this); 
-                
-                if( !$field.is('[type="checkbox"], [type="radio"]') ){
-                    if( $field.val() ){
-                        
-                        $field.addClass( cssClass );
-                        
-                    } else {
-                        
-                        $field.removeClass( cssClass );
-                        
-                    }
-                }
-            });
         },
         
         getFormJSON = function( $form ){
@@ -327,9 +403,16 @@ var FORM = (function( $ ){
             return formData;
         },
         
-        init = function( $form, options ){            
-            var $forms = $( $form || $('form') ).filter('[novalidate]'),
-                options = options || {};
+        init = function(){
+            // 1ST ARGUMENT: ELEMENT/NODELIST OF FORM
+            // 2ND ARGUMENT: PLUGIN OPTIONS
+            
+            var argLength = arguments.length,
+                arg0isObject = $.isPlainObject(arguments[0]),
+                $form = ( argLength === 2 || (argLength > 0 && !arg0isObject && arguments[0].is('form')) ? arguments[0] : null ),
+                options = ( argLength === 2 ? arguments[1] : (arg0isObject ? arguments[0] : {}) );
+            
+            var $forms = $( $form || $('form') ).filter('[novalidate]');
             
             if( !$forms.length ){ return false; }
             
@@ -343,7 +426,7 @@ var FORM = (function( $ ){
                     var $field = $(this);
                     
                     if( fieldOptions.checkDirtyField ){
-                        checkDirtyField( $field, fieldOptions.cssClasses.dirty );
+                        _checkDirtyField( $field, fieldOptions.cssClasses.dirty );
                     }
                     
                     if( $field.is('[data-char-count]') ){
@@ -387,7 +470,7 @@ var FORM = (function( $ ){
                         var validationResult = isValidField( $this, fieldOptions );
                         if( typeof fieldOptions.onValidation === 'function' ){
                             
-                            var callbackData = [ { $field: $this, result: validationResult} ];
+                            var callbackData = [ { field: $this, result: validationResult} ];
                             
                             fieldOptions.onValidation( callbackData );
                             
@@ -414,18 +497,31 @@ var FORM = (function( $ ){
                 if( fieldOptions.preventPasteFields && $thisForm.find( fieldOptions.preventPasteFields ).length ){
                     $thisForm.on('paste', fieldOptions.preventPasteFields, function(event){
                         event.preventDefault();
+                        if( typeof fieldOptions.onPastePrevented === 'function' ){
+                            fieldOptions.onPastePrevented( $(this) );
+                        }
                     });
                 }
                 
-                $thisForm.filter('[data-ajax-submit]').on('submit', function(event){
-                    event.preventDefault();
-                    
-                    var optionsAjaxSubmit = {
+                $thisForm.on('submit', function(event){
+                    var $form = $(this),
+                        optionsFormSubmit = {
                             formOptions: formOptions,
                             fieldOptions: fieldOptions
                         };
                     
-                    submitAjaxForm( $(this), optionsAjaxSubmit );
+                    if( $form.is('[data-ajax-submit]') ){
+                        
+                        event.preventDefault();
+                        submitAjaxForm( $form, optionsFormSubmit );
+                        
+                    } else {
+                        
+                        if( !isValidForm($form, optionsFormSubmit).result ){
+                            event.preventDefault();
+                        }
+                        
+                    }
                 });
                 
             });
@@ -451,7 +547,7 @@ var FORM = (function( $ ){
                 $fieldEqualTo =     $field.closest('form').find('[data-equal-to="'+ $field.attr('name') +'"]');
                         
             if( options.checkDirtyField ){
-                checkDirtyField( $field, options.cssClasses.dirty );
+                _checkDirtyField( $field, options.cssClasses.dirty );
             }
             
             if(
@@ -496,9 +592,8 @@ var FORM = (function( $ ){
                     
                         if( isRequiredFrom ){
                             
-                            var $reqMore = $( $field.data('required-from') );
-                            
-                            isValid = $( '[name="'+ $reqMore.attr('name') +'"]:checked' ).length > 0;
+                            var $reqMore = $( $field.data('required-from') ),
+                                isOneChecked = $( '[name="'+ $reqMore.attr('name') +'"]:checked' ).length > 0;
                             
                             if( isValidValue ){
                                 $reqMore.prop('checked', true);
@@ -508,6 +603,11 @@ var FORM = (function( $ ){
                             if( !$reqMore.is(':checked') ){
                                 doExtraValidations = false;
                             }
+                            
+                            isValid = (
+                                $reqMore.is('[required]') && $reqMore.is(':checked') ? 
+                                isValidValue : ($reqMore.is('[required]') ? isOneChecked : true)
+                            );
                             
                         }
 
@@ -572,10 +672,9 @@ var FORM = (function( $ ){
             if( !$form.length || !$form.is('[novalidate]') ){ return false; }
             
             var options = options || {},
-                formOptions = _mergeObjects( options.formOptions || {}, defaultFormOptions ),
                 fieldOptions = _mergeObjects( options.fieldOptions || {}, defaultFieldOptions ),
                 obj = {
-                    $fields: [],
+                    fields: [],
                     result: true
                 },
                 fieldName = '',
@@ -590,7 +689,7 @@ var FORM = (function( $ ){
                     name = $field.attr('name'),
                     type = $field.attr('type'),
                     fieldData = {
-                        $field: $field,
+                        field: $field,
                         result: true
                     };
                 
@@ -608,7 +707,7 @@ var FORM = (function( $ ){
                     obj.result = false;
                 }
                 
-                obj.$fields.push( fieldData );
+                obj.fields.push( fieldData );
             });
             
             return obj;
@@ -619,107 +718,43 @@ var FORM = (function( $ ){
             
             options.fieldOptions = _mergeObjects( (options.fieldOptions || {}), defaultFieldOptions );
             options.formOptions = _mergeObjects( (options.formOptions || {}), defaultFormOptions );
-                        
+            
             var formValidation = isValidForm($form, options),
                 $btn = $form.find('[type="submit"]');
             
             if( typeof options.fieldOptions.onValidation === 'function' ){
-                options.fieldOptions.onValidation( formValidation.$fields );
+                options.fieldOptions.onValidation( formValidation.fields );
             }
             
             if( !formValidation.result || $btn.is(':disabled') ){ return false; }
 
             $btn.prop('disabled', true);
             
-            var formDataObj = getFormJSON( $form );
+            var formDataJSON = getFormJSON( $form );
             
             if( typeof options.formOptions.beforeSend === 'function' ){
                 var beforeSendData = {
-                        formData: formDataObj,
+                        formData: formDataJSON,
                         stopExecution: false
                     },
                     beforeSendFn = options.formOptions.beforeSend( beforeSendData, $form );
                 
                 if( Object.prototype.toString.call(beforeSendFn) === '[object Object]' ){
-                    formDataObj = beforeSendFn.formData || formDataObj;
+                    formDataJSON = beforeSendFn.formData || formDataJSON;
                     if( beforeSendFn.stopExecution ){
                         return false;
                     }
                 }
             }
             
-            var ajaxOptions = {
-                    cache: false,
-                    url: $form.attr('action'),
-                    data: formDataObj,
-                    method: $form.attr('method') || 'POST'
-                };
+            _xhrCall( $form, formDataJSON, options );
             
-            if( $form.is('[enctype="multipart/form-data"]') && options.formOptions.manageFileUpload ){
-                var formDataMultipart = new FormData();
-                
-                for(var key in ajaxOptions.data){
-                    formDataMultipart.append( key, ajaxOptions.data[key] );
-                }
-                
-                $form.find('[type="file"]').each(function(idxField, field){
-                    var field = field;
-                    $.each(field.files, function(idx, file){
-                        var name = field.name+'['+ idx +']';
-                        formDataMultipart.append( name, file, file.name );
-                    });
-                });
-                
-            	ajaxOptions.contentType = false;
-            	ajaxOptions.processData = false;
-                ajaxOptions.data = formDataMultipart;
-            }
-            
-            if( $form.is('[data-ajax-settings]') ){
-                var ajaxSettings = $form.data('ajax-settings');
-                try {
-                    ajaxOptions = _mergeObjects( ajaxOptions, ajaxSettings );
-                } catch(error) {
-                    console.error('data-ajax-settings specified for ' + $form.attr('name') + ' form is not a valid JSON object!');
-                    return false;
-                }
-            }
-            
-            $.ajax( ajaxOptions )
-                .always(function( dataOrXHR, status, XHRorResponse ){
-                    $btn.prop('disabled', false);
-
-                    if( typeof options.formOptions.onSubmitComplete === 'function' ){
-
-                        var ajaxData = { dataOrXHR: dataOrXHR, status: status, XHRorResponse: XHRorResponse };
-                        options.formOptions.onSubmitComplete( ajaxData, $form );
-
-                    }
-                })
-                .done(function( data, status, response ){
-
-                    if( typeof options.formOptions.onSubmitSuccess === 'function' ){
-
-                        var ajaxData = { data: data, status: status, response: response };
-                        options.formOptions.onSubmitSuccess( ajaxData, $form );
-
-                    }
-                })
-                .fail(function( jqXHR, textStatus, errorThrown ){
-                    if( typeof options.formOptions.onSubmitError === 'function' ){
-
-                        var ajaxData = { errorThrown: errorThrown, status: textStatus, response: jqXHR };
-                        options.formOptions.onSubmitError( ajaxData, $form );
-
-                    }
-                });
         };
     
     
     
     return {
         addValidationRules: addValidationRules,
-        checkDirtyField:    checkDirtyField,
         getFormJSON:        getFormJSON,
         init:               init,
         isValidField:       isValidField,
