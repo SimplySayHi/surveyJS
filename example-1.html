@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>surveyJS</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
-    
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Demo 01 | surveyJS - Generate &amp; Manage a Survey from a JSON Object</title>
+    <meta name="description" content="Generate & Manage a Survey from a JSON Object">
+    <meta name="keywords" content="survey, question, answer, jquery, javascript, plugin, ajax, json">
+    <meta name="author" content="Valerio Di Punzio">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Raleway:200" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/stackSlider.css">
     <link rel="stylesheet" href="css/survey.css">
@@ -85,6 +85,9 @@
             </div>
         </div>
     </div>
+
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED FOR FORMJS TO SUPPORT IE 10/11 -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
     
     <script src="js/vendors/modernizr_custom_63321.js"></script>
     <script src="js/vendors/jquery-1.12.4.min.js"></script>

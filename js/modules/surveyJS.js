@@ -1,6 +1,6 @@
 /**
  * @version     1.6.0
- * @file        Generate and manage a survey from a JSON object ( with JS validation )
+ * @file        Generate & Manage a Survey from a JSON Object
  * @author      Valerio Di Punzio <sayhi@valeriodipunzio.com>
  * @doc         http://valeriodipunzio.com/plugins/surveyJS/
  * 

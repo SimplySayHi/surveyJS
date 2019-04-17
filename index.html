@@ -2,13 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>surveyJS - Documentation</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
-    
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Documentation | surveyJS - Generate &amp; Manage a Survey from a JSON Object</title>
+    <meta name="description" content="Generate & Manage a Survey from a JSON Object">
+    <meta name="keywords" content="survey, question, answer, jquery, javascript, plugin, ajax, json">
+    <meta name="author" content="Valerio Di Punzio">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Raleway:200" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -23,13 +22,14 @@
 <body>
     
     <div id="top" class="container mb-5">
+
         <div id="menu" class="position-sticky text-right">
             <div class="dropdown d-inline-block mt-3">
                 <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2" data-toggle="dropdown" type="button">
                     menu
                 </button>
                 <span class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="surveyJS.zip">Download</a>
+                    <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS/archive/master.zip">Download Latest Version</a>
                     <a class="dropdown-item" href="#browsers-support">Browsers Support</a>
                     <a class="dropdown-item" href="#dependencies">Dependencies</a>
                     <a class="dropdown-item" href="#html">HTML</a>
@@ -45,6 +45,7 @@
                 </span>
             </div>
         </div>
+        
         <div id="hero" class="text-center mb-5">
             <div>
                 <p class="d-inline-block my-4">
@@ -64,20 +65,26 @@
     </svg></a>
                 </p>
             </div>
-            <h1>surveyJS</h1>            
+            <h1>surveyJS</h1>
             <p>
+                Generate &amp; Manage a Survey from a JSON Object
+            </p>
+            <div class="mt-5">
+                <p class="d-inline-block mb-1">
                 Version 
-                <span class="dropdown d-inline-block ml-1">
+                </p>
+                <div class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
                         1.6.0
                     </button>
-                    <span class="dropdown-menu dropdown-menu-right w-100 py-1">
-                        <a class="dropdown-item px-2" href="/plugins/surveyJS/1.5.2/">1.5.2</a>
+                    <!-- <span class="dropdown-menu dropdown-menu-right w-100 py-1"> -->
+                    <span class="dropdown-menu w-100 py-1">
+                        <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/1.5.2/">1.5.2</a>
                     </span>
-                </span>
+                </div>
                 <br />
                 Documentation
-            </p>
+            </div>
         </div>
 
         <!-- Demo -->
@@ -125,9 +132,11 @@
         
         <!-- Download -->
         <div id="download" class="text-center">
-            <h3>Download</h3>
+            <h3>Downloads</h3>
             <p>
-                <a href="surveyJS.zip"><i class="fa fa-download"></i> Download the zip package</a>
+                <a href="https://github.com/SimplySayHi/surveyJS/archive/master.zip">Download Latest Version</a>
+                <br class="d-block mt-2">
+                <a href="https://github.com/SimplySayHi/surveyJS/releases" target="_blank">Go To Releases Page</a>
             </p>
         </div>
         
@@ -168,7 +177,7 @@
                     Internet Explorer 10+ / Edge <span class="text-yellow">*</span>
                 </li>
                 <li>
-                    Safari
+                    Safari 9+
                 </li>
             </ul>
             <hr />
@@ -177,7 +186,7 @@
                 <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Dependencies -->
@@ -494,25 +503,25 @@
                             </p>
                             <ul>
                                 <li>
-                                    <span class="text-green">checkbox</span>: 
+                                    <span class="text-green">checkbox</span>: ( string ) css class(es) to be applied to checkbox fields
                                 </li>
                                 <li>
-                                    <span class="text-green">default</span>: 
+                                    <span class="text-green">default</span>: ( string ) css class(es) to be applied to input fields in general ( if the specific one is not set - eg for checkboxes or radios )
                                 </li>
                                 <li>
-                                    <span class="text-green">file</span>: 
+                                    <span class="text-green">file</span>: ( string ) css class(es) to be applied to field with type="file"
                                 </li>
                                 <li>
-                                    <span class="text-green">label</span>: 
+                                    <span class="text-green">label</span>: ( string ) css class(es) to be applied to label tags
                                 </li>
                                 <li>
-                                    <span class="text-green">radio</span>: 
+                                    <span class="text-green">radio</span>: ( string ) css class(es) to be applied to radio fields
                                 </li>
                                 <li>
-                                    <span class="text-green">select</span>: 
+                                    <span class="text-green">select</span>: ( string ) css class(es) to be applied to select fields
                                 </li>
                                 <li>
-                                    <span class="text-green">textarea</span>: 
+                                    <span class="text-green">textarea</span>: ( string ) css class(es) to be applied to textarea fields
                                 </li>
                             </ul>
                         </div>
@@ -1384,7 +1393,7 @@ SURVEY.setup({
     </div>
     
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 -->
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
 
     <script src="js/vendors/modernizr_custom_63321.js"></script>
     <script src="js/vendors/jquery-1.12.4.min.js"></script>
