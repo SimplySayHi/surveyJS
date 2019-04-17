@@ -1,4 +1,4 @@
-html, body, .input-group-addon, .form-control {
+html, body, .input-group-addon, .input-group-prepend, .form-control {
     font-size: 16px;
 }
 
@@ -20,57 +20,97 @@ html, body, .input-group-addon, .form-control {
     color: #073b4c;
 }
 
-.survey-cont {
+.st-wrapper {
+    overflow: visible;
+}
+
+.st-wrapper nav span:before {
+    content: '' !important;
+}
+
+.st-wrapper nav span:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.st-wrapper nav span:first-child:after {
+    transform: translate(-75%, -50%);
+    border-width: 7px 7px 7px 0;
+    border-color: transparent white transparent transparent;
+}
+
+.st-wrapper nav span:first-child:hover:after,
+.st-wrapper nav span:first-child:focus:after {
+    border-color: transparent #ffd166 transparent transparent;
+}
+
+.st-wrapper nav span:last-child:after {
+    transform: translate(-25%, -50%);
+    border-width: 7px 0 7px 7px;
+    border-color: transparent transparent transparent white;
+}
+
+.st-wrapper nav span:last-child:hover:after,
+.st-wrapper nav span:last-child:focus:after {
+    border-color: transparent transparent transparent #ffd166;
+}
+
+.surveyjs-container {
     background-color: transparent;
     color: #fff;
     border-radius: 8px;
     border: 0 none;
 }
 
-.survey-title {
+.surveyjs-title {
     text-transform: uppercase;
 }
 
-.survey-desc {
+.surveyjs-description {
     margin: 0;
 }
 
-.survey-loading p {
+.surveyjs-loading p {
     margin: 0;
 }
 
-.survey-form {
+.surveyjs-form {
     color: #073b4c;
 }
 
-.survey-loading {
+.surveyjs-loading {
     text-align: center;
     color: #fff;
 }
 
-.survey-form .survey-body [data-formjs-question],
-.survey-form .survey-body .question-box {
+.surveyjs-form .surveyjs-body [data-formjs-question],
+.surveyjs-form .surveyjs-body .surveyjs-question-box {
     background-color: #fff;
     color: #073b4c;
     border-radius: 8px 8px 0 0;
 }
 
-.survey-form .survey-body .question-body {
+.surveyjs-form .surveyjs-body .surveyjs-question-body {
     padding: 60px 30px 20px;
 }
 
-.survey-form .question-header {
+.surveyjs-form .surveyjs-question-header {
     text-transform: uppercase;
     background-color: #666;
     color: #fff;
     border-radius: 8px;
 }
 
-.survey-form .input-group .form-control {
+.surveyjs-form .input-group .form-control {
     width: auto;
 }
 
-.survey-footer {
+.surveyjs-footer {
     border-top: 4px dashed #073b4c;
     padding: 30px;
     background-color: #fff;
@@ -80,7 +120,7 @@ html, body, .input-group-addon, .form-control {
     max-width: 600px;
 }
 
-.survey-cont .alert {
+.surveyjs-container .alert {
     margin-bottom: 0;
     margin-top: 15px;
 }
@@ -93,28 +133,8 @@ html, body, .input-group-addon, .form-control {
     margin-bottom: 0;
 }
 
-.has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
-    color: #ef476f;
-}
-
-.has-error .form-control,
-.has-error .form-control:focus {
-    border-color: #ef476f;
-    border-width: 2px;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
-.has-error .input-group-addon {
-    color: #ef476f;
-    border-width: 2px;
-    border-color: #ef476f;
-    border-right-color: #ef476f;
-    background-color: #fcdde4;
-}
-
 @media (max-width: 600px){
-    .survey-form .input-group .form-control {
+    .surveyjs-form .input-group .form-control {
         width: 100%;
     }
 }

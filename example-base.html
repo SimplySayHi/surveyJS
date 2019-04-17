@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/survey.css">
     <link rel="stylesheet" href="css/demo.css">
 </head>
@@ -18,69 +18,73 @@
 <body>
     
     <div class="container">
-        <h1>surveyJS</h1>
-        <p>
-            This survey is generated with Javascript/jQuery.
-        </p>
-        <div class="survey-cont panel panel-primary" data-surveyjs-cont>
-            <div class="panel-heading">
-                <div class="media">
-                    <div class="media-left"><img class="survey-img" data-surveyjs-img /></div>
+        <div class="text-center">
+            <h1>surveyJS</h1>
+            <p>
+                This survey is generated with Javascript/jQuery.
+                <br />
+                This is a basic demo with default inputs.
+            </p>
+        </div>
+        <div class="surveyjs-container card panel-primary mb-4" data-surveyjs-container>
+            <div class="card-header no-bg">
+                <div class="card-header-inner media">
+                    <div class="media-left"><img class="surveyjs-img" data-surveyjs-img /></div>
                     <div class="media-body media-middle">
-                        <h3 class="survey-title panel-title" data-surveyjs-title></h3>
-                        <p class="survey-desc" data-surveyjs-desc></p>
+                        <h3 class="surveyjs-title panel-title text-green mt-0" data-surveyjs-title></h3>
+                        <p class="surveyjs-description" data-surveyjs-description></p>
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
-                <form action="page.jsp" name="survey-form" class="survey-form" data-surveyjs-form novalidate="">
-                    <div class="survey-body questionsList clearfix" data-surveyjs-body></div>
-                    <div class="survey-footer">
-                        <div class="question-box text-right" data-formjs-question>
-                            <div class="answers-box form-group">
+            <div class="card-body">
+                <form action="json/survey.json" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate="">
+                    <div class="surveyjs-body questionsList clearfix" data-surveyjs-body></div>
+                    <div class="surveyjs-footer">
+                        <div class="surveyjs-question-box text-right" data-formjs-question>
+                            <div class="surveyjs-answers-box form-group">
                                 <div class="text-left small">
                                     L'interessato persta il consenso al trattamento dei propri dati personali per la creazione di profili e per l'analisi delle sue abitudini o scelte di consumo sulla base del dettaglio dei suoi acquisti nonch&egrave; dei dati forniti direttamente dal cliente.
                                 </div>
-                                <div class="radio radio-inline">
-                                    <label>
-                                        <input data-exclude-storage="" data-name="bind-survey-answer"/>
+                                <div class="radio form-check-inline">
+                                    <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
+                                    <label class="form-check-label">
                                         <span></span>
                                     </label>
                                 </div>
-                                <div class="radio radio-inline">
-                                    <label>
-                                        <input data-exclude-storage="" data-name="bind-survey-answer"/>
+                                <div class="radio form-check-inline">
+                                    <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
+                                    <label class="form-check-label">
                                         <span></span>
                                     </label>
                                 </div>
-                                <div class="field-error-message small">
+                                <div class="surveyjs-field-error-message small">
                                     Per proseguire &egrave; necessario selezionare una risposta.
                                 </div>
                             </div>
                         </div>
-                        <div class="question-box text-right" data-formjs-question>
-                            <div class="answers-box form-group">
+                        <div class="surveyjs-question-box text-right" data-formjs-question>
+                            <div class="surveyjs-answers-box form-group">
                                 <div class="text-left small">
                                     Devi accettare questa condizione per sblocacre il bottone di invio del quesitonario.
                                 </div>
-                                <div class="radio radio-inline">
-                                    <label>
-                                        <input type="radio" name="prova-00" value="yeee" required="" />
+                                <div class="radio form-check-inline">
+                                    <input class="form-check-input" type="radio" name="prova-00" id="radio-prova-00-a" value="yeee" required="" />
+                                    <label class="form-check-label" for="radio-prova-00-a">
                                         <span>true</span>
                                     </label>
                                 </div>
-                                <div class="radio radio-inline">
-                                    <label>
-                                        <input type="radio" name="prova-00" value="" required="" />
+                                <div class="radio form-check-inline">
+                                    <input class="form-check-input" type="radio" name="prova-00" id="radio-prova-00-b" value="" required="" />
+                                    <label class="form-check-label" for="radio-prova-00-b">
                                         <span>false</span>
                                     </label>
                                 </div>
-                                <div class="field-error-message small">
+                                <div class="surveyjs-field-error-message small">
                                     Per proseguire &egrave; necessario accettare.
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-primary center-block" disabled type="submit">SEND</button>
+                        <button class="btn btn-primary d-block mx-auto" disabled type="submit">SEND</button>
                     </div>
                 </form>
             </div>
@@ -91,15 +95,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
                     <h4 class="modal-title">Mission complete</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="media">
-                        <div class="media-left"><img src="img/survey-image.png" class="survey-img" /></div>
+                        <div class="media-left pr-3"><img src="img/survey-image.png" class="surveyjs-img" /></div>
                         <div class="media-body media-middle">
-                            <h3>Congratulations!</h3>
-                            <p>
+                            <h3 class="text-green">Congratulations!</h3>
+                            <p class="m-0">
                                 You completed the survey and gained <b>100 points</b>.
                             </p>
                         </div>
@@ -108,13 +112,16 @@
             </div>
         </div>
     </div>
+
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED FOR FORMJS TO SUPPORT IE 10/11 -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
     
     <script src="js/vendors/jquery-1.12.4.min.js"></script>
-    <script src="js/vendors/bootstrap-3.3.7.min.js"></script>
+    <script src="js/vendors/bootstrap.bundle.min.js"></script>
     <script src="js/vendors/jquery_stackslider.js"></script>
     
     <script src="js/modules/web_storage.js"></script>
-    <script src="js/modules/jquery.formJS.js"></script>
+    <script src="js/modules/formJS.js"></script>
     <script src="js/modules/surveyJS.js"></script>
     
     <!-- MINIFIED VERSION WITH ALL MODULES -->
@@ -122,97 +129,118 @@
     
     <script type="text/javascript">
         $(function(){
-            
-            var $extraField = $('input[name="prova-00"]'),
-                validateExtraField = function( options ){
-                    var $field = $extraField,
-                        $btn = $field.closest('form').find('[type="submit"]'),
-                        options = options || {};
 
-                    if( FORM.isValidField($field, options) ){
-                        $btn.prop('disabled', false);
-                    } else {
-                        $btn.prop('disabled', true);
-                    }
-                };
-            
-            if( $extraField.length ){
-                var options = ( $extraField.is(':checked') ? {} : {skipUIfeedback: true} );
-                validateExtraField( options );
-            }
-            
-            $extraField.on('change', function(){
-                validateExtraField();
-            });
+            var $surveyCont = $('[data-surveyjs-container]'),
+                $surveyForm = $surveyCont.find('[data-surveyjs-form]'),
+                $surveyBtn = $surveyForm.find('.surveyjs-submit-btn');
             
             /* ADD A NEW LANGUAGE */
-            /*
+            /* 
             var myLang = {
-                loadingBox:         '<div class="survey-loading"><i class="glyphicon glyphicon-refresh icon-spin"></i> DE Caricamento in corso...</div>',
+                loadingBox:         '<div class="surveyjs-loading"><i class="glyphicon glyphicon-refresh icon-spin"></i> DE Caricamento in corso...</div>',
                 selectFirstOption:  'DE Seleziona una risposta...',
                 textareaPlaceholder:'DE Scrivi la tua risposta...',
                 maxChoiceText:      'DE RISPOSTE MAX',
-                fieldErrorMessage:  'DE &Egrave; necessario rispondere.',
-                fieldErrorMessageMultiChoice:  'DE Puoi scegliere al massimo {{maxChoiceNum}} risposte.'
+                fieldErrorMessage:  'DE &Egrave; necessario rispondere.'
             };
             SURVEY.addLanguage( 'de', myLang );
+            */
+
+            /* OVERRIDE SOME VALUES OF AN EXISTING LANGUAGE */
+            /* 
+            var myLang = {
+                selectFirstOption:  'IT Seleziona una risposta...',
+                textareaPlaceholder:'IT Scrivi la tua risposta...',
+                maxChoiceText:      'IT RISPOSTE MAX',
+            };
+            SURVEY.addLanguage( 'it', myLang );
             */
             
             // SETUP FOR THE SURVEY
             SURVEY.setup({
-                lang: 'it',
-                setJSONurl: 'json/survey.json',
-                /*inputTemplate:  '<div class="single-answer input-container {{answerType}}" data-answer-index="{{answerIndex}}">'+
-                                    '<input type="{{answerType}}" name="survey-answer-{{questionNumber}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}}/>'+
-                                    '<label for="{{answerCode}}">'+
-                                        '{{answerString}}'+
-                                    '</label>'+
-                                '</div>',*/
-                /*selectTemplate: '<div class="single-answer" data-answer-index="{{answerIndex}}">'+
-                                    '<select style="border: 3px solid green" id="{{answerCode}}" name="survey-answer-{{questionNumber}}{{addMoreName}}" class="form-control" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}>'+
-                                        '{{optionsHtml}}'+
-                                    '</select>'+
-                                '</div>',*/
-                /*selectTagCode:  '<select style="border: 3px solid green" id="{{answerCode}}" name="survey-answer-{{questionNumber}}{{addMoreName}}" class="{{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}>'+
-                                    '{{optionsHtml}}'+
-                                '</select>',*/
-                //labelTagCode: '<label for="{{answerCode}}" style="border: 3px solid green">{{answerString}}</label>',
-                //inputTagCode: '<input type="{{answerType}}" name="survey-answer-{{questionNumber}}{{addMoreName}}" class="myfield {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{attrRequiredFrom}}/>',
-                fieldOptions: {
-                    //checkDirtyField: true,
-                    //skipUIfeedback: true,
-                    //validateOnEvents: 'blur'
-                },
-                onValidation: function( data ){
-                    console.log( 'onValidation callback data: ', data );
-                    if( data.event === 'submit' ){
-                        
-                        for( var f=0; f<data.fields.length; f++ ){
-                            var obj = data.fields[f];
-                            if( !obj.result ){
-                                var $box = obj.$field.closest('[data-formjs-question]');
-                                $('html, body').animate({ scrollTop: $box.offset().top }, 400);
-                                break;
+                url: 'json/survey.json',
+                
+                fieldOptions: {
+                    onValidation: function( fields ){
+                        console.log( 'onValidation callback fields: ', fields );
+                        if( fields.length > 1 ){
+                            
+                            for( var f=0; f<fields.length; f++ ){
+                                var obj = fields[f];
+                                if( !obj.result ){
+                                    var $box = $(obj.field).closest('[data-formjs-question]');
+                                    $('html, body').animate({ scrollTop: $box.offset().top }, 400);
+                                    break;
+                                }
+                            }
+                            
+                        } else {
+                            var fieldObj = fields[0];
+                            console.log('onValidation of one field ', fieldObj);
+                            if( fieldObj.field.name === 'prova-00' ){
+                                var $btn = $(fieldObj.field).closest('form').find('[type="submit"]'),
+                                    isValidValue = fieldObj.field.value.trim().length > 0;
+
+                                $btn.prop('disabled', !isValidValue);
                             }
                         }
-                        
                     }
                 },
-                onInitSuccess: function( data, $surveyForm ){
-                    var $surveyBody = $surveyForm.find('.survey-body'),
-                        initResult = data.result;
-                    
-                    if( initResult === 'OK' ){
-                        
-                    } else {
-                        $surveyForm.find('.survey-footer').remove();
-                        if ( initResult === 'KO' ){
-                            $surveyBody.html( '<div class="survey-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
-                        } else if( initResult === 'DONE' ) {
-                            $surveyBody.html( '<div class="survey-message">Hai gi&agrave; completato il questionario.</div>' );
-                        } else {
-                            console.log('onInitSuccess -> data.result is ', initResult);
+                formOptions: {
+                    beforeSend: function( data ){
+                        console.log('Survey formOptions.beforeSend call...', data);
+
+                        if( !data.stopExecution ){
+                            $surveyBtn.addClass('surveyjs-submit-sending');
+                            $surveyCont.find('.alert').remove();
+                            data.formData = 'surveyJSON=' + JSON.stringify( data.formData );
                         }
+
+                        return data;
+                    },
+                    onSubmitComplete: function( ajaxData ){
+                        console.log('formOptions.onSubmitComplete', ajaxData);
+                        $surveyBtn.removeClass('surveyjs-submit-sending');
+                    },
+                    onSubmitError: function( ajaxData ){
+                        console.log('Survey formOptions.onSubmitError', ajaxData);
+                        // PRINT THE ERROR MESSAGE AFTER THE FORM
+                        $surveyForm.closest('.surveyjs-container').append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
+                    },
+                    onSubmitSuccess: function( ajaxData ){
+                        console.log('Survey formOptions.onSubmitSuccess', ajaxData);
+                        if( typeof ajaxData === 'string' ){
+                            try{
+                                ajaxData = JSON.parse(ajaxData);
+                            } catch(error){
+                                throw new Error('String returned from ajax call to "' + ajaxOptions.url + '" is not a valid JSON string');
+                            }
+                        }
+
+                        if( $.isPlainObject( ajaxData ) ){
+                            if( ajaxData.data.status === 'success' ){
+                                // REMOVE THE SURVEY FORM FROM THE PAGE AND PRINT A RESPONSE MESSAGE
+                                $surveyForm.parent().html( '<div class="alert alert-success text-center" role="alert"><p class="my-3">Great! You completed the mission.</p></div>' );
+
+                                // OPEN THE BOOTSTRAP MODAL TO SHOW A CONGRATULATION MESSAGE
+                                $('#modal-notification').modal('show');
+                            } else {
+                                // PRINT THE ERROR MESSAGE AFTER THE FORM
+                                $surveyForm.closest('.surveyjs-container').append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
+                            }
+                        }
+                    }
+                },
+                
+                onInitSuccess: function( data, $surveyForm ){
+                    var $surveyBody = $surveyForm.find('.surveyjs-body'),
+                        initStatus = data.status;
+                    
+                    if( initStatus === 'success' ){
+                        // SUCCESS CODE
+                    } else {
+                        $surveyForm.find('.surveyjs-footer').remove();
+                        $surveyBody.html( '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
                     }
                 },
                 onInitError: function( jqXHR, textStatus, errorThrown, $surveyForm ){
@@ -221,35 +249,7 @@
                     console.log('STATUS: ', textStatus);
                     console.log('ERROR: ', errorThrown);
                     
-                    $surveyForm.find('.survey-loading').html( '<div class="survey-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
-                },
-                beforeSend: function( dataJSON, $surveyForm ){
-                    console.log('dataJSON ', dataJSON);
-                    $surveyForm.find('[type="submit"]').button('loading');
-                },
-                onSubmitComplete: function( $surveyForm ){
-                    $surveyForm.find('[type="submit"]').button('reset');
-                },
-                onSubmitSuccess: function( data, $surveyForm ){
-                    if( data.result === 'OK' ){
-                        // REMOVE THE SURVEY FORM FROM THE PAGE AND PRINT A RESPONSE MESSAGE
-                        $surveyForm.parent().html( '<div class="alert alert-success" role="alert"><p><i class="glyphicon glyphicon-thumbs-up"></i> Great! You completed the mission.</p></div>' );
-
-                        // OPEN THE BOOTSTRAP MODAL TO SHOW A CONGRATULATION MESSAGE
-                        $('#modal-notification').modal('show');
-                    } else {
-                        // PRINT THE ERROR MESSAGE AFTER THE FORM
-                        $surveyForm.after( '<div class="alert alert-danger" role="alert"><p><i class="glyphicon glyphicon-exclamation-sign"></i> Generic error, please retry.</p></div>' );
-                    }
-                },
-                onSubmitError: function( jqXHR, textStatus, errorThrown, $surveyForm ){
-                    console.log('AJAX CALL FOR _sendSurvey() ( with url \''+ $surveyForm.attr('action') +'\' ) RETURNED AN ERROR:');
-                    console.log('XHR: ', jqXHR);
-                    console.log('STATUS: ', textStatus);
-                    console.log('ERROR: ', errorThrown);
-                    
-                    // PRINT THE ERROR MESSAGE AFTER THE FORM
-                    $surveyForm.after( '<div class="alert alert-danger" role="alert"><p><i class="glyphicon glyphicon-exclamation-sign"></i> Generic error, please retry.</p></div>' );
+                    $surveyForm.find('.surveyjs-loading').html( '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
                 }
             });
 

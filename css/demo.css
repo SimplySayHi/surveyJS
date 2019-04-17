@@ -1,10 +1,20 @@
-html, body, .input-group-addon, .form-control {
+html, body, .input-group-addon, .input-group-prepend, .form-control {
     font-size: 16px;
 }
+
+html, body { font-family: 'Raleway', sans-serif; }
 
 body {
     background-color: #073b4c;
     color: #06d6a0;
+}
+
+ul, ol {
+    padding-left: 1em;
+}
+
+.card-header p {
+    margin: 0;
 }
 
 code{display: inline-block;padding: 8px;color: #ccc;background-color: rgba(0,0,0,0.1);border: 2px solid rgba(0,0,0,0.15);border-radius: 4px;}
@@ -17,7 +27,51 @@ pre code{padding: 0;font-size: inherit;color: inherit;white-space: pre-wrap;back
     padding: 0.75em 3em;
 }
 
+.btn-red:disabled:hover,
+.btn-red:disabled:focus {
+    color: #fff;
+}
+
+label {
+    font-size: 0.85em;
+    font-weight: 300;
+    margin: 0;
+}
+
+.custom-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.surveyjs-question-text {
+    margin-bottom: 5px;
+}
+
+.form-check-label:before {
+    top: auto !important;
+    bottom: 100% !important;
+    margin-bottom: -19px !important;
+}
+
+.form-check-label:after {
+    top: auto !important;
+    bottom: 100% !important;
+    margin-bottom: -16px !important;
+    line-height: 19px !important;
+}
+
+.input-group .form-check-label:before {
+    margin-bottom: -21px !important;
+}
+
+.input-group .form-check-label:after {
+    margin-bottom: -18px !important;
+}
+
 .input-group-addon,
+.input-group-prepend .input-group-text,
+.custom-select,
 .form-control,
 .form-control:focus {
     -webkit-box-shadow: none;
@@ -27,53 +81,186 @@ pre code{padding: 0;font-size: inherit;color: inherit;white-space: pre-wrap;back
     color: #073B4C;
 }
 
-.input-group-addon {
+.input-group-addon,
+.input-group-prepend .input-group-text {
     background-color: #ebf3f6;
+    border-right: 0 none;
 }
 
-.radio.radio-inline { margin-top: 0; }
+.panel {
+    border: 2px solid #fff;
+}
 
-.survey-cont {
+.bg-white {
+    background-color: #fff;
+}
+
+.no-bg {
+    background-color: transparent !important;
+}
+
+/* PANELS */
+.panel-collapsible .card-header,
+.panel-collapsible .panel-heading {
+	cursor: pointer;
+    position: relative;
+}
+.panel-collapsible .panel-heading:after {
+    content: '\e114';
+    font-family:'Glyphicons Halflings';
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.panel-collapsible .panel-heading.active:after {
+    content: '\e113';
+}
+.panel-collapsible .card-body,
+.panel-collapsible .panel-body {
+    display: none;
+}
+
+.panel-collapsible .card-header > div {
+    position: relative;
+}
+
+.panel-collapsible .card-header > div:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 7px 0 7px;
+    border-color: black transparent transparent transparent;
+}
+
+.panel-collapsible .card-header.active > div:after {
+    border-width: 0 7px 7px 7px;
+    border-color: transparent transparent black transparent;
+}
+
+/* ----- */
+body > .container > div { position: relative; z-index: 0; }
+#menu { top: 0; right: 0; z-index: 10; }
+#menu .dropdown-toggle { background-color: #073b4c; }
+
+#hero { z-index: 5; }
+
+h1 { font-size: 4em; line-height: 1; display: inline-block; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em; }
+h2 { font-size: 3em; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em; }
+h3 { font-size: 2em; }
+h1, h2, h3 { font-family: 'Fredericka the Great', cursive; }
+h2, h3 { color: #ffd166; margin-top: 2em; }
+h1 .small { font-family: 'Raleway', sans-serif; font-size: 0.5em; color: inherit; }
+h3 .small { color: inherit; }
+.sticky-title {
+    position: -webkit-sticky; position: sticky; margin-bottom: 0;
+    top: 0; z-index: 1; background: #073B4C; border-bottom: 2px solid rgba(0,0,0,0.15); padding: 0.25em 0.0625em;
+}
+.sticky-title + * { margin-top: 1rem !important; }
+.sticky-title + p, .sticky-title + ul { margin-top: 0.5rem !important; }
+.interline-normal { line-height: 1.2; }
+.interline-sm { line-height: 1; }
+hr { border-top: 1px solid rgba(0, 0, 0, 0.2); }
+.mt-0 { margin-top: 0; }
+.ml-4em { margin-left: 4em; }
+.title-min { line-height: 0.75; }
+
+.text-yellow { color: #ffd166 !important; }
+.text-red { color: #ef476f !important; }
+.text-green { color: #06d6a0 !important; }
+
+.border-yellow { border-color: #ffd166 !important; }
+.border-red { border-color: #ef476f !important; }
+.border-green { border-color: #06d6a0 !important; }
+
+.bg-yellow { background-color: #ffd166 !important; }
+.bg-red { background-color: #ef476f !important; }
+.bg-green { background-color: #06d6a0 !important; }
+
+.text-opacity { opacity: 0.5; }
+ul { padding-left: 1em; }
+a { color: #ef476f; }
+a:hover, a:focus { color: inherit; }
+pre { max-height: 355px; }
+.panel { background-color: transparent; border-width: 2px; border-radius: 8px; /*color: #ccc;*/ }
+.card-header { border: 0 none; border-top-right-radius: 6px; border-top-left-radius: 6px; }
+.panel-transparent { color: #ccc; }
+.no-bg { background: none; }
+.padding-tb-md { padding-top: 1em; padding-bottom: 1em; }
+.row-list-separator { border-top: 2px solid rgba(204, 204, 204, 0.2); }
+.row-list-separator:first-child { border-top: 0 none; }
+.dropdown-menu { min-width: auto; }
+.dropdown-toggle.dropdown-red-outline { border: 1px solid #ef476f; color: #ef476f; }
+.dropdown-toggle.dropdown-red-outline:after { border-top-color: #ef476f; }
+.dropdown-toggle.dropdown-red-outline[aria-expanded="true"] { background-color: #ef476f !important; color: #fff; }
+.dropdown-toggle.dropdown-red-outline[aria-expanded="true"]:after { border-top-color: #fff; }
+.version-num { min-width: 32px; }
+
+
+
+/* SURVEY */
+.surveyjs-container {
     background-color: #fff;
     color: #073B4C;
     border-radius: 8px;
     border: 0 none;
 }
 
-.survey-title {
+.surveyjs-container .card-header-inner {
+    padding-bottom: 1rem;
+    border-bottom: 4px dotted #06d6a0;
+}
+
+.surveyjs-title {
     text-transform: uppercase;
 }
 
-.survey-desc {
+.surveyjs-description {
     margin: 0;
 }
 
-.survey-loading p {
+.surveyjs-loading p {
     margin: 0;
 }
 
-.survey-form .question-header,
-.survey-form .question-body {
+.surveyjs-form .surveyjs-question-header,
+.surveyjs-form .surveyjs-question-body {
     padding: 15px;
 }
 
-.survey-form .question-header {
+.surveyjs-form .surveyjs-question-header {
     text-transform: uppercase;
     background-color: #06d6a0;
     color: #fff;
     border-radius: 8px;
 }
 
-.survey-form .input-group .form-control {
+.surveyjs-form .input-group .form-control {
     width: auto;
 }
 
-.survey-footer {
+.surveyjs-form .surveyjs-submit-btn.surveyjs-submit-sending .surveyjs-submit-text {
+    display: none;
+}
+.surveyjs-form .surveyjs-submit-btn.surveyjs-submit-sending:before {
+    content: 'Sending data...';
+}
+
+.surveyjs-footer {
     border-top: 4px dotted #06d6a0;
     padding-top: 15px;
 }
 
-.survey-cont .alert {
+.surveyjs-container .alert {
     margin-bottom: 0;
     margin-top: 15px;
 }
@@ -93,4 +280,41 @@ pre code{padding: 0;font-size: inherit;color: inherit;white-space: pre-wrap;back
 .margin-lg {
     margin-top: 30px;
     margin-bottom: 30px;
+}
+
+.has-error .help-block,
+.has-error .control-label,
+.has-error .radio,
+.has-error .checkbox,
+.has-error .radio-inline,
+.has-error .checkbox-inline,
+.has-error .form-check,
+.has-error .form-check-inline,
+.has-error.radio label,
+.has-error.checkbox label,
+.has-error.radio-inline label,
+.has-error.checkbox-inline label,
+.has-error.form-check label,
+.has-error.form-check-inline label
+{
+    color: #ef476f;
+}
+
+.has-error .custom-select,
+.has-error .custom-select:focus,
+.has-error .form-control,
+.has-error .form-control:focus {
+    border-color: #ef476f;
+    border-width: 2px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.has-error .input-group-addon,
+.has-error .input-group-prepend .input-group-text {
+    color: #ef476f;
+    border-width: 2px;
+    border-color: #ef476f;
+    border-right-color: #ef476f;
+    background-color: #fcdde4;
 }
