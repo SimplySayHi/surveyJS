@@ -1,5 +1,5 @@
 /**
- * @version     1.6.0
+ * @version     1.6.1
  * @file        Javascript Survey Creation & Management. Made Easy
  * @author      Valerio Di Punzio <sayhi@valeriodipunzio.com>
  * @doc         http://valeriodipunzio.com/plugins/surveyJS/
@@ -7,7 +7,7 @@
  * 
  * Dependencies:
  * jQuery 1.12.4+
- * formJS 2.3.2 ( module - form validation and submit )
+ * formJS 2.3.3 ( module - form validation and submit )
  * WEB_STORAGE ( module - functions to use and extend web storage )
  *
  */

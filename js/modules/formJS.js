@@ -81,7 +81,7 @@
                 return Constructor;
             };
         }();
- /**! formJS v2.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
+ /**! formJS v2.3.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */        var _helper = __webpack_require__("./src/modules/helper.js");
         var _listenerCallbacks2 = __webpack_require__("./src/modules/listenerCallbacks.js");
         var _optionsUtils = __webpack_require__("./src/modules/optionsUtils.js");
         var _options = __webpack_require__("./src/modules/options.js");
@@ -98,7 +98,7 @@
                 throw new TypeError("Cannot call a class as a function");
             }
         }
-        var version = "2.3.2";
+        var version = "2.3.3";
         var _listenerCallbacks = new WeakMap();
         var Form = function() {
             function Form(formEl) {
@@ -425,26 +425,18 @@
                 if (name === currentFieldName && type === currentFieldType) {
                     return true;
                 }
-                var isCheckboxOrRadio = fieldEl.type === "checkbox" || fieldEl.type === "radio", isFieldForChangeEvent = (0, 
+                var isCheckboxOrRadio = fieldEl.type === "checkbox" || fieldEl.type === "radio", isFieldForChangeEventBoolean = (0, 
                 _helper._isFieldForChangeEvent)(fieldEl), fieldChecked = formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
                 if (!isReqFrom) {
                     currentFieldName = name;
                     currentFieldType = type;
                 }
                 if (!isCheckboxOrRadio && fieldEl.value || isCheckboxOrRadio && fieldChecked !== null || isReqFrom && reqMoreEl.checked) {
-                    var eventToTrigger = "change";
-                    if (isCheckboxOrRadio) {
-                        fieldEl = fieldChecked;
-                    } else if (!isFieldForChangeEvent) {
-                        eventToTrigger = self.options.fieldOptions.validateOnEvents.split(" ").filter(function(evName) {
-                            return evName !== "change";
-                        })[0] || "input";
-                    }
-                    var newEvent = new Event(eventToTrigger, {
-                        bubbles: eventToTrigger !== "blur",
-                        cancelable: true
-                    });
-                    fieldEl.dispatchEvent(newEvent);
+                    var fakeEventObj = {
+                        target: fieldEl,
+                        type: isFieldForChangeEventBoolean ? "change" : ""
+                    };
+                    self.listenerCallbacks.validation.call(self, fakeEventObj);
                 }
             });
             self.isInitialized = true;
@@ -628,16 +620,14 @@
                         var findReqMoreEl = isReqMore ? fieldEl : self.formEl.querySelector('[name="' + fieldEl.name + '"][data-require-more]'), findReqFromEl = findReqMoreEl !== null ? self.formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
                         if (isReqMore) {
                             if (findReqFromEl !== null) {
-                                if (fieldEl.required) {
-                                    findReqFromEl.required = true;
-                                }
+                                findReqFromEl.required = fieldEl.required;
                                 if (self.options.fieldOptions.focusOnRelated) {
                                     findReqFromEl.focus();
                                 }
                             }
                         } else if (findReqMoreEl !== null) {
                             if (findReqFromEl !== null) {
-                                findReqFromEl.required = false;
+                                findReqFromEl.required = findReqMoreEl.required && findReqMoreEl.checked;
                                 findReqFromEl.value = "";
                             }
                         }
@@ -646,9 +636,7 @@
                         if (isValidValue) {
                             var reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
                             reqMoreEl.checked = true;
-                            if (reqMoreEl.required) {
-                                fieldEl.required = true;
-                            }
+                            fieldEl.required = reqMoreEl.required;
                         }
                     }
                     if (isFieldForChangeEvent && eventName === "change" || !isFieldForChangeEvent && eventName !== "change") {
@@ -713,9 +701,6 @@
         Object.defineProperty(exports, "__esModule", {
             value: true
         });
-        exports._setCallbackFunctionsInOptions = undefined;
-        var _helper = __webpack_require__("./src/modules/helper.js");
-        var _checkDirtyField2 = __webpack_require__("./src/modules/checkDirtyField.js");
         var _setCallbackFunctionsInOptions = exports._setCallbackFunctionsInOptions = function _setCallbackFunctionsInOptions() {
             var self = this, callbacks = {
                 fieldOptions: [ "onPastePrevented", "onValidation" ],
@@ -749,7 +734,7 @@
         function submit() {
             var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
             var event = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-            var self = this, formEl = self.formEl, eventPreventDefault = function eventPreventDefault() {
+            var self = this, formEl = self.formEl, btnEl = formEl.querySelector('[type="submit"]'), eventPreventDefault = function eventPreventDefault() {
                 var enableBtn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
                 if (btnEl && enableBtn) {
                     btnEl.disabled = false;
@@ -758,14 +743,24 @@
                     event.preventDefault();
                 }
             };
+            if (btnEl) {
+                if (btnEl.disabled) {
+                    eventPreventDefault(false);
+                    return false;
+                }
+                btnEl.disabled = true;
+            }
             options.fieldOptions = (0, _helper._mergeObjects)({}, self.options.fieldOptions, options.fieldOptions || {});
             options.formOptions = (0, _helper._mergeObjects)({}, self.options.formOptions, options.formOptions || {});
-            var handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? self.isValidForm(options) : {
+            var isAjaxForm = options.formOptions.ajaxSubmit, handleValidation = options.fieldOptions.handleValidation, formValidation = handleValidation ? self.isValidForm(options) : {
                 result: true
             };
-            var btnEl = formEl.querySelector('[type="submit"]'), isAjaxForm = options.formOptions.ajaxSubmit;
             if (handleValidation) {
                 _helper._executeCallback.call(self, options.fieldOptions.onValidation, formValidation.fields);
+            }
+            if (!formValidation.result) {
+                eventPreventDefault();
+                return false;
             }
             var formDataJSON = isAjaxForm ? self.getFormJSON() : null, callbacksBeforeSend = [], beforeSendOpt = options.formOptions.beforeSend;
             if (typeof beforeSendOpt === "function" || Array.isArray(beforeSendOpt)) {
@@ -795,13 +790,6 @@
                     eventPreventDefault();
                     return false;
                 }
-            }
-            if (!formValidation.result || btnEl && btnEl.disabled) {
-                eventPreventDefault();
-                return false;
-            }
-            if (btnEl) {
-                btnEl.disabled = true;
             }
             if (isAjaxForm) {
                 eventPreventDefault(false);
