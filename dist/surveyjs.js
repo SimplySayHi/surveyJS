@@ -479,8 +479,6 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
   }
 
   var _loop = function _loop(_a) {
-    // beforeCode       MANAGE FIELD INDENT ( FOR NESTED ANSWERS - SEE BELOW )
-    // afterCode        MANAGE FIELD INDENT ( FOR NESTED ANSWERS - SEE BELOW )
     var answer = list[_a],
         aNum = _a + 1,
         qNum = i + 1,
@@ -488,9 +486,6 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
         aId = answer.id,
         progIdsLength = progIds.length,
         progIdsJoined = progIdsLength > 0 ? self.internals.progIds.join('-') : '',
-        beforeCode = progIdsLength > 0 && _a === 0 ? '<div class="surveyjs-field-indent">' : '',
-        afterCode = progIdsLength > 0 && _a === listL - 1 ? '</div>' : '',
-        relatedAnswerField = '',
         getSettingsFieldClass = function getSettingsFieldClass() {
       var aType = answer.type === 'option' ? 'select' : answer.type;
       a = _a;
@@ -551,7 +546,11 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
     }
 
     if (typeof answer.answer === 'string' || typeof answer.answer === 'number') {
+      // beforeCode       MANAGE FIELD INDENT ( FOR NESTED ANSWERS - SEE BELOW )
+      // afterCode        MANAGE FIELD INDENT ( FOR NESTED ANSWERS - SEE BELOW )
       var surveyFieldType = answer.attribute ? 'attribute' : answer.nested ? 'nested' : aType === 'option' ? 'select' : aType,
+          beforeCode = progIdsLength > 0 && _a === 0 ? '<div class="surveyjs-field-indent">' : '',
+          afterCode = progIdsLength > 0 && _a === listL - 1 ? '</div>' : '',
           data = {
         answer: answer,
         objData: objData,
@@ -567,7 +566,6 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
 
       fieldData = _generateFieldHTML__WEBPACK_IMPORTED_MODULE_0__["generateFieldHTML"][surveyFieldType].call(self, data);
       objData = fieldData.objData;
-      relatedAnswerField = fieldData.relatedAnswerField || '';
 
       if (answer.nested) {
         self.internals.progIds.push(aNum);
@@ -588,7 +586,7 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
       fieldData.aHtml = fieldData.aHtml.replace(/{{selectTagCode}}/g, self.options.templates.selectTag);
     }
 
-    if (relatedAnswerField !== '') {
+    if (fieldData.relatedAnswerField) {
       var relatedAnswerKeys = {
         answerCode: '',
         answerType: 'text',
@@ -601,10 +599,10 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
 
       for (var reKey in relatedAnswerKeys) {
         var regexStrRe = new RegExp('{{' + reKey + '}}', 'g');
-        relatedAnswerField = relatedAnswerField.replace(regexStrRe, relatedAnswerKeys[reKey]);
+        fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace(regexStrRe, relatedAnswerKeys[reKey]);
       }
 
-      fieldData.aHtml = fieldData.aHtml.replace(/{{relatedAnswerField}}/g, relatedAnswerField);
+      fieldData.aHtml = fieldData.aHtml.replace(/{{relatedAnswerField}}/g, fieldData.relatedAnswerField);
     } else {
       fieldData.aHtml = fieldData.aHtml.replace(/{{addMoreName}}/g, '');
       fieldData.aHtml = fieldData.aHtml.replace(/{{attrRequiredFrom}}/g, '');
@@ -1287,7 +1285,7 @@ function retrieveSurvey() {
   var self = this;
   self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML('beforebegin', self.options.loadingBox);
   return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["ajaxCall"])(self.options.url, self.options.initAjaxOptions).then(function (response) {
-    if (response.status && response.status.toLowerCase() === 'success') {
+    if (response.status.toLowerCase() === 'success' && response.data.questions && response.data.questions.length > 0) {
       self.data = response.data;
       Object.freeze(self.data);
       _buildSurvey_buildSurvey__WEBPACK_IMPORTED_MODULE_1__["buildSurvey"].call(self);

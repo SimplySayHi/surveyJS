@@ -25,8 +25,6 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
 
     for(let a=0; a<listL; a++){
 
-        // beforeCode       MANAGE FIELD INDENT ( FOR NESTED ANSWERS - SEE BELOW )
-        // afterCode        MANAGE FIELD INDENT ( FOR NESTED ANSWERS - SEE BELOW )
         let answer = list[a],
             aNum = (a+1),
             qNum = (i+1),
@@ -34,9 +32,6 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
             aId = answer.id,
             progIdsLength = progIds.length,
             progIdsJoined = ( progIdsLength > 0 ? self.internals.progIds.join('-') : '' ),
-            beforeCode = ( progIdsLength > 0 && a === 0 ? '<div class="surveyjs-field-indent">' : '' ),
-            afterCode = ( progIdsLength > 0 && a === listL - 1 ? '</div>' : '' ),
-            relatedAnswerField = '',
             getSettingsFieldClass = function(){
                 let aType = ( answer.type === 'option' ? 'select' : answer.type );
                 return self.options.cssClasses[aType] || self.options.cssClasses.default;
@@ -95,12 +90,11 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
         
         if( typeof answer.answer === 'string' || typeof answer.answer === 'number' ){
 
-                let surveyFieldType = (
-                        answer.attribute ? 'attribute' : 
-                            ( answer.nested ? 'nested' :
-                            ( aType === 'option' ? 'select' : aType )
-                        )
-                    ),
+                // beforeCode       MANAGE FIELD INDENT ( FOR NESTED ANSWERS - SEE BELOW )
+                // afterCode        MANAGE FIELD INDENT ( FOR NESTED ANSWERS - SEE BELOW )
+                let surveyFieldType = ( answer.attribute ? 'attribute' : (answer.nested ? 'nested' : ( aType === 'option' ? 'select' : aType )) ),
+                    beforeCode = ( progIdsLength > 0 && a === 0 ? '<div class="surveyjs-field-indent">' : '' ),
+                    afterCode = ( progIdsLength > 0 && a === listL - 1 ? '</div>' : '' ),
                     data = { answer, objData, beforeCode, afterCode, obj };
 
                 if( typeof generateFieldHTML[surveyFieldType] === 'undefined' ){
@@ -111,7 +105,6 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
                 fieldData = generateFieldHTML[surveyFieldType].call( self, data );
                 
                 objData = fieldData.objData;
-                relatedAnswerField = fieldData.relatedAnswerField || '';
 
                 if( answer.nested ){
                     self.internals.progIds.push( aNum );
@@ -130,7 +123,7 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
             fieldData.aHtml = fieldData.aHtml.replace( /{{selectTagCode}}/g, self.options.templates.selectTag );
         }
 
-        if( relatedAnswerField !== '' ){
+        if( fieldData.relatedAnswerField ){
             let relatedAnswerKeys = {
                     answerCode: '', answerType: 'text', fieldClass: objData.fieldClass,
                     answerIdValue: '', attrRequired: '', addMoreName: '-more',
@@ -139,10 +132,10 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
                 
             for(let reKey in relatedAnswerKeys){
                 let regexStrRe = new RegExp( '{{' + reKey + '}}', 'g' );
-                relatedAnswerField = relatedAnswerField.replace( regexStrRe, relatedAnswerKeys[reKey] );    
+                fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace( regexStrRe, relatedAnswerKeys[reKey] );    
             }
             
-            fieldData.aHtml = fieldData.aHtml.replace( /{{relatedAnswerField}}/g, relatedAnswerField );
+            fieldData.aHtml = fieldData.aHtml.replace( /{{relatedAnswerField}}/g, fieldData.relatedAnswerField );
         } else {
             fieldData.aHtml = fieldData.aHtml.replace( /{{addMoreName}}/g, '' );
             fieldData.aHtml = fieldData.aHtml.replace( /{{attrRequiredFrom}}/g, '' );

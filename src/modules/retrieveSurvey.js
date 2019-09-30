@@ -11,7 +11,7 @@ export function retrieveSurvey(){
     return ajaxCall(self.options.url, self.options.initAjaxOptions)
         .then(function( response ){
 
-            if( response.status && response.status.toLowerCase() === 'success' ){
+            if( response.status.toLowerCase() === 'success' && response.data.questions && response.data.questions.length > 0 ){
                 self.data = response.data;
                 Object.freeze(self.data);
                 buildSurvey.call(self);

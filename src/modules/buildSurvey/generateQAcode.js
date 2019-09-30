@@ -8,7 +8,7 @@ export function generateQAcode( questionsList = [] ){
         qaCodeAll = '',
         qaDataLength = qaData.length;
     
-    for(var i=0; i<qaDataLength; i++){
+    for(let i=0; i<qaDataLength; i++){
         let item = qaData[i],
             maxChoice = (item.checks ? JSON.parse(item.checks) : ''),
             checksMin = (maxChoice.length > 0 ? maxChoice[0] : ''),
