@@ -23,9 +23,14 @@
     
     <div class="container">
         <div class="text-center">
+            <div>
+                <p class="mt-5 mb-4">
+                    <a href="index.html">&leftarrow; back to documentation</a>
+                </p>
+            </div>
             <h1>surveyJS</h1>
             <p>
-                This survey is generated with Javascript/jQuery.
+                This survey is generated with Javascript.
                 <br />
                 This demo uses <a href="https://github.com/flatlogic/awesome-bootstrap-checkbox/tree/bump-to-bootstrap4" target="_blank">Awesome Bootstrap Checkbox</a>
             </p>
@@ -90,32 +95,28 @@
         </div>
     </div>
 
-    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED FOR FORMJS TO SUPPORT IE 10/11 -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
-    
+    <!-- ONLY FOR DOCUMENTATION DEMO SLIDER -->
     <script src="js/vendors/modernizr_custom_63321.js"></script>
     <script src="js/vendors/jquery-1.12.4.min.js"></script>
-    <script src="js/vendors/bootstrap.bundle.min.js"></script>
     <script src="js/vendors/jquery_stackslider.js"></script>
     
-    <!-- <script src="js/modules/web_storage.js"></script>
-    <script src="js/modules/formJS.js"></script>
-    <script src="js/modules/surveyJS.js"></script> -->
-    
-    <!-- MINIFIED VERSION WITH ALL MODULES -->
-    <script src="js/surveyJS.min.js"></script>
-    
-    <script type="text/javascript">
-        $(function(){
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
+    <script src="js/include.js"></script>
+    <script src="js/vendors/formJS.js"></script>
+    <script src="dist/surveyjs.min.js"></script>
 
-            var $surveyCont = $('[data-surveyjs-container]'),
-                $surveyForm = $surveyCont.find('[data-surveyjs-form]'),
-                $surveyBtn = $surveyForm.find('.surveyjs-submit-btn');
-            
-            // SETUP FOR THE SURVEY
-            SURVEY.setup({
+    <script type="text/javascript">
+        var $surveyCont = $('[data-surveyjs-container]'),
+            $surveyForm = $surveyCont.find('[data-surveyjs-form]'),
+            $surveyBtn = $surveyForm.find('.surveyjs-submit-btn');
+
+        var formEl = document.querySelector('[data-surveyjs-form]');
+        var options = {
                 url: 'json/survey.json',
-                
+                cssClasses: {
+                    select: 'custom-select'
+                },
                 templates: {
                     question:   '<div class="st-item" data-title="#{{questionId}}">'+
                                     '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix" {{maxChoice}}>'+
@@ -143,9 +144,8 @@
                                     '{{relatedAnswerField}}'+
                                 '</div>'
                 },
-
                 fieldOptions: {
-                    onValidation: function( fields ){
+                    onValidation: function onValidation_doc( fields ){
                         if( fields.length > 1 ){
                             // GO TO THE FIRST UNANSWERED QUESTION
                             var $stWrapper = $('.surveyjs-form .st-wrapper'),
@@ -153,8 +153,8 @@
                                 $invalidField = (function(){
                                     for( var f=0; f<fields.length; f++ ){
                                         var obj = fields[f];
-                                        if( !obj.result && !$(obj.field).is('[data-name="bind-surveyjs-answer"]') ){
-                                            return $(obj.field);
+                                        if( !obj.result && !$(obj.fieldEl).is('[data-name="bind-surveyjs-answer"]') ){
+                                            return $(obj.fieldEl);
                                         }
                                     }
                                     return $();
@@ -179,27 +179,26 @@
                     }
                 },
                 formOptions: {
-                    beforeSend: function( data ){
+                    beforeSend: function beforeSend_doc( data ){
                         console.log('Survey formOptions.beforeSend call...', data);
 
                         if( !data.stopExecution ){
                             $surveyBtn.addClass('surveyjs-submit-sending');
                             $surveyCont.find('.alert').remove();
-                            data.formData = 'surveyJSON=' + JSON.stringify( data.formData );
                         }
 
-                        return data;
+                        return Promise.resolve(data);
                     },
-                    onSubmitComplete: function( ajaxData ){
-                        console.log('formOptions.onSubmitComplete', ajaxData);
+                    onSubmitComplete: function onSubmitComplete_doc(){
+                        console.log('formOptions.onSubmitComplete');
                         $surveyBtn.removeClass('surveyjs-submit-sending');
                     },
-                    onSubmitError: function( ajaxData ){
+                    onSubmitError: function onSubmitError_doc( ajaxData ){
                         console.log('Survey formOptions.onSubmitError', ajaxData);
                         // PRINT THE ERROR MESSAGE AFTER THE FORM
                         $surveyForm.closest('.surveyjs-container').append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
                     },
-                    onSubmitSuccess: function( ajaxData ){
+                    onSubmitSuccess: function onSubmitSuccess_doc( ajaxData ){
                         console.log('Survey formOptions.onSubmitSuccess', ajaxData);
                         if( typeof ajaxData === 'string' ){
                             try{
@@ -222,30 +221,43 @@
                             }
                         }
                     }
-                },
-
-                onInitSuccess: function( data, $surveyForm ){
-                    var $surveyBody = $surveyForm.find('.surveyjs-body'),
-                        initStatus = data.status;
-                    
-                    if( initStatus === 'success' ){
-                        $('.stackSlider').stackslider({ piles : false });
-                    } else {
-                        $surveyForm.find('.surveyjs-footer').remove();
-                        $surveyBody.html( '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
-                    }
-                },
-                onInitError: function( jqXHR, textStatus, errorThrown, $surveyForm ){
-                    console.log('_setJSONurl(\''+ $surveyForm.attr('action') +'\') RETURNED AN ERROR:');
-                    console.log('XHR: ', jqXHR);
-                    console.log('STATUS: ', textStatus);
-                    console.log('ERROR: ', errorThrown);
-                    
-                    $surveyForm.find('.surveyjs-loading').html( '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
                 }
-            });
+        };
 
-        });
+        var onInitSuccess = function( ajaxData ){
+                console.log('onInitSuccess', ajaxData);
+
+                var surveyFormEl = this.formEl,
+                    surveyBody = surveyFormEl.querySelector('.surveyjs-body'),
+                    initStatus = ajaxData.status;
+                
+                if( initStatus === 'success' ){
+                    $('.stackSlider').stackslider({ piles : false });
+                } else {
+                    var elemToRemove = surveyFormEl.querySelector('.surveyjs-footer');
+                    elemToRemove.parentNode.removeChild(elemToRemove);
+                    surveyBody.innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
+                }
+            },
+            onInitError = function( error ){
+                var surveyFormEl = this.formEl;
+
+                console.log('onInitError', error);
+                console.log('_setJSONurl(\''+ surveyFormEl.getAttribute('action') +'\') RETURNED AN ERROR:');
+                
+                surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
+            };
+        
+        var mySurvey = new Survey( formEl, options );
+        mySurvey.init()
+            .then(function( data ){
+                console.log('retrieveSurvey init then');
+                onInitSuccess.call(mySurvey, data);
+            })
+            .catch(function( error ){
+                console.log('retrieveSurvey init catch');
+                onInitError.call(mySurvey, error);
+            });
     </script>
 </body>
 </html>

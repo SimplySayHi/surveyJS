@@ -1,33 +1,21 @@
 {
     "status": "success",
-    "survey": {
-        "id": 0,
-        "image": "img/surveyjs-image.png",
+    "data": {
+        "id": 1,
         "title": "My Survey",
         "description": "Answer the questions",
         "questions": [
             {
-                "id": "1",
-                "question": "Do you have pets?",
-                "answers": [
-                    { "id": "1", "type": "radio", "answer": "Yes" },
-                    { "id": "2", "type": "radio", "answer": "No" }
-                ],
-                "required": "",
-                "sort": 1
-            },
-            {
                 "id": "1b",
-                "question": "Do you have pets?",
+                "question": "What's your name?",
                 "answers": [
                     { "id": "1ba", "type": "text", "answer": "" }
                 ],
-                "required": "",
-                "sort": 2
+                "sort": 1
             },
             {
                 "id": "2",
-                "question": "Which are your hobbies/interests?",
+                "question": "Waht's your most important hobby/interest?",
                 "answers": [
                     { "id": "6", "type": "radio", "answer": "Music", "sort": 5 },
                     { "id": "7", "type": "radio", "answer": "Photography", "sort": 2 },
@@ -36,50 +24,27 @@
                     { "id": "10", "type": "radio", "answer": "Reading", "sort": 1 },
                     { "id": "11", "type": "radio", "answer": "Wellness", "sort": 6 },
                     {
-                        "id": "100", "type": "radio", "answer": "Other...", "sort": 7
+                        "id": "100", "type": "radio", "answer": "Other...", "sort": 7,
+                        "attribute": { "id": "", "type": "text", "answers": "" }
                     }
                 ],
                 "required": "",
-                "sort": 3
+                "sort": 2
             },
             {
                 "id": "3",
-                "question": "If yes, specify which sport:",
+                "question": "Describe your daily routine in 300 chars:",
                 "answers": [
                     { "id": "18", "type": "textarea", "answer": "", "maxlength": 300 }
                 ],
-                "sort": 4
-            },
-            {
-                "id": "4",
-                "question": "If yes, specify which sport:",
-                "answers": [
-                    { "id": "18", "type": "textarea", "answer": "", "placeholder": "This is my custom placeholder..." }
-                ],
-                "sort": 5
-            },
-            {
-                "id": "5",
-                "question": "What is important for you about the loyalty program?",
-                "answers": [
-                    { "id": "19", "type": "radio", "answer": "It should be funny" },
-                    { "id": "20", "type": "radio", "answer": "It does not require much time" },
-                    {
-                        "id": "200", "type": "radio", "answer": "Other...",
-                        "attribute": {
-                            "id": "", "type": "text", "answers": ""
-                        }
-                    }
-                ],
-                "required": "",
-                "sort": 6
+                "sort": 3
             },
             {
                 "id": "6",
-                "question": "How do you prefer to be interact with the loyalty program?",
+                "question": "How do you prefer to interact with us?",
                 "answers": [
                     {
-                        "id": "21", "type": "radio", "answer": "Website",
+                        "id": "21", "type": "radio", "answer": "Website 1",
                         "nested": [
                             { "id": "21a", "type": "radio", "answer": "Pc", "sort": 1 },
                             { "id": "21b", "type": "radio", "answer": "Smartphone", "sort": 2 },
@@ -87,7 +52,7 @@
                         ], "sort": 1
                     },
                     {
-                        "id": "21aPlus", "type": "radio", "answer": "Website",
+                        "id": "21aPlus", "type": "radio", "answer": "Website 2",
                         "attribute": [
                             { "id": "21aa", "type": "option", "answer": "Pc", "sort": 1 },
                             { "id": "21ba", "type": "option", "answer": "Smartphone", "sort": 2 },
@@ -95,58 +60,46 @@
                         ], "sort": 6
                     },
                     { "id": "24", "type": "radio", "answer": "App", "sort": 3 },
-                    { "id": "25", "type": "radio", "answer": "Phone", "sort": 4 },
-                    { "id": "26", "type": "radio", "answer": "With loyalty card", "sort": 5 }
+                    { "id": "25", "type": "radio", "answer": "Phone", "sort": 4 }
                 ],
                 "required": "",
-                "sort": 7
+                "sort": 4
             },
             {
                 "id": "7",
-                "question": "How much is important that the loyalty program is funny?",
+                "question": "How much is important this survey for you?",
                 "answers": [
                             { "id": "60", "type": "option", "answer": "Not much", "sort": 1 },
                             { "id": "61", "type": "option", "answer": "Medium", "sort": 2 },
                             { "id": "62", "type": "option", "answer": "Much", "sort": 3 }
                 ],
-                "sort": 8
+                "sort": 5
             },
             {
                 "id": "8",
-                "question": "What do you like the most about this edition?",
+                "question": "What do you like about this survey?",
                 "answers": [
                     { "id": "43", "type": "checkbox", "answer": "Clear of communication", "sort": 1 },
                     { "id": "44", "type": "checkbox", "answer": "Simplicity of usage", "sort": 2 },
                     { "id": "45", "type": "checkbox", "answer": "Graphic style and language", "sort": 3 },
-                    { "id": "46", "type": "checkbox", "answer": "Duration", "sort": 4 },
-                    { "id": "47", "type": "checkbox", "answer": "Content/prizes", "sort": 5 }
+                    { "id": "46", "type": "checkbox", "answer": "Duration", "sort": 4 }
                 ],
                 "checks": "[1,2]",
                 "required": "",
-                "sort": 9
-            },
-            {
-                "id": "9",
-                "question": "How much is important that the loyalty program is funny?",
-                "answers": [
-                            { "id": "160", "type": "option", "answer": "Not much", "sort": 1 },
-                            { "id": "161", "type": "option", "answer": "Medium", "sort": 2 },
-                            { "id": "162", "type": "option", "answer": "Much", "sort": 3 }
-                ],
-                "required": "",
-                "sort": 10
+                "sort": 6
             },
             {
                 "id": "10",
-                "question": "How much is important that the loyalty program is funny?",
+                "question": "How much do you like pizza?",
                 "answers": [
-                            { "id": "", "type": "option", "answer": "My custom first option...", "sort": 1 },
+                            { "id": "", "type": "option", "answer": "Give your last answer...", "sort": 1 },
                             { "id": "160", "type": "option", "answer": "Not much", "sort": 2 },
                             { "id": "161", "type": "option", "answer": "Medium", "sort": 3 },
-                            { "id": "162", "type": "option", "answer": "Much", "sort": 4 }
+                            { "id": "162", "type": "option", "answer": "Much", "sort": 4 },
+                            { "id": "163", "type": "option", "answer": "True love", "sort": 5 }
                 ],
                 "required": "",
-                "sort": 11
+                "sort": 7
             },
             {
                 "id": "22",
@@ -156,7 +109,7 @@
                             { "id": "45", "type": "radio", "answer": "No", "sort": 2 }
                 ],
                 "required": "",
-                "sort": 12
+                "sort": 8
             }
         ]
     }

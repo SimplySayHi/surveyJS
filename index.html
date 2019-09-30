@@ -32,12 +32,13 @@
                     <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS/archive/master.zip">Download Latest Version</a>
                     <a class="dropdown-item" href="#browsers-support">Browsers Support</a>
                     <a class="dropdown-item" href="#dependencies">Dependencies</a>
+                    <a class="dropdown-item" href="#usage">Usage</a>
                     <a class="dropdown-item" href="#html">HTML</a>
                     <a class="dropdown-item" href="#initialization">Initialization</a>
                     <a class="dropdown-item" href="#json-file">JSON File</a>
                     <a class="dropdown-item" href="#options-list">Options</a>
-                    <a class="dropdown-item" href="#localization">Localization</a>
                     <a class="dropdown-item" href="#methods">Methods</a>
+                    <a class="dropdown-item" href="#prototype-methods">Prototype Methods</a>
                     <a class="dropdown-item" href="#templates">Templates</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS" target="_blank">View on Github</a>
@@ -75,9 +76,10 @@
                 </p>
                 <div class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        1.6.1
+                        2.0.0
                     </button>
                     <span class="dropdown-menu w-100 py-1">
+                        <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/1.6.1/" target="_blank">1.6.1</a>
                         <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/1.5.2/" target="_blank">1.5.2</a>
                     </span>
                 </div>
@@ -125,7 +127,7 @@
         <div id="demo-links" class="text-center mt-5">
             <p>
                 All demos<br />
-                <a href="example-base.html" target="_blank">basic</a> - <a href="example-1.html" target="_blank">demo 1</a> - <a href="example-2.html" target="_blank">demo 2</a>
+                <a href="example-base.html">basic</a> - <a href="example-1.html">demo 1</a> - <a href="example-2.html">demo 2</a>
             </p>
         </div>
         
@@ -137,13 +139,17 @@
                 <br class="d-block mt-2">
                 <a href="https://github.com/SimplySayHi/surveyJS/releases" target="_blank">Go To Releases Page</a>
             </p>
+            <h3>CDNs</h3>
+            <p>
+                <a href="https://www.jsdelivr.com/package/gh/simplysayhi/surveyJS" target="_blank">jsDelivr</a>
+            </p>
         </div>
         
         <!-- Intro -->
         <div id="intro">
             <h2>Intro</h2>
             <p>
-                surveyJS let's you create a survey from a JSON and manage all the process ( fields validation, local storage and JSON construction are already set )<br />
+                surveyJS let's you create a survey from a JSON and manage all the process ( fields validation, local storage and form data are already managed )<br />
                 You can manage:
             </p>
             <ul>
@@ -151,10 +157,10 @@
                     HTML for questions, answers and feedback messages
                 </li>
                 <li>
-                    JSON data before sending it to the backend
+                    Form data before sending it to the backend
                 </li>
                 <li>
-                    Callback functions for success/error AJAX calls and validation
+                    Callback functions for AJAX calls success/error/end and validation
                 </li>
                 <li>
                     and more...
@@ -185,10 +191,10 @@
             <hr />
             <p>
                 <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Event</code> <code>WeakMap</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Dependencies -->
@@ -199,42 +205,39 @@
             </p>
             <ul>
                 <li>
-                    jQuery 1.12.4+
+                    <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> ( version 3.1.0 - for survey form validation and submit )
                 </li>
                 <li>
-                    Bootstrap 4 CSS ( only form CSS ) but you can write the CSS by yourself ;)
-                </li>
-                <li>
-                    JS Modules ( included ):
-                    <ul>
-                        <li>
-                            WEB_STORAGE ( functions to check web storage availability and implementation of setObject/getObject )
-                        </li>
-                        <li>
-                            <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> ( version 2.3.3 - for survey form validation and submit )
-                        </li>
-                    </ul>
+                    Bootstrap 4 CSS ( Optional - only form CSS ) but you can write the CSS by yourself ;)
                 </li>
             </ul>
+        </div>
+
+        <!-- Usage -->
+        <div id="usage">
+            <h3 class="sticky-title">Usage</h3>
+            <p>
+                Include css and js in your page.
+            </p>
             <pre>
-&lt;!-- BOOTSTRAP CSS --&gt;
+&lt;!-- BOOTSTRAP CSS ( OPTIONAL ) --&gt;
 &lt;link rel="stylesheet" href="css/bootstrap.css"&gt;
 
 &lt;!-- SURVEY CSS --&gt;
 &lt;link rel="stylesheet" href="css/survey.css"&gt;
 
-&lt;!-- JQUERY --&gt;
-&lt;script src="js/vendors/jquery-1.12.4.min.js"&gt;&lt;/script&gt;
+&lt;!-- FORM JS --&gt;
+&lt;script src="js/vendors/formJS.min.js"&gt;&lt;/script&gt;
 
-&lt;!-- SURVEY JS ( with WEB_STORAGE and formJS modules included ) --&gt;
-&lt;script src="js/surveyJS.min.js"&gt;&lt;/script&gt;</pre>
+&lt;!-- SURVEY JS --&gt;
+&lt;script src="dist/surveyjs.min.js"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- HTML -->
         <div id="html">
             <h3 class="sticky-title">HTML</h3>
             <p>
-                This is the basic HTML structure to initialize the survey ( div with class "surveyjs-body" will be filled with questions &amp; answers. ):
+                This is the basic HTML structure to initialize the survey ( element with <code>data-surveyjs-body</code> will be filled with questions &amp; answers. ):
             </p>
             <pre>
 &lt;div class="surveyjs-container" data-surveyjs-container&gt;
@@ -261,7 +264,7 @@
             </ul>
             <p>
                 CSS classes ( like <code>.surveyjs-*</code> ) are optional but used to give styles to the demos.<br />
-                For custom graphic inputs, using class <code>surveyjs-custom-inputs</code> for the Survey container ( with class "surveyjs-container" ) is suggested in order to default Survey CSS be applied.
+                For custom graphic inputs, using CSS class <code>surveyjs-custom-inputs</code> on the Survey container ( with class "surveyjs-container" ) is suggested in order to default Survey CSS be applied.
             </p>
         </div>
         
@@ -271,7 +274,36 @@
             <p>
                 You must specify the url to retrieve the JSON data to build the survey.
             </p>
-            <pre>SURVEY.setup({ url: 'json/survey.json' });</pre>
+            <pre>
+var formEl = document.querySelector('[data-surveyjs-form]');
+var options = { url: 'json/survey.json' };
+var mySurvey = new Survey( formEl, options );
+mySurvey.init();
+</pre>
+            <ul>
+                <li>
+                    formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>var formEl = '.my-container .my-form';</code>
+                </li>
+                <li>
+                    options: ( required ) a JS object as defined in <a href="#options-list">Options section</a> with at least <code>url</code>
+                </li>
+            </ul>
+            <hr />
+            <p>
+                <b>IMPORTANT</b>: If <code>Survey</code> namespace is not available, you can use <code>SurveyJS</code> namespace.
+            </p>
+            <hr />
+            <p>
+                surveyJS has some more properties:
+            </p>
+            <ul>
+                <li>
+                    isInitialized: whether or not the init method was called on the Survey instance.
+                </li>
+                <li>
+                    version: the version number.
+                </li>
+            </ul>
         </div>
 
         <!-- JSON File -->
@@ -281,62 +313,81 @@
                 Example of JSON file for the survey is <a href="json/survey.json" target="_blank">here</a>.<br />
                 ( image, title and description are optional )
                 <br /><br />
-                Note that the AJAX call to get the JSON file MUST return it as JSON string or JS/JSON object ( it's the same for the response from survey submit ).
-                <br /><br />
-                Below the explanation of the JSON:
+                Note that the AJAX call to get the JSON file MUST return it as JSON string or JS/JSON object.
             </p>
             <pre>
 {
-    "result": "OK", // IF "OK" THE SURVEY WILL BE BUILT
-    "survey": {
+    "status": "success", // MANDATORY, IF "success" THE SURVEY WILL BE BUILT
+    "data": {
         "id": 0,
-        "image": "img/surveyjs-image.png",
         "title": "My Survey",
         "description": "Answer the questions",
-        
-        // LIST OF ALL QUESTIONS ( AS OBJECTS )
+
+        // LIST OF ALL QUESTIONS
         "questions": [
-        
+
             // RADIO ANSWER
             {
-                // EVERY QUESTION HAS ITS OWN DATA
                 "id": "1",
-                "question": "Hai animali domestici?",
+                "question": "Do you have pets?",
                 "answers": [
                     // EACH ANSWER IS AN OBJECT WITH SOME DATA
-                    { "id": "1", "type": "radio", "answer": "S&igrave;", "sort": 1 },
-                    { "id": "2", "type": "radio", "answer": "No", "sort": 2 }
+                    { "id": "1", "type": "radio", "answer": "Yes" },
+                    { "id": "2", "type": "radio", "answer": "No" }
                 ],
-                
-                // IF required IS FOUND, THE ANSWER FIELDS WILL HAVE THE required ATTRIBUTE (SO THIS QUESTION REQUIRE AN ANSWER)
+                // IF required IF FOUND, THE ANSWER FIELDS WILL HAVE THE required ATTRIBUTE (SO THIS QUESTION REQUIRE AN ANSWER)
                 "required": "",
-                
                 // THE POSITION TO SET FOR THE QUESTION (USED ALSO FOR ANSWERS - SEE ABOVE) - THIS IS OPTIONAL
                 "sort": 1
             },
-            
-            
-            
+
             // TEXT INPUT ANSWER NOT MANDATORY
             {
                 "id": "1b",
-                "question": "Hai animali domestici?",
+                "question": "Do you have pets?",
                 "answers": [
                     { "id": "1ba", "type": "text", "answer": "" }
-                ]
+                ],
+                "sort": 2
             },
-            
-            
-            
+
+            {
+                "id": "2",
+                "question": "Which are your hobbies/interests?",
+                "answers": [
+                    { "id": "6", "type": "radio", "answer": "Music", "sort": 5 },
+                    { "id": "7", "type": "radio", "answer": "Photography", "sort": 2 },
+                    { "id": "8", "type": "radio", "answer": "Technology", "sort": 3 },
+                    { "id": "9", "type": "radio", "answer": "Games", "sort": 4 },
+                    { "id": "10", "type": "radio", "answer": "Reading", "sort": 1 },
+                    { "id": "11", "type": "radio", "answer": "Wellness", "sort": 6 },
+                    {
+                        "id": "100", "type": "radio", "answer": "Other...", "sort": 7
+                    }
+                ],
+                "required": "",
+                "sort": 3
+            },
+
+            // TEXTARE
+            {
+                "id": "3",
+                "question": "If yes, specify which sport:",
+                "answers": [
+                    { "id": "18", "type": "textarea", "answer": "", "maxlength": 300 }
+                ],
+                "sort": 4
+            },
+
             // RELATED FIELD ANSWER WITH INPUT TEXT ( SEE attribute FIELD )
             {
                 "id": "5",
-                "question": "Quanto &egrave; importante che il programma fedelt&agrave;...?",
+                "question": "What is important for you about the loyalty program?",
                 "answers": [
-                    { "id": "19", "type": "radio", "answer": "Sia divertente" },
-                    { "id": "20", "type": "radio", "answer": "Non richieda molto impegno di partecipazione" },
+                    { "id": "19", "type": "radio", "answer": "It should be funny" },
+                    { "id": "20", "type": "radio", "answer": "It does not require much time" },
                     {
-                        "id": "200", "type": "radio", "answer": "Altro...",
+                        "id": "200", "type": "radio", "answer": "Other...",
                         "attribute": {
                             "id": "", "type": "text", "answers": ""
                         }
@@ -345,17 +396,15 @@
                 "required": "",
                 "sort": 6
             },
-            
-            
-            
+
             // NESTED ANSWERS ( SEE nested ATTRIBUTE )
             // RELATED FIELD ANSWER WITH SELECT FIELD ( SEE attribute FIELD )
             {
                 "id": "6",
-                "question": "Quale MODALIT&Agrave; DI PARTECIPAZIONE al programma fedelt&agrave; preferisci?",
+                "question": "How do you prefer to be interact with the loyalty program?",
                 "answers": [
                     {
-                        "id": "21", "type": "radio", "answer": "Sito",
+                        "id": "21", "type": "radio", "answer": "Website",
                         "nested": [
                             { "id": "21a", "type": "radio", "answer": "Pc", "sort": 1 },
                             { "id": "21b", "type": "radio", "answer": "Smartphone", "sort": 2 },
@@ -363,7 +412,7 @@
                         ], "sort": 1
                     },
                     {
-                        "id": "21aPlus", "type": "radio", "answer": "Sito",
+                        "id": "21aPlus", "type": "radio", "answer": "Website",
                         "attribute": [
                             { "id": "21aa", "type": "option", "answer": "Pc", "sort": 1 },
                             { "id": "21ba", "type": "option", "answer": "Smartphone", "sort": 2 },
@@ -371,62 +420,58 @@
                         ], "sort": 6
                     },
                     { "id": "24", "type": "radio", "answer": "App", "sort": 3 },
-                    { "id": "25", "type": "radio", "answer": "Telefonica", "sort": 4 },
-                    { "id": "26", "type": "radio", "answer": "Con utilizzo card/tessera", "sort": 5 }
+                    { "id": "25", "type": "radio", "answer": "Phone", "sort": 4 },
+                    { "id": "26", "type": "radio", "answer": "With loyalty card", "sort": 5 }
                 ],
                 "required": "",
                 "sort": 7
             },
-            
-            
-            
+
             // CHECKBOX ANSWER WITH MULTIPLE CHOICE ( maxChoice: NUMBER OF MAXIMUM SELECTABLE ANSWERS )
             {
                 "id": "8",
-                "question": "Cosa hai gradito di pi&ugrave; del programma in corso?",
+                "question": "What do you like the most about this edition?",
                 "answers": [
-                    { "id": "43", "type": "checkbox", "answer": "Chiarezza della comunicazione", "sort": 1 },
-                    { "id": "44", "type": "checkbox", "answer": "Facilit&agrave; e modalit&agrave; di partecipazione", "sort": 2 },
-                    { "id": "45", "type": "checkbox", "answer": "Stile del programma (grafica e linguaggio)", "sort": 3 },
-                    { "id": "46", "type": "checkbox", "answer": "Durata del tempo di partecipazione", "sort": 4 },
-                    { "id": "47", "type": "checkbox", "answer": "Contenuti/premi proposti", "sort": 5 }
+                    { "id": "43", "type": "checkbox", "answer": "Clear of communication", "sort": 1 },
+                    { "id": "44", "type": "checkbox", "answer": "Simplicity of usage", "sort": 2 },
+                    { "id": "45", "type": "checkbox", "answer": "Graphic style and language", "sort": 3 },
+                    { "id": "46", "type": "checkbox", "answer": "Duration", "sort": 4 },
+                    { "id": "47", "type": "checkbox", "answer": "Content/prizes", "sort": 5 }
                 ],
                 "checks": "[1,2]",
                 "required": "",
                 "sort": 9
             },
-            
-            
-            
+
             // SELECT ANSWER
             {
                 "id": "9",
-                "question": "Quanto &egrave; importante che il programma fedelt&agrave; sia divertente?",
+                "question": "How much is important that the loyalty program is funny?",
                 "answers": [
-                            { "id": "160", "type": "option", "answer": "Poco", "sort": 1 },
-                            { "id": "161", "type": "option", "answer": "Cos&igrave; cos&igrave;", "sort": 2 },
-                            { "id": "162", "type": "option", "answer": "Tanto", "sort": 3 }
+                            { "id": "160", "type": "option", "answer": "Not much", "sort": 1 },
+                            { "id": "161", "type": "option", "answer": "Medium", "sort": 2 },
+                            { "id": "162", "type": "option", "answer": "Much", "sort": 3 }
                 ],
                 "required": "",
                 "sort": 10
             },
-            
-            
             
             // PRIVACY CHECK
             {
                 "id": "22",
                 "question": "hidden-privacy",
                 "answers": [
-                            { "id": "44", "type": "radio", "answer": "S&igrave;" },
-                            { "id": "45", "type": "radio", "answer": "No" }
+                            { "id": "44", "type": "radio", "answer": "Yes", "sort": 1 },
+                            { "id": "45", "type": "radio", "answer": "No", "sort": 2 }
                 ],
                 "required": "",
-                "sort": 10
-            },
+                "sort": 12
+            }
+
         ]
     }
-}</pre>
+}
+</pre>
             <p>
                 <b>Note:</b><br />
                 To <b>bind the privacy acceptance field to the survey</b> you can set a question object as shown in the JSON above ( see PRIVACY CHECK ):
@@ -599,6 +644,19 @@
                     </div>
                     <div class="clearfix padding-tb-md row-list-separator d-flex">
                         <div class="col-4">
+                            <p class="text-green">initAjaxOptions</p>
+                        </div>
+                        <div class="col-3">
+                            object
+                        </div>
+                        <div class="col-5">
+                            <p>
+                                JS object with ajax options passed to the fetch call to retrieve the survey data.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="clearfix padding-tb-md row-list-separator d-flex">
+                        <div class="col-4">
                             <p class="text-green">lang</p>
                         </div>
                         <div class="col-3">
@@ -637,78 +695,6 @@
                                 This text can be used for quesions that let the user choose more than one answer (checkboxes).<br />
                                 See below for default messages ( depending on the language ).
                             </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex">
-                        <div class="col-4">
-                            <p class="text-green">onInitComplete( $surveyForm )</p>
-                        </div>
-                        <div class="col-3">
-                            function
-                        </div>
-                        <div class="col-5">
-                            <p>
-                                Fires when the AJAX call ( to get the survey JSON ) ends.
-                                <br /><br />
-                                Parameters:
-                            </p>
-                            <ul>
-                                <li>
-                                    <span class="text-green">$surveyForm</span>: jQuery object of the form
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex">
-                        <div class="col-4">
-                            <p class="text-green">onInitError( jqXHR, textStatus, errorThrown, $surveyForm )</p>
-                        </div>
-                        <div class="col-3">
-                            function
-                        </div>
-                        <div class="col-5">
-                            <p>
-                                Fires when the AJAX call ( to get the survey JSON ) throws an error.
-                                <br /><br />
-                                Parameters:
-                            </p>
-                            <ul>
-                                <li>
-                                    <span class="text-green">jqXHR</span>: as returned by jQuery 
-                                </li>
-                                <li>
-                                    <span class="text-green">textStatus</span>: as returned by jQuery 
-                                </li>
-                                <li>
-                                    <span class="text-green">errorThrown</span>: as returned by jQuery 
-                                </li>
-                                <li>
-                                    <span class="text-green">$surveyForm</span>: jQuery object of the form
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex">
-                        <div class="col-4">
-                            <p class="text-green">onInitSuccess( json, $surveyForm )</p>
-                        </div>
-                        <div class="col-3">
-                            function
-                        </div>
-                        <div class="col-5">
-                            <p>
-                                Fires when all the survey is successfully loaded in the page.
-                                <br /><br />
-                                Parameters: 
-                            </p>
-                            <ul>
-                                <li>
-                                    <span class="text-green">json</span>: JSON data returned from AJAX call
-                                </li>
-                                <li>
-                                    <span class="text-green">$surveyForm</span>: jQuery object of the form
-                                </li>
-                            </ul>
                         </div>
                     </div>
                     <div class="clearfix padding-tb-md row-list-separator d-flex">
@@ -902,18 +888,23 @@
         validateOnEvents: 'input change'
     },
     formOptions: {
-        ajaxOptions: {
-            cache:      false,
-            dataType:   'json',
-            method:     $surveyForm.attr('method') || 'POST',
-            url:        $surveyForm.attr('action')
+        beforeSend:         [beforeSend],
+        getFormData:        getFormData,
+        onSubmitSuccess:    [onSubmitSuccess]
+    },
+    initAjaxOptions:        {
+        cache:              'no-store',
+        credentials:        'same-origin',
+        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept':       'application/json'
         },
-        getFormJSON:    _getAnswersJSON // SURVEY PRIVATE FUNCTION
+        method:             'GET',
+        mode:               'same-origin',
+        redirect:           'follow',
+        timeout:            0
     },
     lang:                   'en',
-    onInitError:            null,
-    onInitComplete:         null,
-    onInitSuccess:          null,
     templates: {
         fieldError:     // SEE TEMPLATES SECTION,
         inputGroup:     // SEE TEMPLATES SECTION,
@@ -950,141 +941,10 @@
     }
 }</pre>
                     <p class="mt-3">
-                        <span class="text-yellow">*</span> can also be set via <code>SURVEY.addLanguage( langString, langMessages )</code>
+                        <span class="text-yellow">*</span> can also be set via <code>Survey.addLanguage( langString, langMessages )</code>
                     </p>
                 </div>
             </div>
-            <p class="mt-3">
-                Here an example of custom initialization:
-            </p>
-            <pre>
-SURVEY.setup({
-    url: 'json/survey.json',
-    onInitSuccess: function( json, $surveyForm ){
-        var $surveyBody = $surveyForm.find('.surveyjs-body'),
-            initStatus = json.status;
-
-        if( initStatus === 'success' ){
-            $('.stackSlider').stackslider({ piles : false });
-        } else {
-            $surveyForm.find('.surveyjs-footer').remove();
-            $surveyBody.html( '&lt;div class="surveyjs-message"&gt;Errore durante il caricamento. Per favore, ricarica la pagina.&lt;/div&gt;' );
-        }
-    },
-    onInitError: function( jqXHR, textStatus, errorThrown, $surveyForm ){
-        $surveyForm.find('.surveyjs-loading').html( '&lt;div class="surveyjs-message"&gt;Errore durante il caricamento. Per favore, ricarica la pagina.&lt;/div&gt;' );
-    },
-    fieldOptions: {
-        onValidation: function( fields ){
-            if( fields.length &gt; 1 ){
-                // GO TO THE FIRST UNANSWERED QUESTION
-                var $stWrapper = $('.surveyjs-form .st-wrapper'),
-                    activeIndex = $stWrapper.find('.st-center').index(),
-                    $invalidField = (function(){
-                        for( var f=0; f&lt;fields.length; f++ ){
-                            var obj = fields[f];
-                            if( !obj.result && !$(obj.field).is('[data-name="bind-surveyjs-answer"]') ){
-                                return $(obj.field);
-                            }
-                        }
-                        return $();
-                    })();
-                
-                if( $invalidField.length ){
-                    
-                    var invalidIndex = $invalidField.closest('.st-item').index(),
-                        clickDirection = ( activeIndex &gt; invalidIndex ? 'prev' : 'next' ),
-                        $btn = ( clickDirection === 'prev' ? $stWrapper.find('nav &gt; span:first-child') : $stWrapper.find('nav &gt; span:last-child') ),
-                        clicksLength = ( clickDirection === 'prev' ? activeIndex - invalidIndex : invalidIndex - activeIndex );
-
-                    for(var i=0; i&lt;clicksLength; i++){
-                        $btn.trigger('mousedown.stackslider');
-                        $btn.trigger('mouseup.stackslider');
-                    }
-                    
-                }
-            } else {
-                console.log('validating field ', fields[0]);
-            }
-        }
-    },
-    formOptions: {
-        beforeSend: function( data ){
-            console.log('Survey formOptions.beforeSend call...', data);
-
-            if( !data.stopExecution ){
-                //$surveyForm.find('[type="submit"]').button('loading');
-                $surveyCont.find('.alert').remove();
-                data.formData = 'surveyJSON=' + JSON.stringify( data.formData );
-            }
-
-            return data;
-        },
-        onSubmitComplete: function( ajaxData ){
-            console.log('formOptions.onSubmitComplete', ajaxData);
-            //$surveyForm.find('[type="submit"]').button('reset');
-        },
-        onSubmitError: function( ajaxData ){
-            console.log('Survey formOptions.onSubmitError', ajaxData);
-            // PRINT THE ERROR MESSAGE AFTER THE FORM
-            $surveyForm.closest('.surveyjs-container').append( '&lt;div class="alert alert-danger text-center" role="alert"&gt;&lt;p&gt;Generic error, please retry.&lt;/p&gt;&lt;/div&gt;' );
-        },
-        onSubmitSuccess: function( ajaxData ){
-            console.log('Survey formOptions.onSubmitSuccess', ajaxData);
-            if( typeof ajaxData === 'string' ){
-                try{
-                    ajaxData = JSON.parse(ajaxData);
-                } catch(error){
-                    throw new Error('String returned from ajax call to "' + ajaxOptions.url + '" is not a valid JSON string');
-                }
-            }
-
-            if( $.isPlainObject( ajaxData ) ){
-                if( ajaxData.data.status === 'success' ){
-                    // REMOVE THE SURVEY FORM FROM THE PAGE AND PRINT A RESPONSE MESSAGE
-                    $surveyForm.parent().html( '&lt;div class="alert alert-success text-center" role="alert"&gt;&lt;p&gt;Great! You completed the mission.&lt;/p&gt;&lt;/div&gt;' );
-
-                    // OPEN THE BOOTSTRAP MODAL TO SHOW A CONGRATULATION MESSAGE
-                    $('#modal-notification').modal('show');
-                } else {
-                    // PRINT THE ERROR MESSAGE AFTER THE FORM
-                    $surveyForm.closest('.surveyjs-container').append( '&lt;div class="alert alert-danger text-center" role="alert"&gt;&lt;p&gt;Generic error, please retry.&lt;/p&gt;&lt;/div&gt;' );
-                }
-            }
-        }
-    }
-});</pre>
-        </div>
-
-        <!-- Localization -->
-        <div id="localization">
-            <h3 class="sticky-title">Localization</h3>
-            <p>
-                You can add a new language ( or override an existing one ), with <code>SURVEY.addLanguage( langString, langObject )</code>.<br />
-                This will also set the language used for the survey.
-            </p>
-            <ul>
-                <li>
-                    langString: a string representing the name of the language to add/override
-                </li>
-                <li>
-                    langObject: object with key/value pairs
-                </li>
-            </ul>
-            <p>
-                You MUST pass all the key/value pairs as shown below:
-            </p>
-            <pre>
-var newLang = {
-        fieldErrorMessage:  'Du musst antworten',
-        fieldErrorMessageMultiChoice:  'Sie K&ouml;nnen zwischen 1 und 3 Antworten w&auml;hlen.',
-        loadingBox:         '&lt;div class="surveyjs-loading" data-surveyjs-loading&gt;&lt;i class="glyphicon glyphicon-refresh icon-spin"&gt;&lt;/i&gt; Wird geladen...&lt;/div&gt;',
-        maxChoiceText:      'ANTWORTEN MAX',
-        selectFirstOption:  'W&auml;hle eine Antwort...',
-        textareaPlaceholder:'Schreibe eine Antwort...'
-    };
-
-SURVEY.addLanguage( 'de', newLang );</pre>
         </div>
         
         <!-- Methods -->
@@ -1096,10 +956,64 @@ SURVEY.addLanguage( 'de', newLang );</pre>
                         <div class="col-4">
                             name
                         </div>
+                        <div class="col-5">
+                            description &amp; parameters
+                        </div>
+                        <div class="col-3">
+                             return value
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="">
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">destroy()</pre>
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    Remove all events listeners from the Survey and Form instances.
+                                </p>
+                            </div>
+                            <div class="col-3">
+                            </div>
+                        </div>
+                        <div class="clearfix padding-tb-md row-list-separator d-flex">
+                            <div class="col-4">
+                                <pre class="text-green">init()</pre>
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    This will retrieve the survey data and initialize the Form instance for it.
+                                </p>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    Promise
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prototype Methods -->
+        <div id="prototype-methods">
+            <h3 class="sticky-title">Prototype Methods</h3>
+            <p>
+                You can use these methods ONLY from the original Survey object ( not from a new instance - but you can always set each single property/method from the class prototype ):
+            </p>
+            <div class="panel panel-default panel-transparent" style="background-color: transparent;">
+                <div class="card-header bg-white text-dark clearfix">
+                    <div class="d-flex">
                         <div class="col-4">
+                            name
+                        </div>
+                        <div class="col-5">
                             parameters
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             description
                         </div>
                     </div>
@@ -1110,40 +1024,63 @@ SURVEY.addLanguage( 'de', newLang );</pre>
                             <div class="col-4">
                                 <pre class="text-green">addLanguage( langString, langObject )</pre>
                             </div>
-                            <div class="col-4">
+                            <div class="col-5">
                                 <ul>
                                     <li>
-                                        langString
+                                        <span class="text-green">langString</span>: a string representing the name of the language to add/override
                                     </li>
                                     <li>
-                                        langObject
+                                        <span class="text-green">langObject</span>: object with key/value pairs
                                     </li>
                                 </ul>
-                            </div>
-                            <div class="col-4">
                                 <p>
-                                    See <a href="#localization">Localization</a> section.
+                                    You MUST pass all the key/value pairs to set a new language.<br />
+                                    You can pass only new key/value pairs if you want to override an existing language.
+                                </p>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    This will affect <b>ONLY</b> new instances
+                                </p>
+                                <p>
+                                    This can be used to add a new language or override an existing one.
                                 </p>
                             </div>
                         </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex">
                             <div class="col-4">
-                                <pre class="text-green">setup( options )</pre>
+                                <pre class="text-green">setOptions( options )</pre>
                             </div>
-                            <div class="col-4">
+                            <div class="col-5">
                                 <ul>
                                     <li>
-                                        options
+                                        <span class="text-green">options</span>: JS object with the fieldOptions/formOptions to override ( see <a href="#options-list">Options section</a> )
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <p>
-                                    See <a href="#options-list">Options</a> section for details and default values.
+                                    This will affect <b>ONLY</b> new instances
                                 </p>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="card-footer no-bg">
+                    <p>
+                        Example of usage:
+                    </p>
+                    <pre>
+var newLang = {
+        fieldErrorMessage:  'Du musst antworten',
+        fieldErrorMessageMultiChoice:  'Sie K&ouml;nnen zwischen 1 und 3 Antworten w&auml;hlen.',
+        loadingBox:         '&lt;div class="surveyjs-loading" data-surveyjs-loading&gt;&lt;i class="glyphicon glyphicon-refresh icon-spin"&gt;&lt;/i&gt; Wird geladen...&lt;/div&gt;',
+        maxChoiceText:      'ANTWORTEN MAX',
+        selectFirstOption:  'W&auml;hle eine Antwort...',
+        textareaPlaceholder:'Schreibe eine Antwort...'
+    };
+Survey.addLanguage( 'de', newLang );</pre>
+
                 </div>
             </div>
         </div>
@@ -1168,7 +1105,7 @@ SURVEY.addLanguage( 'de', newLang );</pre>
                     Label tags ( labelTag )
                 </li>
                 <li>
-                    Input Groups - as of <a href="https://getbootstrap.com/docs/4.0/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a> ( inputGroup )
+                    Input Groups - as of <a href="https://getbootstrap.com/docs/4.3/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a> ( inputGroup )
                 </li>
                 <li>
                     Questions ( question )
@@ -1187,23 +1124,23 @@ SURVEY.addLanguage( 'de', newLang );</pre>
 
             <br /><p>Custom Template for Loading Box</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     loadingBox: '&lt;div class="surveyjs-loading" data-surveyjs-loading&gt;&lt;i class="glyphicon glyphicon-refresh icon-spin"&gt;&lt;/i&gt; Loading...&lt;/div&gt;'
-});</pre>
+}</pre>
             
             <br /><p>Custom Template for Fields Error</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     templates: {
         fieldError: '&lt;div class="surveyjs-field-error-message"&gt;{{fieldErrorMessage}}&lt;/div&gt;'
     }
-});</pre>
+}</pre>
             
             <br /><p>Custom Template for Inputs</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     templates: {
         input:  '&lt;div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check" data-answer-index="{{answerIndex}}"&gt;'+
@@ -1211,11 +1148,11 @@ SURVEY.setup({
                     '{{labelTagCode}}'+
                 '&lt;/div&gt;'
     }
-});</pre>
+}</pre>
             
             <br /><p>Custom Template for Input Groups</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     templates: {
         inputGroup: '&lt;div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}"&gt;'+
@@ -1228,29 +1165,29 @@ SURVEY.setup({
                         '{{relatedAnswerField}}'+
                     '&lt;/div&gt;'
     }
-});</pre>
+}</pre>
 
             <br /><p>Custom Template for Input Tags</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     templates: {
         inputTag: '&lt;input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{attrChecks}} {{attrRequiredFrom}} /&gt;'
     }
-});</pre>
+}</pre>
 
             <br /><p>Custom Template for Label Tags</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     templates: {
         labelTag: '&lt;label for="{{answerCode}}" class="surveyjs-label {{labelClass}}">{{answerString}}&lt;/label&gt;'
     }
-});</pre>
+}</pre>
 
             <br /><p>Custom Template for Questions</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     templates: {
         question:   '&lt;div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix"&gt;'+
@@ -1264,46 +1201,62 @@ SURVEY.setup({
                         '&lt;/div&gt;'+
                     '&lt;/div&gt;'
     }
-});</pre>
+}</pre>
 
             <br /><p>Custom Template for Selects</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     templates: {
         select: '&lt;div class="surveyjs-single-answer surveyjs-answer-select" data-answer-index="{{answerIndex}}"&gt;'+
                     '{{selectTagCode}}'+
                 '&lt;/div&gt;'
     }
-});</pre>
+}</pre>
             
             <br /><p>Custom Template for Select Tags</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     templates: {
         selectTag:  '&lt;select id="{{answerCode}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}&gt;'+
                         '{{optionsHtml}}'+
                     '&lt;/select&gt;'
     }
-});</pre>
+}</pre>
 
             <br /><p>Custom Template for Textareas</p>
             <pre>
-SURVEY.setup({
+{
     url: 'json/survey.json',
     templates: {
         textarea:   '&lt;div class="surveyjs-single-answer surveyjs-answer-textarea"&gt;'+
                         '&lt;textarea id="{{answerCode}}" data-answer-id="{{answerId}}" {{nestedAnswer}} name="surveyjs-answer-{{questionNumber}}" {{attrRequired}} class="surveyjs-textarea {{fieldClass}}" {{answerMaxlength}} rows="6" placeholder="{{answerPlaceholder}}"&gt;&lt;/textarea&gt;'+
                     '&lt;/div&gt;'
     }
-});</pre>
+}</pre>
         </div>
 
         <!-- Changelog -->
         <div id="changelog">
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
+                <li class="media my-3">
+                    <div class="version-num text-red">2.0.0</div>
+                    <div class="media-body pl-2">
+                        <ul>
+                            <li>
+                                Rewritten with ES6
+                            </li>
+                            <li>
+                                Updated dependency: formJS 3.1.0
+                            </li>
+                            <li>
+                                Bugfix and improvements
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="media my-3">
                     <div class="version-num text-red">1.6.1</div>
                     <div class="media-body pl-2">
@@ -1403,32 +1356,29 @@ SURVEY.setup({
             </div>
         </div>
     </div>
-    
-    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Event,WeakMap"></script>
 
+    <!-- ONLY FOR DOCUMENTATION DEMO SLIDER -->
     <script src="js/vendors/modernizr_custom_63321.js"></script>
     <script src="js/vendors/jquery-1.12.4.min.js"></script>
-    <script src="js/vendors/bootstrap.bundle.min.js"></script>
     <script src="js/vendors/jquery_stackslider.js"></script>
-
-    <!-- <script src="js/modules/web_storage.js"></script>
-    <script src="js/modules/formJS.js"></script>
-    <script src="js/modules/surveyJS.js"></script> -->
-
-    <script src="js/surveyJS.min.js"></script>
+    
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
+    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
+    <script src="js/include.js"></script>
+    <script src="js/vendors/formJS.js"></script>
+    <script src="dist/surveyjs.min.js"></script>
 
     <script type="text/javascript">
-        $(function(){
+        var $surveyCont = $('[data-surveyjs-container]'),
+            $surveyForm = $surveyCont.find('[data-surveyjs-form]'),
+            $surveyBtn = $surveyForm.find('.surveyjs-submit-btn');
 
-            var $surveyCont = $('[data-surveyjs-container]'),
-                $surveyForm = $surveyCont.find('[data-surveyjs-form]'),
-                $surveyBtn = $surveyForm.find('.surveyjs-submit-btn');
-
-            // SETUP FOR THE SURVEY
-            SURVEY.setup({
-                url: 'json/survey.json',
-
+        var formEl = document.querySelector('[data-surveyjs-form]');
+        var options = {
+            url: 'json/survey.json',
+                cssClasses: {
+                    select: 'custom-select'
+                },
                 templates: {
                         question:   '<div class="st-item" data-title="#{{questionNumber}}">'+
                                             '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix">'+
@@ -1456,9 +1406,8 @@ SURVEY.setup({
                                             '{{relatedAnswerField}}'+
                                         '</div>'
                 },
-
                 fieldOptions: {
-                    onValidation: function( fields ){
+                    onValidation: function onValidation_doc( fields ){
                         if( fields.length > 1 ){
                             // GO TO THE FIRST UNANSWERED QUESTION
                             var $stWrapper = $('.surveyjs-form .st-wrapper'),
@@ -1466,8 +1415,8 @@ SURVEY.setup({
                                 $invalidField = (function(){
                                     for( var f=0; f<fields.length; f++ ){
                                         var obj = fields[f];
-                                        if( !obj.result && !$(obj.field).is('[data-name="bind-surveyjs-answer"]') ){
-                                            return $(obj.field);
+                                        if( !obj.result && !$(obj.fieldEl).is('[data-name="bind-surveyjs-answer"]') ){
+                                            return $(obj.fieldEl);
                                         }
                                     }
                                     return $();
@@ -1492,27 +1441,26 @@ SURVEY.setup({
                     }
                 },
                 formOptions: {
-                    beforeSend: function( data ){
+                    beforeSend: function beforeSend_doc( data ){
                         console.log('Survey formOptions.beforeSend call...', data);
 
                         if( !data.stopExecution ){
                             $surveyBtn.addClass('surveyjs-submit-sending');
                             $surveyCont.find('.alert').remove();
-                            data.formData = 'surveyJSON=' + JSON.stringify( data.formData );
                         }
 
-                        return data;
+                        return Promise.resolve(data);
                     },
-                    onSubmitComplete: function( ajaxData ){
-                        console.log('formOptions.onSubmitComplete', ajaxData);
+                    onSubmitComplete: function onSubmitComplete_doc(){
+                        console.log('formOptions.onSubmitComplete');
                         $surveyBtn.removeClass('surveyjs-submit-sending');
                     },
-                    onSubmitError: function( ajaxData ){
+                    onSubmitError: function onSubmitError_doc( ajaxData ){
                         console.log('Survey formOptions.onSubmitError', ajaxData);
                         // PRINT THE ERROR MESSAGE AFTER THE FORM
                         $surveyForm.closest('.surveyjs-container').append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
                     },
-                    onSubmitSuccess: function( ajaxData ){
+                    onSubmitSuccess: function onSubmitSuccess_doc( ajaxData ){
                         console.log('Survey formOptions.onSubmitSuccess', ajaxData);
                         if( typeof ajaxData === 'string' ){
                             try{
@@ -1535,30 +1483,43 @@ SURVEY.setup({
                             }
                         }
                     }
-                },
-                                    
-                onInitSuccess: function( data, $surveyForm ){
-                    var $surveyBody = $surveyForm.find('.surveyjs-body'),
-                        initStatus = data.status;
-                    
-                    if( initStatus === 'success' ){
-                        $('.stackSlider').stackslider({ piles : false });
-                    } else {
-                        $surveyForm.find('.surveyjs-footer').remove();
-                        $surveyBody.html( '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
-                    }
-                },
-                onInitError: function( jqXHR, textStatus, errorThrown, $surveyForm ){
-                    console.log('_setJSONurl(\''+ $surveyForm.attr('action') +'\') RETURNED AN ERROR:');
-                    console.log('XHR: ', jqXHR);
-                    console.log('STATUS: ', textStatus);
-                    console.log('ERROR: ', errorThrown);
-                    
-                    $surveyForm.find('.surveyjs-loading').html( '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>' );
                 }
-            });
+        };
 
-        });
+        var onInitSuccess = function( ajaxData ){
+                console.log('onInitSuccess', ajaxData);
+
+                var surveyFormEl = this.formEl,
+                    surveyBody = surveyFormEl.querySelector('.surveyjs-body'),
+                    initStatus = ajaxData.status;
+                
+                if( initStatus === 'success' ){
+                    $('.stackSlider').stackslider({ piles : false });
+                } else {
+                    var elemToRemove = surveyFormEl.querySelector('.surveyjs-footer');
+                    elemToRemove.parentNode.removeChild(elemToRemove);
+                    surveyBody.innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
+                }
+            },
+            onInitError = function( error ){
+                var surveyFormEl = this.formEl;
+
+                console.log('onInitError', error);
+                console.log('_setJSONurl(\''+ surveyFormEl.getAttribute('action') +'\') RETURNED AN ERROR:');
+                
+                surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
+            };
+        
+        var mySurvey = new Survey( formEl, options );
+        mySurvey.init()
+            .then(function( data ){
+                console.log('retrieveSurvey init then');
+                onInitSuccess.call(mySurvey, data);
+            })
+            .catch(function( error ){
+                console.log('retrieveSurvey init catch');
+                onInitError.call(mySurvey, error);
+            });
     </script>
 </body>
 </html>

@@ -42,11 +42,6 @@
     padding-left: 0;
 }
 
-/* .surveyjs-container .form-check:not(.surveyjs-answer-checkbox):not(.surveyjs-answer-radio),
-.surveyjs-container.surveyjs-custom-inputs .form-check {
-    padding-left: 0;
-} */
-
 .surveyjs-container .form-check:not(.surveyjs-answer-checkbox):not(.surveyjs-answer-radio) {
     padding-left: 0;
 }
@@ -61,6 +56,11 @@
 .surveyjs-container.surveyjs-custom-inputs .surveyjs-label:before,
 .surveyjs-container.surveyjs-custom-inputs .surveyjs-label:after {
     margin-left: -17px;
+}
+
+.surveyjs-container.surveyjs-custom-inputs .surveyjs-radio .surveyjs-label.custom-control-label:before,
+.surveyjs-container.surveyjs-custom-inputs .surveyjs-radio .surveyjs-label.custom-control-label:after {
+    display: none;
 }
 
 .surveyjs-container.surveyjs-custom-inputs .input-group .custom-control {

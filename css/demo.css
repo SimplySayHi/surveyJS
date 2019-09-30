@@ -21,6 +21,11 @@ code{display: inline-block;padding: 8px;color: #ccc;background-color: rgba(0,0,0
 pre{display: block;padding: 9.5px;margin: 0 0 10px;font-size: 14px;line-height: 1.5;word-break: break-all;word-wrap: break-word;color: #ccc;background-color: rgba(0,0,0,0.1);border: 2px solid rgba(0,0,0,0.15);border-radius: 4px;}
 pre code{padding: 0;font-size: inherit;color: inherit;white-space: pre-wrap;background-color: rgba(0,0,0,0.1);border-radius: 0;}
 
+p code,
+li code {
+    padding: 0 4px;
+}
+
 .btn {
     border: 0 none;
     border-radius: 8px;
@@ -246,6 +251,7 @@ pre { max-height: 355px; }
 
 .surveyjs-form .input-group .form-control {
     width: auto;
+    height: auto;
 }
 
 .surveyjs-form .surveyjs-submit-btn.surveyjs-submit-sending .surveyjs-submit-text {
