@@ -1,7 +1,7 @@
 {
     "name": "surveyjs",
     "title": "surveyJS",
-    "description": " Javascript Survey Creation & Management. Made Easy",
+    "description": "Javascript Survey Creation & Management. Made Easy",
     "version": "2.0.0",
     "main": "webpack.config.js",
     "homepage": "https://www.valeriodipunzio.com/plugins/surveyJS/",

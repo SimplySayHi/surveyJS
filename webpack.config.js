@@ -9,10 +9,10 @@ module.exports = [
             path: path.resolve(__dirname, './dist')
         },
         mode: 'none',
+        //watch: true,
         optimization: {
             namedModules: true
         },
-        //watch: true,
         module: {
             rules: [
                 {
