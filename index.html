@@ -227,7 +227,7 @@
 &lt;link rel="stylesheet" href="css/survey.css"&gt;
 
 &lt;!-- FORM JS --&gt;
-&lt;script src="js/vendors/formJS.min.js"&gt;&lt;/script&gt;
+&lt;script src="js/vendors/formjs.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- SURVEY JS --&gt;
 &lt;script src="dist/surveyjs.min.js"&gt;&lt;/script&gt;</pre>
@@ -298,10 +298,16 @@ mySurvey.init();
             </p>
             <ul>
                 <li>
-                    isInitialized: whether or not the init method was called on the Survey instance.
+                    <code>data</code>: the survey data structure returned from the AJAX call.
                 </li>
                 <li>
-                    version: the version number.
+                    <code>internals</code>: objects &amp; methods used internally ( <code>formInstance</code> can be useful also for you ).
+                </li>
+                <li>
+                    <code>isInitialized</code>: whether or not the init method was called on the Survey instance.
+                </li>
+                <li>
+                    <code>version</code>: the version number.
                 </li>
             </ul>
         </div>
@@ -1365,7 +1371,7 @@ Survey.addLanguage( 'de', newLang );</pre>
     <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
     <script src="js/include.js"></script>
-    <script src="js/vendors/formJS.js"></script>
+    <script src="js/vendors/formjs.min.js"></script>
     <script src="dist/surveyjs.min.js"></script>
 
     <script type="text/javascript">
