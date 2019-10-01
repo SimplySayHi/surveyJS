@@ -1,3 +1,5 @@
+[![](https://data.jsdelivr.com/v1/package/gh/simplysayhi/surveyJS/badge)](https://www.jsdelivr.com/package/gh/simplysayhi/surveyJS)
+
 # surveyJS
 
 Visit the [Plugin Documentation Page](https://www.valeriodipunzio.com/plugins/surveyJS/) for more info.
