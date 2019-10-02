@@ -77,15 +77,10 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="media">
-                        <div class="media-left pr-3"><img src="img/survey-image.png" class="surveyjs-img" /></div>
-                        <div class="media-body media-middle">
-                            <h3 class="text-green">Congratulations!</h3>
-                            <p class="m-0">
-                                You completed the survey and gained <b>100 points</b>.
-                            </p>
-                        </div>
-                    </div>
+                    <h3 class="text-green">Congratulations!</h3>
+                    <p class="m-0">
+                        You completed the survey and gained <b>100 points</b>.
+                    </p>
                 </div>
             </div>
         </div>
@@ -211,14 +206,13 @@
 
                         if( $.isPlainObject( ajaxData ) ){
                             if( ajaxData.status === 'success' ){
-                                // REMOVE THE SURVEY FORM FROM THE PAGE AND PRINT A RESPONSE MESSAGE
-                                $surveyForm.parent().html( '<div class="alert alert-success text-center" role="alert"><p class="my-3">Great! You completed the mission.</p></div>' );
-
+                                // REMOVE THE SURVEY FROM THE PAGE
+                                $surveyCont.remove();
                                 // OPEN THE BOOTSTRAP MODAL TO SHOW A CONGRATULATION MESSAGE
                                 $('#modal-notification').modal('show');
                             } else {
                                 // PRINT THE ERROR MESSAGE AFTER THE FORM
-                                $surveyForm.closest('.surveyjs-container').append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
+                                $surveyCont.append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
                             }
                         }
                     }
