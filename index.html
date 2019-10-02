@@ -1477,7 +1477,7 @@ Survey.addLanguage( 'de', newLang );</pre>
                         }
 
                         if( $.isPlainObject( ajaxData ) ){
-                            if( ajaxData.data.status === 'success' ){
+                            if( ajaxData.status === 'success' ){
                                 // REMOVE THE SURVEY FORM FROM THE PAGE AND PRINT A RESPONSE MESSAGE
                                 $surveyForm.parent().html( '<div class="alert alert-success text-center" role="alert"><p class="my-3">Great! You completed the mission.</p></div>' );
 
