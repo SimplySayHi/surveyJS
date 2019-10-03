@@ -496,7 +496,8 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
 
     var fieldData = {
       aHtml: ''
-    };
+    }; // ALL THESE OBJECT KEYS WILL REPLACE {{key}} WITH objData.KEY IN HTML STRING
+
     var objData = {
       // answerId         ANSWER ID AS FROM THE JSON. THIS IS USED AS VALUE ATTRIBUTE OF THE ANSWER
       // answerType       ANSWER TYPE AS FROM THE JSON. USED TO CHECK WHICH FIELD MUST BE CREATED ( EG: text, radio, checkbox, select, textarea )
@@ -520,7 +521,8 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
       progIdsJoined: progIdsJoined,
       questionNumber: qNum,
       answerCode: (aType === 'option' ? 'select' : aType) + '-' + qID + '-' + (aId || 0) + '-' + qNum + (progIdsJoined !== '' ? '-' + progIdsJoined : '') + '-' + aNum,
-      attrChecks: obj.checks ? 'data-checks="' + obj.checks + '"' : ''
+      attrChecks: obj.checks ? 'data-checks="' + obj.checks + '"' : '',
+      attrSubtype: answer.subtype ? 'data-subtype="' + answer.subtype + '"' : ''
     };
 
     if (needsBinding) {
@@ -1115,7 +1117,7 @@ var options = {
     fieldError: '<div class="surveyjs-field-error-message">{{fieldErrorMessage}}</div>',
     input: '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check" data-answer-index="{{answerIndex}}">' + '{{inputTagCode}}' + '{{labelTagCode}}' + '</div>',
     inputGroup: '<div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}">' + '<div class="input-group-prepend">' + '<div class="input-group-text form-check surveyjs-answer-{{answerType}}">' + '<input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" />' + '<label for="{{answerCode}}" class="surveyjs-label form-check-label">{{answerString}}</label>' + '</div>' + '</div>' + '{{relatedAnswerField}}' + '</div>',
-    inputTag: '<input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{attrChecks}} {{attrRequiredFrom}} />',
+    inputTag: '<input type="{{answerType}}" {{attrSubtype}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{attrChecks}} {{attrRequiredFrom}} />',
     labelTag: '<label for="{{answerCode}}" class="surveyjs-label {{labelClass}}">{{answerString}}</label>',
     question: '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix">' + '<div class="surveyjs-question-header">Question {{questionNumber}}</div>' + '<div class="surveyjs-question-body">' + '<div class="surveyjs-question-text">{{questionText}}</div>' + '<div class="surveyjs-answers-box form-group clearfix">' + '{{answersHtml}}' + '{{fieldErrorTemplate}}' + '</div>' + '</div>' + '</div>',
     select: '<div class="surveyjs-single-answer surveyjs-answer-select" data-answer-index="{{answerIndex}}">' + '{{selectTagCode}}' + '</div>',

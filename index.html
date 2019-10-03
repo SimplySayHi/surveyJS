@@ -357,6 +357,17 @@ mySurvey.init();
                 "sort": 2
             },
 
+            // INPUT WITH SUBTYPE ( IF TYPE EXISTS IN HTML YOU CAN SET IT AS "type" -> "type": "email" )
+            {
+                "id": "1c",
+                "question": "What's your email address?",
+                "answers": [
+                    { "id": "1c", "type": "text", "answer": "", "subtype": "email" }
+                ],
+                "required": "",
+                "sort": 1
+            },
+
             {
                 "id": "2",
                 "question": "Which are your hobbies/interests?",
@@ -1178,7 +1189,7 @@ Survey.addLanguage( 'de', newLang );</pre>
 {
     url: 'json/survey.json',
     templates: {
-        inputTag: '&lt;input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{attrChecks}} {{attrRequiredFrom}} /&gt;'
+        inputTag: '&lt;input type="{{answerType}}" {{attrSubtype}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{attrChecks}} {{attrRequiredFrom}} /&gt;'
     }
 }</pre>
 
@@ -1253,6 +1264,9 @@ Survey.addLanguage( 'de', newLang );</pre>
                         <ul>
                             <li>
                                 Rewritten with ES6
+                            </li>
+                            <li>
+                                Added possibility to set "subtype" in JSON file to enable "data-subtype" attribute on input fields and take advantage of formJS custom validations.
                             </li>
                             <li>
                                 Updated dependency: formJS 3.1.0

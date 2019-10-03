@@ -11,6 +11,15 @@
                 "answers": [
                     { "id": "1ba", "type": "text", "answer": "" }
                 ],
+                "sort": 0
+            },
+            {
+                "id": "1c",
+                "question": "What's your email address?",
+                "answers": [
+                    { "id": "1c", "type": "text", "answer": "", "subtype": "email" }
+                ],
+                "required": "",
                 "sort": 1
             },
             {

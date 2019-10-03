@@ -40,6 +40,7 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
 
         let fieldData = { aHtml: '' };
         
+        // ALL THESE OBJECT KEYS WILL REPLACE {{key}} WITH objData.KEY IN HTML STRING
         let objData = {
             // answerId         ANSWER ID AS FROM THE JSON. THIS IS USED AS VALUE ATTRIBUTE OF THE ANSWER
             // answerType       ANSWER TYPE AS FROM THE JSON. USED TO CHECK WHICH FIELD MUST BE CREATED ( EG: text, radio, checkbox, select, textarea )
@@ -63,7 +64,8 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
                 progIdsJoined: progIdsJoined,
                 questionNumber: qNum,
                 answerCode: (aType === 'option' ? 'select' : aType) +'-' + qID +'-'+ (aId || 0) + '-' + qNum + (progIdsJoined !== '' ? '-'+progIdsJoined : '') +'-'+ aNum,
-                attrChecks: (obj.checks ? 'data-checks="' + obj.checks + '"' : '')
+                attrChecks: (obj.checks ? 'data-checks="' + obj.checks + '"' : ''),
+                attrSubtype: (answer.subtype ? 'data-subtype="' + answer.subtype + '"' : '')
             };
         
         if( needsBinding ){
