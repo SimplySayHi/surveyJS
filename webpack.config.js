@@ -56,6 +56,7 @@ module.exports = [
             minimize: true,
             minimizer: [
                 new TerserPlugin({
+                    sourceMap: true,
                     terserOptions: {
                         output: {
                             preamble: initialComment
