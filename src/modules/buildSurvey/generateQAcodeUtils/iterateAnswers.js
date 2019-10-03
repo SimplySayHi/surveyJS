@@ -1,5 +1,6 @@
 
 import { generateFieldHTML } from './generateFieldHTML';
+import { replaceTemplateStrings } from './replaceTemplateStrings';
 
 export function iterateAnswers( obj, qID, qIdx, attrReq ){
 
@@ -118,34 +119,8 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
                 if( progIdsLength > 0 && a === listL-1 ){ self.internals.progIds.pop(); }
 
         }
-        
-        if( objData.optionsHtml !== '' ){
-            fieldData.aHtml = fieldData.aHtml.replace( /{{selectTagCode}}/g, self.options.templates.selectTag );
-        }
 
-        if( fieldData.relatedAnswerField ){
-            let relatedAnswerKeys = {
-                    answerCode: '', answerType: 'text', fieldClass: objData.fieldClass,
-                    answerIdValue: '', attrRequired: '', addMoreName: '-more',
-                    attrRequiredFrom: 'data-required-from="#'+ objData.answerCode +'"'
-                };
-                
-            for(let reKey in relatedAnswerKeys){
-                let regexStrRe = new RegExp( '{{' + reKey + '}}', 'g' );
-                fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace( regexStrRe, relatedAnswerKeys[reKey] );    
-            }
-            
-            fieldData.aHtml = fieldData.aHtml.replace( /{{relatedAnswerField}}/g, fieldData.relatedAnswerField );
-        } else {
-            fieldData.aHtml = fieldData.aHtml.replace( /{{addMoreName}}/g, '' );
-            fieldData.aHtml = fieldData.aHtml.replace( /{{attrRequiredFrom}}/g, '' );
-        }
-        
-        for( let key in objData ){
-            let regexStr = new RegExp( '{{' + key + '}}', 'g' );
-            fieldData.aHtml = fieldData.aHtml.replace( regexStr, objData[key] );
-        }
-
+        fieldData.aHtml = replaceTemplateStrings.call(self, fieldData, objData);
         aLoopHtml += fieldData.aHtml;
         
         if( aType === 'option' ){

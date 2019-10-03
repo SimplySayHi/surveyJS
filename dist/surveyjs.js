@@ -457,6 +457,8 @@ var generateFieldHTML = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iterateAnswers", function() { return iterateAnswers; });
 /* harmony import */ var _generateFieldHTML__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/generateFieldHTML.js");
+/* harmony import */ var _replaceTemplateStrings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/replaceTemplateStrings.js");
+
 
 function iterateAnswers(obj, qID, qIdx, attrReq) {
   var self = this;
@@ -582,37 +584,7 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
       }
     }
 
-    if (objData.optionsHtml !== '') {
-      fieldData.aHtml = fieldData.aHtml.replace(/{{selectTagCode}}/g, self.options.templates.selectTag);
-    }
-
-    if (fieldData.relatedAnswerField) {
-      var relatedAnswerKeys = {
-        answerCode: '',
-        answerType: 'text',
-        fieldClass: objData.fieldClass,
-        answerIdValue: '',
-        attrRequired: '',
-        addMoreName: '-more',
-        attrRequiredFrom: 'data-required-from="#' + objData.answerCode + '"'
-      };
-
-      for (var reKey in relatedAnswerKeys) {
-        var regexStrRe = new RegExp('{{' + reKey + '}}', 'g');
-        fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace(regexStrRe, relatedAnswerKeys[reKey]);
-      }
-
-      fieldData.aHtml = fieldData.aHtml.replace(/{{relatedAnswerField}}/g, fieldData.relatedAnswerField);
-    } else {
-      fieldData.aHtml = fieldData.aHtml.replace(/{{addMoreName}}/g, '');
-      fieldData.aHtml = fieldData.aHtml.replace(/{{attrRequiredFrom}}/g, '');
-    }
-
-    for (var _key in objData) {
-      var regexStr = new RegExp('{{' + _key + '}}', 'g');
-      fieldData.aHtml = fieldData.aHtml.replace(regexStr, objData[_key]);
-    }
-
+    fieldData.aHtml = _replaceTemplateStrings__WEBPACK_IMPORTED_MODULE_1__["replaceTemplateStrings"].call(self, fieldData, objData);
     aLoopHtml += fieldData.aHtml;
 
     if (aType === 'option') {
@@ -629,6 +601,51 @@ function iterateAnswers(obj, qID, qIdx, attrReq) {
   }
 
   return aLoopHtml;
+}
+
+/***/ }),
+
+/***/ "./src/modules/buildSurvey/generateQAcodeUtils/replaceTemplateStrings.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "replaceTemplateStrings", function() { return replaceTemplateStrings; });
+function replaceTemplateStrings(fieldData, objData) {
+  var self = this;
+
+  if (objData.optionsHtml !== '') {
+    fieldData.aHtml = fieldData.aHtml.replace(/{{selectTagCode}}/g, self.options.templates.selectTag);
+  }
+
+  if (fieldData.relatedAnswerField) {
+    var relatedAnswerKeys = {
+      answerCode: '',
+      answerType: 'text',
+      fieldClass: objData.fieldClass,
+      answerIdValue: '',
+      attrRequired: '',
+      addMoreName: '-more',
+      attrRequiredFrom: 'data-required-from="#' + objData.answerCode + '"'
+    };
+
+    for (var reKey in relatedAnswerKeys) {
+      var regexStrRe = new RegExp('{{' + reKey + '}}', 'g');
+      fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace(regexStrRe, relatedAnswerKeys[reKey]);
+    }
+
+    fieldData.aHtml = fieldData.aHtml.replace(/{{relatedAnswerField}}/g, fieldData.relatedAnswerField);
+  } else {
+    fieldData.aHtml = fieldData.aHtml.replace(/{{addMoreName}}/g, '');
+    fieldData.aHtml = fieldData.aHtml.replace(/{{attrRequiredFrom}}/g, '');
+  }
+
+  for (var key in objData) {
+    var regexStr = new RegExp('{{' + key + '}}', 'g');
+    fieldData.aHtml = fieldData.aHtml.replace(regexStr, objData[key]);
+  }
+
+  return fieldData.aHtml;
 }
 
 /***/ }),
