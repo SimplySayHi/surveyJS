@@ -1,6 +1,4 @@
 
-/**! surveyJS v2.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
-
 import { mergeObjects }         from './modules/helpers';
 import { messages }             from './modules/messages';
 import { options }              from './modules/options';

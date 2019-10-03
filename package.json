@@ -6,7 +6,8 @@
     "main": "webpack.config.js",
     "homepage": "https://www.valeriodipunzio.com/plugins/surveyJS/",
     "author": {
-        "name": "Valerio Di Punzio <sayhi@valeriodipunzio.com>",
+        "email": "sayhi@valeriodipunzio.com",
+        "name": "Valerio Di Punzio",
         "url": "https://valeriodipunzio.com"
     },
     "repository": {

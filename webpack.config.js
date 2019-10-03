@@ -1,5 +1,8 @@
 
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
+const package = require('./package.json');
+const initialComment = '/**! '+ package.title +' v'+ package.version +' | '+ package.author.name +' (@SimplySayHi) | '+ package.homepage +' | https://github.com/SimplySayHi/'+ package.title +' | '+ package.license +' license */';
 
 module.exports = [
     {
@@ -11,7 +14,20 @@ module.exports = [
         mode: 'none',
         //watch: true,
         optimization: {
-            namedModules: true
+            namedModules: true,
+            minimize: true,
+            minimizer: [
+                new TerserPlugin({
+                    terserOptions: {
+                        compress: false,
+                        mangle: false,
+                        output: {
+                            beautify: true,
+                            preamble: initialComment
+                        }
+                    }
+                })
+            ]
         },
         module: {
             rules: [
@@ -36,6 +52,18 @@ module.exports = [
         },
         mode: 'production',
         //watch: true,
+        optimization: {
+            minimize: true,
+            minimizer: [
+                new TerserPlugin({
+                    terserOptions: {
+                        output: {
+                            preamble: initialComment
+                        }
+                    }
+                })
+            ]
+        },
         // for test:    eval-source-map
         // for deploy:  hidden-source-map or source-map
         devtool: 'source-map',
