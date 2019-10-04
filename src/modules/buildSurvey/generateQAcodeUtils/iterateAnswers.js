@@ -57,7 +57,7 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
                 answerMaxlength: (answer.maxlength ? 'maxlength="' + answer.maxlength + '"' : ''),
                 answerString: (typeof answer.answer === 'string' ? answer.answer : ''),
                 answerType: aType,
-                attrRequired: ( typeof obj.required !== 'undefined' ? 'required=""' : (typeof attrReq !== 'undefined' ? attrReq : '') ),
+                attrRequired: ( typeof obj.required !== 'undefined' ? 'required' : (typeof attrReq !== 'undefined' ? attrReq : '') ),
                 fieldClass: getSettingsFieldClass(),
                 nestedAnswer: ( progIdsJoined !== '' ? 'data-nested-index="'+ aNum +'"' : '' ),
                 optionsHtml: '',
@@ -65,7 +65,8 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
                 questionNumber: qNum,
                 answerCode: (aType === 'option' ? 'select' : aType) +'-' + qID +'-'+ (aId || 0) + '-' + qNum + (progIdsJoined !== '' ? '-'+progIdsJoined : '') +'-'+ aNum,
                 attrChecks: (obj.checks ? 'data-checks="' + obj.checks + '"' : ''),
-                attrSubtype: (answer.subtype ? 'data-subtype="' + answer.subtype + '"' : '')
+                attrSubtype: (answer.subtype ? 'data-subtype="' + answer.subtype + '"' : ''),
+                validateIfFilled: (typeof obj.validateIfFilled !== 'undefined' ? 'data-validate-if-filled' : '')
             };
         
         if( needsBinding ){

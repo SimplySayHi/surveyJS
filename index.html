@@ -347,6 +347,17 @@ mySurvey.init();
                 "sort": 1
             },
 
+            // VALIDATE INPUT FIELD ONLY IF FILLED ( validateIfFilled ) AND WITH SPECIFIC subtype VALIDATION ( SEE FORM JS PLUGIN )
+            {
+                "id": "1b0",
+                "question": "What's your name?",
+                "answers": [
+                    { "id": "1ba0", "type": "text", "answer": "", "subtype": "alphabeticExtended" }
+                ],
+                "validateIfFilled": "",
+                "sort": 0
+            },
+
             // TEXT INPUT ANSWER NOT MANDATORY
             {
                 "id": "1b",
@@ -1383,6 +1394,7 @@ Survey.addLanguage( 'de', newLang );</pre>
     <script src="js/include.js"></script>
     <script src="js/vendors/formjs.min.js"></script>
     <script src="dist/surveyjs.min.js"></script>
+    <script src="js/demo.js"></script>
 
     <script type="text/javascript">
         var $surveyCont = $('[data-surveyjs-container]'),

@@ -9,8 +9,9 @@
                 "id": "1b",
                 "question": "What's your name?",
                 "answers": [
-                    { "id": "1ba", "type": "text", "answer": "" }
+                    { "id": "1ba", "type": "text", "answer": "", "subtype": "alphabeticExtended" }
                 ],
+                "validateIfFilled": "",
                 "sort": 0
             },
             {
