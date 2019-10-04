@@ -4,12 +4,9 @@ function isPlainObject( object ){
 }
 
 function scrollToElement( element ){
-    var c = document.documentElement.scrollTop || document.body.scrollTop;
-    var elTop = element.offsetTop;
-    if (c > 0) {
-        window.requestAnimationFrame(scrollToElement);
-        window.scrollTo(0, c - c / 8);
-    }
+    setTimeout(function(){
+        element.scrollIntoView({ behavior: 'smooth'});
+    }, 50);
 }
 
 var isLocalEnv = location.protocol.indexOf('http') === -1 || location.host.indexOf('127.0.0.1') > -1;

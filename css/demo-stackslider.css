@@ -24,11 +24,11 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
     overflow: visible;
 }
 
-.st-wrapper nav span:before {
+.st-wrapper nav .st-arrow:before {
     content: '' !important;
 }
 
-.st-wrapper nav span:after {
+.st-wrapper nav .st-arrow:after {
     content: '';
     position: absolute;
     top: 50%;
@@ -38,26 +38,43 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
     border-style: solid;
 }
 
-.st-wrapper nav span:first-child:after {
+.st-wrapper nav .st-arrow.st-prev:after {
     transform: translate(-75%, -50%);
     border-width: 7px 7px 7px 0;
     border-color: transparent white transparent transparent;
 }
 
-.st-wrapper nav span:first-child:hover:after,
-.st-wrapper nav span:first-child:focus:after {
+.st-wrapper nav .st-arrow.st-prev:hover:after,
+.st-wrapper nav .st-arrow.st-prev:focus:after {
     border-color: transparent #ffd166 transparent transparent;
 }
 
-.st-wrapper nav span:last-child:after {
+.st-wrapper nav .st-arrow.st-next:after {
     transform: translate(-25%, -50%);
     border-width: 7px 0 7px 7px;
     border-color: transparent transparent transparent white;
 }
 
-.st-wrapper nav span:last-child:hover:after,
-.st-wrapper nav span:last-child:focus:after {
+.st-wrapper nav .st-arrow.st-next:hover:after,
+.st-wrapper nav .st-arrow.st-next:focus:after {
     border-color: transparent transparent transparent #ffd166;
+}
+
+.st-wrapper nav .st-arrow.st-disabled,
+.st-wrapper nav .st-arrow.st-disabled:before {
+    cursor: auto;
+}
+
+.st-wrapper nav .st-arrow.st-disabled:before {
+    background-color: #fff;
+}
+
+.st-wrapper nav .st-arrow.st-prev.st-disabled:after {
+    border-color: transparent #eee transparent transparent;
+}
+
+.st-wrapper nav .st-arrow.st-next.st-disabled:after {
+    border-color: transparent transparent transparent #eee;
 }
 
 .surveyjs-container {

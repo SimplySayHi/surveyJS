@@ -165,8 +165,7 @@
                                     clicksLength = ( clickDirection === 'prev' ? activeIndex - invalidIndex : invalidIndex - activeIndex );
 
                                 for(var i=0; i<clicksLength; i++){
-                                    $btn.trigger('mousedown.stackslider');
-                                    $btn.trigger('mouseup.stackslider');
+                                    $btn.trigger('click.stackslider');
                                 }
                                 
                             }

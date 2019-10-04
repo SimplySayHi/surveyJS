@@ -232,6 +232,7 @@
 					return false;
 				}
 				self._initEvents();
+                self.$navigation.find( '.st-arrow.st-prev' ).addClass('st-disabled');
 
 			} );
 
@@ -263,7 +264,7 @@
             
             // add navigation
 			if( this.itemsCount > 1 ) {
-				this.$navigation = $( '<nav><span>Previous</span><span>Next</span></nav>' );
+				this.$navigation = $( '<nav><span class="st-arrow st-prev">Previous</span><span class="st-arrow st-next">Next</span></nav>' );
 				this.$wrapper.append( this.$navigation );
 			}
 
@@ -275,32 +276,34 @@
 
 			var self = this;
 
-			this.$navigation.children( 'span:last' ).on( {
-				'mousedown.stackslider' : function() {
+			this.$navigation.find( '.st-arrow.st-next' ).on( {
+				'click.stackslider' : function() {
 
+                    if( $(this).hasClass('st-disabled') ){ return false; }
 					self._navigate( 'next' );
-					self.startflowtimeout = setTimeout( function() {
+					/* self.startflowtimeout = setTimeout( function() {
 						self.flow = true;
 						self._flow( 'next' );
-					}, 600 );
+					}, 600 ); */
 
-				}, 
+				}/* , 
 				'mouseup.stackslider mouseleave.stackslider' : function() {
 					self._mouseup( 'next' );
-				}
-			} ).end().children( 'span:first' ).on( {
-				'mousedown.stackslider' : function() {
+				} */
+			} ).end().find( '.st-arrow.st-prev' ).on( {
+				'click.stackslider' : function() {
 
+                    if( $(this).hasClass('st-disabled') ){ return false; }
 					self._navigate( 'prev' );
-					self.startflowtimeout = setTimeout( function() {
+					/* self.startflowtimeout = setTimeout( function() {
 						self.flow = true;
 						self._flow( 'prev' );
-					}, 600 );
+					}, 600 ); */
 
-				},
+				}/* ,
 				'mouseup.stackslider mouseleave.stackslider' : function() {
 					self._mouseup( 'prev' );
-				}
+				} */
 			} );
 
 			$window.on( 'debouncedresize.stackslider', function() {
@@ -342,6 +345,13 @@
 			var self = this,
 				classes = 'st-left st-center st-right st-leftflow st-rightflow st-leftflow-in st-rightflow-in', dirclass, posclass, pileOut, pileIn, dirclasscenter,
 				$currentItem = this.$items.eq( this.current );
+
+            this.$navigation.find( '.st-arrow' ).removeClass('st-disabled');
+            if( dir === 'next' && this.current + 1 === this.itemsCount - 1 ){
+                this.$navigation.find( '.st-arrow.st-next' ).addClass('st-disabled');
+            } else if( dir === 'prev' && this.current - 1 === 0 ) {
+                this.$navigation.find( '.st-arrow.st-prev' ).addClass('st-disabled');
+            }
 
 			if( dir === 'next' && this.current < this.itemsCount - 1 ) {
 
