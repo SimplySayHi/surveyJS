@@ -12,7 +12,7 @@
                     { "id": "1ba", "type": "text", "answer": "", "subtype": "alphabeticExtended" }
                 ],
                 "validateIfFilled": "",
-                "sort": 0
+                "sort": 1
             },
             {
                 "id": "1c",
@@ -21,7 +21,7 @@
                     { "id": "1c", "type": "text", "answer": "", "subtype": "email" }
                 ],
                 "required": "",
-                "sort": 1
+                "sort": 2
             },
             {
                 "id": "2",
@@ -39,7 +39,7 @@
                     }
                 ],
                 "required": "",
-                "sort": 2
+                "sort": 3
             },
             {
                 "id": "3",
@@ -47,7 +47,7 @@
                 "answers": [
                     { "id": "18", "type": "textarea", "answer": "", "maxlength": 300 }
                 ],
-                "sort": 3
+                "sort": 4
             },
             {
                 "id": "6",
@@ -73,16 +73,6 @@
                     { "id": "25", "type": "radio", "answer": "Phone", "sort": 4 }
                 ],
                 "required": "",
-                "sort": 4
-            },
-            {
-                "id": "7",
-                "question": "How much is important this survey for you?",
-                "answers": [
-                            { "id": "60", "type": "option", "answer": "Not much", "sort": 1 },
-                            { "id": "61", "type": "option", "answer": "Medium", "sort": 2 },
-                            { "id": "62", "type": "option", "answer": "Much", "sort": 3 }
-                ],
                 "sort": 5
             },
             {
