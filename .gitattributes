@@ -1,6 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-js/vendors/* linguist-vendored
 index.html linguist-documentation
 example-base.html linguist-documentation
 example-1.html linguist-documentation
@@ -9,6 +8,7 @@ css/* linguist-documentation
 fonts/* linguist-documentation
 img/* linguist-documentation
 json/* linguist-documentation
-js/surveyJS.js linguist-generated=true
-js/surveyJS.min.js linguist-generated=true
-js/surveyJS.min.js.map linguist-generated=true
+js/demo.js linguist-documentation
+js/include.js linguist-documentation
+js/vendors/* linguist-vendored
+dist/* linguist-generated=true
