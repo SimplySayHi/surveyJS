@@ -227,10 +227,10 @@
 &lt;link rel="stylesheet" href="css/survey.css"&gt;
 
 &lt;!-- FORM JS --&gt;
-&lt;script src="js/vendors/formjs.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.1.0/dist/formjs.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- SURVEY JS --&gt;
-&lt;script src="dist/surveyjs.min.js"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS@2.0.0/dist/surveyjs.min.js"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- HTML -->
@@ -278,7 +278,9 @@
 var formEl = document.querySelector('[data-surveyjs-form]');
 var options = { url: 'json/survey.json' };
 var mySurvey = new Survey( formEl, options );
-mySurvey.init();
+mySurvey.init().then(function( response ){
+    console.log('SURVEY DATA RETRIEVED', response);
+});
 </pre>
             <ul>
                 <li>
@@ -316,10 +318,11 @@ mySurvey.init();
         <div id="json-file">
             <h3 class="sticky-title">JSON File</h3>
             <p>
-                Example of JSON file for the survey is <a href="json/survey.json" target="_blank">here</a>.<br />
-                ( image, title and description are optional )
-                <br /><br />
-                Note that the AJAX call to get the JSON file MUST return it as JSON string or JS/JSON object.
+                Example of JSON file for the survey is <a href="json/survey.json" target="_blank">here</a>.
+                <br />
+                Note that the AJAX call to get the JSON file MUST return it as JSON string or JSON object.
+                <br />
+                The survey will be built if <code>status</code> is "success" and <code>questions</code> is a non-empty array.
             </p>
             <pre>
 {
