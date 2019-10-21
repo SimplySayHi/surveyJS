@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="css/font-awesome.css">
     <link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
     <link rel="stylesheet" href="css/stackSlider.css">
-    <link rel="stylesheet" href="css/survey.css">
+    <link rel="stylesheet" href="dist/survey.css">
     <link rel="stylesheet" href="css/demo.css">
     <link rel="stylesheet" href="css/demo-stackslider.css">
 </head>
@@ -76,7 +76,7 @@
                 </p>
                 <div class="dropdown d-inline-block ml-1">
                     <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button">
-                        2.0.0
+                        2.0.1
                     </button>
                     <span class="dropdown-menu w-100 py-1">
                         <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/1.6.1/" target="_blank">1.6.1</a>
@@ -141,7 +141,8 @@
             </p>
             <h3>CDNs</h3>
             <p>
-                <a href="https://www.jsdelivr.com/package/gh/simplysayhi/surveyJS" target="_blank">jsDelivr</a>
+                <a href="https://www.jsdelivr.com/package/gh/simplysayhi/surveyJS" target="_blank">jsDelivr</a> | 
+                <a href="https://unpkg.com/surveyjs/dist/surveyjs.min.js" target="_blank">UNPKG</a>
             </p>
         </div>
         
@@ -205,7 +206,7 @@
             </p>
             <ul>
                 <li>
-                    <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> ( version 3.1.0 - for survey form validation and submit )
+                    <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> ( version 3.1.0 or higher - for survey form validation and submit )
                 </li>
                 <li>
                     Bootstrap 4 CSS ( Optional - only form CSS ) but you can write the CSS by yourself ;)
@@ -220,17 +221,42 @@
                 Include css and js in your page.
             </p>
             <pre>
-&lt;!-- BOOTSTRAP CSS ( OPTIONAL ) --&gt;
-&lt;link rel="stylesheet" href="css/bootstrap.css"&gt;
-
 &lt;!-- SURVEY CSS --&gt;
-&lt;link rel="stylesheet" href="css/survey.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS/dist/survey.min.css"&gt;
 
 &lt;!-- FORM JS --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3.1.0/dist/formjs.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3/dist/formjs.min.js"&gt;&lt;/script&gt;
 
 &lt;!-- SURVEY JS --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS@2.0.0/dist/surveyjs.min.js"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS/dist/surveyjs.min.js"&gt;&lt;/script&gt;
+</pre>
+            <p>
+                or from unpkg.com:
+            </p>
+            <pre>
+&lt;script src="https://unpkg.com/surveyjs/dist/survey.min.css"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/formjs-plugin@3/dist/formjs.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/surveyjs/dist/surveyjs.min.js"&gt;&lt;/script&gt;
+</pre>
+            <hr />
+            <p>
+                or install via NPM:
+            </p>
+            <pre>
+npm install surveyjs
+</pre>
+            <p>
+                and use as ES6 module:
+            </p>
+            <pre>
+import Survey from 'surveyjs';
+</pre>
+            <p>
+                or use as CommonJS module:
+            </p>
+            <pre>
+var Survey = require('surveyjs');
+</pre>
         </div>
         
         <!-- HTML -->
@@ -290,10 +316,6 @@ mySurvey.init().then(function( response ){
                     options: ( required ) a JS object as defined in <a href="#options-list">Options section</a> with at least <code>url</code>
                 </li>
             </ul>
-            <hr />
-            <p>
-                <b>IMPORTANT</b>: If <code>Survey</code> namespace is not available, you can use <code>SurveyJS</code> namespace.
-            </p>
             <hr />
             <p>
                 surveyJS has some more properties:
@@ -1273,93 +1295,125 @@ Survey.addLanguage( 'de', newLang );</pre>
             <h3 class="sticky-title">Changelog</h3>
             <ul class="p-0">
                 <li class="media my-3">
-                    <div class="version-num text-red">2.0.0</div>
+                    <div class="version-num text-red">2.0.1</div>
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Rewritten with ES6
+                                Project published on NPM.
                             </li>
                             <li>
-                                Added possibility to set "subtype" in JSON file to enable "data-subtype" attribute on input fields and take advantage of formJS custom validations.
+                                Updated webpack config to export library as UMD Module.
                             </li>
                             <li>
-                                Added possibility to set "validateIfFilled" in JSON file to enable "data-validate-if-filled" attribute on input fields as per formJS spec.
+                                Updated dependency: formJS 3.1.2
                             </li>
                             <li>
-                                Updated dependency: formJS 3.1.0
-                            </li>
-                            <li>
-                                Bugfix and improvements
+                                Removed "SurveyJS" as alternative namespace.
                             </li>
                         </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">1.6.1</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                Updated dependency: formJS 2.3.3
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">1.6.0</div>
-                    <div class="media-body pl-2">
-                        <ul>
-                            <li>
-                                Updated dependency: formJS 2.3.2 - Survey validation and submit is now automatically handled via formJS initialization.
-                            </li>
-                            <li>
-                                Updated dependency: Bootstrap 4 CSS.
-                            </li>
-                            <li>
-                                Renamed option "setJSONurl" with "url".
-                            </li>
-                            <li>
-                                Added "useLocalStorage" option in "options".
-                            </li>
-                            <li>
-                                Added "cssClasses" in "options".
-                            </li>
-                            <li>
-                                Added support for "maxlength" ( number ) in JSON file. For textareas, the value will make the plugin add maxlength attribute with the specified value.
-                            </li>
-                            <li>
-                                Changed attribute "data-max-check" with "data-checks" ( "checks" in JSON file ) as for new formJS version.
-                            </li>
-                            <li>
-                                Changed some CSS classes in default HTML templates.
-                            </li>
-                            <li>
-                                Changed some CSS classes related to the survey graphic.
-                            </li>
-                            <li>
-                                Moved all ( or almost all ) the template string options in "templates".
-                            </li>
-                            <li>
-                                Moved "beforeSend", "onSubmitComplete", "onSubmitError", "onSubmitSuccess" in "formOptions" as for formJS plugin.
-                            </li>
-                            <li>
-                                Moved "onValidation" in "fieldOptions" as for formJS plugin.
-                            </li>
-                            <li>
-                                Removed "graphicInput" option in "options".
-                            </li>
-                            <li>
-                                Bugfix &amp; many changes under the hood.
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="media my-3">
-                    <div class="version-num text-red">1.5.2</div>
-                    <div class="media-body pl-2">
-                        First stable version ( with formJS v1.2.0 )
                     </div>
                 </li>
             </ul>
+            <div class="toggable-content-outer">
+                <input type="checkbox" class="fake-checkbox btn-toggable-content" id="changelog-show-more" />
+                <label class="toggable-label text-red" for="changelog-show-more">
+                    <span>Show more</span>
+                    <span>Close</span>
+                </label>
+                <div class="toggable-content">
+                    <ul class="p-0">
+
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.0.0</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Rewritten with ES6
+                                    </li>
+                                    <li>
+                                        Added possibility to set "subtype" in JSON file to enable "data-subtype" attribute on input fields and take advantage of formJS custom validations.
+                                    </li>
+                                    <li>
+                                        Added possibility to set "validateIfFilled" in JSON file to enable "data-validate-if-filled" attribute on input fields as per formJS spec.
+                                    </li>
+                                    <li>
+                                        Updated dependency: formJS 3.1.0
+                                    </li>
+                                    <li>
+                                        Bugfix and improvements
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">1.6.1</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Updated dependency: formJS 2.3.3
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">1.6.0</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Updated dependency: formJS 2.3.2 - Survey validation and submit is now automatically handled via formJS initialization.
+                                    </li>
+                                    <li>
+                                        Updated dependency: Bootstrap 4 CSS.
+                                    </li>
+                                    <li>
+                                        Renamed option "setJSONurl" with "url".
+                                    </li>
+                                    <li>
+                                        Added "useLocalStorage" option in "options".
+                                    </li>
+                                    <li>
+                                        Added "cssClasses" in "options".
+                                    </li>
+                                    <li>
+                                        Added support for "maxlength" ( number ) in JSON file. For textareas, the value will make the plugin add maxlength attribute with the specified value.
+                                    </li>
+                                    <li>
+                                        Changed attribute "data-max-check" with "data-checks" ( "checks" in JSON file ) as for new formJS version.
+                                    </li>
+                                    <li>
+                                        Changed some CSS classes in default HTML templates.
+                                    </li>
+                                    <li>
+                                        Changed some CSS classes related to the survey graphic.
+                                    </li>
+                                    <li>
+                                        Moved all ( or almost all ) the template string options in "templates".
+                                    </li>
+                                    <li>
+                                        Moved "beforeSend", "onSubmitComplete", "onSubmitError", "onSubmitSuccess" in "formOptions" as for formJS plugin.
+                                    </li>
+                                    <li>
+                                        Moved "onValidation" in "fieldOptions" as for formJS plugin.
+                                    </li>
+                                    <li>
+                                        Removed "graphicInput" option in "options".
+                                    </li>
+                                    <li>
+                                        Bugfix &amp; many changes under the hood.
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="media my-3">
+                            <div class="version-num text-red">1.5.2</div>
+                            <div class="media-body pl-2">
+                                First stable version ( with formJS v1.2.0 )
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- Bugs -->

@@ -8,7 +8,9 @@ import { constructorFn }        from './modules/constructor';
 import { retrieveSurvey as init } from './modules/retrieveSurvey';
 import { destroy }              from './modules/destroy';
 
-const version = '2.0.0';
+import './index.css';
+
+const version = '2.0.1';
 
 class Survey {
 
@@ -40,5 +42,4 @@ Survey.prototype.messages = messages;
 Survey.prototype.options = options;
 Survey.prototype.version = version;
 
-if( !window.Survey ){ window.Survey = Survey; }
-if( !window.SurveyJS ) { window.SurveyJS = Survey; }
+export default Survey;

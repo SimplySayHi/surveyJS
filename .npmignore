@@ -1,0 +1,8 @@
+css
+fonts
+js
+json
+*.html
+*.config.js
+*.zip
+.gitattributes

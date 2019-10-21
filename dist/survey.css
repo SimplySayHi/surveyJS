@@ -1,0 +1,123 @@
+@-webkit-keyframes surveyjs-icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes surveyjs-icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+.surveyjs-container .icon-spin {
+  -webkit-animation: surveyjs-icon-spin 2s infinite linear;
+  animation: surveyjs-icon-spin 2s infinite linear;
+}
+
+.surveyjs-container .surveyjs-label {
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+.surveyjs-container .surveyjs-input:not([type]){
+    display: none;
+}
+
+.surveyjs-container .surveyjs-field-indent {
+    padding-left: 20px;
+}
+
+.surveyjs-container .surveyjs-field-indent-0 {
+    padding-left: 0;
+}
+
+.surveyjs-container .form-check:not(.surveyjs-answer-checkbox):not(.surveyjs-answer-radio) {
+    padding-left: 0;
+}
+
+.surveyjs-container.surveyjs-custom-inputs .form-check .surveyjs-input[type="checkbox"],
+.surveyjs-container.surveyjs-custom-inputs .form-check .surveyjs-input[type="radio"] {
+    width: 17px;
+    margin: 0;
+    padding: 0;
+}
+
+.surveyjs-container.surveyjs-custom-inputs .surveyjs-label:before,
+.surveyjs-container.surveyjs-custom-inputs .surveyjs-label:after {
+    margin-left: -17px;
+}
+
+.surveyjs-container.surveyjs-custom-inputs .surveyjs-radio .surveyjs-label.custom-control-label:before,
+.surveyjs-container.surveyjs-custom-inputs .surveyjs-radio .surveyjs-label.custom-control-label:after {
+    display: none;
+}
+
+.surveyjs-container.surveyjs-custom-inputs .input-group .custom-control {
+    padding-left: 2rem;
+}
+
+.surveyjs-container .input-group .surveyjs-select:not([size]):not([multiple]) {
+    height: auto;
+}
+
+.surveyjs-container.surveyjs-custom-inputs .input-group .custom-control-label:before,
+.surveyjs-container.surveyjs-custom-inputs .input-group .custom-control-label:after {
+    top: auto;
+    left: auto;
+    right: 100%;
+    bottom: 100%;
+    margin-bottom: -3px;
+    margin-right: 5px;
+    -webkit-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+    -o-transform: translateY(100%);
+    transform: translateY(100%);
+}
+
+.surveyjs-container.surveyjs-custom-inputs .input-group .custom-control .surveyjs-label {
+    position: relative;
+}
+
+.surveyjs-container.surveyjs-custom-inputs .custom-control .surveyjs-label:before,
+.surveyjs-container.surveyjs-custom-inputs .custom-control .surveyjs-label:after {
+    margin-left: 0;
+}
+
+.surveyjs-container .input-group {
+    margin-left: -0.8125em;
+    margin-top: 0.3125em;
+    margin-bottom: 0.3125em;
+    width: auto;
+}
+
+.surveyjs-container .input-group .form-check-input {
+    position: static;
+    margin: 0;
+}
+
+.surveyjs-container .input-group .surveyjs-label {
+    font-weight: inherit;
+    margin: 0;
+    padding-left: 5px;
+}
+
+.surveyjs-container .surveyjs-field-error-message,
+.surveyjs-container .surveyjs-footer {
+    display: none;
+}
+
+.surveyjs-container .has-error .surveyjs-field-error-message,
+.surveyjs-container.surveyjs-init-success .surveyjs-footer {
+    display: block;
+}

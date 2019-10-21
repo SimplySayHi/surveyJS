@@ -324,3 +324,47 @@ pre { max-height: 355px; }
     border-right-color: #ef476f;
     background-color: #fcdde4;
 }
+
+.toggable-content-outer .fake-checkbox.btn-toggable-content,
+.toggable-content-outer .fake-checkbox.btn-toggable-content ~ .toggable-label span,
+.toggable-content-outer .toggable-content {
+    display: none;
+}
+
+.toggable-content-outer .toggable-label {
+    position: relative;
+}
+
+.toggable-content-outer .toggable-label span {
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.toggable-content-outer .toggable-label span:after {
+    display: inline-block;
+    margin-left: .255em;
+    vertical-align: .255em;
+    content: "";
+    border-right: .3em solid transparent;
+    border-bottom: 0;
+    border-left: .3em solid transparent;
+}
+
+.toggable-content-outer .toggable-label span:first-child:after {
+    border-top: .3em solid;
+    border-top-color: #ef476f;
+}
+
+.toggable-content-outer .toggable-label span:last-child:after {
+    border-bottom: .3em solid;
+    border-bottom-color: #ef476f;
+}
+
+.toggable-content-outer .fake-checkbox.btn-toggable-content:not(:checked) ~ .toggable-label span:first-child {
+    display: block;
+}
+
+.toggable-content-outer .fake-checkbox.btn-toggable-content:checked ~ .toggable-label span:last-child,
+.toggable-content-outer .fake-checkbox.btn-toggable-content:checked ~ .toggable-content {
+    display: block;
+}

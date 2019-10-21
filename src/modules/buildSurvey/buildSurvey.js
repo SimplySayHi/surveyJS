@@ -4,8 +4,10 @@ import { appendDomStringToNode }from '../helpers';
 import { generateQAcode }       from './generateQAcode';
 import { populateAnswers }      from './populateAnswers';
 
-export function buildSurvey(){
+import Form from 'formjs-plugin';
 
+export function buildSurvey(){
+    
     const self = this,
           data = self.data,
           formEl = self.formEl,

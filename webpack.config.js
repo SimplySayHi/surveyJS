@@ -1,7 +1,11 @@
 
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const package = require('./package.json');
+
+const libraryName = 'Survey';
 const initialComment = '/**! '+ package.title +' v'+ package.version +' | '+ package.author.name +' (@SimplySayHi) | '+ package.homepage +' | https://github.com/SimplySayHi/'+ package.title +' | '+ package.license +' license */';
 
 module.exports = [
@@ -9,10 +13,16 @@ module.exports = [
         entry : "./src/index.js",
         output: {
             filename: 'surveyjs.js',
-            path: path.resolve(__dirname, './dist')
+            path: path.resolve(__dirname, './dist'),
+            libraryTarget: 'umd',
+            libraryExport: 'default',
+            globalObject: 'this',
+            library: libraryName
+        },
+        externals: {
+            'formjs-plugin': 'Form'
         },
         mode: 'none',
-        //watch: true,
         optimization: {
             namedModules: true,
             minimize: true,
@@ -40,18 +50,33 @@ module.exports = [
                             presets: ['@babel/env']
                         }
                     }
+                },
+                {
+                    test: /\.css$/,
+                    use: [MiniCssExtractPlugin.loader, 'css-loader']
                 }
             ]	
-        }
+        },
+        plugins: [
+            new MiniCssExtractPlugin({
+                filename: 'survey.css'
+            })
+        ]
     },
     {
         entry : "./src/index.js",
         output: {
             filename: 'surveyjs.min.js',
-            path: path.resolve(__dirname, './dist')
+            path: path.resolve(__dirname, './dist'),
+            libraryTarget: 'umd',
+            libraryExport: 'default',
+            globalObject: 'this',
+            library: libraryName
+        },
+        externals: {
+            'formjs-plugin': 'Form'
         },
         mode: 'production',
-        //watch: true,
         optimization: {
             minimize: true,
             minimizer: [
@@ -62,7 +87,8 @@ module.exports = [
                             preamble: initialComment
                         }
                     }
-                })
+                }),
+                new OptimizeCssAssetsPlugin({})
             ]
         },
         // for test:    eval-source-map
@@ -79,8 +105,17 @@ module.exports = [
                             presets: ['@babel/env']
                         }
                     }
+                },
+                {
+                    test: /\.css$/,
+                    use: [MiniCssExtractPlugin.loader, 'css-loader']
                 }
             ]	
-        }
+        },
+        plugins: [
+            new MiniCssExtractPlugin({
+                filename: 'survey.min.css'
+            })
+        ]
     }
 ];
