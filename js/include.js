@@ -65,3 +65,10 @@ document.addEventListener('click', function(e){
         }
     }
 }, false);
+
+document.addEventListener('DOMContentLoaded', function(){
+    var version = Survey.prototype.version;
+    Array.from( document.querySelectorAll('[data-print-current-version]') ).forEach(function( elem ){
+        elem.innerHTML = version;
+    });
+});

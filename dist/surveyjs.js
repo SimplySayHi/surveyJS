@@ -1,4 +1,4 @@
-/**! surveyJS v2.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/**! surveyJS v2.0.2 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 (function webpackUniversalModuleDefinition(root, factory) {
     if (typeof exports === "object" && typeof module === "object") module.exports = factory(require("Form")); else if (typeof define === "function" && define.amd) define([ "Form" ], factory); else if (typeof exports === "object") exports["Survey"] = factory(require("Form")); else root["Survey"] = factory(root["Form"]);
 })(this, (function(__WEBPACK_EXTERNAL_MODULE_formjs_plugin__) {
@@ -98,7 +98,7 @@
                 if (staticProps) _defineProperties(Constructor, staticProps);
                 return Constructor;
             }
-            var version = "2.0.1";
+            var version = "2.0.2";
             var Survey = function() {
                 function Survey(formEl, optionsObj) {
                     _classCallCheck(this, Survey);
@@ -892,7 +892,6 @@
             var defaultCallbacksInOptions = {
                 formOptions: {
                     beforeSend: function beforeSend_surveyDefault(data) {
-                        console.log("Survey beforeSend_surveyDefault", data);
                         var surveyjs = this.formEl.surveyjs;
                         var surveyContEl = this.formEl.closest("[data-surveyjs-container]");
                         var formInstance = surveyjs.internals.formInstance;
@@ -918,7 +917,6 @@
                                 }
                             }
                         }));
-                        console.log("Survey beforeSend_surveyDefault VALIDATE FORM...");
                         var fieldOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, surveyjs.options.fieldOptions, {
                             focusOnRelated: false
                         });
@@ -927,13 +925,11 @@
                                 if (!formRes.result) {
                                     data.stopExecution = true;
                                 }
-                                console.log("Survey beforeSend_surveyDefault END", data);
                                 resolve(data);
                             }));
                         }));
                     },
                     getFormData: function getFormData_surveyDefault() {
-                        console.log("Survey getFormData_surveyDefault");
                         var formEl = this.formEl;
                         var survey = formEl.surveyjs;
                         var fieldsList = Array.from(formEl.closest("[data-surveyjs-container]").querySelectorAll(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelectorSurvey"]));
@@ -985,14 +981,11 @@
                             }
                             obj.answers.push(qaObj);
                         }));
-                        console.log("Survey getFormData_surveyDefault END", obj);
                         return obj;
                     },
                     onSubmitSuccess: function onSubmitSuccess_surveyDefault() {
                         var survey = this.formEl.surveyjs;
-                        console.log("Survey onSubmitSuccess_surveyDefault");
                         if (self.options.useLocalStorage) {
-                            console.log("Survey onSubmitSuccess_surveyDefault REMOVE LOCAL STORAGE");
                             localStorage.removeItem(survey.internals.localStorageName);
                         }
                     }

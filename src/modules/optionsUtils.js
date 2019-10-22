@@ -6,7 +6,6 @@ export const defaultCallbacksInOptions = {
     formOptions: {
 
         beforeSend: function beforeSend_surveyDefault( data ){
-            console.log('Survey beforeSend_surveyDefault', data);
             const surveyjs = this.formEl.surveyjs;
             const surveyContEl = this.formEl.closest('[data-surveyjs-container]');
             const formInstance = surveyjs.internals.formInstance;
@@ -47,21 +46,18 @@ export const defaultCallbacksInOptions = {
 
             });
 
-            console.log('Survey beforeSend_surveyDefault VALIDATE FORM...');
             const fieldOptions = mergeObjects({}, surveyjs.options.fieldOptions, {focusOnRelated: false});
             return new Promise(resolve => {
                 formInstance.validateForm( fieldOptions ).then(formRes => {
                     if( !formRes.result ){
                         data.stopExecution = true;
                     }
-                    console.log('Survey beforeSend_surveyDefault END', data);
                     resolve( data );
                 });
             });
         },
 
         getFormData: function getFormData_surveyDefault(){
-            console.log('Survey getFormData_surveyDefault');
             const formEl = this.formEl;
             const survey = formEl.surveyjs;
             const fieldsList = Array.from( formEl.closest('[data-surveyjs-container]').querySelectorAll(fieldsStringSelectorSurvey) );
@@ -140,16 +136,13 @@ export const defaultCallbacksInOptions = {
                 obj.answers.push( qaObj );
             });
         
-            console.log('Survey getFormData_surveyDefault END', obj);
             return obj;
         },
 
         onSubmitSuccess: function onSubmitSuccess_surveyDefault(){
             // REMOVE SURVEY LOCAL STORAGE
             const survey = this.formEl.surveyjs;
-            console.log('Survey onSubmitSuccess_surveyDefault');
             if( self.options.useLocalStorage ){
-                console.log('Survey onSubmitSuccess_surveyDefault REMOVE LOCAL STORAGE');
                 localStorage.removeItem( survey.internals.localStorageName );
             }
         }
