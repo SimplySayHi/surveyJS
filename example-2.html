@@ -116,7 +116,7 @@
                 },
                 templates: {
                     question:   '<div class="st-item" data-title="#{{questionId}}">'+
-                                    '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix" {{maxChoice}}>'+
+                                    '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix">'+
                                         '<div class="surveyjs-question-body">'+
                                             '<div class="surveyjs-question-text">{{questionText}}</div>'+
                                             '<div class="surveyjs-answers-box form-group clearfix">'+
@@ -144,6 +144,9 @@
                 fieldOptions: {
                     onValidation: function onValidation_doc( fields ){
                         if( fields.length > 1 ){
+                            if( !formEl.querySelector('[type="submit"]').disabled ){
+                                return;
+                            }
                             // GO TO THE FIRST UNANSWERED QUESTION
                             var $stWrapper = $('.surveyjs-form .st-wrapper'),
                                 activeIndex = $stWrapper.find('.st-center').index(),

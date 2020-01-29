@@ -2,7 +2,7 @@
     "name": "surveyjs",
     "title": "surveyJS",
     "description": "Javascript Survey Creation & Management. Made Easy",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "main": "dist/surveyjs.min.js",
     "module": "src/index.js",
     "homepage": "https://www.valeriodipunzio.com/plugins/surveyJS/",
@@ -30,16 +30,16 @@
         "build": "webpack"
     },
     "devDependencies": {
-        "@babel/core": "^7.6.0",
-        "@babel/preset-env": "^7.6.0",
+        "@babel/core": "^7.8.3",
+        "@babel/preset-env": "^7.8.3",
         "babel-loader": "^8.0.6",
-        "css-loader": "^3.2.0",
-        "mini-css-extract-plugin": "^0.8.0",
+        "css-loader": "^3.4.2",
+        "mini-css-extract-plugin": "^0.8.2",
         "optimize-css-assets-webpack-plugin": "^5.0.3",
-        "webpack": "^4.40.2",
-        "webpack-cli": "^3.3.8"
+        "webpack": "^4.41.5",
+        "webpack-cli": "^3.3.10"
     },
     "peerDependencies": {
-        "formjs-plugin": "^3.1.2"
+        "formjs-plugin": "^3.2.1"
     }
 }

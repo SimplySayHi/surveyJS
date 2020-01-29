@@ -5,12 +5,12 @@ import { options }              from './modules/options';
 
 // CONSTRUCTOR FUNCTION & PUBLIC METHODS
 import { constructorFn }        from './modules/constructor';
-import { retrieveSurvey as init } from './modules/retrieveSurvey';
+import { retrieveSurvey }       from './modules/retrieveSurvey';
 import { destroy }              from './modules/destroy';
 
 import './index.css';
 
-const version = '2.0.2';
+const version = '2.0.3';
 
 class Survey {
 
@@ -23,7 +23,7 @@ class Survey {
     }
 
     init(){
-        return init.call(this);
+        return retrieveSurvey.call(this);
     }
     
     static addLanguage( langString, langObject ){

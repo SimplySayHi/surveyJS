@@ -3,7 +3,7 @@ export const
 
 fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]',
 
-ajaxCall = function ( url = location.href, options = {} ) {
+ajaxCall = ( url = location.href, options = {} ) => {
     let timeoutTimer;
 
     /* SET AbortController FOR timeout */
@@ -51,7 +51,7 @@ ajaxCall = function ( url = location.href, options = {} ) {
         });
 },
 
-appendDomStringToNode = function ( HTMLstring, parentNode ) {
+appendDomStringToNode = ( HTMLstring, parentNode ) => {
 
     const tmpEl = document.createElement('div');
     tmpEl.innerHTML = HTMLstring;
@@ -61,7 +61,7 @@ appendDomStringToNode = function ( HTMLstring, parentNode ) {
 
 },
 
-checkFormEl = function( formEl ){
+checkFormEl = ( formEl ) => {
     let isString = typeof formEl,
         isValidNodeSelector = isString === 'string' && isDOMNode(document.querySelector(formEl)),
         isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
@@ -73,7 +73,7 @@ checkFormEl = function( formEl ){
     return obj;
 },
 
-concatFieldsLists = function (){
+concatFieldsLists = function () {
     return Array.from(arguments).reduce((argAcc, list) => {
         return list.reduce((listAcc, elem) => {
             if( listAcc.indexOf(elem) === -1 ){
@@ -84,23 +84,23 @@ concatFieldsLists = function (){
     }, []);
 },
 
-isDOMNode = function( node ){
+isDOMNode = ( node ) => {
     return Element.prototype.isPrototypeOf( node );
 },
 
-isEmptyObject = function ( object ) {
+isEmptyObject = ( object ) => {
     return isPlainObject(object) && Object.getOwnPropertyNames(object).length === 0;
 },
 
-isFieldForChangeEvent = function ( fieldEl ) {
+isFieldForChangeEvent = ( fieldEl ) => {
     return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
 },
 
-isNodeList = function( nodeList ){
+isNodeList = ( nodeList ) => {
     return NodeList.prototype.isPrototypeOf( nodeList );
 },
 
-isPlainObject = function( object ){
+isPlainObject = ( object ) => {
     return Object.prototype.toString.call( object ) === '[object Object]';
 },
 

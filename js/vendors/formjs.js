@@ -1,4 +1,4 @@
-/**! formJS v3.1.2 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v3.2.1 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 (function webpackUniversalModuleDefinition(root, factory) {
     if (typeof exports === "object" && typeof module === "object") module.exports = factory(); else if (typeof define === "function" && define.amd) define([], factory); else if (typeof exports === "object") exports["Form"] = factory(); else root["Form"] = factory();
 })(this, (function() {
@@ -70,7 +70,7 @@
         "./src/index.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            var _modules_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _modules_helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _modules_options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/options.js");
             var _modules_validationRules__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/validationRules.js");
             var _modules_validationErrors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/validationErrors.js");
@@ -99,7 +99,7 @@
                 if (staticProps) _defineProperties(Constructor, staticProps);
                 return Constructor;
             }
-            var version = "3.1.2";
+            var version = "3.2.1";
             var Form = function() {
                 function Form(formEl, optionsObj) {
                     _classCallCheck(this, Form);
@@ -133,17 +133,17 @@
                 } ], [ {
                     key: "addValidationErrors",
                     value: function addValidationErrors(errorsObj) {
-                        this.prototype.validationErrors = Object(_modules_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.prototype.validationErrors, errorsObj);
+                        this.prototype.validationErrors = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.prototype.validationErrors, errorsObj);
                     }
                 }, {
                     key: "addValidationRules",
                     value: function addValidationRules(rulesObj) {
-                        this.prototype.validationRules = Object(_modules_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.prototype.validationRules, rulesObj);
+                        this.prototype.validationRules = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.prototype.validationRules, rulesObj);
                     }
                 }, {
                     key: "setOptions",
                     value: function setOptions(optionsObj) {
-                        this.prototype.options = Object(_modules_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.prototype.options, optionsObj);
+                        this.prototype.options = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.prototype.options, optionsObj);
                     }
                 } ]);
                 return Form;
@@ -161,9 +161,9 @@
             __webpack_require__.d(__webpack_exports__, "ajaxCall", (function() {
                 return ajaxCall;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             function ajaxCall(formDataObj) {
-                var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer, ajaxOptions = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, formOptions.ajaxOptions), isMultipart = ajaxOptions.headers["Content-Type"] === "multipart/form-data";
+                var self = this, formEl = self.formEl, fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions, btnEl = formEl.querySelector('[type="submit"]'), timeoutTimer, ajaxOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, formOptions.ajaxOptions), isMultipart = ajaxOptions.headers["Content-Type"] === "multipart/form-data";
                 ajaxOptions.body = formDataObj;
                 if (isMultipart && fieldOptions.handleFileUpload) {
                     var formDataMultipart = new FormData;
@@ -179,11 +179,11 @@
                     ajaxOptions.body = formDataMultipart;
                 }
                 if (ajaxOptions.method === "GET") {
-                    ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + Object(_helper__WEBPACK_IMPORTED_MODULE_0__["serializeObject"])(ajaxOptions.body);
+                    ajaxOptions.url += (/\?/.test(ajaxOptions.url) ? "&" : "?") + Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["serializeObject"])(ajaxOptions.body);
                     delete ajaxOptions.body;
                 } else {
                     if (ajaxOptions.headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1) {
-                        ajaxOptions.body = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["serializeObject"])(ajaxOptions.body);
+                        ajaxOptions.body = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["serializeObject"])(ajaxOptions.body);
                     } else if (!isMultipart) {
                         ajaxOptions.body = JSON.stringify(ajaxOptions.body);
                     }
@@ -213,37 +213,23 @@
                     var fetchMethod = getFetchMethod(response);
                     return response[fetchMethod]();
                 })).then((function(data) {
-                    _helper__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, formOptions.onSubmitSuccess, data);
+                    _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
+                        fn: formOptions.onSubmitSuccess,
+                        data: data
+                    });
                 }))["catch"]((function(error) {
-                    _helper__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, formOptions.onSubmitError, error);
+                    _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
+                        fn: formOptions.onSubmitError,
+                        data: error
+                    });
                 }))["finally"]((function() {
                     if (timeoutTimer) {
                         window.clearTimeout(timeoutTimer);
                     }
                     btnEl.disabled = false;
-                    _helper__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, formOptions.onSubmitComplete);
-                }));
-            }
-        },
-        "./src/modules/checkDirtyField.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "checkDirtyField", (function() {
-                return checkDirtyField;
-            }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
-            function checkDirtyField(fields) {
-                var cssClasses = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.options.fieldOptions.cssClasses.dirty;
-                var fields = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["isNodeList"])(fields) ? Array.from(fields) : [ fields ];
-                fields.forEach((function(fieldEl) {
-                    if (fieldEl.type !== "checkbox" && fieldEl.type !== "radio") {
-                        var containerEl = fieldEl.closest("[data-formjs-question]") || fieldEl;
-                        if (fieldEl.value) {
-                            Object(_helper__WEBPACK_IMPORTED_MODULE_0__["addClass"])(containerEl, cssClasses);
-                        } else {
-                            Object(_helper__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, cssClasses);
-                        }
-                    }
+                    _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
+                        fn: formOptions.onSubmitComplete
+                    });
                 }));
             }
         },
@@ -253,16 +239,16 @@
             __webpack_require__.d(__webpack_exports__, "constructorFn", (function() {
                 return constructorFn;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/listenerCallbacks.js");
             var _formStartup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/formStartup.js");
             function constructorFn(formEl) {
                 var optionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                var self = this, argsL = arguments.length, checkFormElem = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
+                var self = this, argsL = arguments.length, checkFormElem = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
                 if (argsL === 0 || argsL > 0 && !formEl) {
                     throw new Error('First argument "formEl" is missing or falsy!');
                 }
-                if (Object(_helper__WEBPACK_IMPORTED_MODULE_0__["isNodeList"])(formEl)) {
+                if (Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isNodeList"])(formEl)) {
                     throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
                 }
                 if (!checkFormElem.result) {
@@ -270,7 +256,7 @@
                 }
                 self.formEl = checkFormElem.element;
                 self.formEl.formjs = self;
-                self.options = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.constructor.prototype.options, optionsObj);
+                self.options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.constructor.prototype.options, optionsObj);
                 self.listenerCallbacks = {
                     dataTypeNumber: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].dataTypeNumber,
                     keypressMaxlength: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_1__["callbackFns"].keypressMaxlength,
@@ -315,9 +301,7 @@
             }));
             function formStartup() {
                 var self = this, formEl = self.formEl;
-                if (!formEl.matches("[novalidate]")) {
-                    return null;
-                }
+                formEl.noValidate = true;
                 var fieldOptions = self.options.fieldOptions, formOptions = self.options.formOptions;
                 if (fieldOptions.handleValidation) {
                     if (fieldOptions.strictHtmlValidation) {
@@ -362,7 +346,7 @@
                 return self.options.formOptions.getFormData.call(self, filteredFields);
             }
         },
-        "./src/modules/helper.js": function(module, __webpack_exports__, __webpack_require__) {
+        "./src/modules/helpers.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
             __webpack_require__.d(__webpack_exports__, "fieldsStringSelector", (function() {
@@ -371,14 +355,23 @@
             __webpack_require__.d(__webpack_exports__, "addClass", (function() {
                 return addClass;
             }));
+            __webpack_require__.d(__webpack_exports__, "checkDirtyField", (function() {
+                return checkDirtyField;
+            }));
             __webpack_require__.d(__webpack_exports__, "checkFormEl", (function() {
                 return checkFormEl;
             }));
             __webpack_require__.d(__webpack_exports__, "executeCallback", (function() {
                 return executeCallback;
             }));
+            __webpack_require__.d(__webpack_exports__, "getFilledFields", (function() {
+                return getFilledFields;
+            }));
             __webpack_require__.d(__webpack_exports__, "getSplitChar", (function() {
                 return getSplitChar;
+            }));
+            __webpack_require__.d(__webpack_exports__, "getUniqueFields", (function() {
+                return getUniqueFields;
             }));
             __webpack_require__.d(__webpack_exports__, "isDOMNode", (function() {
                 return isDOMNode;
@@ -397,6 +390,9 @@
             }));
             __webpack_require__.d(__webpack_exports__, "removeClass", (function() {
                 return removeClass;
+            }));
+            __webpack_require__.d(__webpack_exports__, "runFunctionsSequence", (function() {
+                return runFunctionsSequence;
             }));
             __webpack_require__.d(__webpack_exports__, "serializeObject", (function() {
                 return serializeObject;
@@ -422,9 +418,22 @@
                 }
                 return _typeof(obj);
             }
-            var fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type=button]):not([type=hidden]), select, textarea', addClass = function addClass(element, cssClasses) {
+            var fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', addClass = function addClass(element, cssClasses) {
                 cssClasses.split(" ").forEach((function(className) {
                     element.classList.add(className);
+                }));
+            }, checkDirtyField = function checkDirtyField(fields) {
+                var cssClasses = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.options.fieldOptions.cssClasses.dirty;
+                var fields = isNodeList(fields) ? Array.from(fields) : [ fields ];
+                fields.forEach((function(fieldEl) {
+                    if (fieldEl.type !== "checkbox" && fieldEl.type !== "radio") {
+                        var containerEl = fieldEl.closest("[data-formjs-question]") || fieldEl;
+                        if (fieldEl.value) {
+                            addClass(containerEl, cssClasses);
+                        } else {
+                            removeClass(containerEl, cssClasses);
+                        }
+                    }
                 }));
             }, checkFormEl = function checkFormEl(formEl) {
                 var isString = _typeof(formEl), isValidNodeSelector = isString === "string" && isDOMNode(document.querySelector(formEl)), isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === "form", obj = {
@@ -432,17 +441,23 @@
                     element: isString === "string" ? document.querySelector(formEl) : formEl
                 };
                 return obj;
-            }, executeCallback = function executeCallback(callbackOption) {
-                var callbackData = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                var tempOptions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-                var self = this, options = mergeObjects({}, self.options, tempOptions), callbackFnList = [];
-                if (typeof callbackOption === "function") {
-                    callbackFnList.push(callbackOption);
-                } else if (Array.isArray(callbackOption)) {
-                    callbackFnList = callbackOption;
+            }, executeCallback = function executeCallback() {
+                var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {}, _ref$fn = _ref.fn, fn = _ref$fn === void 0 ? null : _ref$fn, _ref$data = _ref.data, data = _ref$data === void 0 ? {} : _ref$data, _ref$options = _ref.options, options = _ref$options === void 0 ? {} : _ref$options;
+                var self = this, optionsNew = mergeObjects({}, self.options, options), callbackFnList = [];
+                if (typeof fn === "function") {
+                    callbackFnList.push(fn);
+                } else if (Array.isArray(fn)) {
+                    callbackFnList = fn;
                 }
-                callbackFnList.forEach((function(cbFn) {
-                    cbFn.call(self, callbackData, options);
+                callbackFnList.forEach((function(promiseFn) {
+                    promiseFn.call(self, data, optionsNew);
+                }));
+            }, getFilledFields = function getFilledFields(formEl) {
+                return getUniqueFields(formEl.querySelectorAll(fieldsStringSelector)).map((function(fieldEl) {
+                    var name = fieldEl.name, type = fieldEl.type, isCheckboxOrRadio = type === "checkbox" || type === "radio", fieldChecked = formEl.querySelector('[name="' + name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
+                    return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && reqMoreEl.checked || !isReqFrom && fieldEl.value ? fieldEl : null;
+                })).filter((function(fieldEl) {
+                    return fieldEl !== null;
                 }));
             }, getSplitChar = function getSplitChar(string) {
                 var splitChar = ".";
@@ -454,6 +469,19 @@
                     }
                 }
                 return splitChar;
+            }, getUniqueFields = function getUniqueFields(nodeList) {
+                var currentFieldName = "", currentFieldType = "";
+                return Array.from(nodeList).filter((function(fieldEl) {
+                    var name = fieldEl.name, type = fieldEl.type;
+                    if (name === currentFieldName && type === currentFieldType) {
+                        return false;
+                    }
+                    if (!fieldEl.matches("[data-required-from]")) {
+                        currentFieldName = name;
+                        currentFieldType = type;
+                    }
+                    return true;
+                }));
             }, isDOMNode = function isDOMNode(node) {
                 return Element.prototype.isPrototypeOf(node);
             }, isFieldForChangeEvent = function isFieldForChangeEvent(fieldEl) {
@@ -495,6 +523,31 @@
                 cssClasses.split(" ").forEach((function(className) {
                     element.classList.remove(className);
                 }));
+            }, runFunctionsSequence = function runFunctionsSequence() {
+                var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {}, _ref2$functionsList = _ref2.functionsList, functionsList = _ref2$functionsList === void 0 ? [] : _ref2$functionsList, _ref2$data = _ref2.data, data = _ref2$data === void 0 ? {} : _ref2$data, _ref2$stopConditionFn = _ref2.stopConditionFn, stopConditionFn = _ref2$stopConditionFn === void 0 ? function() {
+                    return false;
+                } : _ref2$stopConditionFn;
+                var self = this;
+                return functionsList.reduce((function(acc, promiseFn) {
+                    return acc.then((function(res) {
+                        var dataNew = mergeObjects({}, res[res.length - 1]);
+                        if (stopConditionFn(dataNew)) {
+                            return Promise.resolve(res);
+                        }
+                        return new Promise((function(resolve) {
+                            resolve(promiseFn.call(self, dataNew));
+                        })).then((function() {
+                            var result = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : dataNew;
+                            res.push(result);
+                            return res;
+                        }));
+                    }));
+                }), Promise.resolve([ data ])).then((function(dataList) {
+                    if (dataList.length > 1) {
+                        dataList.shift();
+                    }
+                    return dataList;
+                }));
             }, serializeObject = function serializeObject(obj) {
                 var objToString = obj && _typeof(obj) === "object" && obj.constructor === Object ? Object.keys(obj).reduce((function(a, k) {
                     a.push(k + "=" + encodeURIComponent(obj[k]));
@@ -519,30 +572,16 @@
             __webpack_require__.d(__webpack_exports__, "init", (function() {
                 return init;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var init = function init() {
-                var self = this, formEl = self.formEl, formFields = formEl.querySelectorAll(_helper__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"]);
-                var currentFieldName = "", currentFieldType = "";
-                Array.from(formFields).forEach((function(fieldEl) {
-                    var name = fieldEl.name, type = fieldEl.type;
-                    if (name === currentFieldName && type === currentFieldType) {
-                        return true;
-                    }
-                    var isCheckboxOrRadio = fieldEl.type === "checkbox" || fieldEl.type === "radio", isFieldForChangeEventBoolean = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), fieldChecked = formEl.querySelector('[name="' + fieldEl.name + '"]:checked'), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isReqFrom ? formEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
-                    if (!isReqFrom) {
-                        currentFieldName = name;
-                        currentFieldType = type;
-                    }
-                    if (fieldChecked) {
-                        fieldEl = fieldChecked;
-                    }
-                    if (!isCheckboxOrRadio && fieldEl.value || isCheckboxOrRadio && fieldChecked !== null || isReqFrom && reqMoreEl.checked) {
-                        var fakeEventObj = {
-                            target: fieldEl,
-                            type: isFieldForChangeEventBoolean ? "change" : ""
-                        };
-                        self.listenerCallbacks.validation.call(self, fakeEventObj);
-                    }
+                var self = this, formEl = self.formEl, formFields = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getFilledFields"])(formEl);
+                formFields.forEach((function(fieldEl) {
+                    var isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl);
+                    var fakeEventObj = {
+                        target: fieldEl,
+                        type: isFieldForChangeEventBoolean ? "change" : ""
+                    };
+                    self.listenerCallbacks.validation.call(self, fakeEventObj);
                 }));
                 self.isInitialized = true;
                 return self;
@@ -554,15 +593,16 @@
             __webpack_require__.d(__webpack_exports__, "isValid", (function() {
                 return isValid;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _validationRules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/validationRules.js");
             function isValid(fieldEl) {
                 var fieldOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                var self = this, fieldType = fieldEl.matches("[data-subtype]") ? Object(_helper__WEBPACK_IMPORTED_MODULE_0__["toCamelCase"])(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0, fieldAttributes = Array.from(fieldEl.attributes).sort((function(a, b) {
+                var self = this, fieldType = fieldEl.matches("[data-subtype]") ? Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["toCamelCase"])(fieldEl.getAttribute("data-subtype")) : fieldEl.type, fieldValue = fieldEl.value, isValidValue = fieldValue.trim().length > 0, fieldAttributes = Array.from(fieldEl.attributes).sort((function(a, b) {
                     return a.name < b.name;
                 }));
                 var attrValidations = [], attrValidationsResult = isValidValue, obj = {
-                    result: isValidValue
+                    result: isValidValue,
+                    fieldEl: fieldEl
                 };
                 if (!obj.result) {
                     obj.errors = {
@@ -571,7 +611,7 @@
                     return Promise.resolve(obj);
                 }
                 fieldAttributes.forEach((function(attr) {
-                    var attrName = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["toCamelCase"])(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = attrName === "type" && typeof _validationRules__WEBPACK_IMPORTED_MODULE_1__["validationRulesAttributes"][attrValue] === "function", isAttrNameWithFn = typeof _validationRules__WEBPACK_IMPORTED_MODULE_1__["validationRulesAttributes"][attrName] === "function";
+                    var attrName = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["toCamelCase"])(attr.name.replace("data-", "")), attrValue = attr.value, isAttrValueWithFn = attrName === "type" && typeof _validationRules__WEBPACK_IMPORTED_MODULE_1__["validationRulesAttributes"][attrValue] === "function", isAttrNameWithFn = typeof _validationRules__WEBPACK_IMPORTED_MODULE_1__["validationRulesAttributes"][attrName] === "function";
                     if (isAttrValueWithFn || isAttrNameWithFn) {
                         var extraValObj = {
                             attrName: isAttrValueWithFn ? attrValue : attrName,
@@ -586,21 +626,23 @@
                         }
                     }
                 }));
-                attrValidations.forEach((function(item) {
-                    var extraVal = _validationRules__WEBPACK_IMPORTED_MODULE_1__["validationRulesAttributes"][item.attrName](item);
-                    if (!extraVal.result) {
-                        obj = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, obj, extraVal);
-                        attrValidationsResult = false;
-                    }
-                }));
                 return new Promise((function(resolve) {
+                    attrValidations.forEach((function(item) {
+                        var extraVal = _validationRules__WEBPACK_IMPORTED_MODULE_1__["validationRulesAttributes"][item.attrName](item);
+                        if (!extraVal.result) {
+                            obj = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, obj, extraVal);
+                            attrValidationsResult = false;
+                        }
+                    }));
                     if (typeof self.validationRules[fieldType] === "function") {
                         resolve(self.validationRules[fieldType](fieldValue, fieldEl));
                     } else {
                         resolve(obj);
                     }
                 })).then((function(data) {
-                    obj = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, obj, data);
+                    obj = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, obj, data, {
+                        fieldEl: fieldEl
+                    });
                     obj.result = obj.result && attrValidationsResult;
                     if (!obj.result) {
                         var fieldErrors = typeof self.validationErrors[fieldType] === "function" ? self.validationErrors[fieldType](fieldValue, fieldEl) : {};
@@ -608,7 +650,7 @@
                             obj.errors = {};
                         }
                         obj.errors.rule = true;
-                        obj.errors = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, obj.errors, fieldErrors);
+                        obj.errors = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, obj.errors, fieldErrors);
                     }
                     return obj;
                 }));
@@ -620,28 +662,34 @@
             __webpack_require__.d(__webpack_exports__, "isValidField", (function() {
                 return isValidField;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
-            var _checkDirtyField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/checkDirtyField.js");
-            var _isValid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/isValid.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
+            var _isValid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/isValid.js");
             function isValidField(fieldElem) {
                 var fieldOptionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
                 var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem;
-                var obj = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, _helper__WEBPACK_IMPORTED_MODULE_0__["validateFieldObjDefault"]);
-                if (!Object(_helper__WEBPACK_IMPORTED_MODULE_0__["isDOMNode"])(fieldEl)) {
+                var obj = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, _helpers__WEBPACK_IMPORTED_MODULE_0__["validateFieldObjDefault"], {
+                    fieldEl: fieldEl
+                });
+                if (!Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isDOMNode"])(fieldEl)) {
                     return Promise.resolve(obj);
                 }
-                var options = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj), isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]");
-                _checkDirtyField__WEBPACK_IMPORTED_MODULE_1__["checkDirtyField"].call(self, fieldEl);
-                return new Promise((function(resolve) {
-                    if (!isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired) {
-                        obj.result = true;
-                        resolve(obj);
-                    } else {
-                        resolve(_isValid__WEBPACK_IMPORTED_MODULE_2__["isValid"].call(self, fieldEl, options));
+                var options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj), isValidValue = fieldEl.value.trim().length > 0, isRequired = fieldEl.required, isReqFrom = fieldEl.matches("[data-required-from]"), isValidateIfFilled = fieldEl.matches("[data-validate-if-filled]");
+                var rfsObject = {
+                    functionsList: self.options.fieldOptions.beforeValidation,
+                    data: {
+                        fieldEl: fieldEl
                     }
-                })).then((function(obj) {
-                    obj.fieldEl = fieldEl;
-                    return obj;
+                };
+                return _helpers__WEBPACK_IMPORTED_MODULE_0__["runFunctionsSequence"].call(self, rfsObject).then((function(data) {
+                    var dataObj = data.pop();
+                    return new Promise((function(resolve) {
+                        if (!isRequired && !isValidateIfFilled && !isReqFrom || isValidateIfFilled && !isValidValue || isReqFrom && !isRequired) {
+                            dataObj.result = true;
+                            resolve(dataObj);
+                        } else {
+                            resolve(_isValid__WEBPACK_IMPORTED_MODULE_1__["isValid"].call(self, fieldEl, options));
+                        }
+                    }));
                 }));
             }
         },
@@ -651,25 +699,13 @@
             __webpack_require__.d(__webpack_exports__, "isValidForm", (function() {
                 return isValidForm;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _isValidField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/isValidField.js");
             function isValidForm() {
                 var fieldOptionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-                var self = this, formEl = self.formEl, obj = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, _helper__WEBPACK_IMPORTED_MODULE_0__["validateFormObjDefault"]), fieldOptions = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, fieldOptionsObj, {
+                var self = this, formEl = self.formEl, obj = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, _helpers__WEBPACK_IMPORTED_MODULE_0__["validateFormObjDefault"]), fieldOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, fieldOptionsObj, {
                     focusOnRelated: false
-                });
-                var currentFieldName = "", currentFieldType = "";
-                var fieldsList = Array.from(formEl.querySelectorAll(_helper__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"])).filter((function(fieldEl) {
-                    var name = fieldEl.name, type = fieldEl.type;
-                    if (name === currentFieldName && type === currentFieldType) {
-                        return false;
-                    }
-                    if (!fieldEl.matches("[data-required-from]")) {
-                        currentFieldName = name;
-                        currentFieldType = type;
-                    }
-                    return true;
-                }));
+                }), fieldsList = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getUniqueFields"])(formEl.querySelectorAll(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"]));
                 return Promise.all(fieldsList.map((function(fieldEl) {
                     return _isValidField__WEBPACK_IMPORTED_MODULE_1__["isValidField"].call(self, fieldEl, fieldOptions);
                 }))).then((function(list) {
@@ -688,7 +724,7 @@
             __webpack_require__.d(__webpack_exports__, "callbackFns", (function() {
                 return callbackFns;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _submit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/submit.js");
             var callbackFns = {
                 dataTypeNumber: function dataTypeNumber(event) {
@@ -716,7 +752,10 @@
                     var fieldOptions = self.options.fieldOptions;
                     if (fieldEl.matches(fieldOptions.preventPasteFields)) {
                         event.preventDefault();
-                        _helper__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, fieldOptions.onPastePrevented, fieldEl);
+                        _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
+                            fn: fieldOptions.onPastePrevented,
+                            data: fieldEl
+                        });
                     }
                 },
                 submit: function submit(event) {
@@ -724,8 +763,8 @@
                 },
                 validation: function validation(event) {
                     var self = this, eventName = event.type, fieldEl = event.target;
-                    if (fieldEl.matches(_helper__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"])) {
-                        var isFieldForChangeEventBoolean = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), isRadio = fieldEl.type === "radio", isReqFrom = fieldEl.matches("[data-required-from]"), isReqMore = fieldEl.matches("[data-require-more]"), isValidValue = fieldEl.value.trim().length > 0;
+                    if (fieldEl.matches(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelector"])) {
+                        var isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), isRadio = fieldEl.type === "radio", isReqFrom = fieldEl.matches("[data-required-from]"), isReqMore = fieldEl.matches("[data-require-more]"), isValidValue = fieldEl.value.trim().length > 0;
                         if (isRadio && eventName === "change") {
                             var findReqMoreEl = isReqMore ? fieldEl : self.formEl.querySelector('[name="' + fieldEl.name + '"][data-require-more]'), findReqFromEl = findReqMoreEl !== null ? self.formEl.querySelector('[data-required-from="#' + findReqMoreEl.id + '"]') : null;
                             if (isReqMore) {
@@ -750,10 +789,12 @@
                             }
                         }
                         if (isFieldForChangeEventBoolean && eventName === "change" || !isFieldForChangeEventBoolean && eventName !== "change") {
-                            self.validateField(fieldEl).then((function(obj) {
+                            return self.validateField(fieldEl).then((function(obj) {
                                 var type = obj.fieldEl.type, realtedFieldEqualTo = obj.fieldEl.closest("form").querySelector('[data-equal-to="' + obj.fieldEl.name + '"]');
                                 if ((obj.fieldEl.required || obj.fieldEl.matches("[data-validate-if-filled]")) && !(type === "checkbox" || type === "radio") && realtedFieldEqualTo && realtedFieldEqualTo.value.trim() !== "") {
-                                    self.validateField(realtedFieldEqualTo);
+                                    return self.validateField(realtedFieldEqualTo);
+                                } else {
+                                    return obj;
                                 }
                             }));
                         }
@@ -771,11 +812,13 @@
             var _optionsAjax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/optionsAjax.js");
             var options = {
                 fieldOptions: {
+                    beforeValidation: [ _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].fieldOptions.beforeValidation ],
                     cssClasses: {
                         dirty: "is-dirty",
                         error: "has-error",
                         errorEmpty: "has-error-empty",
                         errorRule: "has-error-rule",
+                        pending: "is-pending",
                         valid: "is-valid"
                     },
                     focusOnRelated: true,
@@ -784,6 +827,7 @@
                     maxFileSize: 10,
                     onPastePrevented: [],
                     onValidation: [ _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].fieldOptions.onValidation ],
+                    onValidationCheckAll: true,
                     preventPasteFields: '[type="password"], [data-equal-to]',
                     skipUIfeedback: false,
                     strictHtmlValidation: true,
@@ -827,20 +871,29 @@
             __webpack_require__.d(__webpack_exports__, "defaultCallbacksInOptions", (function() {
                 return defaultCallbacksInOptions;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var defaultCallbacksInOptions = {
                 fieldOptions: {
+                    beforeValidation: function beforeValidationDefault(fieldObj) {
+                        _helpers__WEBPACK_IMPORTED_MODULE_0__["checkDirtyField"].call(this, fieldObj.fieldEl);
+                        if (!this.options.fieldOptions.skipUIfeedback) {
+                            Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(fieldObj.fieldEl.closest("[data-formjs-question]"), this.options.fieldOptions.cssClasses.pending);
+                        }
+                    },
                     onValidation: function onValidationDefault(fieldsArray) {
                         var tempOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                        var self = this, options = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, tempOptions.fieldOptions);
+                        var self = this, options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, tempOptions.fieldOptions);
                         fieldsArray.forEach((function(obj) {
                             var fieldEl = obj.fieldEl, containerEl = fieldEl.closest("[data-formjs-question]"), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = self.formEl.querySelector(fieldEl.getAttribute("data-required-from"));
+                            if (containerEl !== null) {
+                                Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, options.cssClasses.pending);
+                            }
                             if (containerEl !== null && !options.skipUIfeedback) {
                                 if (obj.result) {
                                     if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
                                         var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                                        Object(_helper__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, errorClasses);
-                                        Object(_helper__WEBPACK_IMPORTED_MODULE_0__["addClass"])(containerEl, options.cssClasses.valid);
+                                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, errorClasses);
+                                        Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(containerEl, options.cssClasses.valid);
                                     }
                                 } else {
                                     var extraErrorClass = options.cssClasses.errorRule;
@@ -849,8 +902,8 @@
                                         extraErrorClass = options.cssClasses.errorEmpty;
                                     }
                                     var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                                    Object(_helper__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, options.cssClasses.valid + " " + errorClassToRemove);
-                                    Object(_helper__WEBPACK_IMPORTED_MODULE_0__["addClass"])(containerEl, _errorClasses);
+                                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["removeClass"])(containerEl, options.cssClasses.valid + " " + errorClassToRemove);
+                                    Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["addClass"])(containerEl, _errorClasses);
                                 }
                             }
                         }));
@@ -900,7 +953,7 @@
             __webpack_require__.d(__webpack_exports__, "submit", (function() {
                 return submit;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _ajaxCall__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/ajaxCall.js");
             function submit(event) {
                 var self = this, options = self.options, isAjaxForm = options.formOptions.ajaxSubmit, formEl = self.formEl, btnEl = formEl.querySelector('[type="submit"]'), eventPreventDefault = function eventPreventDefault() {
@@ -922,7 +975,7 @@
                     }
                     btnEl.disabled = true;
                 }
-                var handleValidation = options.fieldOptions.handleValidation, formValidationPromise = handleValidation ? self.validateForm() : Promise.resolve(_helper__WEBPACK_IMPORTED_MODULE_0__["validateFormObjDefault"]);
+                var handleValidation = options.fieldOptions.handleValidation, formValidationPromise = handleValidation ? self.validateForm() : Promise.resolve(_helpers__WEBPACK_IMPORTED_MODULE_0__["validateFormObjDefault"]);
                 formValidationPromise.then((function(formValidation) {
                     var beforeSendData = {
                         stopExecution: false,
@@ -937,18 +990,14 @@
                     if (formDataObj) {
                         beforeSendData.formData = formDataObj;
                     }
-                    return callbacksBeforeSend.reduce((function(acc, cbFn) {
-                        return acc.then((function(res) {
-                            var beforeSendDataNew = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, res[res.length - 1]);
-                            if (beforeSendDataNew.stopExecution) {
-                                return Promise.resolve(res);
-                            }
-                            return cbFn.call(self, beforeSendDataNew, options).then((function(result) {
-                                res.push(result);
-                                return res;
-                            }));
-                        }));
-                    }), Promise.resolve([ beforeSendData ]));
+                    var rfsObject = {
+                        functionsList: callbacksBeforeSend,
+                        data: beforeSendData,
+                        stopConditionFn: function stopConditionFn(data) {
+                            return data.stopExecution;
+                        }
+                    };
+                    return _helpers__WEBPACK_IMPORTED_MODULE_0__["runFunctionsSequence"].call(self, rfsObject);
                 })).then((function(dataList) {
                     if (dataList.filter((function(data) {
                         return data.stopExecution;
@@ -969,21 +1018,44 @@
             __webpack_require__.d(__webpack_exports__, "validateField", (function() {
                 return validateField;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _isValidField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/isValidField.js");
-            function validateField(fieldElem) {
-                var fieldOptionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem, fieldOptions = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj);
+            var _isValidForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/isValidForm.js");
+            function validateField(fieldElem, fieldOptionsObj) {
+                var self = this, fieldEl = typeof fieldElem === "string" ? self.formEl.querySelector(fieldElem) : fieldElem, skipUIfeedback = self.options.fieldOptions.skipUIfeedback, fieldOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj);
                 return new Promise((function(resolve) {
-                    var prom = _isValidField__WEBPACK_IMPORTED_MODULE_1__["isValidField"].call(self, fieldEl, fieldOptionsObj);
+                    var prom = _isValidField__WEBPACK_IMPORTED_MODULE_1__["isValidField"].call(self, fieldEl, fieldOptions);
                     resolve(prom);
                 })).then((function(obj) {
-                    if (obj.fieldEl) {
-                        _helper__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, fieldOptions.onValidation, [ obj ], {
-                            fieldOptions: fieldOptionsObj
-                        });
-                    }
-                    return obj;
+                    return new Promise((function(resolve) {
+                        if (obj.fieldEl) {
+                            var runCallback = function runCallback(data) {
+                                var fieldOptionsNew = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+                                var options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, {
+                                    fieldOptions: fieldOptions
+                                }, {
+                                    fieldOptions: fieldOptionsNew
+                                });
+                                _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
+                                    fn: fieldOptions.onValidation,
+                                    data: data,
+                                    options: options
+                                });
+                            };
+                            runCallback([ obj ]);
+                            if (fieldOptions.onValidationCheckAll && obj.result) {
+                                self.options.fieldOptions.skipUIfeedback = true;
+                                resolve(_isValidForm__WEBPACK_IMPORTED_MODULE_2__["isValidForm"].call(self).then((function(dataForm) {
+                                    runCallback(dataForm.fields, {
+                                        skipUIfeedback: true
+                                    });
+                                    self.options.fieldOptions.skipUIfeedback = skipUIfeedback;
+                                    return obj;
+                                })));
+                            }
+                        }
+                        resolve(obj);
+                    }));
                 }));
             }
         },
@@ -993,17 +1065,21 @@
             __webpack_require__.d(__webpack_exports__, "validateForm", (function() {
                 return validateForm;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _isValidForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/isValidForm.js");
             function validateForm() {
                 var fieldOptionsObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-                var self = this, fieldOptions = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj);
+                var self = this, fieldOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options.fieldOptions, fieldOptionsObj);
                 return new Promise((function(resolve) {
-                    var prom = _isValidForm__WEBPACK_IMPORTED_MODULE_1__["isValidForm"].call(self, fieldOptionsObj);
+                    var prom = _isValidForm__WEBPACK_IMPORTED_MODULE_1__["isValidForm"].call(self, fieldOptions);
                     resolve(prom);
                 })).then((function(obj) {
-                    _helper__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, fieldOptions.onValidation, obj.fields, {
-                        fieldOptions: fieldOptionsObj
+                    _helpers__WEBPACK_IMPORTED_MODULE_0__["executeCallback"].call(self, {
+                        fn: fieldOptions.onValidation,
+                        data: obj.fields,
+                        options: {
+                            fieldOptions: fieldOptions
+                        }
                     });
                     return obj;
                 }));
@@ -1054,7 +1130,7 @@
             __webpack_require__.d(__webpack_exports__, "validationRulesAttributes", (function() {
                 return validationRulesAttributes;
             }));
-            var _helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helper.js");
+            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var validationRules = {
                 date: function date(string) {
                     var date = /^(((19|[2-9]\d)\d{2})[ \/\-.](0[13578]|1[02])[ \/\-.](0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})[ \/\-.](0[13456789]|1[012])[ \/\-.](0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})[ \/\-.]02[ \/\-.](0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))[ \/\-.]02[ \/\-.]29)$/g.test(string), obj = {
@@ -1182,7 +1258,7 @@
                 max: function max(data) {
                     var fieldEl = data.fieldEl, isDate = fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]'), value = data.fieldEl.value, maxVal = data.attrValue;
                     if (isDate) {
-                        var splitChar = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["getSplitChar"])(value);
+                        var splitChar = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getSplitChar"])(value);
                         if (value.indexOf(splitChar) === 2) {
                             value = value.split(splitChar).reverse();
                         } else {
@@ -1217,7 +1293,7 @@
                 min: function min(data) {
                     var fieldEl = data.fieldEl, isDate = fieldEl.matches('[type="date"]') || fieldEl.matches('[data-subtype="date"]') || fieldEl.matches('[data-subtype="dateDDMMYYYY"]'), value = data.fieldEl.value, minVal = data.attrValue;
                     if (isDate) {
-                        var splitChar = Object(_helper__WEBPACK_IMPORTED_MODULE_0__["getSplitChar"])(value);
+                        var splitChar = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["getSplitChar"])(value);
                         if (value.indexOf(splitChar) === 2) {
                             value = value.split(splitChar).reverse();
                         } else {

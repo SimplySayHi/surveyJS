@@ -9,17 +9,20 @@ export function retrieveSurvey(){
     self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.loadingBox );
 
     return ajaxCall(self.options.url, self.options.initAjaxOptions)
-        .then(function( response ){
+        .then(response => {
 
             if( response.status.toLowerCase() === 'success' && response.data.questions && response.data.questions.length > 0 ){
                 self.data = response.data;
                 Object.freeze(self.data);
-                buildSurvey.call(self);
+                return new Promise(resolve => {
+                    resolve( buildSurvey.call(self) );
+                }).then(() => {
+                    return response;
+                });
             }
-            return response;
 
         })
-        .finally(function(){
+        .finally(() => {
 
             let loadingBoxEl = self.formEl.querySelector('[data-surveyjs-loading]');
             if( loadingBoxEl ){

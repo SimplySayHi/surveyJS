@@ -19,7 +19,7 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
         needsBinding = (obj.question === 'hidden-privacy' ? true : false);
 
     if( list[0]['sort'] ){
-        list.sort(function(a, b){
+        list.sort((a, b) => {
             return a['sort'] > b['sort'];
         });
     }
@@ -33,7 +33,7 @@ export function iterateAnswers( obj, qID, qIdx, attrReq ){
             aId = answer.id,
             progIdsLength = progIds.length,
             progIdsJoined = ( progIdsLength > 0 ? self.internals.progIds.join('-') : '' ),
-            getSettingsFieldClass = function(){
+            getSettingsFieldClass = () => {
                 let aType = ( answer.type === 'option' ? 'select' : answer.type );
                 return self.options.cssClasses[aType] || self.options.cssClasses.default;
             };

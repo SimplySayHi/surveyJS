@@ -4,7 +4,7 @@ import { iterateAnswers } from './generateQAcodeUtils/iterateAnswers';
 export function generateQAcode( questionsList = [] ){
 
     const self = this;
-    let qaData = ( questionsList[0]['sort'] ? questionsList.sort(function(a, b){ return a['sort'] > b['sort']; }) : questionsList ),
+    let qaData = ( questionsList[0]['sort'] ? questionsList.sort((a, b) => { return a['sort'] > b['sort']; }) : questionsList ),
         qaCodeAll = '',
         qaDataLength = qaData.length;
     

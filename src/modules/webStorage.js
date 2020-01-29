@@ -1,7 +1,7 @@
 
 export function webStorage(){
 
-        const checkLocalStorage = function(){
+        const checkLocalStorage = () => {
             var mod = 'check_storage';
             try {
                 localStorage.setItem(mod, mod);

@@ -48,9 +48,11 @@ export function buildSurvey(){
             formOptions: self.options.formOptions
         };
     self.internals.formInstance = new Form( formEl, formJSoptions );
-    self.internals.formInstance.init();
-    
-    self.isInitialized = true;
-    surveyContEl.classList.add('surveyjs-init-success');
+    return new Promise(resolve => {
+        resolve( self.internals.formInstance.init() );
+    }).then(() => {
+        self.isInitialized = true;
+        surveyContEl.classList.add('surveyjs-init-success');
+    });
 
 }

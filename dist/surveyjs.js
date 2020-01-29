@@ -1,4 +1,4 @@
-/**! surveyJS v2.0.2 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/**! surveyJS v2.0.3 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 (function webpackUniversalModuleDefinition(root, factory) {
     if (typeof exports === "object" && typeof module === "object") module.exports = factory(require("Form")); else if (typeof define === "function" && define.amd) define([ "Form" ], factory); else if (typeof exports === "object") exports["Survey"] = factory(require("Form")); else root["Survey"] = factory(root["Form"]);
 })(this, (function(__WEBPACK_EXTERNAL_MODULE_formjs_plugin__) {
@@ -98,7 +98,7 @@
                 if (staticProps) _defineProperties(Constructor, staticProps);
                 return Constructor;
             }
-            var version = "2.0.2";
+            var version = "2.0.3";
             var Survey = function() {
                 function Survey(formEl, optionsObj) {
                     _classCallCheck(this, Survey);
@@ -170,9 +170,12 @@
                     formOptions: self.options.formOptions
                 };
                 self.internals.formInstance = new formjs_plugin__WEBPACK_IMPORTED_MODULE_3___default.a(formEl, formJSoptions);
-                self.internals.formInstance.init();
-                self.isInitialized = true;
-                surveyContEl.classList.add("surveyjs-init-success");
+                return new Promise((function(resolve) {
+                    resolve(self.internals.formInstance.init());
+                })).then((function() {
+                    self.isInitialized = true;
+                    surveyContEl.classList.add("surveyjs-init-success");
+                }));
             }
         },
         "./src/modules/buildSurvey/generateQAcode.js": function(module, __webpack_exports__, __webpack_require__) {
@@ -1007,9 +1010,12 @@
                     if (response.status.toLowerCase() === "success" && response.data.questions && response.data.questions.length > 0) {
                         self.data = response.data;
                         Object.freeze(self.data);
-                        _buildSurvey_buildSurvey__WEBPACK_IMPORTED_MODULE_1__["buildSurvey"].call(self);
+                        return new Promise((function(resolve) {
+                            resolve(_buildSurvey_buildSurvey__WEBPACK_IMPORTED_MODULE_1__["buildSurvey"].call(self));
+                        })).then((function() {
+                            return response;
+                        }));
                     }
-                    return response;
                 }))["finally"]((function() {
                     var loadingBoxEl = self.formEl.querySelector("[data-surveyjs-loading]");
                     if (loadingBoxEl) {

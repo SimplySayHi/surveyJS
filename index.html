@@ -219,22 +219,17 @@
                 Include css and js in your page.
             </p>
             <pre>
-&lt;!-- SURVEY CSS --&gt;
-&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS/dist/survey.min.css"&gt;
-
-&lt;!-- FORM JS --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3/dist/formjs.min.js"&gt;&lt;/script&gt;
-
-&lt;!-- SURVEY JS --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS/dist/surveyjs.min.js"&gt;&lt;/script&gt;
-</pre>
-            <p>
-                or from unpkg.com:
-            </p>
-            <pre>
-&lt;script src="https://unpkg.com/surveyjs/dist/survey.min.css"&gt;&lt;/script&gt;
+&lt;link href="https://unpkg.com/surveyjs/dist/survey.min.css" rel="stylesheet" type="text/css"&gt;
 &lt;script src="https://unpkg.com/formjs-plugin@3/dist/formjs.min.js"&gt;&lt;/script&gt;
 &lt;script src="https://unpkg.com/surveyjs/dist/surveyjs.min.js"&gt;&lt;/script&gt;
+</pre>
+            <p>
+                or from jsDelivr:
+            </p>
+            <pre>
+&lt;link href="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS/dist/survey.min.css" rel="stylesheet" type="text/css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@3/dist/formjs.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS/dist/surveyjs.min.js"&gt;&lt;/script&gt;
 </pre>
             <hr />
             <p>
@@ -1297,7 +1292,10 @@ Survey.addLanguage( 'de', newLang );</pre>
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Minor code improvements
+                                Updated dependency: formJS 3.2.1 ( new options are available )
+                            </li>
+                            <li>
+                                Minor improvements
                             </li>
                         </ul>
                     </div>
@@ -1312,6 +1310,16 @@ Survey.addLanguage( 'de', newLang );</pre>
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">2.0.2</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Minor code improvements.
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">2.0.1</div>
                             <div class="media-body pl-2">
@@ -1505,6 +1513,9 @@ Survey.addLanguage( 'de', newLang );</pre>
                 fieldOptions: {
                     onValidation: function onValidation_doc( fields ){
                         if( fields.length > 1 ){
+                            if( !formEl.querySelector('[type="submit"]').disabled ){
+                                return;
+                            }
                             // GO TO THE FIRST UNANSWERED QUESTION
                             var $stWrapper = $('.surveyjs-form .st-wrapper'),
                                 activeIndex = $stWrapper.find('.st-center').index(),
@@ -1588,6 +1599,7 @@ Survey.addLanguage( 'de', newLang );</pre>
                     initStatus = ajaxData.status;
                 
                 if( initStatus === 'success' ){
+                    console.log('init slider');
                     $('.stackSlider').stackslider({ piles : false });
                 } else {
                     var elemToRemove = surveyFormEl.querySelector('.surveyjs-footer');
@@ -1607,11 +1619,11 @@ Survey.addLanguage( 'de', newLang );</pre>
         var mySurvey = new Survey( formEl, options );
         mySurvey.init()
             .then(function( data ){
-                console.log('retrieveSurvey init then');
+                console.log('survey init then');
                 onInitSuccess.call(mySurvey, data);
             })
             .catch(function( error ){
-                console.log('retrieveSurvey init catch');
+                console.log('survey init catch');
                 onInitError.call(mySurvey, error);
             });
     </script>
