@@ -1,4 +1,4 @@
-/**! formJS v3.2.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/**! formJS v3.3.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 (function webpackUniversalModuleDefinition(root, factory) {
     if (typeof exports === "object" && typeof module === "object") module.exports = factory(); else if (typeof define === "function" && define.amd) define([], factory); else if (typeof exports === "object") exports["Form"] = factory(); else root["Form"] = factory();
 })(this, (function() {
@@ -99,7 +99,7 @@
                 if (staticProps) _defineProperties(Constructor, staticProps);
                 return Constructor;
             }
-            var version = "3.2.2";
+            var version = "3.3.0";
             var Form = function() {
                 function Form(formEl, optionsObj) {
                     _classCallCheck(this, Form);
