@@ -156,9 +156,10 @@
                     onValidation: function onValidation_surveyDemo( fields ){
                         //console.log( 'Survey onValidation_surveyDemo', fields );
                         if( fields.length > 1 ){
-                            console.log('validating form');
-                            if( formEl.querySelector('[type="submit"]').disabled ){
-                                console.log('submit is disabled');
+                            var isFormSubmitting = formEl.classList.contains('is-submitting');
+                            var submitDisabled = formEl.querySelector('[type="submit"]').disabled;
+
+                            if( (submitDisabled && !isFormSubmitting) || !isFormSubmitting ){
                                 return;
                             }
                             
