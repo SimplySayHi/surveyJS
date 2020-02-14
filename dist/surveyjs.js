@@ -627,6 +627,7 @@
                 var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
                 var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
                 var timeoutTimer;
+                options.headers = new Headers(options.headers);
                 if (options.timeout > 0) {
                     var controller = new AbortController;
                     var signal = controller.signal;
@@ -640,15 +641,22 @@
                         return Promise.reject(response);
                     }
                     var getFetchMethod = function getFetchMethod(response) {
-                        var contentType = response.headers.get("Content-Type"), methodName = "blob";
-                        if (contentType.indexOf("application/json") > -1) {
-                            methodName = "json";
-                        } else if (contentType.indexOf("text/") > -1) {
-                            methodName = "text";
+                        var accept = options.headers.get("Accept");
+                        var contentType = response.headers.get("Content-Type");
+                        var headerOpt = accept || contentType || "";
+                        console.log("getFetchMethod accept", accept);
+                        console.log("getFetchMethod contentType", contentType);
+                        console.log("getFetchMethod headerOpt", headerOpt);
+                        if (headerOpt.indexOf("application/json") > -1 || headerOpt === "") {
+                            return "json";
+                        } else if (headerOpt.indexOf("text/") > -1) {
+                            return "text";
+                        } else {
+                            return "blob";
                         }
-                        return methodName;
                     };
                     var fetchMethod = getFetchMethod(response);
+                    console.log("fetchMethod", fetchMethod);
                     return response[fetchMethod]();
                 }))["finally"]((function() {
                     if (timeoutTimer) {

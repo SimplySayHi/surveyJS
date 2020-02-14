@@ -6,6 +6,8 @@ fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not
 ajaxCall = ( url = location.href, options = {} ) => {
     let timeoutTimer;
 
+    options.headers = new Headers( options.headers );
+
     /* SET AbortController FOR timeout */
     if ( options.timeout > 0 ) {
         const controller = new AbortController();
@@ -26,16 +28,17 @@ ajaxCall = ( url = location.href, options = {} ) => {
             }
 
             let getFetchMethod = function( response ){
-                let contentType = response.headers.get('Content-Type'),
-                    methodName = 'blob';
+                const accept = options.headers.get('Accept');
+                const contentType = response.headers.get('Content-Type');
+                const headerOpt = accept || contentType || '';
 
-                if( contentType.indexOf('application/json') > -1 ){
-                    methodName = 'json';
-                } else if( contentType.indexOf('text/') > -1 ){
-                    methodName = 'text';
+                if( headerOpt.indexOf('application/json') > -1 || headerOpt === '' ){
+                    return 'json';
+                } else if( headerOpt.indexOf('text/') > -1 ){
+                    return 'text';
+                } else {
+                    return 'blob';
                 }
-                
-                return methodName;
             };
             let fetchMethod = getFetchMethod( response );
 
