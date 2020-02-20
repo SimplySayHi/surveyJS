@@ -40,6 +40,6 @@
         "webpack-cli": "^3.3.10"
     },
     "peerDependencies": {
-        "formjs-plugin": "^3.3.0"
+        "formjs-plugin": "^3.3.1"
     }
 }
