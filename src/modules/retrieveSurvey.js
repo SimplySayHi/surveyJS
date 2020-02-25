@@ -19,6 +19,8 @@ export function retrieveSurvey(){
                 }).then(() => {
                     return response;
                 });
+            } else {
+                return Promise.reject(response);
             }
 
         })

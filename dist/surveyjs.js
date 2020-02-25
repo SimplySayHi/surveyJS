@@ -644,9 +644,6 @@
                         var accept = options.headers.get("Accept");
                         var contentType = response.headers.get("Content-Type");
                         var headerOpt = accept || contentType || "";
-                        console.log("getFetchMethod accept", accept);
-                        console.log("getFetchMethod contentType", contentType);
-                        console.log("getFetchMethod headerOpt", headerOpt);
                         if (headerOpt.indexOf("application/json") > -1 || headerOpt === "") {
                             return "json";
                         } else if (headerOpt.indexOf("text/") > -1) {
@@ -656,8 +653,9 @@
                         }
                     };
                     var fetchMethod = getFetchMethod(response);
-                    console.log("fetchMethod", fetchMethod);
                     return response[fetchMethod]();
+                }))["catch"]((function(error) {
+                    return Promise.reject(error);
                 }))["finally"]((function() {
                     if (timeoutTimer) {
                         window.clearTimeout(timeoutTimer);
@@ -1023,6 +1021,8 @@
                         })).then((function() {
                             return response;
                         }));
+                    } else {
+                        return Promise.reject(response);
                     }
                 }))["finally"]((function() {
                     var loadingBoxEl = self.formEl.querySelector("[data-surveyjs-loading]");

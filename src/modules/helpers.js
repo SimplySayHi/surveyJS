@@ -45,6 +45,9 @@ ajaxCall = ( url = location.href, options = {} ) => {
             return response[fetchMethod]();
 
         })
+        .catch(error => {
+            return Promise.reject(error);
+        })
         .finally(function(){
 
             if( timeoutTimer ){
