@@ -2,7 +2,7 @@
     "name": "surveyjs",
     "title": "surveyJS",
     "description": "Javascript Survey Creation & Management. Made Easy",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "main": "dist/surveyjs.min.js",
     "module": "src/index.js",
     "homepage": "https://www.valeriodipunzio.com/plugins/surveyJS/",

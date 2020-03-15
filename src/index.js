@@ -10,7 +10,7 @@ import { destroy }              from './modules/destroy';
 
 import './index.css';
 
-const version = '2.0.3';
+const version = '2.0.4';
 
 class Survey {
 
