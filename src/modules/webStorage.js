@@ -1,5 +1,5 @@
 
-export function webStorage(){
+export const webStorage = () => {
 
         const checkLocalStorage = () => {
             var mod = 'check_storage';

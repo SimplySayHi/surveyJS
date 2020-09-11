@@ -1,15 +1,12 @@
 
-export function populateAnswers(){
+export const populateAnswers = ( formEl, options, internals ) => {
 
-    const self = this;
-
-    if( self.options.useLocalStorage ){
-
-        const LS = localStorage.getObject( self.internals.localStorageName );
+    if( options.useLocalStorage ){
+        const LS = localStorage.getObject( internals.localStorageName );
         if( LS ){
 
-            const surveyContEl = self.formEl.closest('[data-surveyjs-container]');
-            self.internals.localStorageArray = LS;
+            const surveyContEl = formEl.closest('[data-surveyjs-container]');
+            internals.localStorageArray = LS;
             LS.forEach(item => {
                 var fieldFirst = surveyContEl.querySelector( '[name="' + item.field + '"]' ),
                     isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'),
@@ -23,7 +20,6 @@ export function populateAnswers(){
             });
             
         }
-
     } else { console.warn('LOCAL STORAGE IS NOT SUPPORTED!'); }
 
 }

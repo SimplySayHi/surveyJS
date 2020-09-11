@@ -8,21 +8,21 @@ export const callbackFns = {
     // THIS WILL RUN BEFORE FORMJS VALIDATION FUNCTION SO THAT USERS CANNOT SKIP REQUIRED FIELDS VALIDATION ( WHILE TYPING )
     validation: function( event ){
 
-        const self = this,
-              eventName = event.type,
+        const eventName = event.type,
               fieldEl = event.target,
+              self = fieldEl.closest('form').surveyjs,
               containerEl = fieldEl.closest('[data-formjs-question]'),
-              fieldValue = ( fieldEl.value ? fieldEl.value.trim() : fieldEl.value ),
+              fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value,
               isMultiChoice = fieldEl.matches('[data-checks]'),
               isRequireMore = fieldEl.matches('[data-require-more]'),
               isRequiredFrom = fieldEl.matches('[data-required-from]'),
-              reqMoreEl = ( isRequiredFrom ? containerEl.querySelector( fieldEl.getAttribute('data-required-from') ) : null );
+              reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute('data-required-from')) : null;
 
         // VARS USED TO VALIDATE THE FILED IF IT IS REQUIRED
-        const itemEl = ( isRequiredFrom ? reqMoreEl : fieldEl ),
-              questionId = (itemEl.id ? itemEl.id.split('-')[1] : 'id-not-found'),
+        const itemEl = isRequiredFrom ? reqMoreEl : fieldEl,
+              questionId = itemEl.id ? itemEl.id.split('-')[1] : 'id-not-found',
               isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
-              questionObj = getQuestionObject.call( self, questionId );
+              questionObj = getQuestionObject.call(self, questionId);
 
         // IF IT'S NOT A SURVEY QUESTION -> SKIP
         if( isEmptyObject(questionObj) ){ return true; }

@@ -1,8 +1,7 @@
 
-export function generateOptionTags( optionsList = [] ){
+export const generateOptionTags = ( optionsList = [], options ) => {
 
-    const self = this;
-    let optionsHtml = ( optionsList[0].id === '' ? '' : '<option value="">'+ self.options.selectFirstOption +'</option>' );
+    let optionsHtml = optionsList[0].id === '' ? '' : '<option value="">'+ options.selectFirstOption +'</option>';
 
     optionsList.forEach(opt => {
         optionsHtml += '<option value="'+ opt.id +'" data-answer-id="'+ opt.id +'">'+ opt.answer +'</option>';

@@ -1,14 +1,12 @@
 
 import { generateOptionTags } from './generateOptionTags';
 
-export const select = function( data ){
+export const select = ( options, data ) => {
 
-    const self = this,
-          objData = data.objData;
+    const objData = data.objData,
+          aHtml = data.beforeCode + options.templates.select + data.afterCode;
     
-    let aHtml = data.beforeCode + self.options.templates.select + data.afterCode;
-    
-    objData.optionsHtml = generateOptionTags.call( self, data.obj.answers );
+    objData.optionsHtml = generateOptionTags( data.obj.answers, options );
 
     return { aHtml, objData };
 }

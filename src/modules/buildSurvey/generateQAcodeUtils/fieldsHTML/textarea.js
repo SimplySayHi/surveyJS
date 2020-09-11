@@ -1,13 +1,10 @@
 
-export const textarea = function( data ){
+export const textarea = ( options, data ) => {
 
-    const self = this,
-          answer = data.answer,
-          objData = data.objData;
+    const objData = data.objData,
+          aHtml = options.templates.textarea;
 
-    let aHtml = self.options.templates.textarea;
-
-    objData.answerPlaceholder = answer.placeholder || self.options.textareaPlaceholder;
+    objData.answerPlaceholder = data.answer.placeholder || options.textareaPlaceholder;
 
     return { aHtml, objData };
 }

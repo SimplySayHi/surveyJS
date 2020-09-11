@@ -1,13 +1,12 @@
 
 import { checkFormEl, isNodeList, mergeObjects } from './helpers';
 import { internals } from './internals';
-import { callbackFns } from './listenerCallbacks';
+import { webStorage } from './webStorage';
 
-export function constructorFn( formEl, optionsObj = {} ){
+export function constructorFn( self, formEl, optionsObj = {} ){
 
-    let self = this,
-        argsL = arguments.length,
-        checkFormElem = checkFormEl(formEl);
+    const argsL = arguments.length,
+          checkFormElem = checkFormEl(formEl);
 
     if( argsL === 0 || (argsL > 0 && !formEl) ){
         throw new Error('First argument "formEl" is missing or falsy!');
@@ -26,18 +25,11 @@ export function constructorFn( formEl, optionsObj = {} ){
     self.formEl = checkFormElem.element;
     self.formEl.surveyjs = self;
 
-    formEl = self.formEl;
-
     // SET THE lang VALUE IN options ( MANDATORY FOR OTHER OPERATIONS )
-    if( typeof optionsObj.lang === 'string' ){
-        let langValue = optionsObj.lang.toLowerCase();
-        if( self.messages[ langValue ] ){
-            self.options.lang = langValue;
-        }
-    }
-    
+    const customLang = typeof optionsObj.lang === 'string' && optionsObj.lang.toLowerCase();
+    const langValue = customLang && self.constructor.prototype.messages[customLang] ? customLang : self.constructor.prototype.options.lang;
     // MERGE messages OF THE CHOSEN lang INSIDE options
-    self.options = mergeObjects( {}, self.options, self.messages[self.options.lang] );
+    self.options = mergeObjects( {}, self.constructor.prototype.options, self.constructor.prototype.messages[langValue] );
     // MERGE OPTIONS
     self.options = mergeObjects( {}, self.options, optionsObj );
 
@@ -46,17 +38,10 @@ export function constructorFn( formEl, optionsObj = {} ){
     }
 
     self.options.templates.labelTag = self.options.templates.labelTag.replace(/{{labelClass}}/g, self.options.cssClasses.label);
-
-    // SET INTERNAL UTILS
     self.internals = internals;
 
-    if( !self.internals.isAvailableStorage ){
+    if( !webStorage().isAvailable ){
         self.options.useLocalStorage = false;
     }
-
-    self.listenerCallbacks = {
-        validation: callbackFns.validation.bind(self)
-    };
-    Object.freeze(self.listenerCallbacks);
     
 }

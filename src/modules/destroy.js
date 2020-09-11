@@ -1,15 +1,14 @@
 
-export function destroy(){
+import { callbackFns } from './listenerCallbacks';
 
-    const self = this,
-          formEl = self.formEl;
+export const destroy = formEl => {
 
     formEl.formjs.options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
-        let useCapturing = (eventName === 'blur' ? true : false);
-        formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
+        const useCapturing = eventName === 'blur' ? true : false;
+        formEl.removeEventListener(eventName, callbackFns.validation, useCapturing);
     });
 
-    delete self.formEl.surveyjs;
-    self.formEl.formjs.destroy();
+    delete formEl.surveyjs;
+    formEl.formjs.destroy();
     
 }

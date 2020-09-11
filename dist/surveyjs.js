@@ -1,4 +1,4 @@
-/**! surveyJS v2.0.4 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/**! surveyJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 (function webpackUniversalModuleDefinition(root, factory) {
     if (typeof exports === "object" && typeof module === "object") module.exports = factory(require("Form")); else if (typeof define === "function" && define.amd) define([ "Form" ], factory); else if (typeof exports === "object") exports["Survey"] = factory(require("Form")); else root["Survey"] = factory(root["Form"]);
 })(this, (function(__WEBPACK_EXTERNAL_MODULE_formjs_plugin__) {
@@ -98,21 +98,27 @@
                 if (staticProps) _defineProperties(Constructor, staticProps);
                 return Constructor;
             }
-            var version = "2.0.4";
+            var version = "3.0.0";
             var Survey = function() {
                 function Survey(formEl, optionsObj) {
                     _classCallCheck(this, Survey);
-                    return _modules_constructor__WEBPACK_IMPORTED_MODULE_3__["constructorFn"].call(this, formEl, optionsObj);
+                    return Object(_modules_constructor__WEBPACK_IMPORTED_MODULE_3__["constructorFn"])(this, formEl, optionsObj);
                 }
                 _createClass(Survey, [ {
                     key: "destroy",
                     value: function destroy() {
-                        _modules_destroy__WEBPACK_IMPORTED_MODULE_5__["destroy"].call(this);
+                        Object(_modules_destroy__WEBPACK_IMPORTED_MODULE_5__["destroy"])(this.formEl);
                     }
                 }, {
                     key: "init",
                     value: function init() {
-                        return _modules_retrieveSurvey__WEBPACK_IMPORTED_MODULE_4__["retrieveSurvey"].call(this);
+                        var _this = this;
+                        return Object(_modules_retrieveSurvey__WEBPACK_IMPORTED_MODULE_4__["retrieveSurvey"])(this.formEl, this.options, this.internals).then((function(response) {
+                            _this.isInitialized = true;
+                            _this.data = response.data;
+                            Object.freeze(_this.data);
+                            return response;
+                        }));
                     }
                 } ], [ {
                     key: "addLanguage",
@@ -143,12 +149,13 @@
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _generateQAcode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/buildSurvey/generateQAcode.js");
             var _populateAnswers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/buildSurvey/populateAnswers.js");
-            var formjs_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("formjs-plugin");
-            var formjs_plugin__WEBPACK_IMPORTED_MODULE_3___default = __webpack_require__.n(formjs_plugin__WEBPACK_IMPORTED_MODULE_3__);
-            function buildSurvey() {
-                var self = this, data = self.data, formEl = self.formEl, formName = formEl.getAttribute("name") || "", surveyContEl = formEl.closest("[data-surveyjs-container]");
-                self.internals.localStorageName = self.internals.localStorageName.replace(/{{surveyId}}/g, data.id);
-                self.internals.localStorageName = self.internals.localStorageName.replace(/{{surveyFormName}}/g, formName);
+            var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/listenerCallbacks.js");
+            var formjs_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("formjs-plugin");
+            var formjs_plugin__WEBPACK_IMPORTED_MODULE_4___default = __webpack_require__.n(formjs_plugin__WEBPACK_IMPORTED_MODULE_4__);
+            var buildSurvey = function buildSurvey(formEl, options, internals, data) {
+                var self = formEl.surveyjs, formName = formEl.getAttribute("name") || "", surveyContEl = formEl.closest("[data-surveyjs-container]");
+                self.internals.localStorageName = internals.localStorageName.replace(/{{surveyId}}/g, data.id);
+                self.internals.localStorageName = internals.localStorageName.replace(/{{surveyFormName}}/g, formName);
                 var checkData = function checkData(data) {
                     return typeof data !== "undefined" ? data : "";
                 };
@@ -158,25 +165,31 @@
                 if (surveyContEl.querySelector("[data-surveyjs-description]")) {
                     surveyContEl.querySelector("[data-surveyjs-description]").textContent = checkData(data.description);
                 }
-                var qaHtmlAll = _generateQAcode__WEBPACK_IMPORTED_MODULE_1__["generateQAcode"].call(self, data.questions);
+                var qaHtmlAll = Object(_generateQAcode__WEBPACK_IMPORTED_MODULE_1__["generateQAcode"])(formEl, options, data.questions);
                 Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["appendDomStringToNode"])(qaHtmlAll, formEl.querySelector("[data-surveyjs-body]"));
-                _populateAnswers__WEBPACK_IMPORTED_MODULE_2__["populateAnswers"].call(self);
-                self.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
+                Object(_populateAnswers__WEBPACK_IMPORTED_MODULE_2__["populateAnswers"])(formEl, options, self.internals);
+                options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = eventName === "blur" ? true : false;
-                    formEl.addEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
+                    formEl.addEventListener(eventName, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_3__["callbackFns"].validation, useCapturing);
                 }));
                 var formJSoptions = {
-                    fieldOptions: self.options.fieldOptions,
-                    formOptions: self.options.formOptions
+                    fieldOptions: options.fieldOptions,
+                    formOptions: options.formOptions
                 };
-                self.internals.formInstance = new formjs_plugin__WEBPACK_IMPORTED_MODULE_3___default.a(formEl, formJSoptions);
+                var formInstance = new formjs_plugin__WEBPACK_IMPORTED_MODULE_4___default.a(formEl, formJSoptions);
+                formEl.addEventListener("fjs.form:submit", (function(event) {
+                    event.data.then((function() {
+                        if (options.useLocalStorage) {
+                            localStorage.removeItem(self.internals.localStorageName);
+                        }
+                    }));
+                }));
                 return new Promise((function(resolve) {
-                    resolve(self.internals.formInstance.init());
+                    resolve(formInstance.init());
                 })).then((function() {
-                    self.isInitialized = true;
                     surveyContEl.classList.add("surveyjs-init-success");
                 }));
-            }
+            };
         },
         "./src/modules/buildSurvey/generateQAcode.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
@@ -185,17 +198,18 @@
                 return generateQAcode;
             }));
             var _generateQAcodeUtils_iterateAnswers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/iterateAnswers.js");
-            function generateQAcode() {
-                var questionsList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-                var self = this;
+            var generateQAcode = function generateQAcode(formEl, options) {
+                var questionsList = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
                 var qaData = questionsList[0]["sort"] ? questionsList.sort((function(a, b) {
                     return a["sort"] > b["sort"];
-                })) : questionsList, qaCodeAll = "", qaDataLength = qaData.length;
+                })) : questionsList, qaDataLength = qaData.length;
+                var qaCodeAll = "";
                 for (var i = 0; i < qaDataLength; i++) {
-                    var item = qaData[i], maxChoice = item.checks ? JSON.parse(item.checks) : "", checksMin = maxChoice.length > 0 ? maxChoice[0] : "", checksMax = maxChoice.length > 0 ? maxChoice[1] : "", aHtml = "", qaHtml = self.options.templates.question;
-                    aHtml += _generateQAcodeUtils_iterateAnswers__WEBPACK_IMPORTED_MODULE_0__["iterateAnswers"].call(self, item, item.id, i);
+                    var item = qaData[i], maxChoice = item.checks ? JSON.parse(item.checks) : "", checksMin = maxChoice.length > 0 ? maxChoice[0] : "", checksMax = maxChoice.length > 0 ? maxChoice[1] : "";
+                    var aHtml = "", qaHtml = options.templates.question;
+                    aHtml += Object(_generateQAcodeUtils_iterateAnswers__WEBPACK_IMPORTED_MODULE_0__["iterateAnswers"])(formEl, options, item, item.id, i);
                     if (item.question === "hidden-privacy") {
-                        var bindAnswerEl = self.formEl.closest("[data-surveyjs-container]").querySelector('[data-name="bind-surveyjs-answer"]');
+                        var bindAnswerEl = formEl.closest("[data-surveyjs-container]").querySelector('[data-name="bind-surveyjs-answer"]');
                         if (bindAnswerEl) {
                             bindAnswerEl.closest("[data-formjs-question]").setAttribute("data-question-id", item.id);
                             continue;
@@ -203,17 +217,17 @@
                     }
                     qaHtml = qaHtml.replace(/{{questionId}}/g, item.id);
                     qaHtml = qaHtml.replace(/{{questionNumber}}/g, i + 1);
-                    qaHtml = qaHtml.replace(/{{questionText}}/g, item.question + (maxChoice !== "" ? " (" + checksMax + " " + self.options.maxChoiceText + ")" : ""));
+                    qaHtml = qaHtml.replace(/{{questionText}}/g, item.question + (maxChoice !== "" ? " (" + checksMax + " " + options.maxChoiceText + ")" : ""));
                     qaHtml = qaHtml.replace(/{{answersHtml}}/g, aHtml);
-                    qaHtml = qaHtml.replace(/{{fieldErrorTemplate}}/g, self.options.fieldErrorFeedback ? self.options.templates.fieldError : "");
-                    if (self.options.fieldErrorFeedback && self.options.templates.fieldError.indexOf("{{fieldErrorMessage}}") !== -1) {
-                        var message = maxChoice !== "" ? self.options.fieldErrorMessageMultiChoice : self.options.fieldErrorMessage;
+                    qaHtml = qaHtml.replace(/{{fieldErrorTemplate}}/g, options.fieldErrorFeedback ? options.templates.fieldError : "");
+                    if (options.fieldErrorFeedback && options.templates.fieldError.indexOf("{{fieldErrorMessage}}") !== -1) {
+                        var message = maxChoice !== "" ? options.fieldErrorMessageMultiChoice : options.fieldErrorMessage;
                         qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, message).replace(/{{checksMin}}/g, checksMin).replace(/{{checksMax}}/g, checksMax);
                     }
                     qaCodeAll += qaHtml;
                 }
                 return qaCodeAll;
-            }
+            };
         },
         "./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/attribute.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
@@ -222,13 +236,12 @@
                 return attribute;
             }));
             var _generateOptionTags__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/generateOptionTags.js");
-            var attribute = function attribute(data) {
-                var self = this, answer = data.answer, objData = data.objData, aHtml = self.options.templates.inputGroup, attr = answer.attribute, attributeIsArray = Array.isArray(attr);
-                var relatedAnswerField = attributeIsArray ? self.options.templates.selectTag : self.options.templates.inputTag;
-                objData.fieldClass = self.options.cssClasses["default"];
+            var attribute = function attribute(options, data) {
+                var objData = data.objData, aHtml = options.templates.inputGroup, attr = data.answer.attribute, attributeIsArray = Array.isArray(attr), relatedAnswerField = attributeIsArray ? options.templates.selectTag : options.templates.inputTag;
+                objData.fieldClass = options.cssClasses["default"];
                 if (attributeIsArray) {
-                    objData.fieldClass = self.options.cssClasses.select;
-                    objData.optionsHtml = _generateOptionTags__WEBPACK_IMPORTED_MODULE_0__["generateOptionTags"].call(self, attr);
+                    objData.fieldClass = options.cssClasses.select;
+                    objData.optionsHtml = Object(_generateOptionTags__WEBPACK_IMPORTED_MODULE_0__["generateOptionTags"])(attr, options);
                 }
                 return {
                     aHtml: aHtml,
@@ -243,15 +256,15 @@
             __webpack_require__.d(__webpack_exports__, "generateOptionTags", (function() {
                 return generateOptionTags;
             }));
-            function generateOptionTags() {
+            var generateOptionTags = function generateOptionTags() {
                 var optionsList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-                var self = this;
-                var optionsHtml = optionsList[0].id === "" ? "" : '<option value="">' + self.options.selectFirstOption + "</option>";
+                var options = arguments.length > 1 ? arguments[1] : undefined;
+                var optionsHtml = optionsList[0].id === "" ? "" : '<option value="">' + options.selectFirstOption + "</option>";
                 optionsList.forEach((function(opt) {
                     optionsHtml += '<option value="' + opt.id + '" data-answer-id="' + opt.id + '">' + opt.answer + "</option>";
                 }));
                 return optionsHtml;
-            }
+            };
         },
         "./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/input.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
@@ -259,9 +272,8 @@
             __webpack_require__.d(__webpack_exports__, "input", (function() {
                 return input;
             }));
-            var input = function input(data) {
-                var self = this, objData = data.objData;
-                var aHtml = data.beforeCode + self.options.templates.input + data.afterCode;
+            var input = function input(options, data) {
+                var objData = data.objData, aHtml = data.beforeCode + options.templates.input + data.afterCode;
                 if (objData.answerType !== "checkbox" && objData.answerType !== "radio") {
                     objData.nestedAnswer += ' class="' + objData.fieldClass + '"';
                 }
@@ -277,15 +289,15 @@
             __webpack_require__.d(__webpack_exports__, "nested", (function() {
                 return nested;
             }));
-            var nested = function nested(data) {
-                var self = this, answer = data.answer, objData = data.objData;
-                var labelForNested = self.options.templates.labelTag;
+            var nested = function nested(options, data) {
+                var objData = data.objData;
+                var labelForNested = options.templates.labelTag;
                 labelForNested = labelForNested.replace(/{{answerCode}}/g, objData.answerCode);
-                labelForNested = labelForNested.replace(/{{labelClass}}/g, self.options.cssClasses.label + " surveyjs-field-indent-0");
-                labelForNested = labelForNested.replace(/{{answerString}}/g, answer.answer);
-                var aLoopHtml = data.beforeCode + '<div class="surveyjs-' + objData.answerType + '">' + labelForNested + "</div>" + data.afterCode;
+                labelForNested = labelForNested.replace(/{{labelClass}}/g, options.cssClasses.label + " surveyjs-field-indent-0");
+                labelForNested = labelForNested.replace(/{{answerString}}/g, data.answer.answer);
+                var aHtml = data.beforeCode + '<div class="surveyjs-' + objData.answerType + '">' + labelForNested + "</div>" + data.afterCode;
                 return {
-                    aHtml: aLoopHtml,
+                    aHtml: aHtml,
                     objData: objData
                 };
             };
@@ -297,10 +309,9 @@
                 return select;
             }));
             var _generateOptionTags__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/generateOptionTags.js");
-            var select = function select(data) {
-                var self = this, objData = data.objData;
-                var aHtml = data.beforeCode + self.options.templates.select + data.afterCode;
-                objData.optionsHtml = _generateOptionTags__WEBPACK_IMPORTED_MODULE_0__["generateOptionTags"].call(self, data.obj.answers);
+            var select = function select(options, data) {
+                var objData = data.objData, aHtml = data.beforeCode + options.templates.select + data.afterCode;
+                objData.optionsHtml = Object(_generateOptionTags__WEBPACK_IMPORTED_MODULE_0__["generateOptionTags"])(data.obj.answers, options);
                 return {
                     aHtml: aHtml,
                     objData: objData
@@ -313,10 +324,9 @@
             __webpack_require__.d(__webpack_exports__, "textarea", (function() {
                 return textarea;
             }));
-            var textarea = function textarea(data) {
-                var self = this, answer = data.answer, objData = data.objData;
-                var aHtml = self.options.templates.textarea;
-                objData.answerPlaceholder = answer.placeholder || self.options.textareaPlaceholder;
+            var textarea = function textarea(options, data) {
+                var objData = data.objData, aHtml = options.templates.textarea;
+                objData.answerPlaceholder = data.answer.placeholder || options.textareaPlaceholder;
                 return {
                     aHtml: aHtml,
                     objData: objData
@@ -350,26 +360,27 @@
             }));
             var _generateFieldHTML__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/generateFieldHTML.js");
             var _replaceTemplateStrings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/replaceTemplateStrings.js");
-            function iterateAnswers(obj, qID, qIdx, attrReq) {
-                var self = this;
-                var progIds = self.internals.progIds;
-                var list = Array.isArray(obj) ? obj : obj.answers, listL = list.length, qID = obj.id ? obj.id : qID ? qID : 0, i = qIdx || 0, aLoopHtml = "", needsBinding = obj.question === "hidden-privacy" ? true : false;
+            var progIds = [];
+            var iterateAnswers = function iterateAnswers(formEl, options, obj, qID, qIdx, attrReq) {
+                qID = obj.id ? obj.id : qID || 0;
+                var list = Array.isArray(obj) ? obj : obj.answers, listL = list.length, i = qIdx || 0, aLoopHtml = "";
+                var needsBinding = obj.question === "hidden-privacy" ? true : false;
                 if (list[0]["sort"]) {
                     list.sort((function(a, b) {
                         return a["sort"] > b["sort"];
                     }));
                 }
                 var _loop = function _loop(_a) {
-                    var answer = list[_a], aNum = _a + 1, qNum = i + 1, aType = answer.type, aId = answer.id, progIdsLength = progIds.length, progIdsJoined = progIdsLength > 0 ? self.internals.progIds.join("-") : "", getSettingsFieldClass = function getSettingsFieldClass() {
+                    var answer = list[_a], aNum = _a + 1, qNum = i + 1, aType = answer.type, aId = answer.id, progIdsLength = progIds.length, progIdsJoined = progIdsLength > 0 ? progIds.join("-") : "", getSettingsFieldClass = function getSettingsFieldClass() {
                         var aType = answer.type === "option" ? "select" : answer.type;
                         a = _a;
-                        return self.options.cssClasses[aType] || self.options.cssClasses["default"];
+                        return options.cssClasses[aType] || options.cssClasses["default"];
                     };
                     var fieldData = {
                         aHtml: ""
                     };
                     var objData = {
-                        labelTagCode: aType === "checkbox" || aType === "radio" ? self.options.templates.labelTag : "",
+                        labelTagCode: aType === "checkbox" || aType === "radio" ? options.templates.labelTag : "",
                         answerId: aId,
                         answerIdValue: aType === "text" ? "" : aId,
                         answerIndex: aNum,
@@ -390,7 +401,7 @@
                         validateIfFilled: typeof obj.validateIfFilled !== "undefined" ? "data-validate-if-filled" : ""
                     };
                     if (needsBinding) {
-                        var boundedFieldEl = self.formEl.closest("[data-surveyjs-container]").querySelectorAll('[data-name="bind-surveyjs-answer"]')[_a], fieldProps = {
+                        var boundedFieldEl = formEl.closest("[data-surveyjs-container]").querySelectorAll('[data-name="bind-surveyjs-answer"]')[_a], fieldProps = {
                             id: objData.answerCode,
                             name: objData.answerName,
                             type: aType,
@@ -419,20 +430,20 @@
                         if (typeof _generateFieldHTML__WEBPACK_IMPORTED_MODULE_0__["generateFieldHTML"][surveyFieldType] === "undefined") {
                             surveyFieldType = "input";
                         }
-                        fieldData = _generateFieldHTML__WEBPACK_IMPORTED_MODULE_0__["generateFieldHTML"][surveyFieldType].call(self, data);
+                        fieldData = _generateFieldHTML__WEBPACK_IMPORTED_MODULE_0__["generateFieldHTML"][surveyFieldType](options, data);
                         objData = fieldData.objData;
                         if (answer.nested) {
-                            self.internals.progIds.push(aNum);
+                            progIds.push(aNum);
                             aLoopHtml += fieldData.aHtml;
-                            aLoopHtml += iterateAnswers.call(self, answer.nested, qID, i, objData.attrRequired);
+                            aLoopHtml += iterateAnswers(formEl, options, answer.nested, qID, i, objData.attrRequired);
                             a = _a;
                             return "continue";
                         }
                         if (progIdsLength > 0 && _a === listL - 1) {
-                            self.internals.progIds.pop();
+                            progIds.pop();
                         }
                     }
-                    fieldData.aHtml = _replaceTemplateStrings__WEBPACK_IMPORTED_MODULE_1__["replaceTemplateStrings"].call(self, fieldData, objData);
+                    fieldData.aHtml = Object(_replaceTemplateStrings__WEBPACK_IMPORTED_MODULE_1__["replaceTemplateStrings"])(options, fieldData, objData);
                     aLoopHtml += fieldData.aHtml;
                     if (aType === "option") {
                         _a = _a + obj.answers.length;
@@ -444,7 +455,7 @@
                     if (_ret === "continue") continue;
                 }
                 return aLoopHtml;
-            }
+            };
         },
         "./src/modules/buildSurvey/generateQAcodeUtils/replaceTemplateStrings.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
@@ -452,10 +463,9 @@
             __webpack_require__.d(__webpack_exports__, "replaceTemplateStrings", (function() {
                 return replaceTemplateStrings;
             }));
-            function replaceTemplateStrings(fieldData, objData) {
-                var self = this;
+            var replaceTemplateStrings = function replaceTemplateStrings(options, fieldData, objData) {
                 if (objData.optionsHtml !== "") {
-                    fieldData.aHtml = fieldData.aHtml.replace(/{{selectTagCode}}/g, self.options.templates.selectTag);
+                    fieldData.aHtml = fieldData.aHtml.replace(/{{selectTagCode}}/g, options.templates.selectTag);
                 }
                 if (fieldData.relatedAnswerField) {
                     var relatedAnswerKeys = {
@@ -481,7 +491,7 @@
                     fieldData.aHtml = fieldData.aHtml.replace(regexStr, objData[key]);
                 }
                 return fieldData.aHtml;
-            }
+            };
         },
         "./src/modules/buildSurvey/populateAnswers.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
@@ -489,13 +499,12 @@
             __webpack_require__.d(__webpack_exports__, "populateAnswers", (function() {
                 return populateAnswers;
             }));
-            function populateAnswers() {
-                var self = this;
-                if (self.options.useLocalStorage) {
-                    var LS = localStorage.getObject(self.internals.localStorageName);
+            var populateAnswers = function populateAnswers(formEl, options, internals) {
+                if (options.useLocalStorage) {
+                    var LS = localStorage.getObject(internals.localStorageName);
                     if (LS) {
-                        var surveyContEl = self.formEl.closest("[data-surveyjs-container]");
-                        self.internals.localStorageArray = LS;
+                        var surveyContEl = formEl.closest("[data-surveyjs-container]");
+                        internals.localStorageArray = LS;
                         LS.forEach((function(item) {
                             var fieldFirst = surveyContEl.querySelector('[name="' + item.field + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst;
                             if (isRadioOrCheckbox) {
@@ -508,7 +517,7 @@
                 } else {
                     console.warn("LOCAL STORAGE IS NOT SUPPORTED!");
                 }
-            }
+            };
         },
         "./src/modules/constructor.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
@@ -518,10 +527,10 @@
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _internals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/internals.js");
-            var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/listenerCallbacks.js");
-            function constructorFn(formEl) {
-                var optionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                var self = this, argsL = arguments.length, checkFormElem = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
+            var _webStorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/webStorage.js");
+            function constructorFn(self, formEl) {
+                var optionsObj = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+                var argsL = arguments.length, checkFormElem = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
                 if (argsL === 0 || argsL > 0 && !formEl) {
                     throw new Error('First argument "formEl" is missing or falsy!');
                 }
@@ -536,27 +545,18 @@
                 }
                 self.formEl = checkFormElem.element;
                 self.formEl.surveyjs = self;
-                formEl = self.formEl;
-                if (typeof optionsObj.lang === "string") {
-                    var langValue = optionsObj.lang.toLowerCase();
-                    if (self.messages[langValue]) {
-                        self.options.lang = langValue;
-                    }
-                }
-                self.options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options, self.messages[self.options.lang]);
+                var customLang = typeof optionsObj.lang === "string" && optionsObj.lang.toLowerCase();
+                var langValue = customLang && self.constructor.prototype.messages[customLang] ? customLang : self.constructor.prototype.options.lang;
+                self.options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.constructor.prototype.options, self.constructor.prototype.messages[langValue]);
                 self.options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options, optionsObj);
                 if (self.options.templates.input.indexOf("{{inputTagCode}}") !== -1) {
                     self.options.templates.input = self.options.templates.input.replace(/{{inputTagCode}}/g, self.options.templates.inputTag);
                 }
                 self.options.templates.labelTag = self.options.templates.labelTag.replace(/{{labelClass}}/g, self.options.cssClasses.label);
                 self.internals = _internals__WEBPACK_IMPORTED_MODULE_1__["internals"];
-                if (!self.internals.isAvailableStorage) {
+                if (!Object(_webStorage__WEBPACK_IMPORTED_MODULE_2__["webStorage"])().isAvailable) {
                     self.options.useLocalStorage = false;
                 }
-                self.listenerCallbacks = {
-                    validation: _listenerCallbacks__WEBPACK_IMPORTED_MODULE_2__["callbackFns"].validation.bind(self)
-                };
-                Object.freeze(self.listenerCallbacks);
             }
         },
         "./src/modules/destroy.js": function(module, __webpack_exports__, __webpack_require__) {
@@ -565,15 +565,15 @@
             __webpack_require__.d(__webpack_exports__, "destroy", (function() {
                 return destroy;
             }));
-            function destroy() {
-                var self = this, formEl = self.formEl;
+            var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/listenerCallbacks.js");
+            var destroy = function destroy(formEl) {
                 formEl.formjs.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = eventName === "blur" ? true : false;
-                    formEl.removeEventListener(eventName, self.listenerCallbacks.validation, useCapturing);
+                    formEl.removeEventListener(eventName, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_0__["callbackFns"].validation, useCapturing);
                 }));
-                delete self.formEl.surveyjs;
-                self.formEl.formjs.destroy();
-            }
+                delete formEl.surveyjs;
+                formEl.formjs.destroy();
+            };
         },
         "./src/modules/helpers.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
@@ -641,20 +641,7 @@
                     if (!response.ok) {
                         return Promise.reject(response);
                     }
-                    var getFetchMethod = function getFetchMethod(response) {
-                        var accept = options.headers.get("Accept");
-                        var contentType = response.headers.get("Content-Type");
-                        var headerOpt = accept || contentType || "";
-                        if (headerOpt.indexOf("application/json") > -1 || headerOpt === "") {
-                            return "json";
-                        } else if (headerOpt.indexOf("text/") > -1) {
-                            return "text";
-                        } else {
-                            return "blob";
-                        }
-                    };
-                    var fetchMethod = getFetchMethod(response);
-                    return response[fetchMethod]();
+                    return response.json();
                 }))["catch"]((function(error) {
                     return Promise.reject(error);
                 }))["finally"]((function() {
@@ -730,13 +717,9 @@
             __webpack_require__.d(__webpack_exports__, "internals", (function() {
                 return internals;
             }));
-            var _webStorage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/webStorage.js");
             var internals = {
-                formInstance: null,
-                isAvailableStorage: Object(_webStorage__WEBPACK_IMPORTED_MODULE_0__["webStorage"])().isAvailable,
                 localStorageArray: [],
-                localStorageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]",
-                progIds: []
+                localStorageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]"
             };
         },
         "./src/modules/listenerCallbacks.js": function(module, __webpack_exports__, __webpack_require__) {
@@ -750,7 +733,7 @@
             var _utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/utils/getQuestionObject.js");
             var callbackFns = {
                 validation: function validation(event) {
-                    var self = this, eventName = event.type, fieldEl = event.target, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
+                    var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").surveyjs, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
                     var itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[1] : "id-not-found", isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), questionObj = _utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_2__["getQuestionObject"].call(self, questionId);
                     if (Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isEmptyObject"])(questionObj)) {
                         return true;
@@ -861,8 +844,7 @@
                 },
                 formOptions: {
                     beforeSend: [ _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.beforeSend ],
-                    getFormData: _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.getFormData,
-                    onSubmitSuccess: [ _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.onSubmitSuccess ]
+                    getFormData: _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.getFormData
                 },
                 initAjaxOptions: {
                     cache: "no-store",
@@ -902,9 +884,9 @@
             var defaultCallbacksInOptions = {
                 formOptions: {
                     beforeSend: function beforeSend_surveyDefault(data) {
+                        var _this = this;
                         var surveyjs = this.formEl.surveyjs;
                         var surveyContEl = this.formEl.closest("[data-surveyjs-container]");
-                        var formInstance = surveyjs.internals.formInstance;
                         var fieldsList = Array.from(surveyContEl.querySelectorAll(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelectorSurvey"]));
                         var fieldNameCheck = "", fieldTypeCheck = "";
                         fieldsList.forEach((function(fieldEl) {
@@ -931,7 +913,7 @@
                             focusOnRelated: false
                         });
                         return new Promise((function(resolve) {
-                            formInstance.validateForm(fieldOptions).then((function(formRes) {
+                            _this.formEl.formjs.validateForm(fieldOptions).then((function(formRes) {
                                 if (!formRes.result) {
                                     data.stopExecution = true;
                                 }
@@ -992,12 +974,6 @@
                             obj.answers.push(qaObj);
                         }));
                         return obj;
-                    },
-                    onSubmitSuccess: function onSubmitSuccess_surveyDefault() {
-                        var survey = this.formEl.surveyjs;
-                        if (self.options.useLocalStorage) {
-                            localStorage.removeItem(survey.internals.localStorageName);
-                        }
                     }
                 }
             };
@@ -1010,15 +986,12 @@
             }));
             var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _buildSurvey_buildSurvey__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/buildSurvey/buildSurvey.js");
-            function retrieveSurvey() {
-                var self = this;
-                self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
-                return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["ajaxCall"])(self.options.url, self.options.initAjaxOptions).then((function(response) {
+            var retrieveSurvey = function retrieveSurvey(formEl, options, internals) {
+                formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", options.loadingBox);
+                return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["ajaxCall"])(options.url, options.initAjaxOptions).then((function(response) {
                     if (response.status.toLowerCase() === "success" && response.data.questions && response.data.questions.length > 0) {
-                        self.data = response.data;
-                        Object.freeze(self.data);
                         return new Promise((function(resolve) {
-                            resolve(_buildSurvey_buildSurvey__WEBPACK_IMPORTED_MODULE_1__["buildSurvey"].call(self));
+                            resolve(Object(_buildSurvey_buildSurvey__WEBPACK_IMPORTED_MODULE_1__["buildSurvey"])(formEl, options, internals, response.data));
                         })).then((function() {
                             return response;
                         }));
@@ -1026,12 +999,12 @@
                         return Promise.reject(response);
                     }
                 }))["finally"]((function() {
-                    var loadingBoxEl = self.formEl.querySelector("[data-surveyjs-loading]");
+                    var loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
                     if (loadingBoxEl) {
                         loadingBoxEl.parentNode.removeChild(loadingBoxEl);
                     }
                 }));
-            }
+            };
         },
         "./src/modules/utils/getAnswerIndexInLocalStorage.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
@@ -1085,7 +1058,7 @@
             __webpack_require__.d(__webpack_exports__, "webStorage", (function() {
                 return webStorage;
             }));
-            function webStorage() {
+            var webStorage = function webStorage() {
                 var checkLocalStorage = function checkLocalStorage() {
                     var mod = "check_storage";
                     try {
@@ -1109,7 +1082,7 @@
                 return {
                     isAvailable: isAvailable
                 };
-            }
+            };
         },
         "formjs-plugin": function(module, exports) {
             module.exports = __WEBPACK_EXTERNAL_MODULE_formjs_plugin__;

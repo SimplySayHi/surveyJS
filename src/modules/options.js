@@ -17,8 +17,7 @@ export const options = {
     },
     formOptions: {
         beforeSend:         [defaultCallbacksInOptions.formOptions.beforeSend],
-        getFormData:        defaultCallbacksInOptions.formOptions.getFormData,
-        onSubmitSuccess:    [defaultCallbacksInOptions.formOptions.onSubmitSuccess]
+        getFormData:        defaultCallbacksInOptions.formOptions.getFormData
     },
     initAjaxOptions:        {
         cache:              'no-store',

@@ -8,7 +8,6 @@ export const defaultCallbacksInOptions = {
         beforeSend: function beforeSend_surveyDefault( data ){
             const surveyjs = this.formEl.surveyjs;
             const surveyContEl = this.formEl.closest('[data-surveyjs-container]');
-            const formInstance = surveyjs.internals.formInstance;
             const fieldsList = Array.from( surveyContEl.querySelectorAll(fieldsStringSelectorSurvey) );
 
             let fieldNameCheck = '',
@@ -48,7 +47,7 @@ export const defaultCallbacksInOptions = {
 
             const fieldOptions = mergeObjects({}, surveyjs.options.fieldOptions, {focusOnRelated: false});
             return new Promise(resolve => {
-                formInstance.validateForm( fieldOptions ).then(formRes => {
+                this.formEl.formjs.validateForm( fieldOptions ).then(formRes => {
                     if( !formRes.result ){
                         data.stopExecution = true;
                     }
@@ -137,14 +136,6 @@ export const defaultCallbacksInOptions = {
             });
         
             return obj;
-        },
-
-        onSubmitSuccess: function onSubmitSuccess_surveyDefault(){
-            // REMOVE SURVEY LOCAL STORAGE
-            const survey = this.formEl.surveyjs;
-            if( self.options.useLocalStorage ){
-                localStorage.removeItem( survey.internals.localStorageName );
-            }
         }
     
     }

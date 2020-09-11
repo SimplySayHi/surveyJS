@@ -2,35 +2,26 @@
 import { ajaxCall } from './helpers';
 import { buildSurvey } from './buildSurvey/buildSurvey';
 
-export function retrieveSurvey(){
+export const retrieveSurvey = ( formEl, options, internals ) => {
 
-    const self = this;
-
-    self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.loadingBox );
-
-    return ajaxCall(self.options.url, self.options.initAjaxOptions)
+    formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', options.loadingBox );
+    return ajaxCall(options.url, options.initAjaxOptions)
         .then(response => {
-
             if( response.status.toLowerCase() === 'success' && response.data.questions && response.data.questions.length > 0 ){
-                self.data = response.data;
-                Object.freeze(self.data);
                 return new Promise(resolve => {
-                    resolve( buildSurvey.call(self) );
+                    resolve( buildSurvey(formEl, options, internals, response.data) );
                 }).then(() => {
                     return response;
                 });
             } else {
                 return Promise.reject(response);
             }
-
         })
         .finally(() => {
-
-            let loadingBoxEl = self.formEl.querySelector('[data-surveyjs-loading]');
+            let loadingBoxEl = formEl.querySelector('[data-surveyjs-loading]');
             if( loadingBoxEl ){
                 loadingBoxEl.parentNode.removeChild(loadingBoxEl);
             }
-
         });
 
 }

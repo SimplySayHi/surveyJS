@@ -1,10 +1,8 @@
 
-export const input = function( data ){
+export const input = ( options, data ) => {
 
-    const self = this,
-          objData = data.objData;
-
-    let aHtml = data.beforeCode + self.options.templates.input + data.afterCode;
+    const objData = data.objData,
+          aHtml = data.beforeCode + options.templates.input + data.afterCode;
 
     if( objData.answerType !== 'checkbox' && objData.answerType !== 'radio' ){
         // EVERY INPUT FIELD THAT IS NOT A CHECKBOX OR RADIO ( TEXT, EMAIL, NUMBER, PASSWORD, RANGE AND SO ON... )

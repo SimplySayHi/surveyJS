@@ -1,21 +1,19 @@
 
-export function replaceTemplateStrings( fieldData, objData ){
-
-    const self = this;
+export const replaceTemplateStrings = ( options, fieldData, objData ) => {
 
     if( objData.optionsHtml !== '' ){
-        fieldData.aHtml = fieldData.aHtml.replace( /{{selectTagCode}}/g, self.options.templates.selectTag );
+        fieldData.aHtml = fieldData.aHtml.replace( /{{selectTagCode}}/g, options.templates.selectTag );
     }
 
     if( fieldData.relatedAnswerField ){
-        let relatedAnswerKeys = {
-                answerCode: '', answerType: 'text', fieldClass: objData.fieldClass,
-                answerIdValue: '', attrRequired: '', addMoreName: '-more',
-                attrRequiredFrom: 'data-required-from="#'+ objData.answerCode +'"'
+        const relatedAnswerKeys = {
+              answerCode: '', answerType: 'text', fieldClass: objData.fieldClass,
+              answerIdValue: '', attrRequired: '', addMoreName: '-more',
+              attrRequiredFrom: 'data-required-from="#'+ objData.answerCode +'"'
             };
             
         for(let reKey in relatedAnswerKeys){
-            let regexStrRe = new RegExp( '{{' + reKey + '}}', 'g' );
+            const regexStrRe = new RegExp( '{{' + reKey + '}}', 'g' );
             fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace( regexStrRe, relatedAnswerKeys[reKey] );    
         }
         
@@ -26,7 +24,7 @@ export function replaceTemplateStrings( fieldData, objData ){
     }
     
     for( let key in objData ){
-        let regexStr = new RegExp( '{{' + key + '}}', 'g' );
+        const regexStr = new RegExp( '{{' + key + '}}', 'g' );
         fieldData.aHtml = fieldData.aHtml.replace( regexStr, objData[key] );
     }
 

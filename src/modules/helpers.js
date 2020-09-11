@@ -22,38 +22,18 @@ ajaxCall = ( url = location.href, options = {} ) => {
 
     return fetch( url, options )
         .then(response => {
-
             if( !response.ok ){
                 return Promise.reject(response);
             }
-
-            let getFetchMethod = function( response ){
-                const accept = options.headers.get('Accept');
-                const contentType = response.headers.get('Content-Type');
-                const headerOpt = accept || contentType || '';
-
-                if( headerOpt.indexOf('application/json') > -1 || headerOpt === '' ){
-                    return 'json';
-                } else if( headerOpt.indexOf('text/') > -1 ){
-                    return 'text';
-                } else {
-                    return 'blob';
-                }
-            };
-            let fetchMethod = getFetchMethod( response );
-
-            return response[fetchMethod]();
-
+            return response.json();
         })
         .catch(error => {
             return Promise.reject(error);
         })
         .finally(function(){
-
             if( timeoutTimer ){
                 window.clearTimeout( timeoutTimer );
             }
-
         });
 },
 
@@ -68,10 +48,10 @@ appendDomStringToNode = ( HTMLstring, parentNode ) => {
 },
 
 checkFormEl = ( formEl ) => {
-    let isString = typeof formEl,
-        isValidNodeSelector = isString === 'string' && isDOMNode(document.querySelector(formEl)),
-        isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
-        obj = {
+    const isString = typeof formEl,
+          isValidNodeSelector = isString === 'string' && isDOMNode(document.querySelector(formEl)),
+          isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
+          obj = {
             result: isDOMNode(formEl) || isFormSelector,
             element: (isString === 'string' ? document.querySelector(formEl) : formEl)
         };

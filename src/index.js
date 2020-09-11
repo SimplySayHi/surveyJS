@@ -10,20 +10,26 @@ import { destroy }              from './modules/destroy';
 
 import './index.css';
 
-const version = '2.0.4';
+const version = '3.0.0';
 
 class Survey {
 
     constructor( formEl, optionsObj ){
-        return constructorFn.call(this, formEl, optionsObj);
+        return constructorFn(this, formEl, optionsObj);
     }
 
     destroy(){
-        destroy.call(this);
+        destroy(this.formEl);
     }
 
     init(){
-        return retrieveSurvey.call(this);
+        return retrieveSurvey(this.formEl, this.options, this.internals)
+        .then(response => {
+            this.isInitialized = true;
+            this.data = response.data;
+            Object.freeze(this.data);
+            return response;
+        });
     }
     
     static addLanguage( langString, langObject ){
