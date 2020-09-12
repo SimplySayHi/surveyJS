@@ -15,7 +15,7 @@ const version = '3.0.0';
 class Survey {
 
     constructor( formEl, optionsObj ){
-        return constructorFn(this, formEl, optionsObj);
+        constructorFn(this, formEl, optionsObj);
     }
 
     destroy(){
@@ -27,7 +27,7 @@ class Survey {
         .then(response => {
             this.isInitialized = true;
             this.data = response.data;
-            Object.freeze(this.data);
+            Object.freeze(this.data); // CHANGE WITH deepFreeze
             return response;
         });
     }

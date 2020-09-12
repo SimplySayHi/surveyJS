@@ -1,8 +1,7 @@
 
-export function getQuestionObject( questionId ){
+export function getQuestionObject( data, questionId ){
 
-    const self = this,
-          questions = self.data.questions,
+    const questions = data.questions,
           qLength = questions.length;
 
     let obj = {};

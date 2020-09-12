@@ -32,7 +32,9 @@ export const buildSurvey = ( formEl, options, internals, data ) => {
     appendDomStringToNode( qaHtmlAll, formEl.querySelector('[data-surveyjs-body]') );
 
     // FILL ANSWERS WITH LOCAL STORAGE ( IF AVAILABLE )
-    populateAnswers( formEl, options, self.internals );
+    if( options.useLocalStorage ){
+        populateAnswers( formEl, self.internals );
+    } else { console.warn('LOCAL STORAGE IS NOT SUPPORTED!'); }
 
     // INIT FIELDS VALIDATION
     // THIS WILL RUN BEFORE FORMJS VALIDATION FUNCTION SO THAT USERS CANNOT SKIP REQUIRED FIELDS VALIDATION

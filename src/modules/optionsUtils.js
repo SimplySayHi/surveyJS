@@ -29,7 +29,7 @@ export const defaultCallbacksInOptions = {
 
                 const questionIdEl = fieldEl.closest('[data-question-id]');
                 const questionId = questionIdEl ? questionIdEl.getAttribute('data-question-id') : '';
-                const questionObj = getQuestionObject.call( surveyjs, questionId );
+                const questionObj = getQuestionObject( surveyjs.data, questionId );
 
                 // BASED ON SURVEY JSON FILE, FORCE REQUIRED FIELDS TO BE VALIDATED
                 // THIS AVOIDS USERS TO HACK THE SURVEY, FOR EXAMPLE REMOVING required ATTRIBUTE FROM THE HTML
@@ -98,7 +98,7 @@ export const defaultCallbacksInOptions = {
 
                 // A FIELD WITH ATTRIBUTE 'data-required-from' IS MANAGED TOGETHER WITH ITS RELATED FIELD ( WHICH HAS ATTRIBUTE 'data-require-more' )
                 // IF QUESTION ID IS EMPTY -> SKIP THE FIELD ( USEFUL FOR FORM FIELDS OUTSIDE THE SURVEY BODY )
-                if( fieldEl.matches('[data-required-from]') || questionId === '' || isEmptyObject(getQuestionObject.call( survey, questionId )) ){ return; }
+                if( fieldEl.matches('[data-required-from]') || questionId === '' || isEmptyObject(getQuestionObject( survey.data, questionId )) ){ return; }
                                     
                 if( fieldEl.matches('textarea') ){
                     qaObj.answer.id_answer = [ '' ];

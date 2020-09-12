@@ -11,6 +11,7 @@ export const callbackFns = {
         const eventName = event.type,
               fieldEl = event.target,
               self = fieldEl.closest('form').surveyjs,
+              internals = self.internals,
               containerEl = fieldEl.closest('[data-formjs-question]'),
               fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value,
               isMultiChoice = fieldEl.matches('[data-checks]'),
@@ -22,7 +23,7 @@ export const callbackFns = {
         const itemEl = isRequiredFrom ? reqMoreEl : fieldEl,
               questionId = itemEl.id ? itemEl.id.split('-')[1] : 'id-not-found',
               isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
-              questionObj = getQuestionObject.call(self, questionId);
+              questionObj = getQuestionObject(self.data, questionId);
 
         // IF IT'S NOT A SURVEY QUESTION -> SKIP
         if( isEmptyObject(questionObj) ){ return true; }
@@ -34,10 +35,10 @@ export const callbackFns = {
             
             // MANAGE ITEMS IN LOCAL STORAGE ( IF AVAILABLE AND USABLE )
             if( self.options.useLocalStorage && !fieldEl.matches('[data-exclude-storage]') ){
-                const inArrayPos = getAnswerIndexInLocalStorage.call( self, fieldEl.name, (isMultiChoice ? fieldValue : false) ),
-                    inArrayRequireMorePos = getAnswerIndexInLocalStorage.call( self, fieldEl.name + '-more' );
+                const inArrayPos = getAnswerIndexInLocalStorage( internals, fieldEl.name, (isMultiChoice ? fieldValue : false) ),
+                    inArrayRequireMorePos = getAnswerIndexInLocalStorage( internals, fieldEl.name + '-more' );
 
-                let localStorageArray = self.internals.localStorageArray;
+                let localStorageArray = internals.localStorageArray;
 
                 if( !isRequireMore && !isRequiredFrom && inArrayRequireMorePos !== -1 ){
                     localStorageArray.splice(inArrayRequireMorePos, 1);
@@ -62,7 +63,7 @@ export const callbackFns = {
                 } else {
                     if( fieldValue !== '' ){
                         if( isRequiredFrom && fieldValue !== '' ){
-                            const oldFieldNamePos = getAnswerIndexInLocalStorage.call( self, reqMoreEl.name );
+                            const oldFieldNamePos = getAnswerIndexInLocalStorage( internals, reqMoreEl.name );
 
                             if( oldFieldNamePos !== -1 ){
                                 localStorageArray.splice(oldFieldNamePos, 1);
@@ -77,7 +78,7 @@ export const callbackFns = {
                     }
                 }
 
-                localStorage.setObject( self.internals.localStorageName, localStorageArray );
+                localStorage.setObject( internals.localStorageName, localStorageArray );
             }
 
             // BASED ON JSON DATA, FORCE REQUIRED FIELDS TO BE VALIDATED

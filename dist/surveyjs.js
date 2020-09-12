@@ -102,7 +102,7 @@
             var Survey = function() {
                 function Survey(formEl, optionsObj) {
                     _classCallCheck(this, Survey);
-                    return Object(_modules_constructor__WEBPACK_IMPORTED_MODULE_3__["constructorFn"])(this, formEl, optionsObj);
+                    Object(_modules_constructor__WEBPACK_IMPORTED_MODULE_3__["constructorFn"])(this, formEl, optionsObj);
                 }
                 _createClass(Survey, [ {
                     key: "destroy",
@@ -167,7 +167,11 @@
                 }
                 var qaHtmlAll = Object(_generateQAcode__WEBPACK_IMPORTED_MODULE_1__["generateQAcode"])(formEl, options, data.questions);
                 Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["appendDomStringToNode"])(qaHtmlAll, formEl.querySelector("[data-surveyjs-body]"));
-                Object(_populateAnswers__WEBPACK_IMPORTED_MODULE_2__["populateAnswers"])(formEl, options, self.internals);
+                if (options.useLocalStorage) {
+                    Object(_populateAnswers__WEBPACK_IMPORTED_MODULE_2__["populateAnswers"])(formEl, self.internals);
+                } else {
+                    console.warn("LOCAL STORAGE IS NOT SUPPORTED!");
+                }
                 options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = eventName === "blur" ? true : false;
                     formEl.addEventListener(eventName, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_3__["callbackFns"].validation, useCapturing);
@@ -499,23 +503,19 @@
             __webpack_require__.d(__webpack_exports__, "populateAnswers", (function() {
                 return populateAnswers;
             }));
-            var populateAnswers = function populateAnswers(formEl, options, internals) {
-                if (options.useLocalStorage) {
-                    var LS = localStorage.getObject(internals.localStorageName);
-                    if (LS) {
-                        var surveyContEl = formEl.closest("[data-surveyjs-container]");
-                        internals.localStorageArray = LS;
-                        LS.forEach((function(item) {
-                            var fieldFirst = surveyContEl.querySelector('[name="' + item.field + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst;
-                            if (isRadioOrCheckbox) {
-                                fieldEl.checked = true;
-                            } else {
-                                fieldEl.value = item.value;
-                            }
-                        }));
-                    }
-                } else {
-                    console.warn("LOCAL STORAGE IS NOT SUPPORTED!");
+            var populateAnswers = function populateAnswers(formEl, internals) {
+                var LS = localStorage.getObject(internals.localStorageName);
+                if (LS) {
+                    var surveyContEl = formEl.closest("[data-surveyjs-container]");
+                    internals.localStorageArray = LS;
+                    LS.forEach((function(item) {
+                        var fieldFirst = surveyContEl.querySelector('[name="' + item.field + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst;
+                        if (isRadioOrCheckbox) {
+                            fieldEl.checked = true;
+                        } else {
+                            fieldEl.value = item.value;
+                        }
+                    }));
                 }
             };
         },
@@ -733,15 +733,15 @@
             var _utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/utils/getQuestionObject.js");
             var callbackFns = {
                 validation: function validation(event) {
-                    var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").surveyjs, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
-                    var itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[1] : "id-not-found", isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), questionObj = _utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_2__["getQuestionObject"].call(self, questionId);
+                    var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").surveyjs, internals = self.internals, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
+                    var itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[1] : "id-not-found", isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), questionObj = Object(_utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_2__["getQuestionObject"])(self.data, questionId);
                     if (Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isEmptyObject"])(questionObj)) {
                         return true;
                     }
                     if (isFieldForChangeEventBoolean && eventName === "change" || !isFieldForChangeEventBoolean && eventName !== "change") {
                         if (self.options.useLocalStorage && !fieldEl.matches("[data-exclude-storage]")) {
-                            var inArrayPos = _utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__["getAnswerIndexInLocalStorage"].call(self, fieldEl.name, isMultiChoice ? fieldValue : false), inArrayRequireMorePos = _utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__["getAnswerIndexInLocalStorage"].call(self, fieldEl.name + "-more");
-                            var localStorageArray = self.internals.localStorageArray;
+                            var inArrayPos = Object(_utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__["getAnswerIndexInLocalStorage"])(internals, fieldEl.name, isMultiChoice ? fieldValue : false), inArrayRequireMorePos = Object(_utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__["getAnswerIndexInLocalStorage"])(internals, fieldEl.name + "-more");
+                            var localStorageArray = internals.localStorageArray;
                             if (!isRequireMore && !isRequiredFrom && inArrayRequireMorePos !== -1) {
                                 localStorageArray.splice(inArrayRequireMorePos, 1);
                             }
@@ -765,7 +765,7 @@
                             } else {
                                 if (fieldValue !== "") {
                                     if (isRequiredFrom && fieldValue !== "") {
-                                        var oldFieldNamePos = _utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__["getAnswerIndexInLocalStorage"].call(self, reqMoreEl.name);
+                                        var oldFieldNamePos = Object(_utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__["getAnswerIndexInLocalStorage"])(internals, reqMoreEl.name);
                                         if (oldFieldNamePos !== -1) {
                                             localStorageArray.splice(oldFieldNamePos, 1);
                                         }
@@ -787,7 +787,7 @@
                                     }
                                 }
                             }
-                            localStorage.setObject(self.internals.localStorageName, localStorageArray);
+                            localStorage.setObject(internals.localStorageName, localStorageArray);
                         }
                         if (typeof questionObj.required !== "undefined") {
                             fieldEl.required = true;
@@ -900,7 +900,7 @@
                             }
                             var questionIdEl = fieldEl.closest("[data-question-id]");
                             var questionId = questionIdEl ? questionIdEl.getAttribute("data-question-id") : "";
-                            var questionObj = _utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_1__["getQuestionObject"].call(surveyjs, questionId);
+                            var questionObj = Object(_utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_1__["getQuestionObject"])(surveyjs.data, questionId);
                             if (questionId !== "" && questionObj && typeof questionObj.required !== "undefined") {
                                 var isRequiredFrom = fieldEl.matches("[data-required-from]");
                                 var reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
@@ -944,7 +944,7 @@
                                     id_answer: [ fieldValue ]
                                 }
                             };
-                            if (fieldEl.matches("[data-required-from]") || questionId === "" || Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isEmptyObject"])(_utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_1__["getQuestionObject"].call(survey, questionId))) {
+                            if (fieldEl.matches("[data-required-from]") || questionId === "" || Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isEmptyObject"])(Object(_utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_1__["getQuestionObject"])(survey.data, questionId))) {
                                 return;
                             }
                             if (fieldEl.matches("textarea")) {
@@ -1012,10 +1012,9 @@
             __webpack_require__.d(__webpack_exports__, "getAnswerIndexInLocalStorage", (function() {
                 return getAnswerIndexInLocalStorage;
             }));
-            function getAnswerIndexInLocalStorage(fieldName) {
-                var multiChoiceValue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-                var self = this;
-                var lsSurvey = localStorage.getObject(self.internals.localStorageName);
+            function getAnswerIndexInLocalStorage(internals, fieldName) {
+                var multiChoiceValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+                var lsSurvey = localStorage.getObject(internals.localStorageName);
                 if (lsSurvey) {
                     var lsSurveyLength = lsSurvey.length;
                     for (var ls = 0; ls < lsSurveyLength; ls++) {
@@ -1039,8 +1038,8 @@
             __webpack_require__.d(__webpack_exports__, "getQuestionObject", (function() {
                 return getQuestionObject;
             }));
-            function getQuestionObject(questionId) {
-                var self = this, questions = self.data.questions, qLength = questions.length;
+            function getQuestionObject(data, questionId) {
+                var questions = data.questions, qLength = questions.length;
                 var obj = {};
                 for (var q = 0; q < qLength; q++) {
                     var question = questions[q];

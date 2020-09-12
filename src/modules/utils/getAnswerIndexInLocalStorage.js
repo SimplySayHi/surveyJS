@@ -1,15 +1,14 @@
 
-export function getAnswerIndexInLocalStorage( fieldName, multiChoiceValue = '' ){
+export function getAnswerIndexInLocalStorage( internals, fieldName, multiChoiceValue = '' ){
 
-    const self = this
-    let lsSurvey = localStorage.getObject( self.internals.localStorageName );
+    const lsSurvey = localStorage.getObject( internals.localStorageName );
             
     if( lsSurvey ){
-        let lsSurveyLength = lsSurvey.length;
+        const lsSurveyLength = lsSurvey.length;
         
         for(let ls=0; ls<lsSurveyLength; ls++){
-            let lsItem = lsSurvey[ls];
-            
+            const lsItem = lsSurvey[ls];
+
             if( lsItem.field === fieldName ){
                 if( multiChoiceValue ){
                     if( lsItem.value !== multiChoiceValue ){
