@@ -171,7 +171,8 @@
                 } else {
                     console.warn("LOCAL STORAGE IS NOT SUPPORTED!");
                 }
-                options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
+                var validateOnEvents = options.fieldOptions && options.fieldOptions.validateOnEvents || formjs_plugin__WEBPACK_IMPORTED_MODULE_4___default.a.prototype.options.fieldOptions.validateOnEvents;
+                validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = eventName === "blur" ? true : false;
                     formEl.addEventListener(eventName, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_3__["callbackFns"].validation, useCapturing);
                 }));
@@ -973,9 +974,6 @@
                     textarea: "form-control"
                 },
                 fieldErrorFeedback: true,
-                fieldOptions: {
-                    validateOnEvents: "input change"
-                },
                 formOptions: {
                     beforeSend: [ _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.beforeSend ],
                     getFormData: _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.getFormData

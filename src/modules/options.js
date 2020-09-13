@@ -12,9 +12,6 @@ export const options = {
         textarea:           'form-control'
     },
     fieldErrorFeedback:     true,
-    fieldOptions: {
-        validateOnEvents:   'input change'
-    },
     formOptions: {
         beforeSend:         [defaultCallbacksInOptions.formOptions.beforeSend],
         getFormData:        defaultCallbacksInOptions.formOptions.getFormData

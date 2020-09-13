@@ -38,7 +38,8 @@ export const buildSurvey = ( formEl, options, internals, data ) => {
 
     // INIT FIELDS VALIDATION
     // THIS WILL RUN BEFORE FORMJS VALIDATION FUNCTION SO THAT USERS CANNOT SKIP REQUIRED FIELDS VALIDATION
-    options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
+    const validateOnEvents = (options.fieldOptions && options.fieldOptions.validateOnEvents) || Form.prototype.options.fieldOptions.validateOnEvents;
+    validateOnEvents.split(' ').forEach(eventName => {
         const useCapturing = eventName === 'blur' ? true : false;
         formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
     });
