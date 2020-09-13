@@ -1584,8 +1584,6 @@ Survey.addLanguage( 'de', newLang );</pre>
         };
 
         var onInitSuccess = function( ajaxData ){
-                console.log('onInitSuccess', ajaxData);
-
                 var surveyFormEl = this.formEl,
                     surveyBody = surveyFormEl.querySelector('.surveyjs-body'),
                     initStatus = ajaxData.status;
@@ -1601,10 +1599,6 @@ Survey.addLanguage( 'de', newLang );</pre>
             },
             onInitError = function( error ){
                 var surveyFormEl = this.formEl;
-
-                console.log('onInitError', error);
-                console.log('SURVEY init(\''+ surveyFormEl.getAttribute('action') +'\') RETURNED AN ERROR:');
-                
                 surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
             },
             onValidation = function( fields ){
@@ -1693,11 +1687,13 @@ Survey.addLanguage( 'de', newLang );</pre>
         var mySurvey = new Survey( formEl, options );
         mySurvey.init()
             .then(function( data ){
-                console.log('survey init then');
+                console.log('Survey init then');
+                console.log(data);
                 onInitSuccess.call(mySurvey, data);
             })
             .catch(function( error ){
-                console.log('survey init catch');
+                console.log('Survey init catch');
+                console.log(error);
                 onInitError.call(mySurvey, error);
             });
     </script>

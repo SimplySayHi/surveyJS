@@ -1129,9 +1129,8 @@
                         })).then((function() {
                             return response;
                         }));
-                    } else {
-                        return Promise.reject(response);
                     }
+                    return Promise.reject(response);
                 }))["finally"]((function() {
                     var loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
                     if (loadingBoxEl) {

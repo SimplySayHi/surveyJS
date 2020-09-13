@@ -128,7 +128,7 @@
 
         /* ADD A NEW LANGUAGE */
         var myLang = {
-            loadingBox:         '<div class="surveyjs-loading"><i class="glyphicon glyphicon-refresh icon-spin"></i> DE Caricamento in corso...</div>',
+            loadingBox:         '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> DE Caricamento in corso...</div>',
             selectFirstOption:  'DE Seleziona una risposta...',
             textareaPlaceholder:'DE Scrivi la tua risposta...',
             maxChoiceText:      'DE RISPOSTE MAX',
@@ -153,6 +153,7 @@
                 cssClasses: {
                     select: 'custom-select'
                 },
+                // initAjaxOptions: { timeout: 1 },
                 formOptions: {
                     beforeSend: [
                         function beforeSend_surveyDemo_1( data ){
@@ -203,8 +204,6 @@
             };
 
         var onInitSuccess = function( ajaxData ){
-                console.log('onInitSuccess', ajaxData);
-
                 var surveyFormEl = this.formEl,
                     surveyBody = surveyFormEl.querySelector('.surveyjs-body'),
                     initStatus = ajaxData.status;
@@ -218,11 +217,7 @@
                 }
             },
             onInitError = function( error ){
-                var surveyFormEl = this.formEl;
-
-                console.log('onInitError', error);
-                console.log('SURVEY init(\''+ surveyFormEl.getAttribute('action') +'\') RETURNED AN ERROR:');
-                
+                var surveyFormEl = this.formEl;                
                 surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
             },
             onValidation = function( fields ){
@@ -305,11 +300,13 @@
         var mySurvey = new Survey( formEl, options );
         mySurvey.init()
             .then(function( data ){
-                console.log('retrieveSurvey init then');
+                console.log('Survey init then');
+                console.log(data);
                 onInitSuccess.call(mySurvey, data);
             })
             .catch(function( error ){
-                console.log('retrieveSurvey init catch');
+                console.log('Survey init catch');
+                console.log(error);
                 onInitError.call(mySurvey, error);
             });
     </script>

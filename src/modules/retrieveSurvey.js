@@ -13,9 +13,8 @@ export const retrieveSurvey = ( formEl, options, internals ) => {
                 }).then(() => {
                     return response;
                 });
-            } else {
-                return Promise.reject(response);
             }
+            return Promise.reject(response);
         })
         .finally(() => {
             let loadingBoxEl = formEl.querySelector('[data-surveyjs-loading]');
