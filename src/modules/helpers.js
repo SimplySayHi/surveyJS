@@ -47,7 +47,7 @@ appendDomStringToNode = ( HTMLstring, parentNode ) => {
 
 },
 
-checkFormEl = ( formEl ) => {
+checkFormEl = formEl => {
     const isString = typeof formEl,
           isValidNodeSelector = isString === 'string' && isDOMNode(document.querySelector(formEl)),
           isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === 'form',
@@ -70,46 +70,56 @@ concatFieldsLists = function () {
     }, []);
 },
 
-isDOMNode = ( node ) => {
+deepFreeze = obj => {
+    Object.getOwnPropertyNames(obj).forEach(name => {
+        const prop = obj[name];
+        if( typeof prop === 'object' && prop !== null ){
+            deepFreeze(prop);
+        }
+    });
+    return Object.freeze(obj);
+},
+
+isDOMNode = node => {
     return Element.prototype.isPrototypeOf( node );
 },
 
-isEmptyObject = ( object ) => {
+isEmptyObject = object => {
     return isPlainObject(object) && Object.getOwnPropertyNames(object).length === 0;
 },
 
-isFieldForChangeEvent = ( fieldEl ) => {
+isFieldForChangeEvent = fieldEl => {
     return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
 },
 
-isNodeList = ( nodeList ) => {
+isNodeList = nodeList => {
     return NodeList.prototype.isPrototypeOf( nodeList );
 },
 
-isPlainObject = ( object ) => {
+isPlainObject = object => {
     return Object.prototype.toString.call( object ) === '[object Object]';
 },
 
 mergeObjects = function( out = {} ){
     for(let i=1; i<arguments.length; i++){
-        let obj = arguments[i];
+        const obj = arguments[i];
 
         if(!obj){ continue; }
 
         for(let key in obj){
-            let isArray = Object.prototype.toString.call(obj[key]) === "[object Array]";
-            let isObject = Object.prototype.toString.call(obj[key]) === "[object Object]";
+            const obj_isArray = Array.isArray(obj[key]);
+            const obj_isObject = isPlainObject(obj[key]);
 
             // COPY ONLY ENUMERABLE PROPERTIES
             if( obj.hasOwnProperty(key) ){
-                if( isArray ){
+                if( obj_isArray ){
 
                     if( typeof out[key] === 'undefined' ){
                         out[key] = [];
                     }
                     out[key] = out[key].concat( obj[key].slice(0) );
 
-                } else if( isObject ){
+                } else if( obj_isObject ){
 
                     out[key] = mergeObjects(out[key], obj[key]);
 

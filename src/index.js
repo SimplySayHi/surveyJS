@@ -1,5 +1,5 @@
 
-import { mergeObjects }         from './modules/helpers';
+import { deepFreeze, mergeObjects } from './modules/helpers';
 import { messages }             from './modules/messages';
 import { options }              from './modules/options';
 
@@ -26,8 +26,7 @@ class Survey {
         return retrieveSurvey(this.formEl, this.options, this.internals)
         .then(response => {
             this.isInitialized = true;
-            this.data = response.data;
-            Object.freeze(this.data); // CHANGE WITH deepFreeze
+            this.data = deepFreeze(response.data);
             return response;
         });
     }

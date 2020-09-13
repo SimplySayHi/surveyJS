@@ -115,8 +115,7 @@
                         var _this = this;
                         return Object(_modules_retrieveSurvey__WEBPACK_IMPORTED_MODULE_4__["retrieveSurvey"])(this.formEl, this.options, this.internals).then((function(response) {
                             _this.isInitialized = true;
-                            _this.data = response.data;
-                            Object.freeze(_this.data);
+                            _this.data = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["deepFreeze"])(response.data);
                             return response;
                         }));
                     }
@@ -593,6 +592,9 @@
             __webpack_require__.d(__webpack_exports__, "concatFieldsLists", (function() {
                 return concatFieldsLists;
             }));
+            __webpack_require__.d(__webpack_exports__, "deepFreeze", (function() {
+                return deepFreeze;
+            }));
             __webpack_require__.d(__webpack_exports__, "isDOMNode", (function() {
                 return isDOMNode;
             }));
@@ -670,6 +672,14 @@
                         return listAcc;
                     }), argAcc);
                 }), []);
+            }, deepFreeze = function deepFreeze(obj) {
+                Object.getOwnPropertyNames(obj).forEach((function(name) {
+                    var prop = obj[name];
+                    if (_typeof(prop) === "object" && prop !== null) {
+                        deepFreeze(prop);
+                    }
+                }));
+                return Object.freeze(obj);
             }, isDOMNode = function isDOMNode(node) {
                 return Element.prototype.isPrototypeOf(node);
             }, isEmptyObject = function isEmptyObject(object) {
@@ -688,15 +698,15 @@
                         continue;
                     }
                     for (var key in obj) {
-                        var isArray = Object.prototype.toString.call(obj[key]) === "[object Array]";
-                        var isObject = Object.prototype.toString.call(obj[key]) === "[object Object]";
+                        var obj_isArray = Array.isArray(obj[key]);
+                        var obj_isObject = isPlainObject(obj[key]);
                         if (obj.hasOwnProperty(key)) {
-                            if (isArray) {
+                            if (obj_isArray) {
                                 if (typeof out[key] === "undefined") {
                                     out[key] = [];
                                 }
                                 out[key] = out[key].concat(obj[key].slice(0));
-                            } else if (isObject) {
+                            } else if (obj_isObject) {
                                 out[key] = mergeObjects(out[key], obj[key]);
                             } else {
                                 if (Array.isArray(out[key])) {
