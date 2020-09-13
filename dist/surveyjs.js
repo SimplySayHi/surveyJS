@@ -577,56 +577,62 @@
         "./src/modules/helpers.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "fieldsStringSelectorSurvey", (function() {
-                return fieldsStringSelectorSurvey;
+            var _helpers_ajaxCall__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers/ajaxCall.js");
+            __webpack_require__.d(__webpack_exports__, "ajaxCall", (function() {
+                return _helpers_ajaxCall__WEBPACK_IMPORTED_MODULE_0__["ajaxCall"];
             }));
+            var _helpers_appendDomStringToNode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/helpers/appendDomStringToNode.js");
+            __webpack_require__.d(__webpack_exports__, "appendDomStringToNode", (function() {
+                return _helpers_appendDomStringToNode__WEBPACK_IMPORTED_MODULE_1__["appendDomStringToNode"];
+            }));
+            var _helpers_checkFormEl__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/helpers/checkFormEl.js");
+            __webpack_require__.d(__webpack_exports__, "checkFormEl", (function() {
+                return _helpers_checkFormEl__WEBPACK_IMPORTED_MODULE_2__["checkFormEl"];
+            }));
+            var _helpers_concatFieldsLists__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/helpers/concatFieldsLists.js");
+            __webpack_require__.d(__webpack_exports__, "concatFieldsLists", (function() {
+                return _helpers_concatFieldsLists__WEBPACK_IMPORTED_MODULE_3__["concatFieldsLists"];
+            }));
+            var _helpers_deepFreeze__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/helpers/deepFreeze.js");
+            __webpack_require__.d(__webpack_exports__, "deepFreeze", (function() {
+                return _helpers_deepFreeze__WEBPACK_IMPORTED_MODULE_4__["deepFreeze"];
+            }));
+            var _helpers_fieldsStringSelectorSurvey__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/helpers/fieldsStringSelectorSurvey.js");
+            __webpack_require__.d(__webpack_exports__, "fieldsStringSelectorSurvey", (function() {
+                return _helpers_fieldsStringSelectorSurvey__WEBPACK_IMPORTED_MODULE_5__["fieldsStringSelectorSurvey"];
+            }));
+            var _helpers_isDOMNode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/helpers/isDOMNode.js");
+            __webpack_require__.d(__webpack_exports__, "isDOMNode", (function() {
+                return _helpers_isDOMNode__WEBPACK_IMPORTED_MODULE_6__["isDOMNode"];
+            }));
+            var _helpers_isEmptyObject__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./src/modules/helpers/isEmptyObject.js");
+            __webpack_require__.d(__webpack_exports__, "isEmptyObject", (function() {
+                return _helpers_isEmptyObject__WEBPACK_IMPORTED_MODULE_7__["isEmptyObject"];
+            }));
+            var _helpers_isFieldForChangeEvent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./src/modules/helpers/isFieldForChangeEvent.js");
+            __webpack_require__.d(__webpack_exports__, "isFieldForChangeEvent", (function() {
+                return _helpers_isFieldForChangeEvent__WEBPACK_IMPORTED_MODULE_8__["isFieldForChangeEvent"];
+            }));
+            var _helpers_isNodeList__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./src/modules/helpers/isNodeList.js");
+            __webpack_require__.d(__webpack_exports__, "isNodeList", (function() {
+                return _helpers_isNodeList__WEBPACK_IMPORTED_MODULE_9__["isNodeList"];
+            }));
+            var _helpers_isPlainObject__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./src/modules/helpers/isPlainObject.js");
+            __webpack_require__.d(__webpack_exports__, "isPlainObject", (function() {
+                return _helpers_isPlainObject__WEBPACK_IMPORTED_MODULE_10__["isPlainObject"];
+            }));
+            var _helpers_mergeObjects__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("./src/modules/helpers/mergeObjects.js");
+            __webpack_require__.d(__webpack_exports__, "mergeObjects", (function() {
+                return _helpers_mergeObjects__WEBPACK_IMPORTED_MODULE_11__["mergeObjects"];
+            }));
+        },
+        "./src/modules/helpers/ajaxCall.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
             __webpack_require__.d(__webpack_exports__, "ajaxCall", (function() {
                 return ajaxCall;
             }));
-            __webpack_require__.d(__webpack_exports__, "appendDomStringToNode", (function() {
-                return appendDomStringToNode;
-            }));
-            __webpack_require__.d(__webpack_exports__, "checkFormEl", (function() {
-                return checkFormEl;
-            }));
-            __webpack_require__.d(__webpack_exports__, "concatFieldsLists", (function() {
-                return concatFieldsLists;
-            }));
-            __webpack_require__.d(__webpack_exports__, "deepFreeze", (function() {
-                return deepFreeze;
-            }));
-            __webpack_require__.d(__webpack_exports__, "isDOMNode", (function() {
-                return isDOMNode;
-            }));
-            __webpack_require__.d(__webpack_exports__, "isEmptyObject", (function() {
-                return isEmptyObject;
-            }));
-            __webpack_require__.d(__webpack_exports__, "isFieldForChangeEvent", (function() {
-                return isFieldForChangeEvent;
-            }));
-            __webpack_require__.d(__webpack_exports__, "isNodeList", (function() {
-                return isNodeList;
-            }));
-            __webpack_require__.d(__webpack_exports__, "isPlainObject", (function() {
-                return isPlainObject;
-            }));
-            __webpack_require__.d(__webpack_exports__, "mergeObjects", (function() {
-                return mergeObjects;
-            }));
-            function _typeof(obj) {
-                "@babel/helpers - typeof";
-                if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-                    _typeof = function _typeof(obj) {
-                        return typeof obj;
-                    };
-                } else {
-                    _typeof = function _typeof(obj) {
-                        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-                    };
-                }
-                return _typeof(obj);
-            }
-            var fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', ajaxCall = function ajaxCall() {
+            var ajaxCall = function ajaxCall() {
                 var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
                 var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
                 var timeoutTimer;
@@ -651,20 +657,59 @@
                         window.clearTimeout(timeoutTimer);
                     }
                 }));
-            }, appendDomStringToNode = function appendDomStringToNode(HTMLstring, parentNode) {
+            };
+        },
+        "./src/modules/helpers/appendDomStringToNode.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "appendDomStringToNode", (function() {
+                return appendDomStringToNode;
+            }));
+            var appendDomStringToNode = function appendDomStringToNode(HTMLstring, parentNode) {
                 var tmpEl = document.createElement("div");
                 tmpEl.innerHTML = HTMLstring;
                 Array.from(tmpEl.childNodes).forEach((function(elem) {
                     parentNode.appendChild(elem);
                 }));
-            }, checkFormEl = function checkFormEl(formEl) {
-                var isString = _typeof(formEl), isValidNodeSelector = isString === "string" && isDOMNode(document.querySelector(formEl)), isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === "form", obj = {
-                    result: isDOMNode(formEl) || isFormSelector,
+            };
+        },
+        "./src/modules/helpers/checkFormEl.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "checkFormEl", (function() {
+                return checkFormEl;
+            }));
+            var _isDOMNode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers/isDOMNode.js");
+            function _typeof(obj) {
+                "@babel/helpers - typeof";
+                if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+                    _typeof = function _typeof(obj) {
+                        return typeof obj;
+                    };
+                } else {
+                    _typeof = function _typeof(obj) {
+                        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+                    };
+                }
+                return _typeof(obj);
+            }
+            var checkFormEl = function checkFormEl(formEl) {
+                var isString = _typeof(formEl), isValidNodeSelector = isString === "string" && Object(_isDOMNode__WEBPACK_IMPORTED_MODULE_0__["isDOMNode"])(document.querySelector(formEl)), isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === "form", obj = {
+                    result: Object(_isDOMNode__WEBPACK_IMPORTED_MODULE_0__["isDOMNode"])(formEl) || isFormSelector,
                     element: isString === "string" ? document.querySelector(formEl) : formEl
                 };
                 return obj;
-            }, concatFieldsLists = function concatFieldsLists() {
-                return Array.from(arguments).reduce((function(argAcc, list) {
+            };
+        },
+        "./src/modules/helpers/concatFieldsLists.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "concatFieldsLists", (function() {
+                return concatFieldsLists;
+            }));
+            var _arguments = arguments;
+            var concatFieldsLists = function concatFieldsLists() {
+                return Array.from(_arguments).reduce((function(argAcc, list) {
                     return list.reduce((function(listAcc, elem) {
                         if (listAcc.indexOf(elem) === -1) {
                             listAcc.push(elem);
@@ -672,7 +717,28 @@
                         return listAcc;
                     }), argAcc);
                 }), []);
-            }, deepFreeze = function deepFreeze(obj) {
+            };
+        },
+        "./src/modules/helpers/deepFreeze.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "deepFreeze", (function() {
+                return deepFreeze;
+            }));
+            function _typeof(obj) {
+                "@babel/helpers - typeof";
+                if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+                    _typeof = function _typeof(obj) {
+                        return typeof obj;
+                    };
+                } else {
+                    _typeof = function _typeof(obj) {
+                        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+                    };
+                }
+                return _typeof(obj);
+            }
+            var deepFreeze = function deepFreeze(obj) {
                 Object.getOwnPropertyNames(obj).forEach((function(name) {
                     var prop = obj[name];
                     if (_typeof(prop) === "object" && prop !== null) {
@@ -680,17 +746,75 @@
                     }
                 }));
                 return Object.freeze(obj);
-            }, isDOMNode = function isDOMNode(node) {
+            };
+        },
+        "./src/modules/helpers/fieldsStringSelectorSurvey.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "fieldsStringSelectorSurvey", (function() {
+                return fieldsStringSelectorSurvey;
+            }));
+            var fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]';
+        },
+        "./src/modules/helpers/isDOMNode.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "isDOMNode", (function() {
+                return isDOMNode;
+            }));
+            var isDOMNode = function isDOMNode(node) {
                 return Element.prototype.isPrototypeOf(node);
-            }, isEmptyObject = function isEmptyObject(object) {
-                return isPlainObject(object) && Object.getOwnPropertyNames(object).length === 0;
-            }, isFieldForChangeEvent = function isFieldForChangeEvent(fieldEl) {
+            };
+        },
+        "./src/modules/helpers/isEmptyObject.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "isEmptyObject", (function() {
+                return isEmptyObject;
+            }));
+            var _isPlainObject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers/isPlainObject.js");
+            var isEmptyObject = function isEmptyObject(object) {
+                return Object(_isPlainObject__WEBPACK_IMPORTED_MODULE_0__["isPlainObject"])(object) && Object.getOwnPropertyNames(object).length === 0;
+            };
+        },
+        "./src/modules/helpers/isFieldForChangeEvent.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "isFieldForChangeEvent", (function() {
+                return isFieldForChangeEvent;
+            }));
+            var isFieldForChangeEvent = function isFieldForChangeEvent(fieldEl) {
                 return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
-            }, isNodeList = function isNodeList(nodeList) {
+            };
+        },
+        "./src/modules/helpers/isNodeList.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "isNodeList", (function() {
+                return isNodeList;
+            }));
+            var isNodeList = function isNodeList(nodeList) {
                 return NodeList.prototype.isPrototypeOf(nodeList);
-            }, isPlainObject = function isPlainObject(object) {
+            };
+        },
+        "./src/modules/helpers/isPlainObject.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "isPlainObject", (function() {
+                return isPlainObject;
+            }));
+            var isPlainObject = function isPlainObject(object) {
                 return Object.prototype.toString.call(object) === "[object Object]";
-            }, mergeObjects = function mergeObjects() {
+            };
+        },
+        "./src/modules/helpers/mergeObjects.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "mergeObjects", (function() {
+                return mergeObjects;
+            }));
+            var _isPlainObject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers/isPlainObject.js");
+            var mergeObjects = function mergeObjects() {
                 var out = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
                 for (var i = 1; i < arguments.length; i++) {
                     var obj = arguments[i];
@@ -699,7 +823,7 @@
                     }
                     for (var key in obj) {
                         var obj_isArray = Array.isArray(obj[key]);
-                        var obj_isObject = isPlainObject(obj[key]);
+                        var obj_isObject = Object(_isPlainObject__WEBPACK_IMPORTED_MODULE_0__["isPlainObject"])(obj[key]);
                         if (obj.hasOwnProperty(key)) {
                             if (obj_isArray) {
                                 if (typeof out[key] === "undefined") {
