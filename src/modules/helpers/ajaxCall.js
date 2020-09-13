@@ -12,7 +12,7 @@ export const ajaxCall = ( url = location.href, options = {} ) => {
 
         options.signal = signal;
 
-        timeoutTimer = window.setTimeout(function() {
+        timeoutTimer = window.setTimeout(() => {
             controller.abort();
         }, options.timeout);
     }
@@ -27,7 +27,7 @@ export const ajaxCall = ( url = location.href, options = {} ) => {
         .catch(error => {
             return Promise.reject(error);
         })
-        .finally(function(){
+        .finally(() => {
             if( timeoutTimer ){
                 window.clearTimeout( timeoutTimer );
             }

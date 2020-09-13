@@ -1,5 +1,5 @@
 
-export function getAnswerIndexInLocalStorage( internals, fieldName, multiChoiceValue = '' ){
+export const getAnswerIndexInLocalStorage = ( internals, fieldName, multiChoiceValue = '' ) => {
 
     const lsSurvey = localStorage.getObject( internals.localStorageName );
             

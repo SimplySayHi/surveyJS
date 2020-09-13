@@ -1062,7 +1062,8 @@
                         var obj = {
                             answers: [],
                             id: survey.data.id
-                        }, fieldNameCheck = "", fieldTypeCheck = "";
+                        };
+                        var fieldNameCheck = "", fieldTypeCheck = "";
                         fieldsList.forEach((function(fieldEl) {
                             var type = fieldEl.type, name = fieldEl.name;
                             if (name === fieldNameCheck && type === fieldTypeCheck) {
@@ -1145,7 +1146,7 @@
             __webpack_require__.d(__webpack_exports__, "getAnswerIndexInLocalStorage", (function() {
                 return getAnswerIndexInLocalStorage;
             }));
-            function getAnswerIndexInLocalStorage(internals, fieldName) {
+            var getAnswerIndexInLocalStorage = function getAnswerIndexInLocalStorage(internals, fieldName) {
                 var multiChoiceValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
                 var lsSurvey = localStorage.getObject(internals.localStorageName);
                 if (lsSurvey) {
@@ -1163,7 +1164,7 @@
                     }
                 }
                 return -1;
-            }
+            };
         },
         "./src/modules/utils/getQuestionObject.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
@@ -1171,7 +1172,7 @@
             __webpack_require__.d(__webpack_exports__, "getQuestionObject", (function() {
                 return getQuestionObject;
             }));
-            function getQuestionObject(data, questionId) {
+            var getQuestionObject = function getQuestionObject(data, questionId) {
                 var questions = data.questions, qLength = questions.length;
                 var obj = {};
                 for (var q = 0; q < qLength; q++) {
@@ -1182,7 +1183,7 @@
                     }
                 }
                 return obj;
-            }
+            };
         },
         "./src/modules/webStorage.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";

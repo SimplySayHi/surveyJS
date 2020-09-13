@@ -2,7 +2,7 @@
 export const webStorage = () => {
 
         const checkLocalStorage = () => {
-            var mod = 'check_storage';
+            const mod = 'check_storage';
             try {
                 localStorage.setItem(mod, mod);
                 localStorage.removeItem(mod);
@@ -24,7 +24,7 @@ export const webStorage = () => {
             // getObject METHOD FOR HTML STORAGE -> EG: localStorage.getObject( name )
             // RETURN THE DATA ( STORED AS JSON STRING ) AS JS OBJECT
             Storage.prototype.getObject = function( key ) {
-                var value = this.getItem( key );
+                const value = this.getItem( key );
                 return value && JSON.parse( value );
             }
         }

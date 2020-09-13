@@ -17,7 +17,7 @@ export const retrieveSurvey = ( formEl, options, internals ) => {
             return Promise.reject(response);
         })
         .finally(() => {
-            let loadingBoxEl = formEl.querySelector('[data-surveyjs-loading]');
+            const loadingBoxEl = formEl.querySelector('[data-surveyjs-loading]');
             if( loadingBoxEl ){
                 loadingBoxEl.parentNode.removeChild(loadingBoxEl);
             }

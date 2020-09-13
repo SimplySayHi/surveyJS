@@ -13,7 +13,7 @@ export const defaultCallbacksInOptions = {
             let fieldNameCheck = '',
                 fieldTypeCheck = '';
 
-            fieldsList.forEach(function( fieldEl ){
+            fieldsList.forEach(fieldEl => {
                 
                 const type = fieldEl.type,
                       name = fieldEl.name;
@@ -60,11 +60,11 @@ export const defaultCallbacksInOptions = {
             const formEl = this.formEl;
             const survey = formEl.surveyjs;
             const fieldsList = Array.from( formEl.closest('[data-surveyjs-container]').querySelectorAll(fieldsStringSelectorSurvey) );
-            let obj = {
+            const obj = {
                     answers: [],
                     id: survey.data.id
-                },
-                fieldNameCheck = '',
+                };
+            let fieldNameCheck = '',
                 fieldTypeCheck = '';
 
             fieldsList.forEach(fieldEl => {
@@ -86,10 +86,10 @@ export const defaultCallbacksInOptions = {
                 //                  id_answer:      THE ANSWER ID
                 //                  text:           IF THE FIELD IS A TEXTAREA
                 //                  attributes:     IF THE ANSWER IS NESTED OR IS REQUIRED FROM ANOTHER ANSWER (SEE BELOW)
-                var questionIdEl = fieldEl.closest('[data-question-id]'),
-                    questionId = questionIdEl ? questionIdEl.getAttribute('data-question-id') : '',
-                    fieldValue = fieldEl.value,
-                    qaObj = {
+                const questionIdEl = fieldEl.closest('[data-question-id]'),
+                      questionId = questionIdEl ? questionIdEl.getAttribute('data-question-id') : '',
+                      fieldValue = fieldEl.value,
+                      qaObj = {
                         question: questionId,
                         answer: {
                             id_answer: [ fieldValue ]
@@ -106,8 +106,8 @@ export const defaultCallbacksInOptions = {
                 }
 
                 if( type === 'radio' ){
-                    var containerEl = (fieldEl.closest('form') ? formEl : fieldEl.closest('[data-formjs-question]') ),
-                        elem = containerEl.querySelector('[name="'+ name +'"]:checked');
+                    const containerEl = (fieldEl.closest('form') ? formEl : fieldEl.closest('[data-formjs-question]') ),
+                          elem = containerEl.querySelector('[name="'+ name +'"]:checked');
                     
                     if( elem ){
                         // FOR RADIO THAT REQUIRE THE USER TO GIVE ONE MORE ANSWER
