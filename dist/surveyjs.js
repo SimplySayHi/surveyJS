@@ -177,7 +177,7 @@
                     formEl.addEventListener(eventName, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_3__["callbackFns"].validation, useCapturing);
                 }));
                 var formJSoptions = {
-                    fieldOptions: options.fieldOptions,
+                    fieldOptions: options.fieldOptions || {},
                     formOptions: options.formOptions
                 };
                 var formInstance = new formjs_plugin__WEBPACK_IMPORTED_MODULE_4___default.a(formEl, formJSoptions);
@@ -531,7 +531,7 @@
             function constructorFn(self, formEl) {
                 var optionsObj = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
                 var argsL = arguments.length, checkFormElem = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
-                if (argsL === 0 || argsL > 0 && !formEl) {
+                if (argsL === 1 || argsL > 1 && !formEl) {
                     throw new Error('First argument "formEl" is missing or falsy!');
                 }
                 if (Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isNodeList"])(formEl)) {

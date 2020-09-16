@@ -46,7 +46,7 @@ export const buildSurvey = ( formEl, options, internals, data ) => {
 
     // CREATE & INITIALIZE FORMJS INSTANCE FOR SURVEY
     const formJSoptions = {
-            fieldOptions: options.fieldOptions,
+            fieldOptions: options.fieldOptions || {},
             formOptions: options.formOptions
         };
     const formInstance = new Form( formEl, formJSoptions );

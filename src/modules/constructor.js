@@ -8,7 +8,7 @@ export function constructorFn( self, formEl, optionsObj = {} ){
     const argsL = arguments.length,
           checkFormElem = checkFormEl(formEl);
 
-    if( argsL === 0 || (argsL > 0 && !formEl) ){
+    if( argsL === 1 || (argsL > 1 && !formEl) ){
         throw new Error('First argument "formEl" is missing or falsy!');
     }
     if( isNodeList(formEl) ){
