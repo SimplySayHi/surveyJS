@@ -80,8 +80,6 @@
     margin-bottom: -3px;
     margin-right: 5px;
     -webkit-transform: translateY(100%);
-    -ms-transform: translateY(100%);
-    -o-transform: translateY(100%);
     transform: translateY(100%);
 }
 

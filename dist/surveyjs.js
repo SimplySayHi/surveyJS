@@ -74,7 +74,7 @@
             var _modules_helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
             var _modules_messages__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/messages.js");
             var _modules_options__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/options.js");
-            var _modules_constructor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/constructor.js");
+            var _modules_internals__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/internals.js");
             var _modules_retrieveSurvey__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/retrieveSurvey.js");
             var _modules_destroy__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/destroy.js");
             var _index_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/index.css");
@@ -100,9 +100,35 @@
             }
             var version = "3.0.0";
             var Survey = function() {
-                function Survey(formEl, optionsObj) {
+                function Survey(formEl) {
+                    var optionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
                     _classCallCheck(this, Survey);
-                    Object(_modules_constructor__WEBPACK_IMPORTED_MODULE_3__["constructorFn"])(this, formEl, optionsObj);
+                    var argsL = arguments.length, checkFormElem = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
+                    if (argsL === 0 || argsL > 0 && !formEl) {
+                        throw new Error('First argument "formEl" is missing or falsy!');
+                    }
+                    if (Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["isNodeList"])(formEl)) {
+                        throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+                    }
+                    if (!checkFormElem.result) {
+                        throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+                    }
+                    if (!optionsObj.url || typeof optionsObj.url !== "string") {
+                        throw new Error('"options.url" is missing or not a string!');
+                    }
+                    this.formEl = checkFormElem.element;
+                    this.formEl.surveyjs = this;
+                    var customLang = typeof optionsObj.lang === "string" && optionsObj.lang.toLowerCase();
+                    var langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang;
+                    this.options = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
+                    if (this.options.templates.input.indexOf("{{inputTagCode}}") !== -1) {
+                        this.options.templates.input = this.options.templates.input.replace(/{{inputTagCode}}/g, this.options.templates.inputTag);
+                    }
+                    this.options.templates.labelTag = this.options.templates.labelTag.replace(/{{labelClass}}/g, this.options.cssClasses.label);
+                    this.internals = _modules_internals__WEBPACK_IMPORTED_MODULE_3__["internals"];
+                    if (!Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["webStorage"])().isAvailable) {
+                        this.options.useLocalStorage = false;
+                    }
                 }
                 _createClass(Survey, [ {
                     key: "destroy",
@@ -123,12 +149,12 @@
                     key: "addLanguage",
                     value: function addLanguage(langString, langObject) {
                         var langValue = langString.toLowerCase();
-                        this.prototype.messages[langValue] = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.prototype.messages[langValue], langObject);
+                        Survey.prototype.messages[langValue] = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, Survey.prototype.messages[langValue], langObject);
                     }
                 }, {
                     key: "setOptions",
                     value: function setOptions(optionsObj) {
-                        this.prototype.options = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, this.prototype.options, optionsObj);
+                        Survey.prototype.options = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, Survey.prototype.options, optionsObj);
                     }
                 } ]);
                 return Survey;
@@ -519,46 +545,6 @@
                 }
             };
         },
-        "./src/modules/constructor.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "constructorFn", (function() {
-                return constructorFn;
-            }));
-            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            var _internals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/internals.js");
-            var _webStorage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/webStorage.js");
-            function constructorFn(self, formEl) {
-                var optionsObj = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-                var argsL = arguments.length, checkFormElem = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["checkFormEl"])(formEl);
-                if (argsL === 1 || argsL > 1 && !formEl) {
-                    throw new Error('First argument "formEl" is missing or falsy!');
-                }
-                if (Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isNodeList"])(formEl)) {
-                    throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
-                }
-                if (!checkFormElem.result) {
-                    throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-                }
-                if (!optionsObj.url || typeof optionsObj.url !== "string") {
-                    throw new Error('"options.url" is missing or not valid!');
-                }
-                self.formEl = checkFormElem.element;
-                self.formEl.surveyjs = self;
-                var customLang = typeof optionsObj.lang === "string" && optionsObj.lang.toLowerCase();
-                var langValue = customLang && self.constructor.prototype.messages[customLang] ? customLang : self.constructor.prototype.options.lang;
-                self.options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.constructor.prototype.options, self.constructor.prototype.messages[langValue]);
-                self.options = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, self.options, optionsObj);
-                if (self.options.templates.input.indexOf("{{inputTagCode}}") !== -1) {
-                    self.options.templates.input = self.options.templates.input.replace(/{{inputTagCode}}/g, self.options.templates.inputTag);
-                }
-                self.options.templates.labelTag = self.options.templates.labelTag.replace(/{{labelClass}}/g, self.options.cssClasses.label);
-                self.internals = _internals__WEBPACK_IMPORTED_MODULE_1__["internals"];
-                if (!Object(_webStorage__WEBPACK_IMPORTED_MODULE_2__["webStorage"])().isAvailable) {
-                    self.options.useLocalStorage = false;
-                }
-            }
-        },
         "./src/modules/destroy.js": function(module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
@@ -625,6 +611,10 @@
             var _helpers_mergeObjects__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("./src/modules/helpers/mergeObjects.js");
             __webpack_require__.d(__webpack_exports__, "mergeObjects", (function() {
                 return _helpers_mergeObjects__WEBPACK_IMPORTED_MODULE_11__["mergeObjects"];
+            }));
+            var _helpers_webStorage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("./src/modules/helpers/webStorage.js");
+            __webpack_require__.d(__webpack_exports__, "webStorage", (function() {
+                return _helpers_webStorage__WEBPACK_IMPORTED_MODULE_12__["webStorage"];
             }));
         },
         "./src/modules/helpers/ajaxCall.js": function(module, __webpack_exports__, __webpack_require__) {
@@ -844,6 +834,38 @@
                     }
                 }
                 return out;
+            };
+        },
+        "./src/modules/helpers/webStorage.js": function(module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            __webpack_require__.d(__webpack_exports__, "webStorage", (function() {
+                return webStorage;
+            }));
+            var webStorage = function webStorage() {
+                var checkLocalStorage = function checkLocalStorage() {
+                    var mod = "check_storage";
+                    try {
+                        localStorage.setItem(mod, mod);
+                        localStorage.removeItem(mod);
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                };
+                var isAvailable = checkLocalStorage();
+                if (isAvailable) {
+                    Storage.prototype.setObject = function(key, value) {
+                        this.setItem(key, JSON.stringify(value));
+                    };
+                    Storage.prototype.getObject = function(key) {
+                        var value = this.getItem(key);
+                        return value && JSON.parse(value);
+                    };
+                }
+                return {
+                    isAvailable: isAvailable
+                };
             };
         },
         "./src/modules/internals.js": function(module, __webpack_exports__, __webpack_require__) {
@@ -1181,38 +1203,6 @@
                     }
                 }
                 return obj;
-            };
-        },
-        "./src/modules/webStorage.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "webStorage", (function() {
-                return webStorage;
-            }));
-            var webStorage = function webStorage() {
-                var checkLocalStorage = function checkLocalStorage() {
-                    var mod = "check_storage";
-                    try {
-                        localStorage.setItem(mod, mod);
-                        localStorage.removeItem(mod);
-                        return true;
-                    } catch (e) {
-                        return false;
-                    }
-                };
-                var isAvailable = checkLocalStorage();
-                if (isAvailable) {
-                    Storage.prototype.setObject = function(key, value) {
-                        this.setItem(key, JSON.stringify(value));
-                    };
-                    Storage.prototype.getObject = function(key) {
-                        var value = this.getItem(key);
-                        return value && JSON.parse(value);
-                    };
-                }
-                return {
-                    isAvailable: isAvailable
-                };
             };
         },
         "formjs-plugin": function(module, exports) {
