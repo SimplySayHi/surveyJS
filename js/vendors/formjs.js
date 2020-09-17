@@ -555,7 +555,7 @@ var Form = function() {
                 if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
                 if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
                 if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-                self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, self.constructor.prototype.options, optionsObj);
+                self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj);
                 var cbList = [ "beforeValidation", "beforeSend", "getFormData" ];
                 cbList.forEach((function(cbName) {
                     var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions", cbOpt = self.options[optionType][cbName];
@@ -569,17 +569,17 @@ var Form = function() {
         return Constructor = Form, staticProps = [ {
             key: "addValidationErrors",
             value: function(errorsObj) {
-                this.prototype.validationErrors = mergeObjects({}, this.prototype.validationErrors, errorsObj);
+                Form.prototype.validationErrors = mergeObjects({}, Form.prototype.validationErrors, errorsObj);
             }
         }, {
             key: "addValidationRules",
             value: function(rulesObj) {
-                this.prototype.validationRules = mergeObjects({}, this.prototype.validationRules, rulesObj);
+                Form.prototype.validationRules = mergeObjects({}, Form.prototype.validationRules, rulesObj);
             }
         }, {
             key: "setOptions",
             value: function(optionsObj) {
-                this.prototype.options = mergeObjects({}, this.prototype.options, optionsObj);
+                Form.prototype.options = mergeObjects({}, Form.prototype.options, optionsObj);
             }
         } ], (protoProps = [ {
             key: "destroy",
