@@ -7,8 +7,5 @@ export const destroy = formEl => {
         const useCapturing = eventName === 'blur' ? true : false;
         formEl.removeEventListener(eventName, callbackFns.validation, useCapturing);
     });
-
-    delete formEl.surveyjs;
-    formEl.formjs.destroy();
     
 }

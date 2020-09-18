@@ -1,10 +1,10 @@
 
 export const populateAnswers = ( formEl, internals ) => {
 
-    const LS = localStorage.getObject( internals.localStorageName );
+    const LS = localStorage.getObject( internals.storageName );
     if( LS ){
         const surveyContEl = formEl.closest('[data-surveyjs-container]');
-        internals.localStorageArray = LS;
+        internals.storageArray = LS;
         LS.forEach(item => {
             const fieldFirst = surveyContEl.querySelector( '[name="' + item.field + '"]' ),
                   isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'),

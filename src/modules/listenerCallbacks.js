@@ -10,7 +10,7 @@ export const callbackFns = {
 
         const eventName = event.type,
               fieldEl = event.target,
-              self = fieldEl.closest('form').surveyjs,
+              self = fieldEl.closest('form').formjs,
               internals = self.internals,
               containerEl = fieldEl.closest('[data-formjs-question]'),
               fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value,
@@ -38,26 +38,26 @@ export const callbackFns = {
                 const inArrayPos = getAnswerIndexInLocalStorage( internals, fieldEl.name, (isMultiChoice ? fieldValue : false) ),
                     inArrayRequireMorePos = getAnswerIndexInLocalStorage( internals, fieldEl.name + '-more' );
 
-                let localStorageArray = internals.localStorageArray;
+                let storageArray = internals.storageArray;
 
                 if( !isRequireMore && !isRequiredFrom && inArrayRequireMorePos !== -1 ){
-                    localStorageArray.splice(inArrayRequireMorePos, 1);
+                    storageArray.splice(inArrayRequireMorePos, 1);
                 }
 
                 if( inArrayPos !== -1 ){
                     if( isMultiChoice ){
-                        if( !fieldEl.checked && localStorageArray[inArrayPos].value === fieldValue ){
+                        if( !fieldEl.checked && storageArray[inArrayPos].value === fieldValue ){
                             // REMOVE ITEM FROM LS
-                            localStorageArray.splice(inArrayPos, 1);
+                            storageArray.splice(inArrayPos, 1);
                         } else {
                             // ADD ITEM TO LS
-                            localStorageArray.push( { field: fieldEl.name, value: fieldValue } );
+                            storageArray.push( { field: fieldEl.name, value: fieldValue } );
                         }
                     } else {
                         if( fieldValue !== '' ){
-                            localStorageArray[inArrayPos].value = fieldValue;
+                            storageArray[inArrayPos].value = fieldValue;
                         } else {
-                            localStorageArray.splice(inArrayPos, 1); 
+                            storageArray.splice(inArrayPos, 1); 
                         }
                     }
                 } else {
@@ -66,19 +66,19 @@ export const callbackFns = {
                             const oldFieldNamePos = getAnswerIndexInLocalStorage( internals, reqMoreEl.name );
 
                             if( oldFieldNamePos !== -1 ){
-                                localStorageArray.splice(oldFieldNamePos, 1);
+                                storageArray.splice(oldFieldNamePos, 1);
                             }
-                            localStorageArray.push( { field: reqMoreEl.name, value: reqMoreEl.value.trim() } );
+                            storageArray.push( { field: reqMoreEl.name, value: reqMoreEl.value.trim() } );
                         }
-                        localStorageArray.push( { field: fieldEl.name, value: fieldValue } );
+                        storageArray.push( { field: fieldEl.name, value: fieldValue } );
                         if( isRequireMore ){
                             const elReqFromEl = fieldEl.closest('form').querySelector( '[data-required-from="#' + fieldEl.id + '"]' );
-                            localStorageArray.push( { field: elReqFromEl.name, value: elReqFromEl.value.trim() } );
+                            storageArray.push( { field: elReqFromEl.name, value: elReqFromEl.value.trim() } );
                         }
                     }
                 }
 
-                localStorage.setObject( internals.localStorageName, localStorageArray );
+                localStorage.setObject( internals.storageName, storageArray );
             }
 
             // BASED ON JSON DATA, FORCE REQUIRED FIELDS TO BE VALIDATED

@@ -1,21 +1,17 @@
 
 import { appendDomStringToNode }from '../helpers';
-
 import { generateQAcode }       from './generateQAcode';
 import { populateAnswers }      from './populateAnswers';
-import { callbackFns }          from '../listenerCallbacks';
-
-import Form from 'formjs-plugin';
 
 export const buildSurvey = ( formEl, options, internals, data ) => {
     
-    const self = formEl.surveyjs,
+    const self = formEl.formjs,
           formName = formEl.getAttribute('name') || '',
           surveyContEl = formEl.closest('[data-surveyjs-container]');
     
     // REPLACE SURVEY ID AND FORM NAME IN LOCALSTORAGE NAME
-    self.internals.localStorageName = internals.localStorageName.replace( /{{surveyId}}/g, data.id );
-    self.internals.localStorageName = internals.localStorageName.replace( /{{surveyFormName}}/g, formName );
+    self.internals.storageName = internals.storageName.replace( /{{surveyId}}/g, data.id );
+    self.internals.storageName = internals.storageName.replace( /{{surveyFormName}}/g, formName );
     
     // PRINT GENERAL SURVEY DATA: TITLE AND DESCRIPTION
     const checkData = data => { return typeof data !== 'undefined' ? data : ''; };
@@ -34,36 +30,11 @@ export const buildSurvey = ( formEl, options, internals, data ) => {
     // FILL ANSWERS WITH LOCAL STORAGE ( IF AVAILABLE )
     if( options.useLocalStorage ){
         populateAnswers( formEl, self.internals );
-    } else { console.warn('LOCAL STORAGE IS NOT SUPPORTED!'); }
+    }
 
-    // INIT FIELDS VALIDATION
-    // THIS WILL RUN BEFORE FORMJS VALIDATION FUNCTION SO THAT USERS CANNOT SKIP REQUIRED FIELDS VALIDATION
-    const validateOnEvents = (options.fieldOptions && options.fieldOptions.validateOnEvents) || Form.prototype.options.fieldOptions.validateOnEvents;
-    validateOnEvents.split(' ').forEach(eventName => {
-        const useCapturing = eventName === 'blur' ? true : false;
-        formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
-    });
-
-    // CREATE & INITIALIZE FORMJS INSTANCE FOR SURVEY
-    const formJSoptions = {
-            fieldOptions: options.fieldOptions || {},
-            formOptions: options.formOptions
-        };
-    const formInstance = new Form( formEl, formJSoptions );
-
-    formEl.addEventListener('fjs.form:submit', event => {
-        event.data.then(() => {
-            // REMOVE SURVEY LOCAL STORAGE
-            if( options.useLocalStorage ){
-                localStorage.removeItem( self.internals.localStorageName );
-            }
-        });
-    });
-
-    return new Promise(resolve => {
-        resolve( formInstance.init() );
-    }).then(() => {
-        surveyContEl.classList.add('surveyjs-init-success');
-    });
+    const loadingBoxEl = formEl.querySelector('[data-surveyjs-loading]');
+    if( loadingBoxEl ){
+        loadingBoxEl.parentNode.removeChild(loadingBoxEl);
+    }
 
 }

@@ -1,7 +1,7 @@
 
 export const getAnswerIndexInLocalStorage = ( internals, fieldName, multiChoiceValue = '' ) => {
 
-    const lsSurvey = localStorage.getObject( internals.localStorageName );
+    const lsSurvey = localStorage.getObject( internals.storageName );
             
     if( lsSurvey ){
         const lsSurveyLength = lsSurvey.length;

@@ -1,67 +1,93 @@
 
-import { checkFormEl, deepFreeze, isNodeList, mergeObjects, webStorage } from './modules/helpers';
+import { ajaxCall, deepFreeze, mergeObjects, webStorage } from './modules/helpers';
 import { messages }             from './modules/messages';
 import { options }              from './modules/options';
 import { internals }            from './modules/internals';
-import { retrieveSurvey }       from './modules/retrieveSurvey';
+import { callbackFns }          from './modules/listenerCallbacks';
+import { buildSurvey }          from './modules/buildSurvey/buildSurvey';
 import { destroy }              from './modules/destroy';
+
+import Form from 'formjs-plugin';
 
 import './index.css';
 
 const version = '3.0.0';
 
-class Survey {
+class Survey extends Form {
 
     constructor( formEl, optionsObj = {} ){
-        const argsL = arguments.length,
-              checkFormElem = checkFormEl(formEl);
-
-        if( argsL === 0 || (argsL > 0 && !formEl) ){
-            throw new Error('First argument "formEl" is missing or falsy!');
-        }
-        if( isNodeList(formEl) ){
-            throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
-        }
-        if( !checkFormElem.result ){
-            throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-        }
-
         if( !optionsObj.url || typeof optionsObj.url !== 'string' ){
             throw new Error('"options.url" is missing or not a string!');
         }
 
-        this.formEl = checkFormElem.element;
-        this.formEl.surveyjs = this;
-
         // SET THE lang VALUE IN options ( MANDATORY FOR OTHER OPERATIONS )
         const customLang = typeof optionsObj.lang === 'string' && optionsObj.lang.toLowerCase();
         const langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang;
+        
         // MERGE OPTIONS AND messages OF THE CHOSEN lang INSIDE options
-        this.options = mergeObjects( {}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj );
+        const options = mergeObjects( {}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj );
 
-        if( this.options.templates.input.indexOf('{{inputTagCode}}') !== -1 ){
-            this.options.templates.input = this.options.templates.input.replace( /{{inputTagCode}}/g, this.options.templates.inputTag );
+        if( options.templates.input.indexOf('{{inputTagCode}}') !== -1 ){
+            options.templates.input = options.templates.input.replace( /{{inputTagCode}}/g, options.templates.inputTag );
         }
 
-        this.options.templates.labelTag = this.options.templates.labelTag.replace(/{{labelClass}}/g, this.options.cssClasses.label);
-        this.internals = internals;
+        options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label);
 
         if( !webStorage().isAvailable ){
-            this.options.useLocalStorage = false;
+            options.useLocalStorage = false;
         }
+
+        super( formEl, options );
+
+        this.internals = internals;
+
+        // INIT FIELDS VALIDATION
+        // THIS WILL RUN BEFORE FORMJS VALIDATION FUNCTION SO THAT USERS CANNOT SKIP REQUIRED FIELDS VALIDATION
+        this.options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
+            const useCapturing = eventName === 'blur' ? true : false;
+            formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
+        });
+
+        formEl.addEventListener('fjs.form:submit', event => {
+            event.data.then(() => {
+                // REMOVE SURVEY LOCAL STORAGE
+                if( options.useLocalStorage ){
+                    localStorage.removeItem( this.internals.storageName );
+                }
+            });
+        });
     }
 
     destroy(){
         destroy(this.formEl);
+        super.destroy();
     }
 
     init(){
-        return retrieveSurvey(this.formEl, this.options, this.internals)
-        .then(response => {
-            this.isInitialized = true;
-            this.data = deepFreeze(response.data);
-            return response;
-        });
+        const self = this;
+        const formEl = self.formEl;
+        const options = self.options;
+
+        formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', options.loadingBox );
+
+        return ajaxCall(options.url, options.initAjaxOptions)
+            .then(response => {
+                if( response.status.toLowerCase() === 'success' && response.data.questions && response.data.questions.length > 0 ){
+                    return new Promise(resolve => {
+
+                        buildSurvey(formEl, options, self.internals, response.data);
+                        super.init().then(() => {
+                            self.isInitialized = true;
+                            self.data = response.data;
+                            deepFreeze(self.data);
+                            formEl.closest('[data-surveyjs-container]').classList.add('surveyjs-init-success');
+                            resolve(response);
+                        });
+
+                    });
+                }
+                return Promise.reject(response);
+            });
     }
     
     static addLanguage( langString, langObject ){

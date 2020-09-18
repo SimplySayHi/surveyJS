@@ -6,7 +6,7 @@ export const defaultCallbacksInOptions = {
     formOptions: {
 
         beforeSend: function beforeSend_surveyDefault( data ){
-            const surveyjs = this.formEl.surveyjs;
+            const instance = this.formEl.formjs;
             const surveyContEl = this.formEl.closest('[data-surveyjs-container]');
             const fieldsList = Array.from( surveyContEl.querySelectorAll(fieldsStringSelectorSurvey) );
 
@@ -29,7 +29,7 @@ export const defaultCallbacksInOptions = {
 
                 const questionIdEl = fieldEl.closest('[data-question-id]');
                 const questionId = questionIdEl ? questionIdEl.getAttribute('data-question-id') : '';
-                const questionObj = getQuestionObject( surveyjs.data, questionId );
+                const questionObj = getQuestionObject( instance.data, questionId );
 
                 // BASED ON SURVEY JSON FILE, FORCE REQUIRED FIELDS TO BE VALIDATED
                 // THIS AVOIDS USERS TO HACK THE SURVEY, FOR EXAMPLE REMOVING required ATTRIBUTE FROM THE HTML
@@ -45,7 +45,7 @@ export const defaultCallbacksInOptions = {
 
             });
 
-            const fieldOptions = mergeObjects({}, surveyjs.options.fieldOptions, {focusOnRelated: false});
+            const fieldOptions = mergeObjects({}, instance.options.fieldOptions, {focusOnRelated: false});
             return new Promise(resolve => {
                 this.formEl.formjs.validateForm( fieldOptions ).then(formRes => {
                     if( !formRes.result ){
@@ -58,11 +58,11 @@ export const defaultCallbacksInOptions = {
 
         getFormData: function getFormData_surveyDefault(){
             const formEl = this.formEl;
-            const survey = formEl.surveyjs;
+            const instance = formEl.formjs;
             const fieldsList = Array.from( formEl.closest('[data-surveyjs-container]').querySelectorAll(fieldsStringSelectorSurvey) );
             const obj = {
                     answers: [],
-                    id: survey.data.id
+                    id: instance.data.id
                 };
             let fieldNameCheck = '',
                 fieldTypeCheck = '';
@@ -98,7 +98,7 @@ export const defaultCallbacksInOptions = {
 
                 // A FIELD WITH ATTRIBUTE 'data-required-from' IS MANAGED TOGETHER WITH ITS RELATED FIELD ( WHICH HAS ATTRIBUTE 'data-require-more' )
                 // IF QUESTION ID IS EMPTY -> SKIP THE FIELD ( USEFUL FOR FORM FIELDS OUTSIDE THE SURVEY BODY )
-                if( fieldEl.matches('[data-required-from]') || questionId === '' || isEmptyObject(getQuestionObject( survey.data, questionId )) ){ return; }
+                if( fieldEl.matches('[data-required-from]') || questionId === '' || isEmptyObject(getQuestionObject( instance.data, questionId )) ){ return; }
                                     
                 if( fieldEl.matches('textarea') ){
                     qaObj.answer.id_answer = [ '' ];
