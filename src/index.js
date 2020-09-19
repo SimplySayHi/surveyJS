@@ -9,7 +9,7 @@ import { destroy }              from './modules/destroy';
 
 import Form from 'formjs-plugin';
 
-import './index.css';
+import './index.scss';
 
 const version = '3.0.0';
 

@@ -1,1280 +1,554 @@
-/**! surveyJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
-(function webpackUniversalModuleDefinition(root, factory) {
-    if (typeof exports === "object" && typeof module === "object") module.exports = factory(require("Form")); else if (typeof define === "function" && define.amd) define([ "Form" ], factory); else if (typeof exports === "object") exports["Survey"] = factory(require("Form")); else root["Survey"] = factory(root["Form"]);
-})(this, (function(__WEBPACK_EXTERNAL_MODULE_formjs_plugin__) {
-    return function(modules) {
-        var installedModules = {};
-        function __webpack_require__(moduleId) {
-            if (installedModules[moduleId]) {
-                return installedModules[moduleId].exports;
-            }
-            var module = installedModules[moduleId] = {
-                i: moduleId,
-                l: false,
-                exports: {}
-            };
-            modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-            module.l = true;
-            return module.exports;
+/* surveyJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+var Survey = function(Form) {
+    "use strict";
+    function _interopDefaultLegacy(e) {
+        return e && "object" == typeof e && "default" in e ? e : {
+            default: e
+        };
+    }
+    var Form__default = _interopDefaultLegacy(Form);
+    function _typeof(obj) {
+        return (_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+            return typeof obj;
+        } : function(obj) {
+            return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+        })(obj);
+    }
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
+    }
+    function _defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, 
+            "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
         }
-        __webpack_require__.m = modules;
-        __webpack_require__.c = installedModules;
-        __webpack_require__.d = function(exports, name, getter) {
-            if (!__webpack_require__.o(exports, name)) {
-                Object.defineProperty(exports, name, {
-                    enumerable: true,
-                    get: getter
-                });
+    }
+    function _createClass(Constructor, protoProps, staticProps) {
+        return protoProps && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
+        Constructor;
+    }
+    function _inherits(subClass, superClass) {
+        if ("function" != typeof superClass && null !== superClass) throw new TypeError("Super expression must either be null or a function");
+        subClass.prototype = Object.create(superClass && superClass.prototype, {
+            constructor: {
+                value: subClass,
+                writable: !0,
+                configurable: !0
             }
-        };
-        __webpack_require__.r = function(exports) {
-            if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
-                Object.defineProperty(exports, Symbol.toStringTag, {
-                    value: "Module"
-                });
-            }
-            Object.defineProperty(exports, "__esModule", {
-                value: true
-            });
-        };
-        __webpack_require__.t = function(value, mode) {
-            if (mode & 1) value = __webpack_require__(value);
-            if (mode & 8) return value;
-            if (mode & 4 && typeof value === "object" && value && value.__esModule) return value;
-            var ns = Object.create(null);
-            __webpack_require__.r(ns);
-            Object.defineProperty(ns, "default", {
-                enumerable: true,
-                value: value
-            });
-            if (mode & 2 && typeof value != "string") for (var key in value) __webpack_require__.d(ns, key, function(key) {
-                return value[key];
-            }.bind(null, key));
-            return ns;
-        };
-        __webpack_require__.n = function(module) {
-            var getter = module && module.__esModule ? function getDefault() {
-                return module["default"];
-            } : function getModuleExports() {
-                return module;
-            };
-            __webpack_require__.d(getter, "a", getter);
-            return getter;
-        };
-        __webpack_require__.o = function(object, property) {
-            return Object.prototype.hasOwnProperty.call(object, property);
-        };
-        __webpack_require__.p = "";
-        return __webpack_require__(__webpack_require__.s = "./src/index.js");
-    }({
-        "./src/index.css": function(module, exports, __webpack_require__) {},
-        "./src/index.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            var _modules_helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            var _modules_messages__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/messages.js");
-            var _modules_options__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/options.js");
-            var _modules_internals__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/internals.js");
-            var _modules_listenerCallbacks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/listenerCallbacks.js");
-            var _modules_buildSurvey_buildSurvey__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/buildSurvey/buildSurvey.js");
-            var _modules_destroy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/destroy.js");
-            var formjs_plugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("formjs-plugin");
-            var formjs_plugin__WEBPACK_IMPORTED_MODULE_7___default = __webpack_require__.n(formjs_plugin__WEBPACK_IMPORTED_MODULE_7__);
-            var _index_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./src/index.css");
-            var _index_css__WEBPACK_IMPORTED_MODULE_8___default = __webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_8__);
-            function _typeof(obj) {
-                "@babel/helpers - typeof";
-                if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-                    _typeof = function _typeof(obj) {
-                        return typeof obj;
-                    };
-                } else {
-                    _typeof = function _typeof(obj) {
-                        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-                    };
-                }
-                return _typeof(obj);
-            }
-            function _classCallCheck(instance, Constructor) {
-                if (!(instance instanceof Constructor)) {
-                    throw new TypeError("Cannot call a class as a function");
-                }
-            }
-            function _defineProperties(target, props) {
-                for (var i = 0; i < props.length; i++) {
-                    var descriptor = props[i];
-                    descriptor.enumerable = descriptor.enumerable || false;
-                    descriptor.configurable = true;
-                    if ("value" in descriptor) descriptor.writable = true;
-                    Object.defineProperty(target, descriptor.key, descriptor);
-                }
-            }
-            function _createClass(Constructor, protoProps, staticProps) {
-                if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-                if (staticProps) _defineProperties(Constructor, staticProps);
-                return Constructor;
-            }
-            function _get(target, property, receiver) {
-                if (typeof Reflect !== "undefined" && Reflect.get) {
-                    _get = Reflect.get;
-                } else {
-                    _get = function _get(target, property, receiver) {
-                        var base = _superPropBase(target, property);
-                        if (!base) return;
-                        var desc = Object.getOwnPropertyDescriptor(base, property);
-                        if (desc.get) {
-                            return desc.get.call(receiver);
-                        }
-                        return desc.value;
-                    };
-                }
-                return _get(target, property, receiver || target);
-            }
-            function _superPropBase(object, property) {
-                while (!Object.prototype.hasOwnProperty.call(object, property)) {
-                    object = _getPrototypeOf(object);
-                    if (object === null) break;
-                }
-                return object;
-            }
-            function _inherits(subClass, superClass) {
-                if (typeof superClass !== "function" && superClass !== null) {
-                    throw new TypeError("Super expression must either be null or a function");
-                }
-                subClass.prototype = Object.create(superClass && superClass.prototype, {
-                    constructor: {
-                        value: subClass,
-                        writable: true,
-                        configurable: true
-                    }
-                });
-                if (superClass) _setPrototypeOf(subClass, superClass);
-            }
-            function _setPrototypeOf(o, p) {
-                _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-                    o.__proto__ = p;
-                    return o;
-                };
-                return _setPrototypeOf(o, p);
-            }
-            function _createSuper(Derived) {
-                var hasNativeReflectConstruct = _isNativeReflectConstruct();
-                return function _createSuperInternal() {
-                    var Super = _getPrototypeOf(Derived), result;
-                    if (hasNativeReflectConstruct) {
-                        var NewTarget = _getPrototypeOf(this).constructor;
-                        result = Reflect.construct(Super, arguments, NewTarget);
-                    } else {
-                        result = Super.apply(this, arguments);
-                    }
-                    return _possibleConstructorReturn(this, result);
-                };
-            }
-            function _possibleConstructorReturn(self, call) {
-                if (call && (_typeof(call) === "object" || typeof call === "function")) {
-                    return call;
-                }
-                return _assertThisInitialized(self);
-            }
-            function _assertThisInitialized(self) {
-                if (self === void 0) {
-                    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-                }
-                return self;
-            }
-            function _isNativeReflectConstruct() {
-                if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-                if (Reflect.construct.sham) return false;
-                if (typeof Proxy === "function") return true;
-                try {
-                    Date.prototype.toString.call(Reflect.construct(Date, [], (function() {})));
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            }
-            function _getPrototypeOf(o) {
-                _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-                    return o.__proto__ || Object.getPrototypeOf(o);
-                };
-                return _getPrototypeOf(o);
-            }
-            var version = "3.0.0";
-            var Survey = function(_Form) {
-                _inherits(Survey, _Form);
-                var _super = _createSuper(Survey);
-                function Survey(formEl) {
-                    var _this;
-                    var optionsObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                    _classCallCheck(this, Survey);
-                    if (!optionsObj.url || typeof optionsObj.url !== "string") {
-                        throw new Error('"options.url" is missing or not a string!');
-                    }
-                    var customLang = typeof optionsObj.lang === "string" && optionsObj.lang.toLowerCase();
-                    var langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang;
-                    var options = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
-                    if (options.templates.input.indexOf("{{inputTagCode}}") !== -1) {
-                        options.templates.input = options.templates.input.replace(/{{inputTagCode}}/g, options.templates.inputTag);
-                    }
-                    options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label);
-                    if (!Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["webStorage"])().isAvailable) {
-                        options.useLocalStorage = false;
-                    }
-                    _this = _super.call(this, formEl, options);
-                    _this.internals = _modules_internals__WEBPACK_IMPORTED_MODULE_3__["internals"];
-                    _this.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
-                        var useCapturing = eventName === "blur" ? true : false;
-                        formEl.addEventListener(eventName, _modules_listenerCallbacks__WEBPACK_IMPORTED_MODULE_4__["callbackFns"].validation, useCapturing);
-                    }));
-                    formEl.addEventListener("fjs.form:submit", (function(event) {
-                        event.data.then((function() {
-                            if (options.useLocalStorage) {
-                                localStorage.removeItem(_this.internals.storageName);
-                            }
-                        }));
-                    }));
-                    return _this;
-                }
-                _createClass(Survey, [ {
-                    key: "destroy",
-                    value: function destroy() {
-                        Object(_modules_destroy__WEBPACK_IMPORTED_MODULE_6__["destroy"])(this.formEl);
-                        _get(_getPrototypeOf(Survey.prototype), "destroy", this).call(this);
-                    }
-                }, {
-                    key: "init",
-                    value: function init() {
-                        var _this2 = this;
-                        var self = this;
-                        var formEl = self.formEl;
-                        var options = self.options;
-                        formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", options.loadingBox);
-                        return Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["ajaxCall"])(options.url, options.initAjaxOptions).then((function(response) {
-                            if (response.status.toLowerCase() === "success" && response.data.questions && response.data.questions.length > 0) {
-                                return new Promise((function(resolve) {
-                                    Object(_modules_buildSurvey_buildSurvey__WEBPACK_IMPORTED_MODULE_5__["buildSurvey"])(formEl, options, self.internals, response.data);
-                                    _get(_getPrototypeOf(Survey.prototype), "init", _this2).call(_this2).then((function() {
-                                        self.isInitialized = true;
-                                        self.data = response.data;
-                                        Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["deepFreeze"])(self.data);
-                                        formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success");
-                                        resolve(response);
-                                    }));
-                                }));
-                            }
-                            return Promise.reject(response);
-                        }));
-                    }
-                } ], [ {
-                    key: "addLanguage",
-                    value: function addLanguage(langString, langObject) {
-                        var langValue = langString.toLowerCase();
-                        Survey.prototype.messages[langValue] = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, Survey.prototype.messages[langValue], langObject);
-                    }
-                }, {
-                    key: "setOptions",
-                    value: function setOptions(optionsObj) {
-                        Survey.prototype.options = Object(_modules_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, Survey.prototype.options, optionsObj);
-                    }
-                } ]);
-                return Survey;
-            }(formjs_plugin__WEBPACK_IMPORTED_MODULE_7___default.a);
-            Survey.prototype.isInitialized = false;
-            Survey.prototype.messages = _modules_messages__WEBPACK_IMPORTED_MODULE_1__["messages"];
-            Survey.prototype.options = _modules_options__WEBPACK_IMPORTED_MODULE_2__["options"];
-            Survey.prototype.version = version;
-            __webpack_exports__["default"] = Survey;
-        },
-        "./src/modules/buildSurvey/buildSurvey.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "buildSurvey", (function() {
-                return buildSurvey;
-            }));
-            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            var _generateQAcode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/buildSurvey/generateQAcode.js");
-            var _populateAnswers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/buildSurvey/populateAnswers.js");
-            var buildSurvey = function buildSurvey(formEl, options, internals, data) {
-                var self = formEl.formjs, formName = formEl.getAttribute("name") || "", surveyContEl = formEl.closest("[data-surveyjs-container]");
-                self.internals.storageName = internals.storageName.replace(/{{surveyId}}/g, data.id);
-                self.internals.storageName = internals.storageName.replace(/{{surveyFormName}}/g, formName);
-                var checkData = function checkData(data) {
-                    return typeof data !== "undefined" ? data : "";
-                };
-                if (surveyContEl.querySelector("[data-surveyjs-title]")) {
-                    surveyContEl.querySelector("[data-surveyjs-title]").textContent = checkData(data.title);
-                }
-                if (surveyContEl.querySelector("[data-surveyjs-description]")) {
-                    surveyContEl.querySelector("[data-surveyjs-description]").textContent = checkData(data.description);
-                }
-                var qaHtmlAll = Object(_generateQAcode__WEBPACK_IMPORTED_MODULE_1__["generateQAcode"])(formEl, options, data.questions);
-                Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["appendDomStringToNode"])(qaHtmlAll, formEl.querySelector("[data-surveyjs-body]"));
-                if (options.useLocalStorage) {
-                    Object(_populateAnswers__WEBPACK_IMPORTED_MODULE_2__["populateAnswers"])(formEl, self.internals);
-                }
-                var loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
-                if (loadingBoxEl) {
-                    loadingBoxEl.parentNode.removeChild(loadingBoxEl);
-                }
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcode.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "generateQAcode", (function() {
-                return generateQAcode;
-            }));
-            var _generateQAcodeUtils_iterateAnswers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/iterateAnswers.js");
-            var generateQAcode = function generateQAcode(formEl, options) {
-                var questionsList = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-                var qaData = questionsList[0]["sort"] ? questionsList.sort((function(a, b) {
-                    return a["sort"] > b["sort"];
-                })) : questionsList, qaDataLength = qaData.length;
-                var qaCodeAll = "";
-                for (var i = 0; i < qaDataLength; i++) {
-                    var item = qaData[i], maxChoice = item.checks ? JSON.parse(item.checks) : "", checksMin = maxChoice.length > 0 ? maxChoice[0] : "", checksMax = maxChoice.length > 0 ? maxChoice[1] : "";
-                    var aHtml = "", qaHtml = options.templates.question;
-                    aHtml += Object(_generateQAcodeUtils_iterateAnswers__WEBPACK_IMPORTED_MODULE_0__["iterateAnswers"])(formEl, options, item, item.id, i);
-                    if (item.question === "hidden-privacy") {
-                        var bindAnswerEl = formEl.closest("[data-surveyjs-container]").querySelector('[data-name="bind-surveyjs-answer"]');
-                        if (bindAnswerEl) {
-                            bindAnswerEl.closest("[data-formjs-question]").setAttribute("data-question-id", item.id);
-                            continue;
-                        }
-                    }
-                    qaHtml = qaHtml.replace(/{{questionId}}/g, item.id);
-                    qaHtml = qaHtml.replace(/{{questionNumber}}/g, i + 1);
-                    qaHtml = qaHtml.replace(/{{questionText}}/g, item.question + (maxChoice !== "" ? " (" + checksMax + " " + options.maxChoiceText + ")" : ""));
-                    qaHtml = qaHtml.replace(/{{answersHtml}}/g, aHtml);
-                    qaHtml = qaHtml.replace(/{{fieldErrorTemplate}}/g, options.fieldErrorFeedback ? options.templates.fieldError : "");
-                    if (options.fieldErrorFeedback && options.templates.fieldError.indexOf("{{fieldErrorMessage}}") !== -1) {
-                        var message = maxChoice !== "" ? options.fieldErrorMessageMultiChoice : options.fieldErrorMessage;
-                        qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, message).replace(/{{checksMin}}/g, checksMin).replace(/{{checksMax}}/g, checksMax);
-                    }
-                    qaCodeAll += qaHtml;
-                }
-                return qaCodeAll;
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/attribute.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "attribute", (function() {
-                return attribute;
-            }));
-            var _generateOptionTags__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/generateOptionTags.js");
-            var attribute = function attribute(options, data) {
-                var objData = data.objData, aHtml = options.templates.inputGroup, attr = data.answer.attribute, attributeIsArray = Array.isArray(attr), relatedAnswerField = attributeIsArray ? options.templates.selectTag : options.templates.inputTag;
-                objData.fieldClass = options.cssClasses["default"];
-                if (attributeIsArray) {
-                    objData.fieldClass = options.cssClasses.select;
-                    objData.optionsHtml = Object(_generateOptionTags__WEBPACK_IMPORTED_MODULE_0__["generateOptionTags"])(attr, options);
-                }
-                return {
-                    aHtml: aHtml,
-                    relatedAnswerField: relatedAnswerField,
-                    objData: objData
-                };
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/generateOptionTags.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "generateOptionTags", (function() {
-                return generateOptionTags;
-            }));
-            var generateOptionTags = function generateOptionTags() {
-                var optionsList = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-                var options = arguments.length > 1 ? arguments[1] : undefined;
-                var optionsHtml = optionsList[0].id === "" ? "" : '<option value="">' + options.selectFirstOption + "</option>";
-                optionsList.forEach((function(opt) {
-                    optionsHtml += '<option value="' + opt.id + '" data-answer-id="' + opt.id + '">' + opt.answer + "</option>";
-                }));
-                return optionsHtml;
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/input.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "input", (function() {
-                return input;
-            }));
-            var input = function input(options, data) {
-                var objData = data.objData, aHtml = data.beforeCode + options.templates.input + data.afterCode;
-                if (objData.answerType !== "checkbox" && objData.answerType !== "radio") {
-                    objData.nestedAnswer += ' class="' + objData.fieldClass + '"';
-                }
-                return {
-                    aHtml: aHtml,
-                    objData: objData
-                };
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/nested.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "nested", (function() {
-                return nested;
-            }));
-            var nested = function nested(options, data) {
-                var objData = data.objData;
-                var labelForNested = options.templates.labelTag;
-                labelForNested = labelForNested.replace(/{{answerCode}}/g, objData.answerCode);
-                labelForNested = labelForNested.replace(/{{labelClass}}/g, options.cssClasses.label + " surveyjs-field-indent-0");
-                labelForNested = labelForNested.replace(/{{answerString}}/g, data.answer.answer);
-                var aHtml = data.beforeCode + '<div class="surveyjs-' + objData.answerType + '">' + labelForNested + "</div>" + data.afterCode;
-                return {
-                    aHtml: aHtml,
-                    objData: objData
-                };
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/select.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "select", (function() {
-                return select;
-            }));
-            var _generateOptionTags__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/generateOptionTags.js");
-            var select = function select(options, data) {
-                var objData = data.objData, aHtml = data.beforeCode + options.templates.select + data.afterCode;
-                objData.optionsHtml = Object(_generateOptionTags__WEBPACK_IMPORTED_MODULE_0__["generateOptionTags"])(data.obj.answers, options);
-                return {
-                    aHtml: aHtml,
-                    objData: objData
-                };
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/textarea.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "textarea", (function() {
-                return textarea;
-            }));
-            var textarea = function textarea(options, data) {
-                var objData = data.objData, aHtml = options.templates.textarea;
-                objData.answerPlaceholder = data.answer.placeholder || options.textareaPlaceholder;
-                return {
-                    aHtml: aHtml,
-                    objData: objData
-                };
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcodeUtils/generateFieldHTML.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "generateFieldHTML", (function() {
-                return generateFieldHTML;
-            }));
-            var _fieldsHTML_attribute__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/attribute.js");
-            var _fieldsHTML_input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/input.js");
-            var _fieldsHTML_nested__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/nested.js");
-            var _fieldsHTML_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/select.js");
-            var _fieldsHTML_textarea__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/fieldsHTML/textarea.js");
-            var generateFieldHTML = {
-                attribute: _fieldsHTML_attribute__WEBPACK_IMPORTED_MODULE_0__["attribute"],
-                input: _fieldsHTML_input__WEBPACK_IMPORTED_MODULE_1__["input"],
-                nested: _fieldsHTML_nested__WEBPACK_IMPORTED_MODULE_2__["nested"],
-                select: _fieldsHTML_select__WEBPACK_IMPORTED_MODULE_3__["select"],
-                textarea: _fieldsHTML_textarea__WEBPACK_IMPORTED_MODULE_4__["textarea"]
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcodeUtils/iterateAnswers.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "iterateAnswers", (function() {
-                return iterateAnswers;
-            }));
-            var _generateFieldHTML__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/generateFieldHTML.js");
-            var _replaceTemplateStrings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/buildSurvey/generateQAcodeUtils/replaceTemplateStrings.js");
-            var progIds = [];
-            var iterateAnswers = function iterateAnswers(formEl, options, obj, qID, qIdx, attrReq) {
-                qID = obj.id ? obj.id : qID || 0;
-                var list = Array.isArray(obj) ? obj : obj.answers, listL = list.length, i = qIdx || 0, aLoopHtml = "";
-                var needsBinding = obj.question === "hidden-privacy" ? true : false;
-                if (list[0]["sort"]) {
-                    list.sort((function(a, b) {
-                        return a["sort"] > b["sort"];
-                    }));
-                }
-                var _loop = function _loop(_a) {
-                    var answer = list[_a], aNum = _a + 1, qNum = i + 1, aType = answer.type, aId = answer.id, progIdsLength = progIds.length, progIdsJoined = progIdsLength > 0 ? progIds.join("-") : "", getSettingsFieldClass = function getSettingsFieldClass() {
-                        var aType = answer.type === "option" ? "select" : answer.type;
-                        a = _a;
-                        return options.cssClasses[aType] || options.cssClasses["default"];
-                    };
-                    var fieldData = {
-                        aHtml: ""
-                    };
-                    var objData = {
-                        labelTagCode: aType === "checkbox" || aType === "radio" ? options.templates.labelTag : "",
-                        answerId: aId,
-                        answerIdValue: aType === "text" ? "" : aId,
-                        answerIndex: aNum,
-                        answerName: "surveyjs-answer-" + qNum,
-                        answerPlaceholder: "",
-                        answerMaxlength: answer.maxlength ? 'maxlength="' + answer.maxlength + '"' : "",
-                        answerString: typeof answer.answer === "string" ? answer.answer : "",
-                        answerType: aType,
-                        attrRequired: typeof obj.required !== "undefined" ? "required" : typeof attrReq !== "undefined" ? attrReq : "",
-                        fieldClass: getSettingsFieldClass(),
-                        nestedAnswer: progIdsJoined !== "" ? 'data-nested-index="' + aNum + '"' : "",
-                        optionsHtml: "",
-                        progIdsJoined: progIdsJoined,
-                        questionNumber: qNum,
-                        answerCode: (aType === "option" ? "select" : aType) + "-" + qID + "-" + (aId || 0) + "-" + qNum + (progIdsJoined !== "" ? "-" + progIdsJoined : "") + "-" + aNum,
-                        attrChecks: obj.checks ? 'data-checks="' + obj.checks + '"' : "",
-                        attrSubtype: answer.subtype ? 'data-subtype="' + answer.subtype + '"' : "",
-                        validateIfFilled: typeof obj.validateIfFilled !== "undefined" ? "data-validate-if-filled" : ""
-                    };
-                    if (needsBinding) {
-                        var boundedFieldEl = formEl.closest("[data-surveyjs-container]").querySelectorAll('[data-name="bind-surveyjs-answer"]')[_a], fieldProps = {
-                            id: objData.answerCode,
-                            name: objData.answerName,
-                            type: aType,
-                            value: objData.answerId
-                        };
-                        if (typeof obj.required !== "undefined") {
-                            fieldProps.required = true;
-                        }
-                        for (var key in fieldProps) {
-                            boundedFieldEl[key] = fieldProps[key];
-                        }
-                        boundedFieldEl.setAttribute("data-answer-id", objData.answerId);
-                        boundedFieldEl.closest("div").querySelector("label").setAttribute("for", objData.answerCode);
-                        boundedFieldEl.closest("div").querySelector("label span").textContent = answer.answer;
-                        a = _a;
-                        return "continue";
-                    }
-                    if (typeof answer.answer === "string" || typeof answer.answer === "number") {
-                        var surveyFieldType = answer.attribute ? "attribute" : answer.nested ? "nested" : aType === "option" ? "select" : aType, beforeCode = progIdsLength > 0 && _a === 0 ? '<div class="surveyjs-field-indent">' : "", afterCode = progIdsLength > 0 && _a === listL - 1 ? "</div>" : "", data = {
-                            answer: answer,
-                            objData: objData,
-                            beforeCode: beforeCode,
-                            afterCode: afterCode,
-                            obj: obj
-                        };
-                        if (typeof _generateFieldHTML__WEBPACK_IMPORTED_MODULE_0__["generateFieldHTML"][surveyFieldType] === "undefined") {
-                            surveyFieldType = "input";
-                        }
-                        fieldData = _generateFieldHTML__WEBPACK_IMPORTED_MODULE_0__["generateFieldHTML"][surveyFieldType](options, data);
-                        objData = fieldData.objData;
-                        if (answer.nested) {
-                            progIds.push(aNum);
-                            aLoopHtml += fieldData.aHtml;
-                            aLoopHtml += iterateAnswers(formEl, options, answer.nested, qID, i, objData.attrRequired);
-                            a = _a;
-                            return "continue";
-                        }
-                        if (progIdsLength > 0 && _a === listL - 1) {
-                            progIds.pop();
-                        }
-                    }
-                    fieldData.aHtml = Object(_replaceTemplateStrings__WEBPACK_IMPORTED_MODULE_1__["replaceTemplateStrings"])(options, fieldData, objData);
-                    aLoopHtml += fieldData.aHtml;
-                    if (aType === "option") {
-                        _a = _a + obj.answers.length;
-                    }
-                    a = _a;
-                };
-                for (var a = 0; a < listL; a++) {
-                    var _ret = _loop(a);
-                    if (_ret === "continue") continue;
-                }
-                return aLoopHtml;
-            };
-        },
-        "./src/modules/buildSurvey/generateQAcodeUtils/replaceTemplateStrings.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "replaceTemplateStrings", (function() {
-                return replaceTemplateStrings;
-            }));
-            var replaceTemplateStrings = function replaceTemplateStrings(options, fieldData, objData) {
-                if (objData.optionsHtml !== "") {
-                    fieldData.aHtml = fieldData.aHtml.replace(/{{selectTagCode}}/g, options.templates.selectTag);
-                }
-                if (fieldData.relatedAnswerField) {
-                    var relatedAnswerKeys = {
-                        answerCode: "",
-                        answerType: "text",
-                        fieldClass: objData.fieldClass,
-                        answerIdValue: "",
-                        attrRequired: "",
-                        addMoreName: "-more",
-                        attrRequiredFrom: 'data-required-from="#' + objData.answerCode + '"'
-                    };
-                    for (var reKey in relatedAnswerKeys) {
-                        var regexStrRe = new RegExp("{{" + reKey + "}}", "g");
-                        fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace(regexStrRe, relatedAnswerKeys[reKey]);
-                    }
-                    fieldData.aHtml = fieldData.aHtml.replace(/{{relatedAnswerField}}/g, fieldData.relatedAnswerField);
-                } else {
-                    fieldData.aHtml = fieldData.aHtml.replace(/{{addMoreName}}/g, "");
-                    fieldData.aHtml = fieldData.aHtml.replace(/{{attrRequiredFrom}}/g, "");
-                }
-                for (var key in objData) {
-                    var regexStr = new RegExp("{{" + key + "}}", "g");
-                    fieldData.aHtml = fieldData.aHtml.replace(regexStr, objData[key]);
-                }
-                return fieldData.aHtml;
-            };
-        },
-        "./src/modules/buildSurvey/populateAnswers.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "populateAnswers", (function() {
-                return populateAnswers;
-            }));
-            var populateAnswers = function populateAnswers(formEl, internals) {
-                var LS = localStorage.getObject(internals.storageName);
-                if (LS) {
-                    var surveyContEl = formEl.closest("[data-surveyjs-container]");
-                    internals.storageArray = LS;
-                    LS.forEach((function(item) {
-                        var fieldFirst = surveyContEl.querySelector('[name="' + item.field + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst;
-                        if (isRadioOrCheckbox) {
-                            fieldEl.checked = true;
-                        } else {
-                            fieldEl.value = item.value;
-                        }
-                    }));
-                }
-            };
-        },
-        "./src/modules/destroy.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "destroy", (function() {
-                return destroy;
-            }));
-            var _listenerCallbacks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/listenerCallbacks.js");
-            var destroy = function destroy(formEl) {
-                formEl.formjs.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
-                    var useCapturing = eventName === "blur" ? true : false;
-                    formEl.removeEventListener(eventName, _listenerCallbacks__WEBPACK_IMPORTED_MODULE_0__["callbackFns"].validation, useCapturing);
-                }));
-            };
-        },
-        "./src/modules/helpers.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            var _helpers_ajaxCall__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers/ajaxCall.js");
-            __webpack_require__.d(__webpack_exports__, "ajaxCall", (function() {
-                return _helpers_ajaxCall__WEBPACK_IMPORTED_MODULE_0__["ajaxCall"];
-            }));
-            var _helpers_appendDomStringToNode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/helpers/appendDomStringToNode.js");
-            __webpack_require__.d(__webpack_exports__, "appendDomStringToNode", (function() {
-                return _helpers_appendDomStringToNode__WEBPACK_IMPORTED_MODULE_1__["appendDomStringToNode"];
-            }));
-            var _helpers_checkFormEl__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/helpers/checkFormEl.js");
-            __webpack_require__.d(__webpack_exports__, "checkFormEl", (function() {
-                return _helpers_checkFormEl__WEBPACK_IMPORTED_MODULE_2__["checkFormEl"];
-            }));
-            var _helpers_concatFieldsLists__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/modules/helpers/concatFieldsLists.js");
-            __webpack_require__.d(__webpack_exports__, "concatFieldsLists", (function() {
-                return _helpers_concatFieldsLists__WEBPACK_IMPORTED_MODULE_3__["concatFieldsLists"];
-            }));
-            var _helpers_deepFreeze__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/modules/helpers/deepFreeze.js");
-            __webpack_require__.d(__webpack_exports__, "deepFreeze", (function() {
-                return _helpers_deepFreeze__WEBPACK_IMPORTED_MODULE_4__["deepFreeze"];
-            }));
-            var _helpers_fieldsStringSelectorSurvey__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("./src/modules/helpers/fieldsStringSelectorSurvey.js");
-            __webpack_require__.d(__webpack_exports__, "fieldsStringSelectorSurvey", (function() {
-                return _helpers_fieldsStringSelectorSurvey__WEBPACK_IMPORTED_MODULE_5__["fieldsStringSelectorSurvey"];
-            }));
-            var _helpers_isDOMNode__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("./src/modules/helpers/isDOMNode.js");
-            __webpack_require__.d(__webpack_exports__, "isDOMNode", (function() {
-                return _helpers_isDOMNode__WEBPACK_IMPORTED_MODULE_6__["isDOMNode"];
-            }));
-            var _helpers_isEmptyObject__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("./src/modules/helpers/isEmptyObject.js");
-            __webpack_require__.d(__webpack_exports__, "isEmptyObject", (function() {
-                return _helpers_isEmptyObject__WEBPACK_IMPORTED_MODULE_7__["isEmptyObject"];
-            }));
-            var _helpers_isFieldForChangeEvent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./src/modules/helpers/isFieldForChangeEvent.js");
-            __webpack_require__.d(__webpack_exports__, "isFieldForChangeEvent", (function() {
-                return _helpers_isFieldForChangeEvent__WEBPACK_IMPORTED_MODULE_8__["isFieldForChangeEvent"];
-            }));
-            var _helpers_isNodeList__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./src/modules/helpers/isNodeList.js");
-            __webpack_require__.d(__webpack_exports__, "isNodeList", (function() {
-                return _helpers_isNodeList__WEBPACK_IMPORTED_MODULE_9__["isNodeList"];
-            }));
-            var _helpers_isPlainObject__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./src/modules/helpers/isPlainObject.js");
-            __webpack_require__.d(__webpack_exports__, "isPlainObject", (function() {
-                return _helpers_isPlainObject__WEBPACK_IMPORTED_MODULE_10__["isPlainObject"];
-            }));
-            var _helpers_mergeObjects__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("./src/modules/helpers/mergeObjects.js");
-            __webpack_require__.d(__webpack_exports__, "mergeObjects", (function() {
-                return _helpers_mergeObjects__WEBPACK_IMPORTED_MODULE_11__["mergeObjects"];
-            }));
-            var _helpers_webStorage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("./src/modules/helpers/webStorage.js");
-            __webpack_require__.d(__webpack_exports__, "webStorage", (function() {
-                return _helpers_webStorage__WEBPACK_IMPORTED_MODULE_12__["webStorage"];
-            }));
-        },
-        "./src/modules/helpers/ajaxCall.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "ajaxCall", (function() {
-                return ajaxCall;
-            }));
-            var ajaxCall = function ajaxCall() {
-                var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : location.href;
-                var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-                var timeoutTimer;
-                options.headers = new Headers(options.headers);
-                if (options.timeout > 0) {
-                    var controller = new AbortController;
-                    var signal = controller.signal;
-                    options.signal = signal;
-                    timeoutTimer = window.setTimeout((function() {
-                        controller.abort();
-                    }), options.timeout);
-                }
-                return fetch(url, options).then((function(response) {
-                    if (!response.ok) {
-                        return Promise.reject(response);
-                    }
-                    return response.json();
-                }))["catch"]((function(error) {
-                    return Promise.reject(error);
-                }))["finally"]((function() {
-                    if (timeoutTimer) {
-                        window.clearTimeout(timeoutTimer);
-                    }
-                }));
-            };
-        },
-        "./src/modules/helpers/appendDomStringToNode.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "appendDomStringToNode", (function() {
-                return appendDomStringToNode;
-            }));
-            var appendDomStringToNode = function appendDomStringToNode(HTMLstring, parentNode) {
-                var tmpEl = document.createElement("div");
-                tmpEl.innerHTML = HTMLstring;
-                Array.from(tmpEl.childNodes).forEach((function(elem) {
-                    parentNode.appendChild(elem);
-                }));
-            };
-        },
-        "./src/modules/helpers/checkFormEl.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "checkFormEl", (function() {
-                return checkFormEl;
-            }));
-            var _isDOMNode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers/isDOMNode.js");
-            function _typeof(obj) {
-                "@babel/helpers - typeof";
-                if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-                    _typeof = function _typeof(obj) {
-                        return typeof obj;
-                    };
-                } else {
-                    _typeof = function _typeof(obj) {
-                        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-                    };
-                }
-                return _typeof(obj);
-            }
-            var checkFormEl = function checkFormEl(formEl) {
-                var isString = _typeof(formEl), isValidNodeSelector = isString === "string" && Object(_isDOMNode__WEBPACK_IMPORTED_MODULE_0__["isDOMNode"])(document.querySelector(formEl)), isFormSelector = isValidNodeSelector && document.querySelector(formEl).tagName.toLowerCase() === "form", obj = {
-                    result: Object(_isDOMNode__WEBPACK_IMPORTED_MODULE_0__["isDOMNode"])(formEl) || isFormSelector,
-                    element: isString === "string" ? document.querySelector(formEl) : formEl
-                };
-                return obj;
-            };
-        },
-        "./src/modules/helpers/concatFieldsLists.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "concatFieldsLists", (function() {
-                return concatFieldsLists;
-            }));
-            var _arguments = arguments;
-            var concatFieldsLists = function concatFieldsLists() {
-                return Array.from(_arguments).reduce((function(argAcc, list) {
-                    return list.reduce((function(listAcc, elem) {
-                        if (listAcc.indexOf(elem) === -1) {
-                            listAcc.push(elem);
-                        }
-                        return listAcc;
-                    }), argAcc);
-                }), []);
-            };
-        },
-        "./src/modules/helpers/deepFreeze.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "deepFreeze", (function() {
-                return deepFreeze;
-            }));
-            function _typeof(obj) {
-                "@babel/helpers - typeof";
-                if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-                    _typeof = function _typeof(obj) {
-                        return typeof obj;
-                    };
-                } else {
-                    _typeof = function _typeof(obj) {
-                        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-                    };
-                }
-                return _typeof(obj);
-            }
-            var deepFreeze = function deepFreeze(obj) {
-                Object.getOwnPropertyNames(obj).forEach((function(name) {
-                    var prop = obj[name];
-                    if (_typeof(prop) === "object" && prop !== null) {
-                        deepFreeze(prop);
-                    }
-                }));
-                return Object.freeze(obj);
-            };
-        },
-        "./src/modules/helpers/fieldsStringSelectorSurvey.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "fieldsStringSelectorSurvey", (function() {
-                return fieldsStringSelectorSurvey;
-            }));
-            var fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]';
-        },
-        "./src/modules/helpers/isDOMNode.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "isDOMNode", (function() {
-                return isDOMNode;
-            }));
-            var isDOMNode = function isDOMNode(node) {
-                return Element.prototype.isPrototypeOf(node);
-            };
-        },
-        "./src/modules/helpers/isEmptyObject.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "isEmptyObject", (function() {
-                return isEmptyObject;
-            }));
-            var _isPlainObject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers/isPlainObject.js");
-            var isEmptyObject = function isEmptyObject(object) {
-                return Object(_isPlainObject__WEBPACK_IMPORTED_MODULE_0__["isPlainObject"])(object) && Object.getOwnPropertyNames(object).length === 0;
-            };
-        },
-        "./src/modules/helpers/isFieldForChangeEvent.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "isFieldForChangeEvent", (function() {
-                return isFieldForChangeEvent;
-            }));
-            var isFieldForChangeEvent = function isFieldForChangeEvent(fieldEl) {
-                return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
-            };
-        },
-        "./src/modules/helpers/isNodeList.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "isNodeList", (function() {
-                return isNodeList;
-            }));
-            var isNodeList = function isNodeList(nodeList) {
-                return NodeList.prototype.isPrototypeOf(nodeList);
-            };
-        },
-        "./src/modules/helpers/isPlainObject.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "isPlainObject", (function() {
-                return isPlainObject;
-            }));
-            var isPlainObject = function isPlainObject(object) {
-                return Object.prototype.toString.call(object) === "[object Object]";
-            };
-        },
-        "./src/modules/helpers/mergeObjects.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "mergeObjects", (function() {
-                return mergeObjects;
-            }));
-            var _isPlainObject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers/isPlainObject.js");
-            var mergeObjects = function mergeObjects() {
-                var out = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-                for (var i = 1; i < arguments.length; i++) {
-                    var obj = arguments[i];
-                    if (!obj) {
-                        continue;
-                    }
-                    for (var key in obj) {
-                        var obj_isArray = Array.isArray(obj[key]);
-                        var obj_isObject = Object(_isPlainObject__WEBPACK_IMPORTED_MODULE_0__["isPlainObject"])(obj[key]);
-                        if (obj.hasOwnProperty(key)) {
-                            if (obj_isArray) {
-                                if (typeof out[key] === "undefined") {
-                                    out[key] = [];
-                                }
-                                out[key] = out[key].concat(obj[key].slice(0));
-                            } else if (obj_isObject) {
-                                out[key] = mergeObjects(out[key], obj[key]);
-                            } else {
-                                if (Array.isArray(out[key])) {
-                                    out[key].push(obj[key]);
-                                } else {
-                                    out[key] = obj[key];
-                                }
-                            }
-                        }
-                    }
-                }
-                return out;
-            };
-        },
-        "./src/modules/helpers/webStorage.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "webStorage", (function() {
-                return webStorage;
-            }));
-            var webStorage = function webStorage() {
-                var checkLocalStorage = function checkLocalStorage() {
-                    var mod = "check_storage";
-                    try {
-                        localStorage.setItem(mod, mod);
-                        localStorage.removeItem(mod);
-                        return true;
-                    } catch (e) {
-                        return false;
-                    }
-                };
-                var isAvailable = checkLocalStorage();
-                if (isAvailable) {
-                    Storage.prototype.setObject = function(key, value) {
-                        this.setItem(key, JSON.stringify(value));
-                    };
-                    Storage.prototype.getObject = function(key) {
-                        var value = this.getItem(key);
-                        return value && JSON.parse(value);
-                    };
-                }
-                return {
-                    isAvailable: isAvailable
-                };
-            };
-        },
-        "./src/modules/internals.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "internals", (function() {
-                return internals;
-            }));
-            var internals = {
-                storageArray: [],
-                storageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]"
-            };
-        },
-        "./src/modules/listenerCallbacks.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "callbackFns", (function() {
-                return callbackFns;
-            }));
-            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            var _utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/utils/getAnswerIndexInLocalStorage.js");
-            var _utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/modules/utils/getQuestionObject.js");
-            var callbackFns = {
-                validation: function validation(event) {
-                    var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null;
-                    var itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[1] : "id-not-found", isFieldForChangeEventBoolean = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isFieldForChangeEvent"])(fieldEl), questionObj = Object(_utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_2__["getQuestionObject"])(self.data, questionId);
-                    if (Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isEmptyObject"])(questionObj)) {
-                        return true;
-                    }
-                    if (isFieldForChangeEventBoolean && eventName === "change" || !isFieldForChangeEventBoolean && eventName !== "change") {
-                        if (self.options.useLocalStorage && !fieldEl.matches("[data-exclude-storage]")) {
-                            var inArrayPos = Object(_utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__["getAnswerIndexInLocalStorage"])(internals, fieldEl.name, isMultiChoice ? fieldValue : false), inArrayRequireMorePos = Object(_utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__["getAnswerIndexInLocalStorage"])(internals, fieldEl.name + "-more");
-                            var storageArray = internals.storageArray;
-                            if (!isRequireMore && !isRequiredFrom && inArrayRequireMorePos !== -1) {
-                                storageArray.splice(inArrayRequireMorePos, 1);
-                            }
-                            if (inArrayPos !== -1) {
-                                if (isMultiChoice) {
-                                    if (!fieldEl.checked && storageArray[inArrayPos].value === fieldValue) {
-                                        storageArray.splice(inArrayPos, 1);
-                                    } else {
-                                        storageArray.push({
-                                            field: fieldEl.name,
-                                            value: fieldValue
-                                        });
-                                    }
-                                } else {
-                                    if (fieldValue !== "") {
-                                        storageArray[inArrayPos].value = fieldValue;
-                                    } else {
-                                        storageArray.splice(inArrayPos, 1);
-                                    }
-                                }
-                            } else {
-                                if (fieldValue !== "") {
-                                    if (isRequiredFrom && fieldValue !== "") {
-                                        var oldFieldNamePos = Object(_utils_getAnswerIndexInLocalStorage__WEBPACK_IMPORTED_MODULE_1__["getAnswerIndexInLocalStorage"])(internals, reqMoreEl.name);
-                                        if (oldFieldNamePos !== -1) {
-                                            storageArray.splice(oldFieldNamePos, 1);
-                                        }
-                                        storageArray.push({
-                                            field: reqMoreEl.name,
-                                            value: reqMoreEl.value.trim()
-                                        });
-                                    }
-                                    storageArray.push({
-                                        field: fieldEl.name,
-                                        value: fieldValue
-                                    });
-                                    if (isRequireMore) {
-                                        var elReqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
-                                        storageArray.push({
-                                            field: elReqFromEl.name,
-                                            value: elReqFromEl.value.trim()
-                                        });
-                                    }
-                                }
-                            }
-                            localStorage.setObject(internals.storageName, storageArray);
-                        }
-                        if (typeof questionObj.required !== "undefined") {
-                            fieldEl.required = true;
-                        }
-                    }
-                }
-            };
-        },
-        "./src/modules/messages.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "messages", (function() {
-                return messages;
-            }));
-            var messages = {
-                it: {
-                    loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Caricamento in corso...</div>',
-                    selectFirstOption: "Seleziona una risposta...",
-                    textareaPlaceholder: "Scrivi la tua risposta...",
-                    maxChoiceText: "RISPOSTE MAX",
-                    fieldErrorMessage: "&Egrave; necessario rispondere.",
-                    fieldErrorMessageMultiChoice: "Puoi scegliere da {{checksMin}} a {{checksMax}} risposte."
-                },
-                en: {
-                    loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Loading...</div>',
-                    selectFirstOption: "Select your answer...",
-                    textareaPlaceholder: "Write here your answer...",
-                    maxChoiceText: "ANSWERS MAX",
-                    fieldErrorMessage: "Answer is necessary.",
-                    fieldErrorMessageMultiChoice: "You can choose from {{checksMin}} to {{checksMax}} answers."
-                }
-            };
-        },
-        "./src/modules/options.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "options", (function() {
-                return options;
-            }));
-            var _optionsUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/optionsUtils.js");
-            var options = {
-                cssClasses: {
-                    checkbox: "form-check-input",
-                    default: "form-control",
-                    file: "form-control-file",
-                    label: "form-check-label",
-                    radio: "form-check-input",
-                    select: "form-control",
-                    textarea: "form-control"
-                },
-                fieldErrorFeedback: true,
-                formOptions: {
-                    beforeSend: [ _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.beforeSend ],
-                    getFormData: _optionsUtils__WEBPACK_IMPORTED_MODULE_0__["defaultCallbacksInOptions"].formOptions.getFormData
-                },
-                initAjaxOptions: {
-                    cache: "no-store",
-                    credentials: "same-origin",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json"
-                    },
-                    method: "GET",
-                    mode: "same-origin",
-                    redirect: "follow",
-                    timeout: 0
-                },
-                lang: "en",
-                templates: {
-                    fieldError: '<div class="surveyjs-field-error-message">{{fieldErrorMessage}}</div>',
-                    input: '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check" data-answer-index="{{answerIndex}}">' + "{{inputTagCode}}" + "{{labelTagCode}}" + "</div>",
-                    inputGroup: '<div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}">' + '<div class="input-group-prepend">' + '<div class="input-group-text form-check surveyjs-answer-{{answerType}}">' + '<input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" />' + '<label for="{{answerCode}}" class="surveyjs-label form-check-label">{{answerString}}</label>' + "</div>" + "</div>" + "{{relatedAnswerField}}" + "</div>",
-                    inputTag: '<input type="{{answerType}}" {{attrSubtype}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{validateIfFilled}} {{attrChecks}} {{attrRequiredFrom}} />',
-                    labelTag: '<label for="{{answerCode}}" class="surveyjs-label {{labelClass}}">{{answerString}}</label>',
-                    question: '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix">' + '<div class="surveyjs-question-header">Question {{questionNumber}}</div>' + '<div class="surveyjs-question-body">' + '<div class="surveyjs-question-text">{{questionText}}</div>' + '<div class="surveyjs-answers-box form-group clearfix">' + "{{answersHtml}}" + "{{fieldErrorTemplate}}" + "</div>" + "</div>" + "</div>",
-                    select: '<div class="surveyjs-single-answer surveyjs-answer-select" data-answer-index="{{answerIndex}}">' + "{{selectTagCode}}" + "</div>",
-                    selectTag: '<select id="{{answerCode}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}>' + "{{optionsHtml}}" + "</select>",
-                    textarea: '<div class="surveyjs-single-answer surveyjs-answer-textarea">' + '<textarea id="{{answerCode}}" data-answer-id="{{answerId}}" {{nestedAnswer}} name="surveyjs-answer-{{questionNumber}}" {{attrRequired}} class="surveyjs-textarea {{fieldClass}}" {{answerMaxlength}} rows="6" placeholder="{{answerPlaceholder}}"></textarea>' + "</div>"
-                },
-                useLocalStorage: true
-            };
-        },
-        "./src/modules/optionsUtils.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "defaultCallbacksInOptions", (function() {
-                return defaultCallbacksInOptions;
-            }));
-            var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/modules/helpers.js");
-            var _utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/modules/utils/getQuestionObject.js");
-            var defaultCallbacksInOptions = {
-                formOptions: {
-                    beforeSend: function beforeSend_surveyDefault(data) {
-                        var _this = this;
-                        var instance = this.formEl.formjs;
-                        var surveyContEl = this.formEl.closest("[data-surveyjs-container]");
-                        var fieldsList = Array.from(surveyContEl.querySelectorAll(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelectorSurvey"]));
-                        var fieldNameCheck = "", fieldTypeCheck = "";
-                        fieldsList.forEach((function(fieldEl) {
-                            var type = fieldEl.type, name = fieldEl.name;
-                            if (name === fieldNameCheck && type === fieldTypeCheck) {
-                                return;
-                            }
-                            if (!fieldEl.matches("[data-required-from]")) {
-                                fieldNameCheck = name;
-                                fieldTypeCheck = type;
-                            }
-                            var questionIdEl = fieldEl.closest("[data-question-id]");
-                            var questionId = questionIdEl ? questionIdEl.getAttribute("data-question-id") : "";
-                            var questionObj = Object(_utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_1__["getQuestionObject"])(instance.data, questionId);
-                            if (questionId !== "" && questionObj && typeof questionObj.required !== "undefined") {
-                                var isRequiredFrom = fieldEl.matches("[data-required-from]");
-                                var reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
-                                if (!isRequiredFrom || isRequiredFrom && reqMoreEl.checked) {
-                                    fieldEl.required = true;
-                                }
-                            }
-                        }));
-                        var fieldOptions = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["mergeObjects"])({}, instance.options.fieldOptions, {
-                            focusOnRelated: false
-                        });
-                        return new Promise((function(resolve) {
-                            _this.formEl.formjs.validateForm(fieldOptions).then((function(formRes) {
-                                if (!formRes.result) {
-                                    data.stopExecution = true;
-                                }
-                                resolve(data);
-                            }));
-                        }));
-                    },
-                    getFormData: function getFormData_surveyDefault() {
-                        var formEl = this.formEl;
-                        var instance = formEl.formjs;
-                        var fieldsList = Array.from(formEl.closest("[data-surveyjs-container]").querySelectorAll(_helpers__WEBPACK_IMPORTED_MODULE_0__["fieldsStringSelectorSurvey"]));
-                        var obj = {
-                            answers: [],
-                            id: instance.data.id
-                        };
-                        var fieldNameCheck = "", fieldTypeCheck = "";
-                        fieldsList.forEach((function(fieldEl) {
-                            var type = fieldEl.type, name = fieldEl.name;
-                            if (name === fieldNameCheck && type === fieldTypeCheck) {
-                                return;
-                            }
-                            if (!fieldEl.matches("[data-required-from]")) {
-                                fieldNameCheck = name;
-                                fieldTypeCheck = type;
-                            }
-                            var questionIdEl = fieldEl.closest("[data-question-id]"), questionId = questionIdEl ? questionIdEl.getAttribute("data-question-id") : "", fieldValue = fieldEl.value, qaObj = {
-                                question: questionId,
-                                answer: {
-                                    id_answer: [ fieldValue ]
-                                }
-                            };
-                            if (fieldEl.matches("[data-required-from]") || questionId === "" || Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["isEmptyObject"])(Object(_utils_getQuestionObject__WEBPACK_IMPORTED_MODULE_1__["getQuestionObject"])(instance.data, questionId))) {
-                                return;
-                            }
-                            if (fieldEl.matches("textarea")) {
-                                qaObj.answer.id_answer = [ "" ];
-                                qaObj.answer.text = fieldValue;
-                            }
-                            if (type === "radio") {
-                                var containerEl = fieldEl.closest("form") ? formEl : fieldEl.closest("[data-formjs-question]"), elem = containerEl.querySelector('[name="' + name + '"]:checked');
-                                if (elem) {
-                                    if (elem.matches("[data-require-more]")) {
-                                        qaObj.answer.attributes = formEl.querySelector('[data-required-from="#' + elem.id + '"]').value.trim();
-                                    }
-                                    if (elem.matches("[data-nested-index]")) {
-                                        qaObj.answer.attributes = elem.getAttribute("data-nested-index");
-                                    }
-                                    qaObj.answer.id_answer = [ elem.value.trim() ];
-                                } else {
-                                    qaObj.answer.id_answer = [ "" ];
-                                }
-                            }
-                            if (type === "checkbox" && fieldEl.matches("[data-checks]")) {
-                                qaObj.answer.id_answer = [];
-                                Array.from(formEl.querySelectorAll('[name="' + name + '"]:checked')).forEach((function(el) {
-                                    qaObj.answer.id_answer.push(el.value.trim());
-                                }));
-                            }
-                            obj.answers.push(qaObj);
-                        }));
-                        return obj;
-                    }
-                }
-            };
-        },
-        "./src/modules/utils/getAnswerIndexInLocalStorage.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "getAnswerIndexInLocalStorage", (function() {
-                return getAnswerIndexInLocalStorage;
-            }));
-            var getAnswerIndexInLocalStorage = function getAnswerIndexInLocalStorage(internals, fieldName) {
-                var multiChoiceValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
-                var lsSurvey = localStorage.getObject(internals.storageName);
-                if (lsSurvey) {
-                    var lsSurveyLength = lsSurvey.length;
-                    for (var ls = 0; ls < lsSurveyLength; ls++) {
-                        var lsItem = lsSurvey[ls];
-                        if (lsItem.field === fieldName) {
-                            if (multiChoiceValue) {
-                                if (lsItem.value !== multiChoiceValue) {
-                                    continue;
-                                }
-                            }
-                            return ls;
-                        }
-                    }
-                }
-                return -1;
-            };
-        },
-        "./src/modules/utils/getQuestionObject.js": function(module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, "getQuestionObject", (function() {
-                return getQuestionObject;
-            }));
-            var getQuestionObject = function getQuestionObject(data, questionId) {
-                var questions = data.questions, qLength = questions.length;
-                var obj = {};
-                for (var q = 0; q < qLength; q++) {
-                    var question = questions[q];
-                    if (question.id == questionId) {
-                        obj = question;
-                        break;
-                    }
-                }
-                return obj;
-            };
-        },
-        "formjs-plugin": function(module, exports) {
-            module.exports = __WEBPACK_EXTERNAL_MODULE_formjs_plugin__;
+        }), superClass && _setPrototypeOf(subClass, superClass);
+    }
+    function _getPrototypeOf(o) {
+        return (_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function(o) {
+            return o.__proto__ || Object.getPrototypeOf(o);
+        })(o);
+    }
+    function _setPrototypeOf(o, p) {
+        return (_setPrototypeOf = Object.setPrototypeOf || function(o, p) {
+            return o.__proto__ = p, o;
+        })(o, p);
+    }
+    function _isNativeReflectConstruct() {
+        if ("undefined" == typeof Reflect || !Reflect.construct) return !1;
+        if (Reflect.construct.sham) return !1;
+        if ("function" == typeof Proxy) return !0;
+        try {
+            return Date.prototype.toString.call(Reflect.construct(Date, [], (function() {}))), 
+            !0;
+        } catch (e) {
+            return !1;
         }
-    })["default"];
-}));
+    }
+    function _assertThisInitialized(self) {
+        if (void 0 === self) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        return self;
+    }
+    function _possibleConstructorReturn(self, call) {
+        return !call || "object" != typeof call && "function" != typeof call ? _assertThisInitialized(self) : call;
+    }
+    function _createSuper(Derived) {
+        var hasNativeReflectConstruct = _isNativeReflectConstruct();
+        return function() {
+            var result, Super = _getPrototypeOf(Derived);
+            if (hasNativeReflectConstruct) {
+                var NewTarget = _getPrototypeOf(this).constructor;
+                result = Reflect.construct(Super, arguments, NewTarget);
+            } else result = Super.apply(this, arguments);
+            return _possibleConstructorReturn(this, result);
+        };
+    }
+    function _superPropBase(object, property) {
+        for (;!Object.prototype.hasOwnProperty.call(object, property) && null !== (object = _getPrototypeOf(object)); ) ;
+        return object;
+    }
+    function _get(target, property, receiver) {
+        return (_get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get : function(target, property, receiver) {
+            var base = _superPropBase(target, property);
+            if (base) {
+                var desc = Object.getOwnPropertyDescriptor(base, property);
+                return desc.get ? desc.get.call(receiver) : desc.value;
+            }
+        })(target, property, receiver || target);
+    }
+    var ajaxCall = function() {
+        var timeoutTimer, url = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : location.href, options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
+        if (options.headers = new Headers(options.headers), options.timeout > 0) {
+            var controller = new AbortController, signal = controller.signal;
+            options.signal = signal, timeoutTimer = window.setTimeout((function() {
+                controller.abort();
+            }), options.timeout);
+        }
+        return fetch(url, options).then((function(response) {
+            return response.ok ? response.json() : Promise.reject(response);
+        })).catch((function(error) {
+            return Promise.reject(error);
+        })).finally((function() {
+            timeoutTimer && window.clearTimeout(timeoutTimer);
+        }));
+    }, appendDomStringToNode = function(HTMLstring, parentNode) {
+        var tmpEl = document.createElement("div");
+        tmpEl.innerHTML = HTMLstring, Array.from(tmpEl.childNodes).forEach((function(elem) {
+            parentNode.appendChild(elem);
+        }));
+    }, deepFreeze = function deepFreeze(obj) {
+        return Object.getOwnPropertyNames(obj).forEach((function(name) {
+            var prop = obj[name];
+            "object" === _typeof(prop) && null !== prop && deepFreeze(prop);
+        })), Object.freeze(obj);
+    }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isPlainObject = function(object) {
+        return "[object Object]" === Object.prototype.toString.call(object);
+    }, isEmptyObject = function(object) {
+        return isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length;
+    }, isFieldForChangeEvent = function(fieldEl) {
+        return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
+    }, mergeObjects = function mergeObjects() {
+        for (var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, i = 1; i < arguments.length; i++) {
+            var obj = arguments[i];
+            if (obj) for (var key in obj) {
+                var obj_isArray = Array.isArray(obj[key]), obj_isObject = isPlainObject(obj[key]);
+                obj.hasOwnProperty(key) && (obj_isArray ? (void 0 === out[key] && (out[key] = []), 
+                out[key] = out[key].concat(obj[key].slice(0))) : obj_isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
+            }
+        }
+        return out;
+    }, webStorage = function() {
+        var isAvailable = function() {
+            var mod = "check_storage";
+            try {
+                return localStorage.setItem(mod, mod), localStorage.removeItem(mod), !0;
+            } catch (e) {
+                return !1;
+            }
+        }();
+        return isAvailable && (Storage.prototype.setObject = function(key, value) {
+            this.setItem(key, JSON.stringify(value));
+        }, Storage.prototype.getObject = function(key) {
+            var value = this.getItem(key);
+            return value && JSON.parse(value);
+        }), {
+            isAvailable: isAvailable
+        };
+    }, messages = {
+        it: {
+            loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Caricamento in corso...</div>',
+            selectFirstOption: "Seleziona una risposta...",
+            textareaPlaceholder: "Scrivi la tua risposta...",
+            maxChoiceText: "RISPOSTE MAX",
+            fieldErrorMessage: "&Egrave; necessario rispondere.",
+            fieldErrorMessageMultiChoice: "Puoi scegliere da {{checksMin}} a {{checksMax}} risposte."
+        },
+        en: {
+            loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Loading...</div>',
+            selectFirstOption: "Select your answer...",
+            textareaPlaceholder: "Write here your answer...",
+            maxChoiceText: "ANSWERS MAX",
+            fieldErrorMessage: "Answer is necessary.",
+            fieldErrorMessageMultiChoice: "You can choose from {{checksMin}} to {{checksMax}} answers."
+        }
+    }, getQuestionObject = function(data, questionId) {
+        for (var questions = data.questions, qLength = questions.length, obj = {}, q = 0; q < qLength; q++) {
+            var question = questions[q];
+            if (question.id == questionId) {
+                obj = question;
+                break;
+            }
+        }
+        return obj;
+    }, defaultCallbacksInOptions = {
+        formOptions: {
+            beforeSend: function(data) {
+                var _this = this, instance = this.formEl.formjs, surveyContEl = this.formEl.closest("[data-surveyjs-container]"), fieldsList = Array.from(surveyContEl.querySelectorAll(fieldsStringSelectorSurvey)), fieldNameCheck = "", fieldTypeCheck = "";
+                fieldsList.forEach((function(fieldEl) {
+                    var type = fieldEl.type, name = fieldEl.name;
+                    if (name !== fieldNameCheck || type !== fieldTypeCheck) {
+                        fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
+                        var questionIdEl = fieldEl.closest("[data-question-id]"), questionId = questionIdEl ? questionIdEl.getAttribute("data-question-id") : "", questionObj = getQuestionObject(instance.data, questionId);
+                        if ("" !== questionId && questionObj && void 0 !== questionObj.required) {
+                            var isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
+                            (!isRequiredFrom || isRequiredFrom && reqMoreEl.checked) && (fieldEl.required = !0);
+                        }
+                    }
+                }));
+                var fieldOptions = mergeObjects({}, instance.options.fieldOptions, {
+                    focusOnRelated: !1
+                });
+                return new Promise((function(resolve) {
+                    _this.formEl.formjs.validateForm(fieldOptions).then((function(formRes) {
+                        formRes.result || (data.stopExecution = !0), resolve(data);
+                    }));
+                }));
+            },
+            getFormData: function() {
+                var formEl = this.formEl, instance = formEl.formjs, fieldsList = Array.from(formEl.closest("[data-surveyjs-container]").querySelectorAll(fieldsStringSelectorSurvey)), obj = {
+                    answers: [],
+                    id: instance.data.id
+                }, fieldNameCheck = "", fieldTypeCheck = "";
+                return fieldsList.forEach((function(fieldEl) {
+                    var type = fieldEl.type, name = fieldEl.name;
+                    if (name !== fieldNameCheck || type !== fieldTypeCheck) {
+                        fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
+                        var questionIdEl = fieldEl.closest("[data-question-id]"), questionId = questionIdEl ? questionIdEl.getAttribute("data-question-id") : "", fieldValue = fieldEl.value, qaObj = {
+                            question: questionId,
+                            answer: {
+                                id_answer: [ fieldValue ]
+                            }
+                        };
+                        if (!fieldEl.matches("[data-required-from]") && "" !== questionId && !isEmptyObject(getQuestionObject(instance.data, questionId))) {
+                            if (fieldEl.matches("textarea") && (qaObj.answer.id_answer = [ "" ], qaObj.answer.text = fieldValue), 
+                            "radio" === type) {
+                                var elem = (fieldEl.closest("form") ? formEl : fieldEl.closest("[data-formjs-question]")).querySelector('[name="' + name + '"]:checked');
+                                elem ? (elem.matches("[data-require-more]") && (qaObj.answer.attributes = formEl.querySelector('[data-required-from="#' + elem.id + '"]').value.trim()), 
+                                elem.matches("[data-nested-index]") && (qaObj.answer.attributes = elem.getAttribute("data-nested-index")), 
+                                qaObj.answer.id_answer = [ elem.value.trim() ]) : qaObj.answer.id_answer = [ "" ];
+                            }
+                            "checkbox" === type && fieldEl.matches("[data-checks]") && (qaObj.answer.id_answer = [], 
+                            Array.from(formEl.querySelectorAll('[name="' + name + '"]:checked')).forEach((function(el) {
+                                qaObj.answer.id_answer.push(el.value.trim());
+                            }))), obj.answers.push(qaObj);
+                        }
+                    }
+                })), obj;
+            }
+        }
+    }, options = {
+        cssClasses: {
+            checkbox: "form-check-input",
+            default: "form-control",
+            file: "form-control-file",
+            label: "form-check-label",
+            radio: "form-check-input",
+            select: "form-control",
+            textarea: "form-control"
+        },
+        fieldErrorFeedback: !0,
+        formOptions: {
+            beforeSend: [ defaultCallbacksInOptions.formOptions.beforeSend ],
+            getFormData: defaultCallbacksInOptions.formOptions.getFormData
+        },
+        initAjaxOptions: {
+            cache: "no-store",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+            method: "GET",
+            mode: "same-origin",
+            redirect: "follow",
+            timeout: 0
+        },
+        lang: "en",
+        templates: {
+            fieldError: '<div class="surveyjs-field-error-message">{{fieldErrorMessage}}</div>',
+            input: '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check" data-answer-index="{{answerIndex}}">{{inputTagCode}}{{labelTagCode}}</div>',
+            inputGroup: '<div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-answer-{{answerType}}"><input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" /><label for="{{answerCode}}" class="surveyjs-label form-check-label">{{answerString}}</label></div></div>{{relatedAnswerField}}</div>',
+            inputTag: '<input type="{{answerType}}" {{attrSubtype}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{validateIfFilled}} {{attrChecks}} {{attrRequiredFrom}} />',
+            labelTag: '<label for="{{answerCode}}" class="surveyjs-label {{labelClass}}">{{answerString}}</label>',
+            question: '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group clearfix">{{answersHtml}}{{fieldErrorTemplate}}</div></div></div>',
+            select: '<div class="surveyjs-single-answer surveyjs-answer-select" data-answer-index="{{answerIndex}}">{{selectTagCode}}</div>',
+            selectTag: '<select id="{{answerCode}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}>{{optionsHtml}}</select>',
+            textarea: '<div class="surveyjs-single-answer surveyjs-answer-textarea"><textarea id="{{answerCode}}" data-answer-id="{{answerId}}" {{nestedAnswer}} name="surveyjs-answer-{{questionNumber}}" {{attrRequired}} class="surveyjs-textarea {{fieldClass}}" {{answerMaxlength}} rows="6" placeholder="{{answerPlaceholder}}"></textarea></div>'
+        },
+        useLocalStorage: !0
+    }, internals = {
+        storageArray: [],
+        storageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]"
+    }, getAnswerIndexInLocalStorage = function(internals, fieldName) {
+        var multiChoiceValue = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : "", lsSurvey = localStorage.getObject(internals.storageName);
+        if (lsSurvey) for (var lsSurveyLength = lsSurvey.length, ls = 0; ls < lsSurveyLength; ls++) {
+            var lsItem = lsSurvey[ls];
+            if (lsItem.field === fieldName) {
+                if (multiChoiceValue && lsItem.value !== multiChoiceValue) continue;
+                return ls;
+            }
+        }
+        return -1;
+    }, callbackFns = {
+        validation: function(event) {
+            var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[1] : "id-not-found", isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), questionObj = getQuestionObject(self.data, questionId);
+            if (isEmptyObject(questionObj)) return !0;
+            if (isFieldForChangeEventBoolean && "change" === eventName || !isFieldForChangeEventBoolean && "change" !== eventName) {
+                if (self.options.useLocalStorage && !fieldEl.matches("[data-exclude-storage]")) {
+                    var inArrayPos = getAnswerIndexInLocalStorage(internals, fieldEl.name, !!isMultiChoice && fieldValue), inArrayRequireMorePos = getAnswerIndexInLocalStorage(internals, fieldEl.name + "-more"), storageArray = internals.storageArray;
+                    if (isRequireMore || isRequiredFrom || -1 === inArrayRequireMorePos || storageArray.splice(inArrayRequireMorePos, 1), 
+                    -1 !== inArrayPos) isMultiChoice ? fieldEl.checked || storageArray[inArrayPos].value !== fieldValue ? storageArray.push({
+                        field: fieldEl.name,
+                        value: fieldValue
+                    }) : storageArray.splice(inArrayPos, 1) : "" !== fieldValue ? storageArray[inArrayPos].value = fieldValue : storageArray.splice(inArrayPos, 1); else if ("" !== fieldValue) {
+                        if (isRequiredFrom && "" !== fieldValue) {
+                            var oldFieldNamePos = getAnswerIndexInLocalStorage(internals, reqMoreEl.name);
+                            -1 !== oldFieldNamePos && storageArray.splice(oldFieldNamePos, 1), storageArray.push({
+                                field: reqMoreEl.name,
+                                value: reqMoreEl.value.trim()
+                            });
+                        }
+                        if (storageArray.push({
+                            field: fieldEl.name,
+                            value: fieldValue
+                        }), isRequireMore) {
+                            var elReqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
+                            storageArray.push({
+                                field: elReqFromEl.name,
+                                value: elReqFromEl.value.trim()
+                            });
+                        }
+                    }
+                    localStorage.setObject(internals.storageName, storageArray);
+                }
+                void 0 !== questionObj.required && (fieldEl.required = !0);
+            }
+        }
+    }, generateOptionTags = function() {
+        var optionsList = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : [], options = arguments.length > 1 ? arguments[1] : void 0, optionsHtml = "" === optionsList[0].id ? "" : '<option value="">' + options.selectFirstOption + "</option>";
+        return optionsList.forEach((function(opt) {
+            optionsHtml += '<option value="' + opt.id + '" data-answer-id="' + opt.id + '">' + opt.answer + "</option>";
+        })), optionsHtml;
+    }, attribute = function(options, data) {
+        var objData = data.objData, aHtml = options.templates.inputGroup, attr = data.answer.attribute, attributeIsArray = Array.isArray(attr), relatedAnswerField = attributeIsArray ? options.templates.selectTag : options.templates.inputTag;
+        return objData.fieldClass = options.cssClasses.default, attributeIsArray && (objData.fieldClass = options.cssClasses.select, 
+        objData.optionsHtml = generateOptionTags(attr, options)), {
+            aHtml: aHtml,
+            relatedAnswerField: relatedAnswerField,
+            objData: objData
+        };
+    }, input = function(options, data) {
+        var objData = data.objData, aHtml = data.beforeCode + options.templates.input + data.afterCode;
+        return "checkbox" !== objData.answerType && "radio" !== objData.answerType && (objData.nestedAnswer += ' class="' + objData.fieldClass + '"'), 
+        {
+            aHtml: aHtml,
+            objData: objData
+        };
+    }, nested = function(options, data) {
+        var objData = data.objData, labelForNested = options.templates.labelTag;
+        return labelForNested = (labelForNested = (labelForNested = labelForNested.replace(/{{answerCode}}/g, objData.answerCode)).replace(/{{labelClass}}/g, options.cssClasses.label + " surveyjs-field-indent-0")).replace(/{{answerString}}/g, data.answer.answer), 
+        {
+            aHtml: data.beforeCode + '<div class="surveyjs-' + objData.answerType + '">' + labelForNested + "</div>" + data.afterCode,
+            objData: objData
+        };
+    }, select = function(options, data) {
+        var objData = data.objData, aHtml = data.beforeCode + options.templates.select + data.afterCode;
+        return objData.optionsHtml = generateOptionTags(data.obj.answers, options), {
+            aHtml: aHtml,
+            objData: objData
+        };
+    }, textarea = function(options, data) {
+        var objData = data.objData, aHtml = options.templates.textarea;
+        return objData.answerPlaceholder = data.answer.placeholder || options.textareaPlaceholder, 
+        {
+            aHtml: aHtml,
+            objData: objData
+        };
+    }, generateFieldHTML = {
+        attribute: attribute,
+        input: input,
+        nested: nested,
+        select: select,
+        textarea: textarea
+    }, replaceTemplateStrings = function(options, fieldData, objData) {
+        if ("" !== objData.optionsHtml && (fieldData.aHtml = fieldData.aHtml.replace(/{{selectTagCode}}/g, options.templates.selectTag)), 
+        fieldData.relatedAnswerField) {
+            var relatedAnswerKeys = {
+                answerCode: "",
+                answerType: "text",
+                fieldClass: objData.fieldClass,
+                answerIdValue: "",
+                attrRequired: "",
+                addMoreName: "-more",
+                attrRequiredFrom: 'data-required-from="#' + objData.answerCode + '"'
+            };
+            for (var reKey in relatedAnswerKeys) {
+                var regexStrRe = new RegExp("{{" + reKey + "}}", "g");
+                fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace(regexStrRe, relatedAnswerKeys[reKey]);
+            }
+            fieldData.aHtml = fieldData.aHtml.replace(/{{relatedAnswerField}}/g, fieldData.relatedAnswerField);
+        } else fieldData.aHtml = fieldData.aHtml.replace(/{{addMoreName}}/g, ""), fieldData.aHtml = fieldData.aHtml.replace(/{{attrRequiredFrom}}/g, "");
+        for (var key in objData) {
+            var regexStr = new RegExp("{{" + key + "}}", "g");
+            fieldData.aHtml = fieldData.aHtml.replace(regexStr, objData[key]);
+        }
+        return fieldData.aHtml;
+    }, progIds = [], iterateAnswers = function iterateAnswers(formEl, options, obj, qID, qIdx, attrReq) {
+        qID = obj.id ? obj.id : qID || 0;
+        var list = Array.isArray(obj) ? obj : obj.answers, listL = list.length, i = qIdx || 0, aLoopHtml = "", needsBinding = "hidden-privacy" === obj.question;
+        list[0].sort && list.sort((function(a, b) {
+            return a.sort > b.sort;
+        }));
+        for (var _loop = function(_a) {
+            var answer = list[_a], aNum = _a + 1, qNum = i + 1, aType = answer.type, aId = answer.id, progIdsLength = progIds.length, progIdsJoined = progIdsLength > 0 ? progIds.join("-") : "", fieldData = {
+                aHtml: ""
+            }, objData = {
+                labelTagCode: "checkbox" === aType || "radio" === aType ? options.templates.labelTag : "",
+                answerId: aId,
+                answerIdValue: "text" === aType ? "" : aId,
+                answerIndex: aNum,
+                answerName: "surveyjs-answer-" + qNum,
+                answerPlaceholder: "",
+                answerMaxlength: answer.maxlength ? 'maxlength="' + answer.maxlength + '"' : "",
+                answerString: "string" == typeof answer.answer ? answer.answer : "",
+                answerType: aType,
+                attrRequired: void 0 !== obj.required ? "required" : void 0 !== attrReq ? attrReq : "",
+                fieldClass: function() {
+                    var aType = "option" === answer.type ? "select" : answer.type;
+                    return a = _a, options.cssClasses[aType] || options.cssClasses.default;
+                }(),
+                nestedAnswer: "" !== progIdsJoined ? 'data-nested-index="' + aNum + '"' : "",
+                optionsHtml: "",
+                progIdsJoined: progIdsJoined,
+                questionNumber: qNum,
+                answerCode: ("option" === aType ? "select" : aType) + "-" + qID + "-" + (aId || 0) + "-" + qNum + ("" !== progIdsJoined ? "-" + progIdsJoined : "") + "-" + aNum,
+                attrChecks: obj.checks ? 'data-checks="' + obj.checks + '"' : "",
+                attrSubtype: answer.subtype ? 'data-subtype="' + answer.subtype + '"' : "",
+                validateIfFilled: void 0 !== obj.validateIfFilled ? "data-validate-if-filled" : ""
+            };
+            if (needsBinding) {
+                var boundedFieldEl = formEl.closest("[data-surveyjs-container]").querySelectorAll('[data-name="bind-surveyjs-answer"]')[_a], fieldProps = {
+                    id: objData.answerCode,
+                    name: objData.answerName,
+                    type: aType,
+                    value: objData.answerId
+                };
+                for (var key in void 0 !== obj.required && (fieldProps.required = !0), fieldProps) boundedFieldEl[key] = fieldProps[key];
+                return boundedFieldEl.setAttribute("data-answer-id", objData.answerId), boundedFieldEl.closest("div").querySelector("label").setAttribute("for", objData.answerCode), 
+                boundedFieldEl.closest("div").querySelector("label span").textContent = answer.answer, 
+                a = _a, "continue";
+            }
+            if ("string" == typeof answer.answer || "number" == typeof answer.answer) {
+                var surveyFieldType = answer.attribute ? "attribute" : answer.nested ? "nested" : "option" === aType ? "select" : aType, data = {
+                    answer: answer,
+                    objData: objData,
+                    beforeCode: progIdsLength > 0 && 0 === _a ? '<div class="surveyjs-field-indent">' : "",
+                    afterCode: progIdsLength > 0 && _a === listL - 1 ? "</div>" : "",
+                    obj: obj
+                };
+                if (void 0 === generateFieldHTML[surveyFieldType] && (surveyFieldType = "input"), 
+                objData = (fieldData = generateFieldHTML[surveyFieldType](options, data)).objData, 
+                answer.nested) return progIds.push(aNum), aLoopHtml += fieldData.aHtml, aLoopHtml += iterateAnswers(formEl, options, answer.nested, qID, i, objData.attrRequired), 
+                a = _a, "continue";
+                progIdsLength > 0 && _a === listL - 1 && progIds.pop();
+            }
+            fieldData.aHtml = replaceTemplateStrings(options, fieldData, objData), aLoopHtml += fieldData.aHtml, 
+            "option" === aType && (_a += obj.answers.length), a = _a;
+        }, a = 0; a < listL; a++) _loop(a);
+        return aLoopHtml;
+    }, generateQAcode = function(formEl, options) {
+        for (var questionsList = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : [], qaData = questionsList[0].sort ? questionsList.sort((function(a, b) {
+            return a.sort > b.sort;
+        })) : questionsList, qaDataLength = qaData.length, qaCodeAll = "", i = 0; i < qaDataLength; i++) {
+            var item = qaData[i], maxChoice = item.checks ? JSON.parse(item.checks) : "", checksMin = maxChoice.length > 0 ? maxChoice[0] : "", checksMax = maxChoice.length > 0 ? maxChoice[1] : "", aHtml = "", qaHtml = options.templates.question;
+            if (aHtml += iterateAnswers(formEl, options, item, item.id, i), "hidden-privacy" === item.question) {
+                var bindAnswerEl = formEl.closest("[data-surveyjs-container]").querySelector('[data-name="bind-surveyjs-answer"]');
+                if (bindAnswerEl) {
+                    bindAnswerEl.closest("[data-formjs-question]").setAttribute("data-question-id", item.id);
+                    continue;
+                }
+            }
+            if (qaHtml = (qaHtml = (qaHtml = (qaHtml = (qaHtml = qaHtml.replace(/{{questionId}}/g, item.id)).replace(/{{questionNumber}}/g, i + 1)).replace(/{{questionText}}/g, item.question + ("" !== maxChoice ? " (" + checksMax + " " + options.maxChoiceText + ")" : ""))).replace(/{{answersHtml}}/g, aHtml)).replace(/{{fieldErrorTemplate}}/g, options.fieldErrorFeedback ? options.templates.fieldError : ""), 
+            options.fieldErrorFeedback && -1 !== options.templates.fieldError.indexOf("{{fieldErrorMessage}}")) {
+                var message = "" !== maxChoice ? options.fieldErrorMessageMultiChoice : options.fieldErrorMessage;
+                qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, message).replace(/{{checksMin}}/g, checksMin).replace(/{{checksMax}}/g, checksMax);
+            }
+            qaCodeAll += qaHtml;
+        }
+        return qaCodeAll;
+    }, populateAnswers = function(formEl, internals) {
+        var LS = localStorage.getObject(internals.storageName);
+        if (LS) {
+            var surveyContEl = formEl.closest("[data-surveyjs-container]");
+            internals.storageArray = LS, LS.forEach((function(item) {
+                var fieldFirst = surveyContEl.querySelector('[name="' + item.field + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst;
+                isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
+            }));
+        }
+    }, buildSurvey = function(formEl, options, internals, data) {
+        var self = formEl.formjs, formName = formEl.getAttribute("name") || "", surveyContEl = formEl.closest("[data-surveyjs-container]");
+        self.internals.storageName = internals.storageName.replace(/{{surveyId}}/g, data.id), 
+        self.internals.storageName = internals.storageName.replace(/{{surveyFormName}}/g, formName);
+        var checkData = function(data) {
+            return void 0 !== data ? data : "";
+        };
+        surveyContEl.querySelector("[data-surveyjs-title]") && (surveyContEl.querySelector("[data-surveyjs-title]").textContent = checkData(data.title)), 
+        surveyContEl.querySelector("[data-surveyjs-description]") && (surveyContEl.querySelector("[data-surveyjs-description]").textContent = checkData(data.description));
+        var qaHtmlAll = generateQAcode(formEl, options, data.questions);
+        appendDomStringToNode(qaHtmlAll, formEl.querySelector("[data-surveyjs-body]")), 
+        options.useLocalStorage && populateAnswers(formEl, self.internals);
+        var loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
+        loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
+    }, destroy = function(formEl) {
+        formEl.formjs.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
+            var useCapturing = "blur" === eventName;
+            formEl.removeEventListener(eventName, callbackFns.validation, useCapturing);
+        }));
+    }, version = "3.0.0", Survey = function(_Form) {
+        _inherits(Survey, _Form);
+        var _super = _createSuper(Survey);
+        function Survey(formEl) {
+            var _this, optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
+            if (_classCallCheck(this, Survey), !optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
+            var customLang = "string" == typeof optionsObj.lang && optionsObj.lang.toLowerCase(), langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang, options = mergeObjects({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
+            return -1 !== options.templates.input.indexOf("{{inputTagCode}}") && (options.templates.input = options.templates.input.replace(/{{inputTagCode}}/g, options.templates.inputTag)), 
+            options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label), 
+            webStorage().isAvailable || (options.useLocalStorage = !1), (_this = _super.call(this, formEl, options)).internals = internals, 
+            _this.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
+                var useCapturing = "blur" === eventName;
+                formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
+            })), formEl.addEventListener("fjs.form:submit", (function(event) {
+                event.data.then((function() {
+                    options.useLocalStorage && localStorage.removeItem(_this.internals.storageName);
+                }));
+            })), _this;
+        }
+        return _createClass(Survey, [ {
+            key: "destroy",
+            value: function() {
+                destroy(this.formEl), _get(_getPrototypeOf(Survey.prototype), "destroy", this).call(this);
+            }
+        }, {
+            key: "init",
+            value: function() {
+                var _this2 = this, self = this, formEl = self.formEl, options = self.options;
+                return formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", options.loadingBox), 
+                ajaxCall(options.url, options.initAjaxOptions).then((function(response) {
+                    return "success" === response.status.toLowerCase() && response.data.questions && response.data.questions.length > 0 ? new Promise((function(resolve) {
+                        buildSurvey(formEl, options, self.internals, response.data), _get(_getPrototypeOf(Survey.prototype), "init", _this2).call(_this2).then((function() {
+                            self.isInitialized = !0, self.data = response.data, deepFreeze(self.data), formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
+                            resolve(response);
+                        }));
+                    })) : Promise.reject(response);
+                }));
+            }
+        } ], [ {
+            key: "addLanguage",
+            value: function(langString, langObject) {
+                var langValue = langString.toLowerCase();
+                Survey.prototype.messages[langValue] = mergeObjects({}, Survey.prototype.messages[langValue], langObject);
+            }
+        }, {
+            key: "setOptions",
+            value: function(optionsObj) {
+                Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);
+            }
+        } ]), Survey;
+    }(Form__default.default);
+    return Survey.prototype.isInitialized = !1, Survey.prototype.messages = messages, 
+    Survey.prototype.options = options, Survey.prototype.version = version, Survey;
+}(Form);
