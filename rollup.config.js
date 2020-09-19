@@ -58,6 +58,46 @@ optionsESM = {
     ]
 },
 
+optionsSYS = {
+    input: 'src/index.js',
+    external: ['formjs-plugin'],
+    output: [
+
+        // SYSTEMJS TRANSPILED SCRIPT
+        {
+            file: `dist/${libraryFileName}-systemjs.js`,
+            format: 'system',
+            sourcemap: false,
+            plugins: [
+                terser({
+                    mangle: false,
+                    output: {
+                        beautify: true,
+                        preamble: initialComment
+                    }
+                })
+            ]
+        },
+
+        // SYSTEMJS TRANSPILED SCRIPT MINIFIED
+        {
+            file: `dist/${libraryFileName}-systemjs.min.js`,
+            format: 'system',
+            sourcemap: true,
+            plugins: [
+                terser({
+                    output: {
+                        beautify: false,
+                        preamble: initialComment
+                    }
+                })
+            ]
+        }
+
+    ],
+    plugins: [ nodeResolve(), babel({babelHelpers: 'bundled'}), postcss(postCssOptions) ]
+},
+
 optionsIIFE = {
     input: 'src/index.js',
     external: ['formjs-plugin'],
@@ -108,4 +148,4 @@ optionsIIFE = {
 
 ;
 
-export default [ optionsESM, optionsIIFE ]
+export default [ optionsESM, optionsSYS, optionsIIFE ]
