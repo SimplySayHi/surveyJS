@@ -6,8 +6,9 @@ export const defaultCallbacksInOptions = {
     formOptions: {
 
         beforeSend: function beforeSend_surveyDefault( data ){
-            const instance = this.formEl.formjs;
-            const surveyContEl = this.formEl.closest('[data-surveyjs-container]');
+            let isHacking = false;
+            const instance = this;
+            const surveyContEl = instance.formEl.closest('[data-surveyjs-container]');
             const fieldsList = Array.from( surveyContEl.querySelectorAll(fieldsStringSelectorSurvey) );
 
             let fieldNameCheck = '',
@@ -38,6 +39,10 @@ export const defaultCallbacksInOptions = {
                     const isRequiredFrom = fieldEl.matches('[data-required-from]');
                     const reqMoreEl = document.querySelector(fieldEl.getAttribute('data-required-from'));
                     if( !isRequiredFrom || ( isRequiredFrom && reqMoreEl.checked ) ){
+                        if( !fieldEl.required ){
+                            // FIELD IS NOT REQUIRED BUT IT SHOULD => USER HACKED FIELD
+                            isHacking = true;
+                        }
                         fieldEl.required = true;
                     }
                     
@@ -45,15 +50,17 @@ export const defaultCallbacksInOptions = {
 
             });
 
-            const fieldOptions = mergeObjects({}, instance.options.fieldOptions, {focusOnRelated: false});
-            return new Promise(resolve => {
-                this.formEl.formjs.validateForm( fieldOptions ).then(formRes => {
-                    if( !formRes.result ){
+            if( isHacking ){
+                // USER IS HACKING FORM ( REMOVING ATTRIBUTE required FROM A FIELD )
+                // => FORCE VALIDATION TO SHOW ERROR AND STOP SUBMIT
+                const fieldOptions = mergeObjects({}, instance.options.fieldOptions, {focusOnRelated: false});
+                return instance.validateForm( fieldOptions )
+                    .then(formRes => {
                         data.stopExecution = true;
-                    }
-                    resolve( data );
-                });
-            });
+                        return data;
+                    });
+            }
+            return data;
         },
 
         getFormData: function getFormData_surveyDefault(){

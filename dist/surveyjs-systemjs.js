@@ -110,27 +110,35 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 tmpEl.innerHTML = HTMLstring, Array.from(tmpEl.childNodes).forEach((function(elem) {
                     parentNode.appendChild(elem);
                 }));
+            }, customEvents = {
+                init: "sjs:init"
             }, deepFreeze = function deepFreeze(obj) {
                 return Object.getOwnPropertyNames(obj).forEach((function(name) {
                     var prop = obj[name];
                     "object" === _typeof(prop) && null !== prop && deepFreeze(prop);
                 })), Object.freeze(obj);
-            }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isPlainObject = function(object) {
+            }, isPlainObject = function(object) {
                 return "[object Object]" === Object.prototype.toString.call(object);
-            }, isEmptyObject = function(object) {
+            }, mergeObjects = function mergeObjects() {
+                var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+                return Array.from(arguments).slice(1).filter((function(arg) {
+                    return !!arg;
+                })).forEach((function(arg) {
+                    Object.keys(arg).forEach((function(key) {
+                        Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+                    }));
+                })), out;
+            }, dispatchCustomEvent = function(elem, eventName) {
+                var data = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {}, eventOptions = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {};
+                eventOptions = mergeObjects({}, {
+                    bubbles: !0
+                }, eventOptions);
+                var eventObj = new Event(eventName, eventOptions);
+                eventObj.data = data, elem.dispatchEvent(eventObj);
+            }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isEmptyObject = function(object) {
                 return isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length;
             }, isFieldForChangeEvent = function(fieldEl) {
                 return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
-            }, mergeObjects = function mergeObjects() {
-                for (var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}, i = 1; i < arguments.length; i++) {
-                    var obj = arguments[i];
-                    if (obj) for (var key in obj) {
-                        var obj_isArray = Array.isArray(obj[key]), obj_isObject = isPlainObject(obj[key]);
-                        obj.hasOwnProperty(key) && (obj_isArray ? (void 0 === out[key] && (out[key] = []), 
-                        out[key] = out[key].concat(obj[key].slice(0))) : obj_isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-                    }
-                }
-                return out;
             }, webStorage = function() {
                 var isAvailable = function() {
                     var mod = "check_storage";
@@ -177,26 +185,27 @@ System.register([ "formjs-plugin" ], (function(exports) {
             }, defaultCallbacksInOptions = {
                 formOptions: {
                     beforeSend: function(data) {
-                        var _this = this, instance = this.formEl.formjs, surveyContEl = this.formEl.closest("[data-surveyjs-container]"), fieldsList = Array.from(surveyContEl.querySelectorAll(fieldsStringSelectorSurvey)), fieldNameCheck = "", fieldTypeCheck = "";
-                        fieldsList.forEach((function(fieldEl) {
+                        var isHacking = !1, instance = this, surveyContEl = instance.formEl.closest("[data-surveyjs-container]"), fieldsList = Array.from(surveyContEl.querySelectorAll(fieldsStringSelectorSurvey)), fieldNameCheck = "", fieldTypeCheck = "";
+                        if (fieldsList.forEach((function(fieldEl) {
                             var type = fieldEl.type, name = fieldEl.name;
                             if (name !== fieldNameCheck || type !== fieldTypeCheck) {
                                 fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
                                 var questionIdEl = fieldEl.closest("[data-question-id]"), questionId = questionIdEl ? questionIdEl.getAttribute("data-question-id") : "", questionObj = getQuestionObject(instance.data, questionId);
                                 if ("" !== questionId && questionObj && void 0 !== questionObj.required) {
                                     var isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
-                                    (!isRequiredFrom || isRequiredFrom && reqMoreEl.checked) && (fieldEl.required = !0);
+                                    (!isRequiredFrom || isRequiredFrom && reqMoreEl.checked) && (fieldEl.required || (isHacking = !0), 
+                                    fieldEl.required = !0);
                                 }
                             }
-                        }));
-                        var fieldOptions = mergeObjects({}, instance.options.fieldOptions, {
-                            focusOnRelated: !1
-                        });
-                        return new Promise((function(resolve) {
-                            _this.formEl.formjs.validateForm(fieldOptions).then((function(formRes) {
-                                formRes.result || (data.stopExecution = !0), resolve(data);
+                        })), isHacking) {
+                            var fieldOptions = mergeObjects({}, instance.options.fieldOptions, {
+                                focusOnRelated: !1
+                            });
+                            return instance.validateForm(fieldOptions).then((function(formRes) {
+                                return data.stopExecution = !0, data;
                             }));
-                        }));
+                        }
+                        return data;
                     },
                     getFormData: function() {
                         var formEl = this.formEl, instance = formEl.formjs, fieldsList = Array.from(formEl.closest("[data-surveyjs-container]").querySelectorAll(fieldsStringSelectorSurvey)), obj = {
@@ -502,39 +511,36 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 _inherits(Survey, _Form);
                 var _super = _createSuper(Survey);
                 function Survey(formEl) {
-                    var _this, optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
+                    var _thisSuper, _this, optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
                     if (_classCallCheck(this, Survey), !optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
                     var customLang = "string" == typeof optionsObj.lang && optionsObj.lang.toLowerCase(), langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang, options = mergeObjects({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
-                    return -1 !== options.templates.input.indexOf("{{inputTagCode}}") && (options.templates.input = options.templates.input.replace(/{{inputTagCode}}/g, options.templates.inputTag)), 
+                    -1 !== options.templates.input.indexOf("{{inputTagCode}}") && (options.templates.input = options.templates.input.replace(/{{inputTagCode}}/g, options.templates.inputTag)), 
                     options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label), 
-                    webStorage().isAvailable || (options.useLocalStorage = !1), (_this = _super.call(this, formEl, options)).internals = internals, 
-                    _this.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
+                    webStorage().isAvailable || (options.useLocalStorage = !1);
+                    var self = _assertThisInitialized(_this = _super.call(this, formEl, options));
+                    self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                         var useCapturing = "blur" === eventName;
-                        formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
-                    })), formEl.addEventListener("fjs.form:submit", (function(event) {
+                        self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
+                    })), self.formEl.addEventListener("fjs.form:submit", (function(event) {
                         event.data.then((function() {
-                            options.useLocalStorage && localStorage.removeItem(_this.internals.storageName);
+                            self.options.useLocalStorage && localStorage.removeItem(self.internals.storageName);
                         }));
-                    })), _this;
+                    })), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
+                    var retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions).then((function(response) {
+                        return "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise((function(resolve) {
+                            response.data.questions && response.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, response.data), 
+                            _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Survey.prototype)), "init", _thisSuper).call(_thisSuper).then((function() {
+                                self.isInitialized = !0, self.data = response.data, deepFreeze(self.data), self.formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
+                                resolve(response);
+                            }))) : resolve(response);
+                        }));
+                    }));
+                    return dispatchCustomEvent(self.formEl, customEvents.init, retrieveSurvey), _this;
                 }
                 return _createClass(Survey, [ {
                     key: "destroy",
                     value: function() {
                         destroy(this.formEl), _get(_getPrototypeOf(Survey.prototype), "destroy", this).call(this);
-                    }
-                }, {
-                    key: "init",
-                    value: function() {
-                        var _this2 = this, self = this, formEl = self.formEl, options = self.options;
-                        return formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", options.loadingBox), 
-                        ajaxCall(options.url, options.initAjaxOptions).then((function(response) {
-                            return "success" === response.status.toLowerCase() && response.data.questions && response.data.questions.length > 0 ? new Promise((function(resolve) {
-                                buildSurvey(formEl, options, self.internals, response.data), _get(_getPrototypeOf(Survey.prototype), "init", _this2).call(_this2).then((function() {
-                                    self.isInitialized = !0, self.data = response.data, deepFreeze(self.data), formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
-                                    resolve(response);
-                                }));
-                            })) : Promise.reject(response);
-                        }));
                     }
                 } ], [ {
                     key: "addLanguage",

@@ -1,20 +1,16 @@
 /* surveyJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 import Form from "formjs-plugin";
 
-const deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
+const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
     const prop = obj[name];
     "object" == typeof prop && null !== prop && deepFreeze(prop);
-}), Object.freeze(obj)), fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), isEmptyObject = object => isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length, mergeObjects = function(out = {}) {
-    for (let i = 1; i < arguments.length; i++) {
-        const obj = arguments[i];
-        if (obj) for (let key in obj) {
-            const obj_isArray = Array.isArray(obj[key]), obj_isObject = isPlainObject(obj[key]);
-            obj.hasOwnProperty(key) && (obj_isArray ? (void 0 === out[key] && (out[key] = []), 
-            out[key] = out[key].concat(obj[key].slice(0))) : obj_isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-        }
-    }
-    return out;
-}, webStorage = () => {
+}), Object.freeze(obj)), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
+    return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
+        Object.keys(arg).forEach(key => {
+            Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+        });
+    }), out;
+}, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isEmptyObject = object => isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length, webStorage = () => {
     const isAvailable = (() => {
         const mod = "check_storage";
         try {
@@ -45,26 +41,27 @@ const deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
 }, defaultCallbacksInOptions = {
     formOptions: {
         beforeSend: function(data) {
-            const instance = this.formEl.formjs, surveyContEl = this.formEl.closest("[data-surveyjs-container]"), fieldsList = Array.from(surveyContEl.querySelectorAll(fieldsStringSelectorSurvey));
+            let isHacking = !1;
+            const instance = this, surveyContEl = instance.formEl.closest("[data-surveyjs-container]"), fieldsList = Array.from(surveyContEl.querySelectorAll(fieldsStringSelectorSurvey));
             let fieldNameCheck = "", fieldTypeCheck = "";
-            fieldsList.forEach(fieldEl => {
+            if (fieldsList.forEach(fieldEl => {
                 const type = fieldEl.type, name = fieldEl.name;
                 if (name === fieldNameCheck && type === fieldTypeCheck) return;
                 fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
                 const questionIdEl = fieldEl.closest("[data-question-id]"), questionId = questionIdEl ? questionIdEl.getAttribute("data-question-id") : "", questionObj = getQuestionObject(instance.data, questionId);
                 if ("" !== questionId && questionObj && void 0 !== questionObj.required) {
                     const isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
-                    (!isRequiredFrom || isRequiredFrom && reqMoreEl.checked) && (fieldEl.required = !0);
+                    (!isRequiredFrom || isRequiredFrom && reqMoreEl.checked) && (fieldEl.required || (isHacking = !0), 
+                    fieldEl.required = !0);
                 }
-            });
-            const fieldOptions = mergeObjects({}, instance.options.fieldOptions, {
-                focusOnRelated: !1
-            });
-            return new Promise(resolve => {
-                this.formEl.formjs.validateForm(fieldOptions).then(formRes => {
-                    formRes.result || (data.stopExecution = !0), resolve(data);
+            }), isHacking) {
+                const fieldOptions = mergeObjects({}, instance.options.fieldOptions, {
+                    focusOnRelated: !1
                 });
-            });
+                return instance.validateForm(fieldOptions).then(formRes => (data.stopExecution = !0, 
+                data));
+            }
+            return data;
         },
         getFormData: function() {
             const formEl = this.formEl, instance = formEl.formjs, fieldsList = Array.from(formEl.closest("[data-surveyjs-container]").querySelectorAll(fieldsStringSelectorSurvey)), obj = {
@@ -385,27 +382,17 @@ class Survey extends Form {
         const customLang = "string" == typeof optionsObj.lang && optionsObj.lang.toLowerCase(), langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang, options = mergeObjects({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
         -1 !== options.templates.input.indexOf("{{inputTagCode}}") && (options.templates.input = options.templates.input.replace(/{{inputTagCode}}/g, options.templates.inputTag)), 
         options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label), 
-        webStorage().isAvailable || (options.useLocalStorage = !1), super(formEl, options), 
-        this.internals = internals, this.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
+        webStorage().isAvailable || (options.useLocalStorage = !1), super(formEl, options);
+        const self = this;
+        self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
             const useCapturing = "blur" === eventName;
-            formEl.addEventListener(eventName, callbackFns_validation, useCapturing);
-        }), formEl.addEventListener("fjs.form:submit", event => {
+            self.formEl.addEventListener(eventName, callbackFns_validation, useCapturing);
+        }), self.formEl.addEventListener("fjs.form:submit", event => {
             event.data.then(() => {
-                options.useLocalStorage && localStorage.removeItem(this.internals.storageName);
+                self.options.useLocalStorage && localStorage.removeItem(self.internals.storageName);
             });
-        });
-    }
-    destroy() {
-        var formEl;
-        (formEl = this.formEl).formjs.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
-            const useCapturing = "blur" === eventName;
-            formEl.removeEventListener(eventName, callbackFns_validation, useCapturing);
-        }), super.destroy();
-    }
-    init() {
-        const self = this, formEl = self.formEl, options = self.options;
-        return formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", options.loadingBox), 
-        ((url = location.href, options = {}) => {
+        }), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
+        const retrieveSurvey = ((url = location.href, options = {}) => {
             let timeoutTimer;
             if (options.headers = new Headers(options.headers), options.timeout > 0) {
                 const controller = new AbortController, signal = controller.signal;
@@ -416,12 +403,27 @@ class Survey extends Form {
             return fetch(url, options).then(response => response.ok ? response.json() : Promise.reject(response)).catch(error => Promise.reject(error)).finally(() => {
                 timeoutTimer && window.clearTimeout(timeoutTimer);
             });
-        })(options.url, options.initAjaxOptions).then(response => "success" === response.status.toLowerCase() && response.data.questions && response.data.questions.length > 0 ? new Promise(resolve => {
-            buildSurvey(formEl, options, self.internals, response.data), super.init().then(() => {
-                self.isInitialized = !0, self.data = response.data, deepFreeze(self.data), formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
+        })(self.options.url, self.options.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
+            response.data.questions && response.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, response.data), 
+            super.init().then(() => {
+                self.isInitialized = !0, self.data = response.data, deepFreeze(self.data), self.formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
                 resolve(response);
-            });
-        }) : Promise.reject(response));
+            })) : resolve(response);
+        }));
+        ((elem, eventName, data = {}, eventOptions = {}) => {
+            eventOptions = mergeObjects({}, {
+                bubbles: !0
+            }, eventOptions);
+            const eventObj = new Event(eventName, eventOptions);
+            eventObj.data = data, elem.dispatchEvent(eventObj);
+        })(self.formEl, customEvents_init, retrieveSurvey);
+    }
+    destroy() {
+        var formEl;
+        (formEl = this.formEl).formjs.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
+            const useCapturing = "blur" === eventName;
+            formEl.removeEventListener(eventName, callbackFns_validation, useCapturing);
+        }), super.destroy();
     }
     static addLanguage(langString, langObject) {
         const langValue = langString.toLowerCase();

@@ -1,5 +1,5 @@
 
-import { ajaxCall, deepFreeze, mergeObjects, webStorage } from './modules/helpers';
+import { ajaxCall, customEvents, deepFreeze, dispatchCustomEvent, mergeObjects, webStorage } from './modules/helpers';
 import { messages }             from './modules/messages';
 import { options }              from './modules/options';
 import { internals }            from './modules/internals';
@@ -39,55 +39,51 @@ class Survey extends Form {
 
         super( formEl, options );
 
-        this.internals = internals;
+        const self = this;
+        self.internals = internals;
 
-        // INIT FIELDS VALIDATION
-        // THIS WILL RUN BEFORE FORMJS VALIDATION FUNCTION SO THAT USERS CANNOT SKIP REQUIRED FIELDS VALIDATION
-        this.options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
+        self.options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
             const useCapturing = eventName === 'blur' ? true : false;
-            formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
+            self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
         });
 
-        formEl.addEventListener('fjs.form:submit', event => {
+        self.formEl.addEventListener('fjs.form:submit', event => {
             event.data.then(() => {
-                // REMOVE SURVEY LOCAL STORAGE
-                if( options.useLocalStorage ){
-                    localStorage.removeItem( this.internals.storageName );
+                if( self.options.useLocalStorage ){
+                    localStorage.removeItem( self.internals.storageName );
                 }
             });
         });
+
+        self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.loadingBox );
+
+        const retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions)
+            .then(response => {
+                if( response.status.toLowerCase() !== 'success' ){
+                    return Promise.reject(response);
+                }
+                return new Promise(resolve => {
+                    if( response.data.questions && response.data.questions.length > 0 ){
+                        buildSurvey(self.formEl, self.options, self.internals, response.data);
+                        super.init().then(() => {
+                            self.isInitialized = true;
+                            self.data = response.data;
+                            deepFreeze(self.data);
+                            self.formEl.closest('[data-surveyjs-container]').classList.add('surveyjs-init-success');
+                            resolve(response);
+                        });
+                    } else {
+                        resolve(response);
+                    }
+                });
+            });
+        
+        dispatchCustomEvent( self.formEl, customEvents.init, retrieveSurvey );
     }
 
     destroy(){
         destroy(this.formEl);
         super.destroy();
-    }
-
-    init(){
-        const self = this;
-        const formEl = self.formEl;
-        const options = self.options;
-
-        formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', options.loadingBox );
-
-        return ajaxCall(options.url, options.initAjaxOptions)
-            .then(response => {
-                if( response.status.toLowerCase() === 'success' && response.data.questions && response.data.questions.length > 0 ){
-                    return new Promise(resolve => {
-
-                        buildSurvey(formEl, options, self.internals, response.data);
-                        super.init().then(() => {
-                            self.isInitialized = true;
-                            self.data = response.data;
-                            deepFreeze(self.data);
-                            formEl.closest('[data-surveyjs-container]').classList.add('surveyjs-init-success');
-                            resolve(response);
-                        });
-
-                    });
-                }
-                return Promise.reject(response);
-            });
     }
     
     static addLanguage( langString, langObject ){

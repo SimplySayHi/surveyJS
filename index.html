@@ -191,10 +191,10 @@
             <hr />
             <p>
                 <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code> <code>Event</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"&gt;&lt;/script&gt;</pre>
+&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"&gt;&lt;/script&gt;</pre>
         </div>
         
         <!-- Dependencies -->
@@ -1695,18 +1695,22 @@ Survey.addLanguage( 'de', newLang );</pre>
                 });
         });
 
+        formEl.addEventListener('sjs:init', function(event){
+            console.log(event.type);
+            event.data
+                .then(function( data ){
+                    console.log('Survey init then');
+                    console.log(data);
+                    onInitSuccess.call(mySurvey, data);
+                })
+                .catch(function( error ){
+                    console.log('Survey init catch');
+                    console.log(error);
+                    onInitError.call(mySurvey, error);
+                });
+        }, false);
+
         var mySurvey = new Survey( formEl, options );
-        mySurvey.init()
-            .then(function( data ){
-                console.log('Survey init then');
-                console.log(data);
-                onInitSuccess.call(mySurvey, data);
-            })
-            .catch(function( error ){
-                console.log('Survey init catch');
-                console.log(error);
-                onInitError.call(mySurvey, error);
-            });
     </script>
 </body>
 </html>

@@ -256,12 +256,12 @@
         formEl.addEventListener('fjs.field:validation', function(event){
             console.log(event.type);
             onValidation([event.data]);
-        });
+        }, false);
 
         formEl.addEventListener('fjs.form:validation', function(event){
             console.log(event.type);
             onValidation(event.data.fields);
-        });
+        }, false);
 
         formEl.addEventListener('fjs.form:submit', function(event){
             console.log(event.type);
@@ -298,20 +298,24 @@
                     console.log('finally');
                     formEl.querySelector('button[type="submit"]').classList.remove('surveyjs-submit-sending');
                 });
-        });
+        }, false);
+
+        formEl.addEventListener('sjs:init', function(event){
+            console.log(event.type);
+            event.data
+                .then(function( data ){
+                    console.log('Survey init then');
+                    console.log(data);
+                    onInitSuccess.call(mySurvey, data);
+                })
+                .catch(function( error ){
+                    console.log('Survey init catch');
+                    console.log(error);
+                    onInitError.call(mySurvey, error);
+                });
+        }, false);
 
         var mySurvey = new Survey( formEl, options );
-        mySurvey.init()
-            .then(function( data ){
-                console.log('Survey init then');
-                console.log(data);
-                onInitSuccess.call(mySurvey, data);
-            })
-            .catch(function( error ){
-                console.log('Survey init catch');
-                console.log(error);
-                onInitError.call(mySurvey, error);
-            });
     </script>
 </body>
 </html>
