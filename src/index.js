@@ -37,16 +37,14 @@ class Survey extends Form {
             options.useLocalStorage = false;
         }
 
+        // CREATE FORM INSTANCE FOR SURVEY
         super( formEl, options );
-
         const self = this;
         self.internals = internals;
-
         self.options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
             const useCapturing = eventName === 'blur' ? true : false;
             self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
         });
-
         self.formEl.addEventListener('fjs.form:submit', event => {
             event.data.then(() => {
                 if( self.options.useLocalStorage ){
@@ -55,8 +53,8 @@ class Survey extends Form {
             });
         });
 
+        // CREATE SURVEY
         self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.loadingBox );
-
         const retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions)
             .then(response => {
                 if( response.status.toLowerCase() !== 'success' ){
