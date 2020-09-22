@@ -1,4 +1,10 @@
-[![](https://data.jsdelivr.com/v1/package/gh/simplysayhi/surveyJS/badge)](https://www.jsdelivr.com/package/gh/simplysayhi/surveyJS)
+
+<p>
+surveyJS is available on 
+<a href="https://www.npmjs.com/package/surveyjs" target="_blank">NPM</a> | 
+<a href="https://www.jsdelivr.com/package/gh/simplysayhi/surveyJS" target="_blank">jsDelivr</a> | 
+<a href="https://unpkg.com/surveyjs/dist/surveyjs.min.js" target="_blank">UNPKG</a>
+</p>
 
 # surveyJS
 
