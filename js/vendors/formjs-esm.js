@@ -1,4 +1,4 @@
-/* formJS v4.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.2.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.add(className);
@@ -7,26 +7,17 @@ const addClass = (element, cssClasses) => {
     cssClasses.split(" ").forEach(className => {
         element.classList.remove(className);
     });
-}, isDOMNode = node => Element.prototype.isPrototypeOf(node), checkFormEl = formEl => {
-    const isString = typeof formEl, isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
-    return {
-        result: isDOMNode(formEl) || isFormSelector,
-        element: "string" === isString ? document.querySelector(formEl) : formEl
-    };
-}, customEvents_field = {
+}, isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_field = {
     validation: "fjs.field:validation"
 }, customEvents_form = {
     submit: "fjs.form:submit",
     validation: "fjs.form:validation"
-}, mergeObjects = function(out = {}) {
-    for (let i = 1; i < arguments.length; i++) {
-        let obj = arguments[i];
-        if (obj) for (let key in obj) {
-            let isArray = "[object Array]" === Object.prototype.toString.call(obj[key]), isObject = "[object Object]" === Object.prototype.toString.call(obj[key]);
-            obj.hasOwnProperty(key) && (isArray ? (void 0 === out[key] && (out[key] = []), out[key] = out[key].concat(obj[key].slice(0))) : isObject ? out[key] = mergeObjects(out[key], obj[key]) : Array.isArray(out[key]) ? out[key].push(obj[key]) : out[key] = obj[key]);
-        }
-    }
-    return out;
+}, isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
+    return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
+        Object.keys(arg).forEach(key => {
+            Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+        });
+    }), out;
 }, dispatchCustomEvent = (elem, eventName, data = {}, eventOptions = {}) => {
     eventOptions = mergeObjects({}, {
         bubbles: !0
@@ -94,7 +85,8 @@ a), []).join("&") : obj, toCamelCase = string => string.replace(/-([a-z])/gi, (a
                     value = fieldEl.checked;
                     const checkboxes = Array.from(formEl.querySelectorAll('[name="' + name + '"]'));
                     if (checkboxes.length > 1) {
-                        value = [], checkboxes.filter(field => field.checked).forEach(fieldEl => {
+                        value = [];
+                        checkboxes.filter(field => field.checked).forEach(fieldEl => {
                             value.push(fieldEl.value);
                         });
                     }
@@ -288,7 +280,8 @@ function submit(event) {
         btnEl.disabled = !0;
     }
     removeClass(formEl, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess), 
-    addClass(formEl, formCssClasses.submit), (options.fieldOptions.handleValidation ? instance.validateForm() : Promise.resolve(getValidateFormDefault())).then(formValidation => {
+    addClass(formEl, formCssClasses.submit);
+    (options.fieldOptions.handleValidation ? instance.validateForm() : Promise.resolve(getValidateFormDefault())).then(formValidation => {
         const beforeSendData = {
             stopExecution: !1,
             formData: {}
@@ -296,7 +289,8 @@ function submit(event) {
         if (!formValidation.result) return eventPreventDefault(), removeClass(formEl, formCssClasses.submit), 
         beforeSendData.stopExecution = !0, [ beforeSendData ];
         const formDataObj = isAjaxForm ? instance.getFormData() : null, callbacksBeforeSend = options.formOptions.beforeSend;
-        return formDataObj && (beforeSendData.formData = formDataObj), runFunctionsSequence({
+        formDataObj && (beforeSendData.formData = formDataObj);
+        return runFunctionsSequence({
             functionsList: callbacksBeforeSend,
             data: beforeSendData,
             stopConditionFn: function(data) {
@@ -380,20 +374,6 @@ const validation = function(event) {
         }
     }));
 };
-
-function formStartup(formEl, options) {
-    formEl.noValidate = !0;
-    const fieldOptions = options.fieldOptions, formOptions = options.formOptions;
-    fieldOptions.handleValidation && (fieldOptions.strictHtmlValidation && (formEl.addEventListener("keypress", keypressMaxlength, !1), 
-    formEl.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length && formEl.addEventListener("paste", pastePrevent, !1), 
-    fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
-        const useCapturing = "blur" === eventName;
-        formEl.addEventListener(eventName, validation, useCapturing);
-    })), formEl.addEventListener(customEvents_field.validation, validationEnd, !1)), 
-    formOptions.handleSubmit && (formEl.addEventListener("submit", submit), formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), 
-    formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), 
-    formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
-}
 
 const init = function(formEl) {
     const instance = formEl.formjs, formFields = (formEl => getUniqueFields(formEl.querySelectorAll(fieldsStringSelector)).map(fieldEl => {
@@ -497,18 +477,35 @@ function checkFormValidity(formEl, fieldOptions, validationRules, validationErro
 
 class Form {
     constructor(formEl, optionsObj) {
-        !function(self, formEl, optionsObj) {
-            const argsL = arguments.length, checkFormElem = checkFormEl(formEl);
-            if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
-            if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
-            if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
-            self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj);
-            const cbList = [ "beforeValidation", "beforeSend", "getFormData" ];
-            cbList.forEach(cbName => {
-                const optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions", cbOpt = self.options[optionType][cbName];
-                cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self));
-            }), formStartup(self.formEl, self.options);
-        }(this, formEl, optionsObj);
+        const argsL = arguments.length, checkFormElem = (formEl => {
+            const isString = typeof formEl, isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
+            return {
+                result: isDOMNode(formEl) || isFormSelector,
+                element: "string" === isString ? document.querySelector(formEl) : formEl
+            };
+        })(formEl);
+        if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
+        if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+        if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+        const self = this;
+        self.formEl = checkFormElem.element, self.formEl.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj);
+        [ "beforeValidation", "beforeSend", "getFormData" ].forEach(cbName => {
+            const optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions";
+            let cbOpt = self.options[optionType][cbName];
+            cbOpt && (self.options[optionType][cbName] = Array.isArray(cbOpt) ? cbOpt.map(cbFn => cbFn.bind(self)) : cbOpt.bind(self));
+        }), function(formEl, options) {
+            formEl.noValidate = !0;
+            const fieldOptions = options.fieldOptions, formOptions = options.formOptions;
+            fieldOptions.handleValidation && (fieldOptions.strictHtmlValidation && (formEl.addEventListener("keypress", keypressMaxlength, !1), 
+            formEl.addEventListener("input", dataTypeNumber, !1)), fieldOptions.preventPasteFields && formEl.querySelectorAll(fieldOptions.preventPasteFields).length && formEl.addEventListener("paste", pastePrevent, !1), 
+            fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
+                const useCapturing = "blur" === eventName;
+                formEl.addEventListener(eventName, validation, useCapturing);
+            })), formEl.addEventListener(customEvents_field.validation, validationEnd, !1)), 
+            formOptions.handleSubmit && (formEl.addEventListener("submit", submit), formOptions.ajaxSubmit && (formEl.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = formEl.getAttribute("enctype")), 
+            formEl.getAttribute("method") && (formOptions.ajaxOptions.method = formEl.getAttribute("method").toUpperCase()), 
+            formEl.getAttribute("action") && (formOptions.ajaxOptions.url = formEl.getAttribute("action"))));
+        }(self.formEl, self.options);
     }
     destroy() {
         !function(formEl, options) {
@@ -530,28 +527,26 @@ class Form {
         return init(this.formEl);
     }
     validateField(fieldEl, fieldOptions) {
-        fieldEl = "string" == typeof fieldEl ? this.formEl.querySelector(fieldEl) : fieldEl, 
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const formEl = this.formEl, skipUIfeedback = this.options.fieldOptions.skipUIfeedback;
-        return checkFieldValidity(fieldEl, fieldOptions, this.validationRules, this.validationErrors).then(obj => new Promise(resolve => {
-            obj.fieldEl && (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                bubbles: !1
-            }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), fieldOptions.onValidationCheckAll && obj.result ? (fieldOptions.skipUIfeedback = !0, 
-            resolve(checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors, obj.fieldEl).then(dataForm => {
-                const clMethodName = dataForm.result ? "add" : "remove";
-                return formEl.classList[clMethodName](this.options.formOptions.cssClasses.valid), 
-                dispatchCustomEvent(formEl, customEvents_form.validation, dataForm), fieldOptions.skipUIfeedback = skipUIfeedback, 
-                obj;
-            }))) : obj.result || removeClass(formEl, this.options.formOptions.cssClasses.valid)), 
-            resolve(obj);
-        }));
+        const self = this;
+        fieldEl = "string" == typeof fieldEl ? self.formEl.querySelector(fieldEl) : fieldEl, 
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const formEl = self.formEl;
+        return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors).then(obj => (dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
+            bubbles: !1
+        }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, 
+        checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl).then(dataForm => {
+            const clMethodName = dataForm.result ? "add" : "remove";
+            formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, dataForm);
+        })) : obj.result || removeClass(formEl, self.options.formOptions.cssClasses.valid), 
+        obj));
     }
     validateForm(fieldOptions) {
-        fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
-        const formEl = this.formEl;
-        return checkFormValidity(formEl, fieldOptions, this.validationRules, this.validationErrors).then(data => {
+        const self = this;
+        fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+        const formEl = self.formEl;
+        return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors).then(data => {
             const clMethodName = data.result ? "add" : "remove";
-            return formEl.classList[clMethodName](this.options.formOptions.cssClasses.valid), 
+            return formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), 
             validationEnd({
                 data: data
             }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
@@ -582,6 +577,6 @@ Form.prototype.isInitialized = !1, Form.prototype.options = options, Form.protot
         }
         return obj;
     }
-}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.0";
+}, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.2";
 
 export default Form;
