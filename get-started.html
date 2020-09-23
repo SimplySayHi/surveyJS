@@ -1,0 +1,460 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Get Started | surveyJS - JavaScript Survey Creation &amp; Management. Made Easy</title>
+    <meta name="description" content="JavaScript Survey Creation & Management. Made Easy">
+    <meta name="keywords" content="survey, question, answer, javascript, plugin, ajax, json">
+    <meta name="author" content="Valerio Di Punzio">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/doc.css">
+    <link rel="stylesheet" href="css/prism.css">
+
+    <script defer src="js/prism.js"></script>
+    <script defer src="js/include.js"></script>
+</head>
+
+<body>
+    
+    <div id="top" class="container-fluid d-flex flex-column">
+
+        <div id="menu" class="position-sticky text-right d-flex">
+            <div class="position-raltive w-100">
+                <a href="index.html" class="logo">S</a>
+                <nav class="position-absolute nav-desktop d-none d-md-flex align-items-center">
+                    <a href="index.html" class="p-2 m-2">Home</a>
+                    <a href="get-started.html" class="p-2 m-2">Get Started</a>
+                    <a href="api.html" class="p-2 m-2">API</a>
+                    <a href="demos.html" class="p-2 m-2">Demos</a>
+                    <a href="https://github.com/SimplySayHi/surveyJS" target="_blank" class="github-logo ml-2">
+                        <svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         width="28px" height="28px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M16,0.112c-8.836,0-16,7.294-16,16.291 C0,23.6,4.584,29.706,10.942,31.86c0.801,0.148 1.093-0.354,1.093-0.785c0-0.387-0.015-1.412-0.021-2.771 c-4.451,0.984-5.39-2.184-5.39-2.184c-0.729-1.881-1.777-2.383-1.777-2.383c-1.452-1.01,0.11-0.99,0.11-0.99 .605,0.115,2.45,1.68,2.45,1.68c1.428,2.488,3.745,1.77,4.657,1.354c0.145-1.053,0.559-1.771,1.016-2.178 c-3.553-0.412-7.288-1.809-7.288-8.051c0-1.778,0.623-3.232,1.646-4.371c-0.164-0.412-0.713-2.068,0.157-4.311 c0,0,1.344-0.438,4.399,1.67c1.276-0.361,2.646-0.543,4.006-0.549c1.359,0.006,2.728,0.188,4.006,0.549 c3.056-2.108,4.396-1.67,4.396-1.67c0.873,2.242,0.323,3.898,0.159,4.311c1.024,1.139,1.644,2.593,1.644,4.371 c0,6.258-3.74,7.635-7.305,8.038c0.574,0.504,1.086,1.498,1.086,3.018c0,2.178-0.02,3.934-0.02,4.469 c0,0.436,0.288,0.941,1.101,0.783C27.421,29.7,32,23.598,32,16.403C32,7.406,24.837,0.112,16,0.112z" />
+                        </svg>
+                    </a>
+                </nav>
+                <div class="position-absolute dropdown d-inline-block d-md-none">
+                    <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2" data-toggle="dropdown" type="button">
+                        menu
+                    </button>
+                    <span class="dropdown-menu">
+                        <a class="dropdown-item" href="index.html">Home</a>
+                        <a class="dropdown-item" href="get-started.html">Get Started</a>
+                        <a class="dropdown-item" href="api.html">API</a>
+                        <a class="dropdown-item" href="demos.html">Demos</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS" target="_blank">View on Github</a>
+                        <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS/issues" target="_blank">Report a Bug</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content mt-5 pt-5">
+
+            <h4 class="m-0 px-2">surveyJS</h4>
+            <h1 class="border-0 m-0">Get Started</h1>
+
+            <!-- Install -->
+            <div id="dependencies">
+                <h3 class="sticky-title">Dependencies</h3>
+                <p>
+                    surveyJS is developed with these dependencies:
+                </p>
+                <ul>
+                    <li>
+                        <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> ( version 4.2.1 or higher - for survey form validation and submit )
+                    </li>
+                    <li>
+                        Bootstrap 4 CSS ( Optional - only form CSS ) but you can write the CSS by yourself ;)
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Install -->
+            <div id="install">
+                <h3 class="sticky-title">Install</h3>
+                <div class="row justify-content-between">
+                    <div class="col-lg-5">
+                        <p>
+                            Include these styles and scripts in your page:
+                        </p>
+                        <pre>
+<code class="language-html">&lt;link href="https://unpkg.com/surveyjs@3/dist/survey.min.css" rel="stylesheet" type="text/css"&gt;
+&lt;script src="https://unpkg.com/formjs-plugin@4"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/surveyjs@3"&gt;&lt;/script&gt;
+</code></pre>
+                        <pre>
+<code class="language-html">&lt;link href="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS@3/dist/survey.min.css" rel="stylesheet" type="text/css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@4/dist/formjs.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS@3/dist/surveyjs.min.js"&gt;&lt;/script&gt;
+</code></pre>
+                    </div>
+                    <div class="col-lg-auto align-self-center d-none d-lg-block mt-3 pt-3">
+                        OR
+                    </div>
+                    <div class="col-lg-5">   
+                        <p>
+                            <span class="d-inline d-lg-none">or</span> Install via NPM and import as ES Module:
+                        </p>
+                        <pre>
+<code class="language-markup">npm install formjs-plugin@4 surveyjs
+</code></pre>
+                        <pre>
+<code class="language-js">import Survey from 'surveyjs';
+</code></pre>
+                    </div>
+                </div>
+                <hr />
+                <p>
+                    In folder <code>dist</code> ( and via CDNs ) are also available these versions:
+                </p>
+                <ul>
+                    <li>
+                        ES Module
+                    </li>
+                    <li>
+                        SystemJS
+                    </li>
+                </ul>
+            </div>
+        
+            <!-- HTML -->
+            <div id="html">
+                <h3 class="sticky-title">HTML</h3>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p>
+                            Basic HTML structure to initialize the survey.<br />
+                            Element with <code>data-surveyjs-body</code> will be filled with questions &amp; answers.
+                        </p>
+                        <pre>
+<code class="language-html">&lt;div class="surveyjs-container" data-surveyjs-container&gt;
+    &lt;form action="page.jsp" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate&gt;
+        &lt;div class="surveyjs-body questionsList clearfix" data-surveyjs-body&gt;&lt;/div&gt;
+        &lt;div class="surveyjs-footer"&gt;
+            &lt;button type="submit"&gt;SEND&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+&lt;/div&gt;</code></pre>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>
+                            Mandatory attributes:
+                        </p>
+                        <ul>
+                            <li class="my-2">
+                                <code>data-surveyjs-*</code> attributes
+                            </li>
+                            <li class="my-2">
+                                <code>action</code> the page where to send the users answers ( with the AJAX call )
+                            </li>
+                        </ul>
+                        <p>
+                            CSS classes ( like <code>.surveyjs-*</code> ) are optional but used to give styles to the demos.<br />
+                            For custom graphic inputs, using CSS class <code>surveyjs-custom-inputs</code> on the Survey container ( with class "surveyjs-container" ) is suggested in order to default Survey CSS be applied.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JSON File -->
+            <div id="json-file">
+                <h3 class="sticky-title">JSON File</h3>
+                <div class="row">
+                    <div class="col-lg-6">
+                <p>
+                    Example of JSON file for the survey is <a href="json/survey.json" target="_blank">here</a>.
+                    <br />
+                    During initialization, the survey will fetch data from url passed in <code>options.url</code>.
+                    <br />
+                    The survey will be built if <code>status</code> is "success" and <code>questions</code> is a non-empty array.
+                </p>
+            <pre>
+<code class="language-js">{
+    "status": "success", // MANDATORY, IF "success" THE SURVEY WILL BE BUILT
+    "data": {
+        "id": 0,
+        "title": "My Survey",
+        "description": "Answer the questions",
+
+        // LIST OF ALL QUESTIONS
+        "questions": [
+
+            // RADIO ANSWER
+            {
+                "id": "1",
+                "question": "Do you have pets?",
+                "answers": [
+                    // EACH ANSWER IS AN OBJECT WITH SOME DATA
+                    { "id": "1", "type": "radio", "answer": "Yes" },
+                    { "id": "2", "type": "radio", "answer": "No" }
+                ],
+                // IF required IF FOUND, THE ANSWER FIELDS WILL HAVE THE required ATTRIBUTE (SO THIS QUESTION REQUIRE AN ANSWER)
+                "required": "",
+                // THE POSITION TO SET FOR THE QUESTION (USED ALSO FOR ANSWERS - SEE ABOVE) - THIS IS OPTIONAL
+                "sort": 1
+            },
+
+            // VALIDATE INPUT FIELD ONLY IF FILLED ( validateIfFilled ) AND WITH SPECIFIC subtype VALIDATION ( SEE FORM JS PLUGIN )
+            {
+                "id": "1b0",
+                "question": "What's your name?",
+                "answers": [
+                    { "id": "1ba0", "type": "text", "answer": "", "subtype": "alphabeticExtended" }
+                ],
+                "validateIfFilled": "",
+                "sort": 0
+            },
+
+            // TEXT INPUT ANSWER NOT MANDATORY
+            {
+                "id": "1b",
+                "question": "Do you have pets?",
+                "answers": [
+                    { "id": "1ba", "type": "text", "answer": "" }
+                ],
+                "sort": 2
+            },
+
+            // INPUT WITH SUBTYPE ( IF TYPE EXISTS IN HTML YOU CAN SET IT AS "type" -> "type": "email" )
+            {
+                "id": "1c",
+                "question": "What's your email address?",
+                "answers": [
+                    { "id": "1c", "type": "text", "answer": "", "subtype": "email" }
+                ],
+                "required": "",
+                "sort": 1
+            },
+
+            {
+                "id": "2",
+                "question": "Which are your hobbies/interests?",
+                "answers": [
+                    { "id": "6", "type": "radio", "answer": "Music", "sort": 5 },
+                    { "id": "7", "type": "radio", "answer": "Photography", "sort": 2 },
+                    { "id": "8", "type": "radio", "answer": "Technology", "sort": 3 },
+                    { "id": "9", "type": "radio", "answer": "Games", "sort": 4 },
+                    { "id": "10", "type": "radio", "answer": "Reading", "sort": 1 },
+                    { "id": "11", "type": "radio", "answer": "Wellness", "sort": 6 },
+                    {
+                        "id": "100", "type": "radio", "answer": "Other...", "sort": 7
+                    }
+                ],
+                "required": "",
+                "sort": 3
+            },
+
+            // TEXTARE
+            {
+                "id": "3",
+                "question": "If yes, specify which sport:",
+                "answers": [
+                    { "id": "18", "type": "textarea", "answer": "", "maxlength": 300 }
+                ],
+                "sort": 4
+            },
+
+            // RELATED FIELD ANSWER WITH INPUT TEXT ( SEE attribute FIELD )
+            {
+                "id": "5",
+                "question": "What is important for you about the loyalty program?",
+                "answers": [
+                    { "id": "19", "type": "radio", "answer": "It should be funny" },
+                    { "id": "20", "type": "radio", "answer": "It does not require much time" },
+                    {
+                        "id": "200", "type": "radio", "answer": "Other...",
+                        "attribute": {
+                            "id": "", "type": "text", "answers": ""
+                        }
+                    }
+                ],
+                "required": "",
+                "sort": 6
+            },
+
+            // NESTED ANSWERS ( SEE nested ATTRIBUTE )
+            // RELATED FIELD ANSWER WITH SELECT FIELD ( SEE attribute FIELD )
+            {
+                "id": "6",
+                "question": "How do you prefer to be interact with the loyalty program?",
+                "answers": [
+                    {
+                        "id": "21", "type": "radio", "answer": "Website",
+                        "nested": [
+                            { "id": "21a", "type": "radio", "answer": "Pc", "sort": 1 },
+                            { "id": "21b", "type": "radio", "answer": "Smartphone", "sort": 2 },
+                            { "id": "21c", "type": "radio", "answer": "Tablet", "sort": 3 }
+                        ], "sort": 1
+                    },
+                    {
+                        "id": "21aPlus", "type": "radio", "answer": "Website",
+                        "attribute": [
+                            { "id": "21aa", "type": "option", "answer": "Pc", "sort": 1 },
+                            { "id": "21ba", "type": "option", "answer": "Smartphone", "sort": 2 },
+                            { "id": "21ca", "type": "option", "answer": "Tablet", "sort": 3 }
+                        ], "sort": 6
+                    },
+                    { "id": "24", "type": "radio", "answer": "App", "sort": 3 },
+                    { "id": "25", "type": "radio", "answer": "Phone", "sort": 4 },
+                    { "id": "26", "type": "radio", "answer": "With loyalty card", "sort": 5 }
+                ],
+                "required": "",
+                "sort": 7
+            },
+
+            // CHECKBOX ANSWER WITH MULTIPLE CHOICE ( maxChoice: NUMBER OF MAXIMUM SELECTABLE ANSWERS )
+            {
+                "id": "8",
+                "question": "What do you like the most about this edition?",
+                "answers": [
+                    { "id": "43", "type": "checkbox", "answer": "Clear of communication", "sort": 1 },
+                    { "id": "44", "type": "checkbox", "answer": "Simplicity of usage", "sort": 2 },
+                    { "id": "45", "type": "checkbox", "answer": "Graphic style and language", "sort": 3 },
+                    { "id": "46", "type": "checkbox", "answer": "Duration", "sort": 4 },
+                    { "id": "47", "type": "checkbox", "answer": "Content/prizes", "sort": 5 }
+                ],
+                "checks": "[1,2]",
+                "required": "",
+                "sort": 9
+            },
+
+            // SELECT ANSWER
+            {
+                "id": "9",
+                "question": "How much is important that the loyalty program is funny?",
+                "answers": [
+                            { "id": "160", "type": "option", "answer": "Not much", "sort": 1 },
+                            { "id": "161", "type": "option", "answer": "Medium", "sort": 2 },
+                            { "id": "162", "type": "option", "answer": "Much", "sort": 3 }
+                ],
+                "required": "",
+                "sort": 10
+            },
+            
+            // PRIVACY CHECK
+            {
+                "id": "22",
+                "question": "hidden-privacy",
+                "answers": [
+                            { "id": "44", "type": "radio", "answer": "Yes", "sort": 1 },
+                            { "id": "45", "type": "radio", "answer": "No", "sort": 2 }
+                ],
+                "required": "",
+                "sort": 12
+            }
+
+        ]
+    }
+}</code>
+</pre>
+                    </div>
+                    <div class="col-lg-6">
+                <p>
+                    To <b>bind the privacy acceptance field to the survey</b> you can set a question object as shown in the JSON above ( see PRIVACY CHECK ):
+                </p>
+                <ul>
+                    <li class="my-2">
+                        "question" must be the string "hidden-privacy";
+                    </li>
+                    <li class="my-2">
+                        include a bit of HTML code ( see below ) inside the div ".surveyjs-container";
+                        <ul>
+                            <li class="my-2">
+                                attribute "data-formjs-question" is mandatory;
+                            </li>
+                            <li class="my-2">
+                                attribute data-name="bind-surveyjs-answer" is mandatory;
+                            </li>
+                            <li class="my-2">
+                                attribute data-exclude-storage is optional ( used to avoid saving the answer in local storage );
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <pre>
+<code class="language-html">&lt;div class="surveyjs-question-box" data-formjs-question&gt;
+    &lt;div class="surveyjs-answers-box"&gt;
+        &lt;div class="form-check-inline"&gt;
+            &lt;input data-exclude-storage data-name="bind-surveyjs-answer"/&gt;
+            &lt;label&gt;
+                &lt;span&gt;&lt;/span&gt;
+            &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="form-check-inline"&gt;
+            &lt;input data-exclude-storage data-name="bind-surveyjs-answer"/&gt;
+            &lt;label&gt;
+                &lt;span&gt;&lt;/span&gt;
+            &lt;/label&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Initialize -->
+            <div id="initialize">
+                <h3 class="sticky-title">Initialize</h3>
+                <div class="row">
+                    <div class="col-lg-6">
+                    <pre>
+<code class="language-js">const formEl = document.querySelector('[data-surveyjs-form]');
+const options = { url: 'json/survey.json' };
+const mySurvey = new Survey( formEl, options );
+</code></pre>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>
+                            You must specify at least <code>options.url</code> to retrieve the JSON data and build the survey.
+                        </p>
+                        <ul>
+                            <li>
+                                <code>formEl</code> ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>const formEl = '.my-container .my-form';</code>
+                            </li>
+                            <li>
+                                <code>options</code> ( required ) a JS object as defined in <a href="api.html#options-list">Options section</a> with at least <code>url</code>
+                            </li>
+                        </ul>
+                        <hr />
+                        <p>
+                            surveyJS has some more properties:
+                        </p>
+                        <ul>
+                            <li>
+                                <code>data</code> the survey data structure returned from the AJAX call.
+                            </li>
+                            <li>
+                                <code>internals</code> extra properties for internal use.
+                            </li>
+                            <li>
+                                <code>isInitialized</code> set to true after retrieving the JSON data and completing initialization.
+                            </li>
+                            <li>
+                                <code>version</code> the version number.
+                            </li>
+                        </ul>
+                </div>
+            </div>
+
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-5 pt-5 mb-3">
+            <hr />
+            <p class="small m-0">
+                Made with passion by <a href="https://valeriodipunzio.com" target="_blank">Valerio Di Punzio</a>
+            </p>
+        </footer>
+        
+    </div>
+    
+</body>
+</html>

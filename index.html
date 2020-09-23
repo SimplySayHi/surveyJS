@@ -2,177 +2,165 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Documentation | surveyJS - Javascript Survey Creation &amp; Management. Made Easy</title>
-    <meta name="description" content="Javascript Survey Creation & Management. Made Easy">
-    <meta name="keywords" content="survey, question, answer, jquery, javascript, plugin, ajax, json">
+    <title>Documentation | surveyJS - JavaScript Survey Creation &amp; Management. Made Easy</title>
+    <meta name="description" content="JavaScript Survey Creation & Management. Made Easy">
+    <meta name="keywords" content="survey, question, answer, javascript, plugin, ajax, json">
     <meta name="author" content="Valerio Di Punzio">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="https://fonts.googleapis.com/css?family=Fredericka+the+Great|Raleway:200" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.css">
     <link rel="stylesheet" href="css/awesome-bootstrap-checkbox.css">
     <link rel="stylesheet" href="css/stackSlider.css">
     <link rel="stylesheet" href="dist/survey.css">
+    <link rel="stylesheet" href="css/doc.css">
     <link rel="stylesheet" href="css/demo.css">
     <link rel="stylesheet" href="css/demo-stackslider.css">
+    <link rel="stylesheet" href="css/prism.css">
+
+    <script defer src="js/prism.js"></script>
+
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
+    <script defer src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
+    <script defer src="js/vendors/formjs.min.js"></script>
+    <script defer src="dist/surveyjs.min.js"></script>
+
+    <!-- ONLY FOR DOCUMENTATION DEMO SLIDER -->
+    <script defer src="js/vendors/modernizr_custom_63321.js"></script>
+    <script defer src="js/vendors/jquery-1.12.4.min.js"></script>
+    <script defer src="js/vendors/bootstrap.bundle.min.js"></script>
+    <script defer src="js/vendors/jquery_stackslider.js"></script>
+    <script defer src="js/doc.js"></script>
+
+    <script defer src="js/include.js"></script>
 </head>
 
 <body>
     
-    <div id="top" class="container mb-5">
+    <div id="top" class="container-fluid d-flex flex-column">
 
-        <div id="menu" class="position-sticky text-right">
-            <div class="dropdown d-inline-block mt-3">
-                <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2" data-toggle="dropdown" type="button">
-                    menu
-                </button>
-                <span class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS/archive/master.zip">Download Latest Version</a>
-                    <a class="dropdown-item" href="#browsers-support">Browsers Support</a>
-                    <a class="dropdown-item" href="#dependencies">Dependencies</a>
-                    <a class="dropdown-item" href="#usage">Usage</a>
-                    <a class="dropdown-item" href="#html">HTML</a>
-                    <a class="dropdown-item" href="#initialization">Initialization</a>
-                    <a class="dropdown-item" href="#json-file">JSON File</a>
-                    <a class="dropdown-item" href="#options-list">Options</a>
-                    <a class="dropdown-item" href="#methods">Methods</a>
-                    <a class="dropdown-item" href="#prototype-methods">Prototype Methods</a>
-                    <a class="dropdown-item" href="#templates">Templates</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS" target="_blank">View on Github</a>
-                    <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS/issues" target="_blank">Report a Bug</a>
-                </span>
-            </div>
-        </div>
-        
-        <div id="hero" class="text-center mb-5">
-            <div>
-                <p class="d-inline-block my-4">
-                    <a href="https://github.com/SimplySayHi/surveyJS" target="_blank" class="media">
-                        <span class="media-body interline-normal">view on <br />Github</span>
-                        <svg class="align-self-center ml-2" style="vertical-align: middle;" version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-         width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
-                    <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M16,0.112c-8.836,0-16,7.294-16,16.291
-        C0,23.6,4.584,29.706,10.942,31.86c0.801,0.148,1.093-0.354,1.093-0.785c0-0.387-0.015-1.412-0.021-2.771
-        c-4.451,0.984-5.39-2.184-5.39-2.184c-0.729-1.881-1.777-2.383-1.777-2.383c-1.452-1.01,0.11-0.99,0.11-0.99
-        c1.605,0.115,2.45,1.68,2.45,1.68c1.428,2.488,3.745,1.77,4.657,1.354c0.145-1.053,0.559-1.771,1.016-2.178
-        c-3.553-0.412-7.288-1.809-7.288-8.051c0-1.778,0.623-3.232,1.646-4.371c-0.164-0.412-0.713-2.068,0.157-4.311
-        c0,0,1.344-0.438,4.399,1.67c1.276-0.361,2.646-0.543,4.006-0.549c1.359,0.006,2.728,0.188,4.006,0.549
-        c3.056-2.108,4.396-1.67,4.396-1.67c0.873,2.242,0.323,3.898,0.159,4.311c1.024,1.139,1.644,2.593,1.644,4.371
-        c0,6.258-3.74,7.635-7.305,8.038c0.574,0.504,1.086,1.498,1.086,3.018c0,2.178-0.02,3.934-0.02,4.469
-        c0,0.436,0.288,0.941,1.101,0.783C27.421,29.7,32,23.598,32,16.403C32,7.406,24.837,0.112,16,0.112z"/>
-    </svg></a>
-                </p>
-            </div>
-            <h1>surveyJS</h1>
-            <p>
-                Javascript Survey Creation &amp; Management. Made Easy
-            </p>
-            <div class="mt-5">
-                <p class="d-inline-block mb-1">
-                Version 
-                </p>
-                <div class="dropdown d-inline-block ml-1">
-                    <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button" data-print-current-version></button>
-                    <span class="dropdown-menu w-100 py-1">
-                        <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/2.0.4/" target="_blank">2.0.4</a>
-                        <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/1.6.1/" target="_blank">1.6.1</a>
-                        <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/1.5.2/" target="_blank">1.5.2</a>
+        <div id="menu" class="position-sticky text-right d-flex">
+            <div class="position-raltive w-100">
+                <a href="index.html" class="logo">S</a>
+                <nav class="position-absolute nav-desktop d-none d-md-flex align-items-center">
+                    <a href="index.html" class="p-2 m-2">Home</a>
+                    <a href="get-started.html" class="p-2 m-2">Get Started</a>
+                    <a href="api.html" class="p-2 m-2">API</a>
+                    <a href="demos.html" class="p-2 m-2">Demos</a>
+                    <a href="https://github.com/SimplySayHi/surveyJS" target="_blank" class="github-logo ml-2">
+                        <svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         width="28px" height="28px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M16,0.112c-8.836,0-16,7.294-16,16.291 C0,23.6,4.584,29.706,10.942,31.86c0.801,0.148 1.093-0.354,1.093-0.785c0-0.387-0.015-1.412-0.021-2.771 c-4.451,0.984-5.39-2.184-5.39-2.184c-0.729-1.881-1.777-2.383-1.777-2.383c-1.452-1.01,0.11-0.99,0.11-0.99 .605,0.115,2.45,1.68,2.45,1.68c1.428,2.488,3.745,1.77,4.657,1.354c0.145-1.053,0.559-1.771,1.016-2.178 c-3.553-0.412-7.288-1.809-7.288-8.051c0-1.778,0.623-3.232,1.646-4.371c-0.164-0.412-0.713-2.068,0.157-4.311 c0,0,1.344-0.438,4.399,1.67c1.276-0.361,2.646-0.543,4.006-0.549c1.359,0.006,2.728,0.188,4.006,0.549 c3.056-2.108,4.396-1.67,4.396-1.67c0.873,2.242,0.323,3.898,0.159,4.311c1.024,1.139,1.644,2.593,1.644,4.371 c0,6.258-3.74,7.635-7.305,8.038c0.574,0.504,1.086,1.498,1.086,3.018c0,2.178-0.02,3.934-0.02,4.469 c0,0.436,0.288,0.941,1.101,0.783C27.421,29.7,32,23.598,32,16.403C32,7.406,24.837,0.112,16,0.112z" />
+                        </svg>
+                    </a>
+                </nav>
+                <div class="position-absolute dropdown d-inline-block d-md-none">
+                    <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2" data-toggle="dropdown" type="button">
+                        menu
+                    </button>
+                    <span class="dropdown-menu">
+                        <a class="dropdown-item" href="index.html">Home</a>
+                        <a class="dropdown-item" href="get-started.html">Get Started</a>
+                        <a class="dropdown-item" href="api.html">API</a>
+                        <a class="dropdown-item" href="demos.html">Demos</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS" target="_blank">View on Github</a>
+                        <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS/issues" target="_blank">Report a Bug</a>
                     </span>
                 </div>
-                <br />
-                Documentation
             </div>
         </div>
 
-        <!-- Demo -->
-        <div id="demo">
-            <div class="surveyjs-container surveyjs-custom-inputs panel" data-surveyjs-container>
-                <div class="panel-body">
-                    <form action="json/survey.json" name="surveyjs-form" class="surveyjs-form surveyjs-cards" data-surveyjs-form novalidate="">
-                        <div class="surveyjs-body questionsList clearfix stackSlider" data-surveyjs-body></div>
-                        <div class="surveyjs-footer row">
-                            <div class="surveyjs-question-box text-right" data-formjs-question="">
-                                <div class="surveyjs-answers-box form-group">
-                                    <div class="text-left small">
-                                        L'interessato persta il consenso al trattamento dei propri dati personali per la creazione di profili e per l'analisi delle sue abitudini o scelte di consumo sulla base del dettaglio dei suoi acquisti nonch&egrave; dei dati forniti direttamente dal cliente.
-                                    </div>
-                                    <div class="form-check-inline abc-radio">
-                                        <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
-                                        <label class="surveyjs-label form-check-label">
-                                            <span></span>
-                                        </label>
-                                    </div>
-                                    <div class="form-check-inline abc-radio">
-                                        <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
-                                        <label class="surveyjs-label form-check-label">
-                                            <span></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="surveyjs-submit-btn btn btn-red d-block mx-auto" type="submit">
-                                <span class="surveyjs-submit-text">SEND</span>
-                            </button>
+        <div id="hero" class="d-flex flex-column justify-content-center">
+            <div class="row pt-5 justify-content-center">
+
+                <div id="intro" class="col-lg-6 text-center text-lg-left d-flex flex-column mt-4">
+                    <div class="d-md-none">
+                        <p class="d-inline-block my-4">
+                            <a href="https://github.com/SimplySayHi/surveyJS" target="_blank" class="media">
+                                <span class="media-body interline-normal">view on <br />Github</span>
+                                <svg class="align-self-center ml-2" style="vertical-align: middle;" version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="32px" height="32px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M16,0.112c-8.836,0-16,7.294-16,16.291 C0,23.6,4.584,29.706,10.942,31.86c0.801,0.148 1.093-0.354,1.093-0.785c0-0.387-0.015-1.412-0.021-2.771 c-4.451,0.984-5.39-2.184-5.39-2.184c-0.729-1.881-1.777-2.383-1.777-2.383c-1.452-1.01,0.11-0.99,0.11-0.99 .605,0.115,2.45,1.68,2.45,1.68c1.428,2.488,3.745,1.77,4.657,1.354c0.145-1.053,0.559-1.771,1.016-2.178 c-3.553-0.412-7.288-1.809-7.288-8.051c0-1.778,0.623-3.232,1.646-4.371c-0.164-0.412-0.713-2.068,0.157-4.311 c0,0,1.344-0.438,4.399,1.67c1.276-0.361,2.646-0.543,4.006-0.549c1.359,0.006,2.728,0.188,4.006,0.549 c3.056-2.108,4.396-1.67,4.396-1.67c0.873,2.242,0.323,3.898,0.159,4.311c1.024,1.139,1.644,2.593,1.644,4.371 c0,6.258-3.74,7.635-7.305,8.038c0.574,0.504,1.086,1.498,1.086,3.018c0,2.178-0.02,3.934-0.02,4.469 c0,0.436,0.288,0.941,1.101,0.783C27.421,29.7,32,23.598,32,16.403C32,7.406,24.837,0.112,16,0.112z" />
+                                </svg>
+                            </a>
+                        </p>
+                    </div>
+                    <h1 class="align-self-center align-self-lg-start">surveyJS</h1>
+                    <p class="claim">
+                        JavaScript Survey Creation &amp; Management. <br class="d-sm-none" />Made Easy
+                    </p>
+                    <p>
+                        Create a fully-customizable survey and take advantage of <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> superpowers.
+                    </p>
+                    <div>
+                        <p class="d-inline-block mb-1">
+                        Version
+                        </p>
+                        <div class="dropdown d-inline-block ml-1">
+                            <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button" data-print-current-version></button>
+                            <span class="dropdown-menu w-100 py-1">
+                                <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/2.0.4/" target="_blank">2.0.4</a>
+                                <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/1.6.1/" target="_blank">1.6.1</a>
+                                <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/1.5.2/" target="_blank">1.5.2</a>
+                            </span>
                         </div>
-                    </form>
+                    </div>
+                    <div class="mt-auto">
+                        <div class="mt-3">
+                            Download
+                            <a href="https://github.com/SimplySayHi/surveyJS/archive/master.zip">Latest Version</a> | 
+                            <a href="https://github.com/SimplySayHi/surveyJS/releases" target="_blank">All Releases</a>
+                        </div>
+                    </div>
                 </div>
+
+                <div id="demo" class="col-md-9 col-lg-6 col-xl-5 mx-auto panel-collapsible- mt-4">
+                    <div class="card-body px-0 d-block">
+                        <div class="surveyjs-container surveyjs-custom-inputs panel" data-surveyjs-container>
+                            <div class="panel-body">
+                                <form action="json/survey.json" name="surveyjs-form" class="surveyjs-form surveyjs-cards" data-surveyjs-form novalidate="">
+                                    <div class="surveyjs-body questionsList clearfix stackSlider" data-surveyjs-body></div>
+                                    <div class="surveyjs-footer row">
+                                        <div class="surveyjs-question-box text-right" data-formjs-question="">
+                                            <div class="surveyjs-answers-box form-group">
+                                                <div class="text-left small">
+                                                    L'interessato persta il consenso al trattamento dei propri dati personali per la creazione di profili e per l'analisi delle sue abitudini o scelte di consumo sulla base del dettaglio dei suoi acquisti nonch&egrave; dei dati forniti direttamente dal cliente.
+                                                </div>
+                                                <div class="form-check-inline abc-radio">
+                                                    <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
+                                                    <label class="surveyjs-label form-check-label">
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-check-inline abc-radio">
+                                                    <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
+                                                    <label class="surveyjs-label form-check-label">
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="surveyjs-submit-btn btn btn-red d-block mx-auto" type="submit">
+                                            <span class="surveyjs-submit-text">SEND</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
             </div>
-        </div>
-        
-        <!-- Demo Links -->
-        <div id="demo-links" class="text-center mt-5">
-            <p>
-                All demos<br />
-                <a href="example-base.html">basic</a> - <a href="example-1.html">demo 1</a> - <a href="example-2.html">demo 2</a>
-            </p>
-        </div>
-        
-        <!-- Download -->
-        <div id="download" class="text-center">
-            <h3>Downloads</h3>
-            <p>
-                <a href="https://github.com/SimplySayHi/surveyJS/archive/master.zip">Download Latest Version</a>
-                <br class="d-block mt-2">
-                <a href="https://github.com/SimplySayHi/surveyJS/releases" target="_blank">Go To Releases Page</a>
-            </p>
-            <h3>CDNs</h3>
-            <p>
-                <a href="https://www.jsdelivr.com/package/gh/simplysayhi/surveyJS" target="_blank">jsDelivr</a> | 
-                <a href="https://unpkg.com/surveyjs/dist/surveyjs.min.js" target="_blank">UNPKG</a>
-            </p>
-        </div>
-        
-        <!-- Intro -->
-        <div id="intro">
-            <h2>Intro</h2>
-            <p>
-                surveyJS let's you create a survey from a JSON and manage all the process ( fields validation, local storage and form data are already managed )<br />
-                You can manage:
-            </p>
-            <ul>
-                <li>
-                    HTML for questions, answers and feedback messages
-                </li>
-                <li>
-                    Form data before sending it to the backend
-                </li>
-                <li>
-                    Callback functions for AJAX calls success/error/end and validation
-                </li>
-                <li>
-                    and more...
-                </li>
-            </ul>
         </div>
         
         <!-- Browsers Support -->
         <div id="browsers-support">
             <h3 class="sticky-title">Browsers Support</h3>
             <p>
-                    surveyJS is compatible with ( desktop &amp; mobile versions ):
+                surveyJS is compatible with ( desktop &amp; mobile versions ):
             </p>
             <ul>
                 <li>
@@ -185,1152 +173,16 @@
                     Internet Explorer 10+ / Edge <span class="text-yellow">*</span>
                 </li>
                 <li>
-                    Safari 9+
+                    Safari 9+ <span class="text-yellow">*</span>
                 </li>
             </ul>
             <hr />
             <p>
-                <span class="text-yellow">*</span> for compatibility with IE 10/11 and old versions of Edge you have to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
+                <span class="text-yellow">*</span> for compatibility with IE 10/11, old versions of Edge and/or other old browsers you need to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
                 <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code> <code>Event</code>
             </p>
             <pre>
-&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"&gt;&lt;/script&gt;</pre>
-        </div>
-        
-        <!-- Dependencies -->
-        <div id="dependencies">
-            <h3 class="sticky-title">Dependencies</h3>
-            <p>
-                surveyJS is developed with these dependencies:
-            </p>
-            <ul>
-                <li>
-                    <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> ( version 4.2.1 - for survey form validation and submit )
-                </li>
-                <li>
-                    Bootstrap 4 CSS ( Optional - only form CSS ) but you can write the CSS by yourself ;)
-                </li>
-            </ul>
-        </div>
-
-        <!-- Usage -->
-        <div id="usage">
-            <h3 class="sticky-title">Usage</h3>
-            <p>
-                Include css and js in your page.
-            </p>
-            <pre>
-&lt;link href="https://unpkg.com/surveyjs/dist/survey.min.css" rel="stylesheet" type="text/css"&gt;
-&lt;script src="https://unpkg.com/formjs-plugin@4/dist/formjs.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://unpkg.com/surveyjs/dist/surveyjs.min.js"&gt;&lt;/script&gt;
-</pre>
-            <p>
-                or from jsDelivr:
-            </p>
-            <pre>
-&lt;link href="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS/dist/survey.min.css" rel="stylesheet" type="text/css"&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@4/dist/formjs.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS/dist/surveyjs.min.js"&gt;&lt;/script&gt;
-</pre>
-            <hr />
-            <p>
-                or install via NPM:
-            </p>
-            <pre>
-npm install surveyjs
-</pre>
-            <p>
-                and use as ES6 module:
-            </p>
-            <pre>
-import Survey from 'surveyjs';
-</pre>
-            <p>
-                or use as CommonJS module:
-            </p>
-            <pre>
-var Survey = require('surveyjs');
-</pre>
-        </div>
-        
-        <!-- HTML -->
-        <div id="html">
-            <h3 class="sticky-title">HTML</h3>
-            <p>
-                This is the basic HTML structure to initialize the survey ( element with <code>data-surveyjs-body</code> will be filled with questions &amp; answers. ):
-            </p>
-            <pre>
-&lt;div class="surveyjs-container" data-surveyjs-container&gt;
-    &lt;form action="page.jsp" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate&gt;
-        &lt;div class="surveyjs-body questionsList clearfix" data-surveyjs-body&gt;&lt;/div&gt;
-        &lt;div class="surveyjs-footer"&gt;
-            &lt;button type="submit"&gt;SEND&lt;/button&gt;
-        &lt;/div&gt;
-    &lt;/form&gt;
-&lt;/div&gt;</pre>
-            <p>
-                Mandatory attributes:
-            </p>
-            <ul>
-                <li class="my-2">
-                    <code>data-surveyjs-*</code> attributes
-                </li>
-                <li class="my-2">
-                    <code>action</code> the page where to send the users answers ( with the AJAX call )
-                </li>
-                <li class="my-2">
-                    <code>novalidate</code> prevent the HTML5 default validation of required fields ( they will be validated via JS )
-                </li>
-            </ul>
-            <p>
-                CSS classes ( like <code>.surveyjs-*</code> ) are optional but used to give styles to the demos.<br />
-                For custom graphic inputs, using CSS class <code>surveyjs-custom-inputs</code> on the Survey container ( with class "surveyjs-container" ) is suggested in order to default Survey CSS be applied.
-            </p>
-        </div>
-        
-        <!-- Initialization -->
-        <div id="initialization">
-            <h3 class="sticky-title">Initialization</h3>
-            <p>
-                You must specify the url to retrieve the JSON data to build the survey.
-            </p>
-            <pre>
-var formEl = document.querySelector('[data-surveyjs-form]');
-var options = { url: 'json/survey.json' };
-var mySurvey = new Survey( formEl, options );
-mySurvey.init().then(function( response ){
-    console.log('SURVEY DATA RETRIEVED', response);
-});
-</pre>
-            <ul>
-                <li>
-                    formEl: ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>var formEl = '.my-container .my-form';</code>
-                </li>
-                <li>
-                    options: ( required ) a JS object as defined in <a href="#options-list">Options section</a> with at least <code>url</code>
-                </li>
-            </ul>
-            <hr />
-            <p>
-                surveyJS has some more properties:
-            </p>
-            <ul>
-                <li>
-                    <code>data</code>: the survey data structure returned from the AJAX call.
-                </li>
-                <li>
-                    <code>internals</code>: objects &amp; methods used internally ( <code>formInstance</code> can be useful also for you ).
-                </li>
-                <li>
-                    <code>isInitialized</code>: whether or not the init method was called on the Survey instance.
-                </li>
-                <li>
-                    <code>version</code>: the version number.
-                </li>
-            </ul>
-        </div>
-
-        <!-- JSON File -->
-        <div id="json-file">
-            <h3 class="sticky-title">JSON File</h3>
-            <p>
-                Example of JSON file for the survey is <a href="json/survey.json" target="_blank">here</a>.
-                <br />
-                Note that the AJAX call to get the JSON file MUST return it as JSON string or JSON object.
-                <br />
-                The survey will be built if <code>status</code> is "success" and <code>questions</code> is a non-empty array.
-            </p>
-            <pre>
-{
-    "status": "success", // MANDATORY, IF "success" THE SURVEY WILL BE BUILT
-    "data": {
-        "id": 0,
-        "title": "My Survey",
-        "description": "Answer the questions",
-
-        // LIST OF ALL QUESTIONS
-        "questions": [
-
-            // RADIO ANSWER
-            {
-                "id": "1",
-                "question": "Do you have pets?",
-                "answers": [
-                    // EACH ANSWER IS AN OBJECT WITH SOME DATA
-                    { "id": "1", "type": "radio", "answer": "Yes" },
-                    { "id": "2", "type": "radio", "answer": "No" }
-                ],
-                // IF required IF FOUND, THE ANSWER FIELDS WILL HAVE THE required ATTRIBUTE (SO THIS QUESTION REQUIRE AN ANSWER)
-                "required": "",
-                // THE POSITION TO SET FOR THE QUESTION (USED ALSO FOR ANSWERS - SEE ABOVE) - THIS IS OPTIONAL
-                "sort": 1
-            },
-
-            // VALIDATE INPUT FIELD ONLY IF FILLED ( validateIfFilled ) AND WITH SPECIFIC subtype VALIDATION ( SEE FORM JS PLUGIN )
-            {
-                "id": "1b0",
-                "question": "What's your name?",
-                "answers": [
-                    { "id": "1ba0", "type": "text", "answer": "", "subtype": "alphabeticExtended" }
-                ],
-                "validateIfFilled": "",
-                "sort": 0
-            },
-
-            // TEXT INPUT ANSWER NOT MANDATORY
-            {
-                "id": "1b",
-                "question": "Do you have pets?",
-                "answers": [
-                    { "id": "1ba", "type": "text", "answer": "" }
-                ],
-                "sort": 2
-            },
-
-            // INPUT WITH SUBTYPE ( IF TYPE EXISTS IN HTML YOU CAN SET IT AS "type" -> "type": "email" )
-            {
-                "id": "1c",
-                "question": "What's your email address?",
-                "answers": [
-                    { "id": "1c", "type": "text", "answer": "", "subtype": "email" }
-                ],
-                "required": "",
-                "sort": 1
-            },
-
-            {
-                "id": "2",
-                "question": "Which are your hobbies/interests?",
-                "answers": [
-                    { "id": "6", "type": "radio", "answer": "Music", "sort": 5 },
-                    { "id": "7", "type": "radio", "answer": "Photography", "sort": 2 },
-                    { "id": "8", "type": "radio", "answer": "Technology", "sort": 3 },
-                    { "id": "9", "type": "radio", "answer": "Games", "sort": 4 },
-                    { "id": "10", "type": "radio", "answer": "Reading", "sort": 1 },
-                    { "id": "11", "type": "radio", "answer": "Wellness", "sort": 6 },
-                    {
-                        "id": "100", "type": "radio", "answer": "Other...", "sort": 7
-                    }
-                ],
-                "required": "",
-                "sort": 3
-            },
-
-            // TEXTARE
-            {
-                "id": "3",
-                "question": "If yes, specify which sport:",
-                "answers": [
-                    { "id": "18", "type": "textarea", "answer": "", "maxlength": 300 }
-                ],
-                "sort": 4
-            },
-
-            // RELATED FIELD ANSWER WITH INPUT TEXT ( SEE attribute FIELD )
-            {
-                "id": "5",
-                "question": "What is important for you about the loyalty program?",
-                "answers": [
-                    { "id": "19", "type": "radio", "answer": "It should be funny" },
-                    { "id": "20", "type": "radio", "answer": "It does not require much time" },
-                    {
-                        "id": "200", "type": "radio", "answer": "Other...",
-                        "attribute": {
-                            "id": "", "type": "text", "answers": ""
-                        }
-                    }
-                ],
-                "required": "",
-                "sort": 6
-            },
-
-            // NESTED ANSWERS ( SEE nested ATTRIBUTE )
-            // RELATED FIELD ANSWER WITH SELECT FIELD ( SEE attribute FIELD )
-            {
-                "id": "6",
-                "question": "How do you prefer to be interact with the loyalty program?",
-                "answers": [
-                    {
-                        "id": "21", "type": "radio", "answer": "Website",
-                        "nested": [
-                            { "id": "21a", "type": "radio", "answer": "Pc", "sort": 1 },
-                            { "id": "21b", "type": "radio", "answer": "Smartphone", "sort": 2 },
-                            { "id": "21c", "type": "radio", "answer": "Tablet", "sort": 3 }
-                        ], "sort": 1
-                    },
-                    {
-                        "id": "21aPlus", "type": "radio", "answer": "Website",
-                        "attribute": [
-                            { "id": "21aa", "type": "option", "answer": "Pc", "sort": 1 },
-                            { "id": "21ba", "type": "option", "answer": "Smartphone", "sort": 2 },
-                            { "id": "21ca", "type": "option", "answer": "Tablet", "sort": 3 }
-                        ], "sort": 6
-                    },
-                    { "id": "24", "type": "radio", "answer": "App", "sort": 3 },
-                    { "id": "25", "type": "radio", "answer": "Phone", "sort": 4 },
-                    { "id": "26", "type": "radio", "answer": "With loyalty card", "sort": 5 }
-                ],
-                "required": "",
-                "sort": 7
-            },
-
-            // CHECKBOX ANSWER WITH MULTIPLE CHOICE ( maxChoice: NUMBER OF MAXIMUM SELECTABLE ANSWERS )
-            {
-                "id": "8",
-                "question": "What do you like the most about this edition?",
-                "answers": [
-                    { "id": "43", "type": "checkbox", "answer": "Clear of communication", "sort": 1 },
-                    { "id": "44", "type": "checkbox", "answer": "Simplicity of usage", "sort": 2 },
-                    { "id": "45", "type": "checkbox", "answer": "Graphic style and language", "sort": 3 },
-                    { "id": "46", "type": "checkbox", "answer": "Duration", "sort": 4 },
-                    { "id": "47", "type": "checkbox", "answer": "Content/prizes", "sort": 5 }
-                ],
-                "checks": "[1,2]",
-                "required": "",
-                "sort": 9
-            },
-
-            // SELECT ANSWER
-            {
-                "id": "9",
-                "question": "How much is important that the loyalty program is funny?",
-                "answers": [
-                            { "id": "160", "type": "option", "answer": "Not much", "sort": 1 },
-                            { "id": "161", "type": "option", "answer": "Medium", "sort": 2 },
-                            { "id": "162", "type": "option", "answer": "Much", "sort": 3 }
-                ],
-                "required": "",
-                "sort": 10
-            },
-            
-            // PRIVACY CHECK
-            {
-                "id": "22",
-                "question": "hidden-privacy",
-                "answers": [
-                            { "id": "44", "type": "radio", "answer": "Yes", "sort": 1 },
-                            { "id": "45", "type": "radio", "answer": "No", "sort": 2 }
-                ],
-                "required": "",
-                "sort": 12
-            }
-
-        ]
-    }
-}
-</pre>
-            <p>
-                <b>Note:</b><br />
-                To <b>bind the privacy acceptance field to the survey</b> you can set a question object as shown in the JSON above ( see PRIVACY CHECK ):
-            </p>
-            <ul>
-                <li class="my-2">
-                    "question" must be the string "hidden-privacy";
-                </li>
-                <li class="my-2">
-                    include a bit of HTML code ( see below ) inside the div ".surveyjs-container";
-                    <ul>
-                        <li class="my-2">
-                            attribute "data-formjs-question" is mandatory;
-                        </li>
-                        <li class="my-2">
-                            attribute data-name="bind-surveyjs-answer" is mandatory;
-                        </li>
-                        <li class="my-2">
-                            attribute data-exclude-storage is optional ( used to avoid saving the answer in local storage );
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <pre>
-&lt;div class="surveyjs-question-box" data-formjs-question&gt;
-    &lt;div class="surveyjs-answers-box"&gt;
-        &lt;div class="form-check-inline"&gt;
-            &lt;input data-exclude-storage data-name="bind-surveyjs-answer"/&gt;
-            &lt;label&gt;
-                &lt;span&gt;&lt;/span&gt;
-            &lt;/label&gt;
-        &lt;/div&gt;
-        &lt;div class="form-check-inline"&gt;
-            &lt;input data-exclude-storage data-name="bind-surveyjs-answer"/&gt;
-            &lt;label&gt;
-                &lt;span&gt;&lt;/span&gt;
-            &lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</pre>
-        </div>
-        
-        <!-- Options -->
-        <div id="options-list">
-            <h3 class="sticky-title">Options</h3>
-            <div>
-                <p>
-                    You can initialize the survey with some extra options:
-                </p>
-            </div>
-            <div class="panel panel-default panel-transparent">
-                <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
-                    <div class="d-flex">
-                        <div class="col-xl-4 d-none d-xl-block">
-                            name
-                        </div>
-                        <div class="col-lg-4 col-xl-3">
-                            <span class="d-inline d-xl-none">name, </span>
-                            type
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            description
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">cssClasses</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>object</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                JS object with keys:
-                            </p>
-                            <ul>
-                                <li>
-                                    <span class="text-green">checkbox</span>: ( string ) css class(es) to be applied to checkbox fields
-                                </li>
-                                <li>
-                                    <span class="text-green">default</span>: ( string ) css class(es) to be applied to input fields in general ( if the specific one is not set - eg for checkboxes or radios )
-                                </li>
-                                <li>
-                                    <span class="text-green">file</span>: ( string ) css class(es) to be applied to field with type="file"
-                                </li>
-                                <li>
-                                    <span class="text-green">label</span>: ( string ) css class(es) to be applied to label tags
-                                </li>
-                                <li>
-                                    <span class="text-green">radio</span>: ( string ) css class(es) to be applied to radio fields
-                                </li>
-                                <li>
-                                    <span class="text-green">select</span>: ( string ) css class(es) to be applied to select fields
-                                </li>
-                                <li>
-                                    <span class="text-green">textarea</span>: ( string ) css class(es) to be applied to textarea fields
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">fieldErrorFeedback</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>boolean</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                whether or not to load the field error message inside the HTML ( shown on failed field validation )
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">fieldErrorMessage <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                Text to show on generic field error validation.<br />
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">fieldErrorMessageMultiChoice <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                Text to show on error validation of checkboxes with multiple choice.<br />
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">fieldOptions</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>object</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                JS object with field options passed to isValidField method of Form instance.<br />
-                                See <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> plugin for details.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">formOptions</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>object</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                JS object with form options passed to the Form instance creation.<br />
-                                See <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> plugin for details.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">initAjaxOptions</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>object</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                JS object with ajax options passed to the fetch call to retrieve the survey data.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">lang</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                language for messages (eg: loading box), select default option etc...<br />
-                                other values: 'it' 
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">loadingBox <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML container and text for the loading box (used when requesting the survey JSON file).<br />
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">maxChoiceText <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                This text can be used for quesions that let the user choose more than one answer (checkboxes).<br />
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">selectFirstOption <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                Used if an option with empty id is NOT found in the JSON.<br />
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.fieldError</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used as field error container ( when showing an error message on failed field validation ).<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.input</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for input fields when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.inputGroup</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for input group answers when generating the survey.<br />
-                                See <a href="https://getbootstrap.com/docs/4.0/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a>
-                                <br /><br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.inputTag</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used as input tags when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.labelTag</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for label tags when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.question</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used as question (and answers) container when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.select</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for select answers when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.selectTag</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for select tags when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.textarea</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for textarea answers when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">textareaPlaceholder <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">useLocalStorage</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>boolean</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                Whether or not to use JS local storage to save user answers while compiling the survey.<br />
-                                When reloading the page, JS local storage will be used to polulate the questions with the answers selected/typed by the user.<br />
-                                Note that localStorage for the survey will be cleared on submit success.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer no-bg">
-                    <p>
-                        Default options:
-                    </p>
-                    <pre>
-{
-    cssClasses:             {
-        checkbox:           'form-check-input',
-        default:            'form-control',
-        file:               'form-control-file',
-        label:              'form-check-label',
-        radio:              'form-check-input',
-        select:             'form-control',
-        textarea:           'form-control'
-    },
-    fieldErrorFeedback:     true,
-    fieldOptions: {
-        validateOnEvents: 'input change'
-    },
-    formOptions: {
-        beforeSend:         [beforeSend],
-        getFormData:        getFormData,
-    },
-    initAjaxOptions:        {
-        cache:              'no-store',
-        credentials:        'same-origin',
-        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept':       'application/json'
-        },
-        method:             'GET',
-        mode:               'same-origin',
-        redirect:           'follow',
-        timeout:            0
-    },
-    lang:                   'en',
-    templates: {
-        fieldError:     // SEE TEMPLATES SECTION,
-        inputGroup:     // SEE TEMPLATES SECTION,
-        inputTag:       // SEE TEMPLATES SECTION,
-        input:          // SEE TEMPLATES SECTION,
-        labelTag:       // SEE TEMPLATES SECTION,
-        question:       // SEE TEMPLATES SECTION,
-        selectTag:      // SEE TEMPLATES SECTION,
-        select:         // SEE TEMPLATES SECTION,
-        textarea:       // SEE TEMPLATES SECTION,
-    },
-    useLocalStorage:        true
-}</pre>
-                    <p>
-                        Default messages:
-                    </p>
-                    <pre>
-{
-    it: {
-        fieldErrorMessage:  '&Egrave; necessario rispondere.',
-        fieldErrorMessageMultiChoice:  'Puoi scegliere da {{checksMin}} a {{checksMax}} risposte.',
-        loadingBox:         // SEE TEMPLATES SECTION,
-        maxChoiceText:      'RISPOSTE MAX',        
-        selectFirstOption:  'Seleziona una risposta...',
-        textareaPlaceholder:'Scrivi la tua risposta...'
-    },
-    en: {
-        fieldErrorMessage:  'Answer is necessary.',
-        fieldErrorMessageMultiChoice:  'You can choose from {{checksMin}} to {{checksMax}} answers.',
-        loadingBox:         // SEE TEMPLATES SECTION,
-        maxChoiceText:      'ANSWERS MAX',
-        selectFirstOption:  'Select your answer...',
-        textareaPlaceholder:'Write here your answer...'
-    }
-}</pre>
-                    <p class="mt-3">
-                        <span class="text-yellow">*</span> can also be set via <code>Survey.addLanguage( langString, langMessages )</code>
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Methods -->
-        <div id="methods">
-            <h3 class="sticky-title">Methods</h3>
-            <div class="panel panel-default panel-transparent">
-                <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
-                    <div class="d-flex">
-                        <div class="col-xl-4 d-none d-xl-block">
-                            name
-                        </div>
-                        <div class="col-lg-6 col-xl-5">
-                            <span class="d-inline d-xl-none">name, </span>
-                            description &amp; parameters
-                        </div>
-                        <div class="col-lg-6 col-xl-3">
-                            return value
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">destroy()</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-6 col-xl-5">
-                                <p class="d-lg-none m-0">
-                                    Description:
-                                </p>
-                                <p>
-                                    Remove all events listeners from the Survey and Form instances.
-                                </p>
-                            </div>
-                            <div class="col-lg-6 col-xl-5">
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">init()</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-6 col-xl-5">
-                                <p class="d-lg-none m-0">
-                                    Description:
-                                </p>
-                                <p>
-                                    This will retrieve the survey data and initialize the Form instance for it.
-                                </p>
-                            </div>
-                            <div class="col-lg-6 col-xl-3">
-                                <p class="d-lg-none m-0">
-                                    Return value:
-                                </p>
-                                <p>
-                                    Promise
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Prototype Methods -->
-        <div id="prototype-methods">
-            <h3 class="sticky-title">Prototype Methods</h3>
-            <p>
-                You can use these methods ONLY from the original Survey object ( not from a new instance - but you can always set each single property/method from the class prototype ):
-            </p>
-            <div class="panel panel-default panel-transparent">
-                <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
-                    <div class="d-flex">
-                        <div class="col-xl-4 d-none d-xl-block">
-                            name
-                        </div>
-                        <div class="col-lg-6 col-xl-5">
-                            <span class="d-inline d-xl-none">name, </span>
-                            parameters
-                        </div>
-                        <div class="col-lg-6 col-xl-3">
-                            description
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="">
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">addLanguage( langString, langObject )</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-6 col-xl-5">
-                                <p class="d-lg-none m-0">
-                                    Parameters:
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">langString</span>: a string representing the name of the language to add/override
-                                    </li>
-                                    <li>
-                                        <span class="text-green">langObject</span>: object with key/value pairs
-                                    </li>
-                                </ul>
-                                <p>
-                                    You MUST pass all the key/value pairs to set a new language.<br />
-                                    You can pass only new key/value pairs if you want to override an existing language.
-                                </p>
-                            </div>
-                            <div class="col-lg-6 col-xl-3">
-                                <p class="d-lg-none m-0">
-                                    Description:
-                                </p>
-                                <p>
-                                    This will affect <b>ONLY</b> new instances
-                                </p>
-                                <p>
-                                    This can be used to add a new language or override an existing one.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">setOptions( options )</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-6 col-xl-5">
-                                <p class="d-lg-none m-0">
-                                    Parameters:
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">options</span>: JS object with the fieldOptions/formOptions to override ( see <a href="#options-list">Options section</a> )
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-6 col-xl-3">
-                                <p class="d-lg-none m-0">
-                                    Description:
-                                </p>
-                                <p>
-                                    This will affect <b>ONLY</b> new instances
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer no-bg">
-                    <p>
-                        Example of usage:
-                    </p>
-                    <pre>
-var newLang = {
-        fieldErrorMessage:  'Du musst antworten',
-        fieldErrorMessageMultiChoice:  'Sie K&ouml;nnen zwischen 1 und 3 Antworten w&auml;hlen.',
-        loadingBox:         '&lt;div class="surveyjs-loading" data-surveyjs-loading&gt;&lt;i class="glyphicon glyphicon-refresh icon-spin"&gt;&lt;/i&gt; Wird geladen...&lt;/div&gt;',
-        maxChoiceText:      'ANTWORTEN MAX',
-        selectFirstOption:  'W&auml;hle eine Antwort...',
-        textareaPlaceholder:'Schreibe eine Antwort...'
-    };
-Survey.addLanguage( 'de', newLang );</pre>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Templates -->
-        <div id="templates">
-            <h3 class="sticky-title">Templates</h3>
-            <p>
-                You can initialize the survey with your custom HTML templates for:
-            </p>
-            <ul>
-                <li>
-                    Loading Box ( loadingBox: in setup or when adding a new language - see above )
-                </li>
-                <li>
-                    Fields Error ( fieldError )
-                </li>
-                <li>
-                    Inputs - the type will be taken from JSON ( input, inputTag )
-                </li>
-                <li>
-                    Label tags ( labelTag )
-                </li>
-                <li>
-                    Input Groups - as of <a href="https://getbootstrap.com/docs/4.3/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a> ( inputGroup )
-                </li>
-                <li>
-                    Questions ( question )
-                </li>
-                <li>
-                    Selects ( select and selectTag )
-                </li>
-                <li>
-                    Textareas ( textarea )
-                </li>
-            </ul>
-            <p>
-                Remember to use ALL the data-* attributes and placeholders with the curly braces, for example {{questionId}}, in your custom code.<br />
-                Here some examples of initialization with custom templates ( these are, actually, the basic templates ):
-            </p>
-
-            <br /><p>Custom Template for Loading Box</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    loadingBox: '&lt;div class="surveyjs-loading" data-surveyjs-loading&gt;&lt;i class="glyphicon glyphicon-refresh icon-spin"&gt;&lt;/i&gt; Loading...&lt;/div&gt;'
-}</pre>
-            
-            <br /><p>Custom Template for Fields Error</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    templates: {
-        fieldError: '&lt;div class="surveyjs-field-error-message"&gt;{{fieldErrorMessage}}&lt;/div&gt;'
-    }
-}</pre>
-            
-            <br /><p>Custom Template for Inputs</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    templates: {
-        input:  '&lt;div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check" data-answer-index="{{answerIndex}}"&gt;'+
-                    '{{inputTagCode}}'+
-                    '{{labelTagCode}}'+
-                '&lt;/div&gt;'
-    }
-}</pre>
-            
-            <br /><p>Custom Template for Input Groups</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    templates: {
-        inputGroup: '&lt;div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}"&gt;'+
-                        '&lt;div class="input-group-prepend"&gt;'+
-                            '&lt;div class="input-group-text form-check surveyjs-answer-{{answerType}}"&gt;'+
-                                '&lt;input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" /&gt;'+
-                                '&lt;label for="{{answerCode}}" class="surveyjs-label form-check-label"&gt;{{answerString}}&lt;/label&gt;'+
-                            '&lt;/div&gt;'+
-                        '&lt;/div&gt;'+
-                        '{{relatedAnswerField}}'+
-                    '&lt;/div&gt;'
-    }
-}</pre>
-
-            <br /><p>Custom Template for Input Tags</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    templates: {
-        inputTag: '&lt;input type="{{answerType}}" {{attrSubtype}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{attrChecks}} {{attrRequiredFrom}} /&gt;'
-    }
-}</pre>
-
-            <br /><p>Custom Template for Label Tags</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    templates: {
-        labelTag: '&lt;label for="{{answerCode}}" class="surveyjs-label {{labelClass}}">{{answerString}}&lt;/label&gt;'
-    }
-}</pre>
-
-            <br /><p>Custom Template for Questions</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    templates: {
-        question:   '&lt;div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix"&gt;'+
-                        '&lt;div class="surveyjs-question-header"&gt;Question {{questionNumber}}&lt;/div&gt;'+
-                        '&lt;div class="surveyjs-question-body"&gt;'+
-                            '&lt;div class="surveyjs-question-text"&gt;{{questionText}}&lt;/div&gt;'+
-                            '&lt;div class="surveyjs-answers-box form-group clearfix"&gt;'+
-                                '{{answersHtml}}'+
-                                '{{fieldErrorTemplate}}'+
-                            '&lt;/div&gt;'+
-                        '&lt;/div&gt;'+
-                    '&lt;/div&gt;'
-    }
-}</pre>
-
-            <br /><p>Custom Template for Selects</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    templates: {
-        select: '&lt;div class="surveyjs-single-answer surveyjs-answer-select" data-answer-index="{{answerIndex}}"&gt;'+
-                    '{{selectTagCode}}'+
-                '&lt;/div&gt;'
-    }
-}</pre>
-            
-            <br /><p>Custom Template for Select Tags</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    templates: {
-        selectTag:  '&lt;select id="{{answerCode}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}&gt;'+
-                        '{{optionsHtml}}'+
-                    '&lt;/select&gt;'
-    }
-}</pre>
-
-            <br /><p>Custom Template for Textareas</p>
-            <pre>
-{
-    url: 'json/survey.json',
-    templates: {
-        textarea:   '&lt;div class="surveyjs-single-answer surveyjs-answer-textarea"&gt;'+
-                        '&lt;textarea id="{{answerCode}}" data-answer-id="{{answerId}}" {{nestedAnswer}} name="surveyjs-answer-{{questionNumber}}" {{attrRequired}} class="surveyjs-textarea {{fieldClass}}" {{answerMaxlength}} rows="6" placeholder="{{answerPlaceholder}}"&gt;&lt;/textarea&gt;'+
-                    '&lt;/div&gt;'
-    }
-}</pre>
+<code class="language-html">&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"&gt;&lt;/script&gt;</code></pre>
         </div>
 
         <!-- Changelog -->
@@ -1509,208 +361,15 @@ Survey.addLanguage( 'de', newLang );</pre>
                 If you find a bug, please report it <a href="https://github.com/SimplySayHi/surveyJS/issues" target="_blank">here</a>
             </p>
         </div>
+
+        <footer class="text-center mt-5 pt-5 mb-3">
+            <hr />
+            <p class="small m-0">
+                Made with passion by <a href="https://valeriodipunzio.com" target="_blank">Valerio Di Punzio</a>
+            </p>
+        </footer>
         
     </div>
-
-    <div id="modal-notification" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Mission complete</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
-                </div>
-                <div class="modal-body">
-                    <h3 class="text-green">Congratulations!</h3>
-                    <p class="m-0">
-                        You completed the survey and gained <b>100 points</b>.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ONLY FOR DOCUMENTATION DEMO SLIDER -->
-    <script src="js/vendors/modernizr_custom_63321.js"></script>
-    <script src="js/vendors/jquery-1.12.4.min.js"></script>
-    <script src="js/vendors/bootstrap.bundle.min.js"></script>
-    <script src="js/vendors/jquery_stackslider.js"></script>
     
-    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch"></script>
-    <script src="js/include.js"></script>
-    <script src="js/vendors/formjs.min.js"></script>
-    <script src="dist/surveyjs.min.js"></script>
-    <script src="js/demo.js"></script>
-
-    <script type="text/javascript">
-        var $surveyCont = $('[data-surveyjs-container]'),
-            $surveyForm = $surveyCont.find('[data-surveyjs-form]'),
-            $surveyBtn = $surveyForm.find('.surveyjs-submit-btn');
-
-        var formEl = document.querySelector('[data-surveyjs-form]');
-        var options = {
-            url: 'json/survey.json',
-                cssClasses: {
-                    select: 'custom-select'
-                },
-                templates: {
-                        question:   '<div class="st-item" data-title="#{{questionNumber}}">'+
-                                            '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix">'+
-                                                '<div class="surveyjs-question-body">'+
-                                                    '<div class="surveyjs-question-text">{{questionText}}</div>'+
-                                                    '<div class="surveyjs-answers-box form-group clearfix">'+
-                                                        '{{answersHtml}}'+
-                                                    '</div>'+
-                                                '</div>'+
-                                            '</div>'+
-                                        '</div>',
-
-                    // FOR AWESOME BOOTSTRAP CHECKBOXES
-                    input:      '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check abc-{{answerType}}" data-answer-index="{{answerIndex}}">'+
-                                            '{{inputTagCode}}'+
-                                            '{{labelTagCode}}'+
-                                        '</div>',
-                    inputGroup: '<div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}">'+
-                                            '<div class="input-group-prepend form-check abc-radio surveyjs-answer-{{answerType}}">'+
-                                                '<div class="input-group-text">'+
-                                                    '<input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" />'+
-                                                    '<label for="{{answerCode}}" class="surveyjs-label form-check-label">{{answerString}}</label>'+
-                                                '</div>'+
-                                            '</div>'+
-                                            '{{relatedAnswerField}}'+
-                                        '</div>'
-                },
-                formOptions: {
-                    beforeSend: function beforeSend_doc( data ){
-                        console.log('Survey formOptions.beforeSend call...', data);
-
-                        if( !data.stopExecution ){
-                            $surveyBtn.addClass('surveyjs-submit-sending');
-                            $surveyCont.find('.alert').remove();
-                        }
-
-                        return Promise.resolve(data);
-                    }
-                }
-        };
-
-        var onInitSuccess = function( ajaxData ){
-                var surveyFormEl = this.formEl,
-                    surveyBody = surveyFormEl.querySelector('.surveyjs-body'),
-                    initStatus = ajaxData.status;
-                
-                if( initStatus === 'success' ){
-                    console.log('init slider');
-                    $('.stackSlider').stackslider({ piles : false });
-                } else {
-                    var elemToRemove = surveyFormEl.querySelector('.surveyjs-footer');
-                    elemToRemove.parentNode.removeChild(elemToRemove);
-                    surveyBody.innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
-                }
-            },
-            onInitError = function( error ){
-                var surveyFormEl = this.formEl;
-                surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
-            },
-            onValidation = function( fields ){
-                console.log( 'onValidation', fields );
-                if( fields.length > 1 ){
-                    if( !formEl.querySelector('[type="submit"]').disabled ){
-                        return;
-                    }
-                    // GO TO THE FIRST UNANSWERED QUESTION
-                    var $stWrapper = $('.surveyjs-form .st-wrapper'),
-                        activeIndex = $stWrapper.find('.st-center').index(),
-                        $invalidField = (function(){
-                            for( var f=0; f<fields.length; f++ ){
-                                var obj = fields[f];
-                                if( !obj.result && !$(obj.fieldEl).is('[data-name="bind-surveyjs-answer"]') ){
-                                    return $(obj.fieldEl);
-                                }
-                            }
-                            return $();
-                        })();
-                    
-                    if( $invalidField.length ){
-                        
-                        var invalidIndex = $invalidField.closest('.st-item').index(),
-                            clickDirection = ( activeIndex > invalidIndex ? 'prev' : 'next' ),
-                            $btn = ( clickDirection === 'prev' ? $stWrapper.find('nav > span:first-child') : $stWrapper.find('nav > span:last-child') ),
-                            clicksLength = ( clickDirection === 'prev' ? activeIndex - invalidIndex : invalidIndex - activeIndex );
-
-                        for(var i=0; i<clicksLength; i++){
-                            $btn.trigger('click.stackslider');
-                        }
-                        
-                    }
-                } else {
-                    console.log('validating field ', fields[0]);
-                }
-            }
-        ;
-        
-        formEl.addEventListener('fjs.field:validation', function(event){
-            console.log(event.type);
-            onValidation([event.data]);
-        });
-
-        formEl.addEventListener('fjs.form:validation', function(event){
-            console.log(event.type);
-            onValidation(event.data.fields);
-        });
-
-        formEl.addEventListener('fjs.form:submit', function(event){
-            console.log(event.type);
-            event.data
-                .then(function(ajaxData){
-                    console.log('then', ajaxData);
-                    if( typeof ajaxData === 'string' ){
-                        try{
-                            ajaxData = JSON.parse(ajaxData);
-                        } catch(error){
-                            throw new Error('String returned from ajax call to "' + ajaxOptions.url + '" is not a valid JSON string');
-                        }
-                    }
-
-                    if( $.isPlainObject( ajaxData ) ){
-                        if( ajaxData.status === 'success' ){
-                            // REMOVE THE SURVEY FROM THE PAGE
-                            $surveyCont.remove();
-                            // OPEN THE BOOTSTRAP MODAL TO SHOW A CONGRATULATION MESSAGE
-                            $('#modal-notification').modal('show');
-                        } else {
-                            // PRINT THE ERROR MESSAGE AFTER THE FORM
-                            $surveyCont.append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
-                        }
-                    }
-                })
-                .catch(function(error){
-                    console.log('catch', error);
-                    // PRINT THE ERROR MESSAGE AFTER THE FORM
-                    $surveyForm.closest('.surveyjs-container').append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
-                })
-                .finally(function(){
-                    console.log('finally');
-                    $surveyBtn.removeClass('surveyjs-submit-sending');
-                });
-        });
-
-        formEl.addEventListener('sjs:init', function(event){
-            console.log(event.type);
-            event.data
-                .then(function( data ){
-                    console.log('Survey init then');
-                    console.log(data);
-                    onInitSuccess.call(mySurvey, data);
-                })
-                .catch(function( error ){
-                    console.log('Survey init catch');
-                    console.log(error);
-                    onInitError.call(mySurvey, error);
-                });
-        }, false);
-
-        var mySurvey = new Survey( formEl, options );
-    </script>
 </body>
 </html>

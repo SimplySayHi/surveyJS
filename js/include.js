@@ -5,7 +5,7 @@ function isPlainObject( object ){
 
 function scrollToElement( element ){
     setTimeout(function(){
-        element.scrollIntoView({ behavior: 'smooth'});
+        element.scrollIntoView({ behavior: 'smooth' });
     }, 50);
 }
 
@@ -67,8 +67,18 @@ document.addEventListener('click', function(e){
 }, false);
 
 document.addEventListener('DOMContentLoaded', function(){
-    var version = Survey.prototype.version;
-    Array.from( document.querySelectorAll('[data-print-current-version]') ).forEach(function( elem ){
-        elem.innerHTML = version;
-    });
+    if( window.Survey ){
+        var version = Survey.prototype.version;
+        Array.from( document.querySelectorAll('[data-print-current-version]') ).forEach(function( elem ){
+            elem.innerHTML = version;
+        });
+    }
 });
+
+if( document.querySelector('[data-panel="html"] .card-header') ){
+    document.querySelector('[data-panel="html"] .card-header').click();
+}
+
+if( document.querySelector('[data-panel="js"] .card-header') ){
+    document.querySelector('[data-panel="js"] .card-header').click();
+}
