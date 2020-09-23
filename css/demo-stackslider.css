@@ -123,9 +123,9 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
     border-radius: 8px;
 }
 
-.surveyjs-form .input-group .form-control {
+/* .surveyjs-form .input-group .form-control {
     width: auto;
-}
+} */
 
 .surveyjs-footer {
     border-top: 4px dashed #073b4c;
@@ -150,8 +150,8 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
     margin-bottom: 0;
 }
 
-@media (max-width: 600px){
+/* @media (max-width: 600px){
     .surveyjs-form .input-group .form-control {
         width: 100%;
     }
-}
+} */
