@@ -1,0 +1,302 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Demo Stack Slider 1 | surveyJS - JavaScript Survey Creation &amp; Management. Made Easy</title>
+    <meta name="description" content="JavaScript Survey Creation & Management. Made Easy">
+    <meta name="keywords" content="survey, question, answer, javascript, plugin, ajax, json">
+    <meta name="author" content="Valerio Di Punzio">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Expletus+Sans:500|Raleway:200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/font-awesome.css">
+    <link rel="stylesheet" href="../css/awesome-bootstrap-checkbox.css">
+    <link rel="stylesheet" href="../css/stackSlider.css">
+    <link rel="stylesheet" href="../dist/survey.css">
+    <link rel="stylesheet" href="../css/doc.css">
+    <link rel="stylesheet" href="../css/demo.css">
+    <link rel="stylesheet" href="../css/demo-stackslider.css">
+    <link rel="stylesheet" href="../css/prism.css">
+
+    <script defer src="../js/vendors/modernizr_custom_63321.js"></script>
+    <script defer src="../js/vendors/jquery-1.12.4.min.js"></script>
+    <script defer src="../js/vendors/bootstrap.bundle.min.js"></script>
+    <script defer src="../js/vendors/jquery_stackslider.js"></script>
+
+    <!-- DYNAMICALLY LOAD POLYFILLS -> REQUIRED TO SUPPORT IE 10/11 AND SOME EDGE VERSIONS -->
+    <script defer src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"></script>
+    <script defer src="../js/vendors/formjs.min.js"></script>
+    <script defer src="../dist/surveyjs.min.js"></script>
+    <script defer src="../js/demo.js"></script>
+
+    <script defer src="../js/prism.js"></script>
+    <script defer src="../js/include.js"></script>
+
+    <script defer src="../js/demos/demo-stackslider-1.js"></script>
+</head>
+
+<body>
+
+    <div id="top" class="container-fluid d-flex flex-column">
+
+        <div id="menu" class="position-sticky text-right d-flex">
+            <div class="position-raltive w-100">
+                <a href="../index.html" class="logo">S</a>
+                <nav class="position-absolute nav-desktop d-none d-md-flex align-items-center">
+                    <a href="../index.html" class="p-2 m-2">Home</a>
+                    <a href="../get-started.html" class="p-2 m-2">Get Started</a>
+                    <a href="../api.html" class="p-2 m-2">API</a>
+                    <a href="../demos.html" class="p-2 m-2">Demos</a>
+                    <a href="https://github.com/SimplySayHi/surveyJS" target="_blank" class="github-logo ml-2">
+                        <svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         width="28px" height="28px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M16,0.112c-8.836,0-16,7.294-16,16.291 C0,23.6,4.584,29.706,10.942,31.86c0.801,0.148 1.093-0.354,1.093-0.785c0-0.387-0.015-1.412-0.021-2.771 c-4.451,0.984-5.39-2.184-5.39-2.184c-0.729-1.881-1.777-2.383-1.777-2.383c-1.452-1.01,0.11-0.99,0.11-0.99 .605,0.115,2.45,1.68,2.45,1.68c1.428,2.488,3.745,1.77,4.657,1.354c0.145-1.053,0.559-1.771,1.016-2.178 c-3.553-0.412-7.288-1.809-7.288-8.051c0-1.778,0.623-3.232,1.646-4.371c-0.164-0.412-0.713-2.068,0.157-4.311 c0,0,1.344-0.438,4.399,1.67c1.276-0.361,2.646-0.543,4.006-0.549c1.359,0.006,2.728,0.188,4.006,0.549 c3.056-2.108,4.396-1.67,4.396-1.67c0.873,2.242,0.323,3.898,0.159,4.311c1.024,1.139,1.644,2.593,1.644,4.371 c0,6.258-3.74,7.635-7.305,8.038c0.574,0.504,1.086,1.498,1.086,3.018c0,2.178-0.02,3.934-0.02,4.469 c0,0.436,0.288,0.941,1.101,0.783C27.421,29.7,32,23.598,32,16.403C32,7.406,24.837,0.112,16,0.112z" />
+                        </svg>
+                    </a>
+                </nav>
+                <div class="position-absolute dropdown d-inline-block d-md-none">
+                    <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2" data-toggle="dropdown" type="button">
+                        menu
+                    </button>
+                    <span class="dropdown-menu">
+                        <a class="dropdown-item" href="../index.html">Home</a>
+                        <a class="dropdown-item" href="../get-started.html">Get Started</a>
+                        <a class="dropdown-item" href="../api.html">API</a>
+                        <a class="dropdown-item" href="../demos.html">Demos</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS" target="_blank">View on Github</a>
+                        <a class="dropdown-item" href="https://github.com/SimplySayHi/surveyJS/issues" target="_blank">Report a Bug</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content mt-5 pt-5">
+
+            <div class="d-flex flex-wrap align-items-baseline px-2">
+                <h4 class="my-0">surveyJS</h4>
+                <span class="mx-2"> / </span>
+                <h4 class="my-0">Demos</h4>
+            </div>
+            
+            <h2 class="border-0 mt-2 mb-4 pt-0">Demo Stack Slider 1</h2>
+
+            <div class="row justify-content-center overflow-hidden">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-6 mx-auto mb-5">
+                    <div class="surveyjs-container surveyjs-custom-inputs panel" data-surveyjs-container>
+                        <div class="panel-body">
+                            <form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form surveyjs-cards" data-surveyjs-form novalidate="">
+                                <div class="surveyjs-question-box text-white text-right margin-lg" data-formjs-question>
+                                    <div class="surveyjs-answers-box form-group">
+                                        <div class="text-left small">
+                                            L'interessato persta il consenso al trattamento dei propri dati personali per la creazione di profili e per l'analisi delle sue abitudini o scelte di consumo sulla base del dettaglio dei suoi acquisti nonch&egrave; dei dati forniti direttamente dal cliente.
+                                        </div>
+                                        <div class="radio custom-radio custom-control custom-control-inline">
+                                            <input class="custom-control-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
+                                            <label class="surveyjs-label custom-control-label">
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                        <div class="radio custom-radio custom-control custom-control-inline">
+                                            <input class="custom-control-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
+                                            <label class="surveyjs-label custom-control-label">
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                        <div class="surveyjs-field-error-message small">
+                                            To go on you must select an answer.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="surveyjs-body questionsList clearfix stackSlider" data-surveyjs-body></div>
+                                <div class="surveyjs-footer row">
+                                    <button class="surveyjs-submit-btn btn btn-red d-block mx-auto" type="submit">
+                                        <span class="surveyjs-submit-text">SEND</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12"></div>
+                <div class="col-12 col-lg-6">
+                    <div class="panel-collapsible mb-4" data-panel="html">
+                        <div class="panel no-bg">
+                            <div class="card-header bg-white text-dark">
+                                <div>
+                                    <p class="m-0">HTML</p>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <pre class="m-0">
+<code class="language-html">&lt;div class="surveyjs-container surveyjs-custom-inputs panel" data-surveyjs-container&gt;
+    &lt;div class="panel-body"&gt;
+        &lt;form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form surveyjs-cards" data-surveyjs-form novalidate=""&gt;
+            &lt;div class="surveyjs-question-box text-white text-right margin-lg" data-formjs-question&gt;
+                &lt;div class="surveyjs-answers-box form-group"&gt;
+                    &lt;div class="text-left small"&gt;
+                        L'interessato persta il consenso al trattamento dei propri dati personali per la creazione di profili e per l'analisi delle sue abitudini o scelte di consumo sulla base del dettaglio dei suoi acquisti nonch&egrave; dei dati forniti direttamente dal cliente.
+                    &lt;/div&gt;
+                    &lt;div class="radio custom-radio custom-control custom-control-inline"&gt;
+                        &lt;input class="custom-control-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/&gt;
+                        &lt;label class="surveyjs-label custom-control-label"&gt;
+                            &lt;span&gt;&lt;/span&gt;
+                        &lt;/label&gt;
+                    &lt;/div&gt;
+                    &lt;div class="radio custom-radio custom-control custom-control-inline"&gt;
+                        &lt;input class="custom-control-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/&gt;
+                        &lt;label class="surveyjs-label custom-control-label"&gt;
+                            &lt;span&gt;&lt;/span&gt;
+                        &lt;/label&gt;
+                    &lt;/div&gt;
+                    &lt;div class="surveyjs-field-error-message small"&gt;
+                        To go on you must select an answer.
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="surveyjs-body questionsList clearfix stackSlider" data-surveyjs-body&gt;&lt;/div&gt;
+            &lt;div class="surveyjs-footer row"&gt;
+                &lt;button class="surveyjs-submit-btn btn btn-red d-block mx-auto" type="submit"&gt;
+                    &lt;span class="surveyjs-submit-text"&gt;SEND&lt;/span&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="panel-collapsible mb-4" data-panel="js">
+                        <div class="panel no-bg">
+                            <div class="card-header bg-white text-dark">
+                                <div>
+                                    <p class="m-0">JS</p>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <pre class="m-0">
+<code class="language-js">// FULL CODE: /js/demos/demo-stackslider-1.js
+const formEl = document.querySelector('[data-surveyjs-form]');
+const options = {
+    url: '../json/survey.json',
+    cssClasses: {
+        checkbox:   'custom-control-input',
+        radio:      'custom-control-input',
+        label:      'custom-control-label',
+        select:     'custom-select'
+    },
+    templates: {
+        question:   '&lt;div class="st-item" data-title="#{{questionNumber}}"&gt;'+
+                        '&lt;div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix"&gt;'+
+                            '&lt;div class="surveyjs-question-body"&gt;'+
+                                '&lt;div class="surveyjs-question-text"&gt;{{questionText}}&lt;/div&gt;'+
+                                '&lt;div class="surveyjs-answers-box form-group clearfix"&gt;'+
+                                    '{{answersHtml}}'+
+                                '&lt;/div&gt;'+
+                            '&lt;/div&gt;'+
+                        '&lt;/div&gt;'+
+                    '&lt;/div&gt;',
+
+        // FOR BOOTSTRAP 4 CUSTOM INPUTS
+        input:  '&lt;div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} custom-control form-check custom-{{answerType}}" data-answer-index="{{answerIndex}}"&gt;'+
+                    '{{inputTagCode}}'+
+                    '{{labelTagCode}}'+
+                '&lt;/div&gt;',
+        inputGroup: '&lt;div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}"&gt;'+
+                        '&lt;div class="input-group-prepend"&gt;'+
+                            '&lt;div class="input-group-text custom-control custom-radio surveyjs-answer-{{answerType}}"&gt;'+
+                                '&lt;input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio custom-control-input" /&gt;'+
+                                '&lt;label for="{{answerCode}}" class="surveyjs-label custom-control-label"&gt;{{answerString}}&lt;/label&gt;'+
+                            '&lt;/div&gt;'+
+                        '&lt;/div&gt;'+
+                        '{{relatedAnswerField}}'+
+                    '&lt;/div&gt;'
+    },
+    formOptions: {
+        beforeSend: function beforeSend_doc( data ){...}
+    }
+};
+
+const onValidation = fields => {...};
+
+const onInitSuccess = function( ajaxData ){
+    const surveyFormEl = this.formEl,
+          surveyBody = surveyFormEl.querySelector('.surveyjs-body'),
+          initStatus = ajaxData.status;
+    
+    if( initStatus === 'success' ){
+        $('.stackSlider').stackslider({ piles : false });
+    } else {
+        const elemToRemove = surveyFormEl.querySelector('.surveyjs-footer');
+        elemToRemove.parentNode.removeChild(elemToRemove);
+        surveyBody.innerHTML = '&lt;div class="surveyjs-message"&gt;Errore durante il caricamento. Per favore, ricarica la pagina.&lt;/div&gt;';
+    }
+};
+
+formEl.addEventListener('fjs.field:validation', event => {
+    onValidation([event.data]);
+}, false);
+
+formEl.addEventListener('fjs.form:validation', event => {
+    onValidation(event.data.fields);
+}, false);
+
+formEl.addEventListener('fjs.form:submit', event => {
+    event.data
+        .then(ajaxData => {...})
+        .catch(error => {...})
+        .finally(() => {...});
+}, false);
+
+formEl.addEventListener('sjs:init', event => {
+    event.data
+        .then(data => {
+            onInitSuccess.call(mySurvey, data);
+        })
+        .catch(error => {...});
+}, false);
+
+const mySurvey = new Survey( formEl, options );
+
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <footer class="text-center mt-5 pt-5 mb-3">
+            <hr />
+            <p class="small m-0">
+                Made with passion by <a href="https://valeriodipunzio.com" target="_blank">Valerio Di Punzio</a>
+            </p>
+        </footer>
+    </div>
+    
+    <div id="modal-notification" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Mission complete</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="text-green">Congratulations!</h3>
+                    <p class="m-0">
+                        You completed the survey and gained <b>100 points</b>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
