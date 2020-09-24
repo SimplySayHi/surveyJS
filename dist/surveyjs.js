@@ -489,14 +489,9 @@ var Survey = function(Form) {
             }));
         }
     }, buildSurvey = function(formEl, options, internals, data) {
-        var self = formEl.formjs, formName = formEl.getAttribute("name") || "", surveyContEl = formEl.closest("[data-surveyjs-container]");
+        var self = formEl.formjs, formName = formEl.getAttribute("name") || "";
         self.internals.storageName = internals.storageName.replace(/{{surveyId}}/g, data.id), 
         self.internals.storageName = internals.storageName.replace(/{{surveyFormName}}/g, formName);
-        var checkData = function(data) {
-            return void 0 !== data ? data : "";
-        };
-        surveyContEl.querySelector("[data-surveyjs-title]") && (surveyContEl.querySelector("[data-surveyjs-title]").textContent = checkData(data.title)), 
-        surveyContEl.querySelector("[data-surveyjs-description]") && (surveyContEl.querySelector("[data-surveyjs-description]").textContent = checkData(data.description));
         var qaHtmlAll = generateQAcode(formEl, options, data.questions);
         appendDomStringToNode(qaHtmlAll, formEl.querySelector("[data-surveyjs-body]")), 
         options.useLocalStorage && populateAnswers(formEl, self.internals);

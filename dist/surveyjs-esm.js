@@ -327,12 +327,9 @@ const iterateAnswers = (formEl, options, obj, qID, qIdx, attrReq) => {
     }
     return aLoopHtml;
 }, buildSurvey = (formEl, options, internals, data) => {
-    const self = formEl.formjs, formName = formEl.getAttribute("name") || "", surveyContEl = formEl.closest("[data-surveyjs-container]");
+    const self = formEl.formjs, formName = formEl.getAttribute("name") || "";
     self.internals.storageName = internals.storageName.replace(/{{surveyId}}/g, data.id), 
     self.internals.storageName = internals.storageName.replace(/{{surveyFormName}}/g, formName);
-    const checkData = data => void 0 !== data ? data : "";
-    surveyContEl.querySelector("[data-surveyjs-title]") && (surveyContEl.querySelector("[data-surveyjs-title]").textContent = checkData(data.title)), 
-    surveyContEl.querySelector("[data-surveyjs-description]") && (surveyContEl.querySelector("[data-surveyjs-description]").textContent = checkData(data.description));
     ((HTMLstring, parentNode) => {
         const tmpEl = document.createElement("div");
         tmpEl.innerHTML = HTMLstring, Array.from(tmpEl.childNodes).forEach(elem => {

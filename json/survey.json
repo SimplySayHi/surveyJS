@@ -2,8 +2,6 @@
     "status": "success",
     "data": {
         "id": 1,
-        "title": "My Survey",
-        "description": "Answer the questions",
         "questions": [
             {
                 "id": "1b",
