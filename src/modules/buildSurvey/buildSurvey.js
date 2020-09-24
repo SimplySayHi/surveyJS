@@ -8,7 +8,7 @@ export const buildSurvey = ( formEl, options, internals, data ) => {
     const self = formEl.formjs,
           formName = formEl.getAttribute('name') || '';
     
-    // REPLACE SURVEY ID AND FORM NAME IN LOCALSTORAGE NAME
+    // REPLACE SURVEY ID AND FORM NAME IN WEB STORAGE NAME
     self.internals.storageName = internals.storageName.replace( /{{surveyId}}/g, data.id );
     self.internals.storageName = internals.storageName.replace( /{{surveyFormName}}/g, formName );
     
@@ -18,7 +18,7 @@ export const buildSurvey = ( formEl, options, internals, data ) => {
     appendDomStringToNode( qaHtmlAll, formEl.querySelector('[data-surveyjs-body]') );
 
     // FILL ANSWERS WITH LOCAL STORAGE ( IF AVAILABLE )
-    if( options.useLocalStorage ){
+    if( options.useWebStorage ){
         populateAnswers( formEl, self.internals );
     }
 

@@ -278,17 +278,17 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     selectTag: '<select id="{{answerCode}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}>{{optionsHtml}}</select>',
                     textarea: '<div class="surveyjs-single-answer surveyjs-answer-textarea"><textarea id="{{answerCode}}" data-answer-id="{{answerId}}" {{nestedAnswer}} name="surveyjs-answer-{{questionNumber}}" {{attrRequired}} class="surveyjs-textarea {{fieldClass}}" {{answerMaxlength}} rows="6" placeholder="{{answerPlaceholder}}"></textarea></div>'
                 },
-                useLocalStorage: !0
+                useWebStorage: !0
             }, internals = {
                 storageArray: [],
                 storageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]"
-            }, getAnswerIndexInLocalStorage = function(internals, fieldName) {
-                var multiChoiceValue = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : "", lsSurvey = localStorage.getObject(internals.storageName);
-                if (lsSurvey) for (var lsSurveyLength = lsSurvey.length, ls = 0; ls < lsSurveyLength; ls++) {
-                    var lsItem = lsSurvey[ls];
+            }, getAnswerIndexInWebStorage = function(internals, fieldName) {
+                var multiChoiceValue = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : "", wsSurvey = sessionStorage.getObject(internals.storageName);
+                if (wsSurvey) for (var wsSurveyLength = wsSurvey.length, ws = 0; ws < wsSurveyLength; ws++) {
+                    var lsItem = wsSurvey[ws];
                     if (lsItem.field === fieldName) {
                         if (multiChoiceValue && lsItem.value !== multiChoiceValue) continue;
-                        return ls;
+                        return ws;
                     }
                 }
                 return -1;
@@ -297,15 +297,15 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[1] : "id-not-found", isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), questionObj = getQuestionObject(self.data, questionId);
                     if (isEmptyObject(questionObj)) return !0;
                     if (isFieldForChangeEventBoolean && "change" === eventName || !isFieldForChangeEventBoolean && "change" !== eventName) {
-                        if (self.options.useLocalStorage && !fieldEl.matches("[data-exclude-storage]")) {
-                            var inArrayPos = getAnswerIndexInLocalStorage(internals, fieldEl.name, !!isMultiChoice && fieldValue), inArrayRequireMorePos = getAnswerIndexInLocalStorage(internals, fieldEl.name + "-more"), storageArray = internals.storageArray;
+                        if (self.options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
+                            var inArrayPos = getAnswerIndexInWebStorage(internals, fieldEl.name, !!isMultiChoice && fieldValue), inArrayRequireMorePos = getAnswerIndexInWebStorage(internals, fieldEl.name + "-more"), storageArray = internals.storageArray;
                             if (isRequireMore || isRequiredFrom || -1 === inArrayRequireMorePos || storageArray.splice(inArrayRequireMorePos, 1), 
                             -1 !== inArrayPos) isMultiChoice ? fieldEl.checked || storageArray[inArrayPos].value !== fieldValue ? storageArray.push({
                                 field: fieldEl.name,
                                 value: fieldValue
                             }) : storageArray.splice(inArrayPos, 1) : "" !== fieldValue ? storageArray[inArrayPos].value = fieldValue : storageArray.splice(inArrayPos, 1); else if ("" !== fieldValue) {
                                 if (isRequiredFrom && "" !== fieldValue) {
-                                    var oldFieldNamePos = getAnswerIndexInLocalStorage(internals, reqMoreEl.name);
+                                    var oldFieldNamePos = getAnswerIndexInWebStorage(internals, reqMoreEl.name);
                                     -1 !== oldFieldNamePos && storageArray.splice(oldFieldNamePos, 1), storageArray.push({
                                         field: reqMoreEl.name,
                                         value: reqMoreEl.value.trim()
@@ -322,7 +322,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                                     });
                                 }
                             }
-                            localStorage.setObject(internals.storageName, storageArray);
+                            sessionStorage.setObject(internals.storageName, storageArray);
                         }
                         void 0 !== questionObj.required && (fieldEl.required = !0);
                     }
@@ -463,27 +463,28 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 for (var questionsList = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : [], qaData = questionsList[0].sort ? questionsList.sort((function(a, b) {
                     return a.sort > b.sort;
                 })) : questionsList, qaDataLength = qaData.length, qaCodeAll = "", i = 0; i < qaDataLength; i++) {
-                    var item = qaData[i], maxChoice = item.checks ? JSON.parse(item.checks) : "", checksMin = maxChoice.length > 0 ? maxChoice[0] : "", checksMax = maxChoice.length > 0 ? maxChoice[1] : "", aHtml = "", qaHtml = options.templates.question;
-                    if (aHtml += iterateAnswers(formEl, options, item, item.id, i), "hidden-privacy" === item.question) {
+                    var item = qaData[i], qaHtml = options.templates.question, answersHtml = iterateAnswers(formEl, options, item, item.id, i);
+                    if ("hidden-privacy" === item.question) {
                         var bindAnswerEl = formEl.closest("[data-surveyjs-container]").querySelector('[data-name="bind-surveyjs-answer"]');
                         if (bindAnswerEl) {
                             bindAnswerEl.closest("[data-formjs-question]").setAttribute("data-question-id", item.id);
                             continue;
                         }
                     }
-                    if (qaHtml = (qaHtml = (qaHtml = (qaHtml = (qaHtml = qaHtml.replace(/{{questionId}}/g, item.id)).replace(/{{questionNumber}}/g, i + 1)).replace(/{{questionText}}/g, item.question + ("" !== maxChoice ? " (" + checksMax + " " + options.maxChoiceText + ")" : ""))).replace(/{{answersHtml}}/g, aHtml)).replace(/{{fieldErrorTemplate}}/g, options.fieldErrorFeedback ? options.templates.fieldError : ""), 
+                    var maxChoice = item.checks ? JSON.parse(item.checks) : "", checksMin = maxChoice.length > 0 ? maxChoice[0] : "", checksMax = maxChoice.length > 0 ? maxChoice[1] : "", maxChoiceText = "" !== maxChoice ? " (" + checksMax + " " + options.maxChoiceText + ")" : "", questionText = item.question + maxChoiceText, fieldErrorTemplate = options.fieldErrorFeedback ? options.templates.fieldError : "";
+                    if (qaHtml = (qaHtml = (qaHtml = (qaHtml = (qaHtml = qaHtml.replace(/{{questionId}}/g, item.id)).replace(/{{questionNumber}}/g, i + 1)).replace(/{{questionText}}/g, questionText)).replace(/{{answersHtml}}/g, answersHtml)).replace(/{{fieldErrorTemplate}}/g, fieldErrorTemplate), 
                     options.fieldErrorFeedback && -1 !== options.templates.fieldError.indexOf("{{fieldErrorMessage}}")) {
-                        var message = "" !== maxChoice ? options.fieldErrorMessageMultiChoice : options.fieldErrorMessage;
-                        qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, message).replace(/{{checksMin}}/g, checksMin).replace(/{{checksMax}}/g, checksMax);
+                        var fieldErrorMessage = "" !== maxChoice ? options.fieldErrorMessageMultiChoice : options.fieldErrorMessage;
+                        qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, fieldErrorMessage).replace(/{{checksMin}}/g, checksMin).replace(/{{checksMax}}/g, checksMax);
                     }
                     qaCodeAll += qaHtml;
                 }
                 return qaCodeAll;
             }, populateAnswers = function(formEl, internals) {
-                var LS = localStorage.getObject(internals.storageName);
-                if (LS) {
+                var WS = sessionStorage.getObject(internals.storageName);
+                if (WS) {
                     var surveyContEl = formEl.closest("[data-surveyjs-container]");
-                    internals.storageArray = LS, LS.forEach((function(item) {
+                    internals.storageArray = WS, WS.forEach((function(item) {
                         var fieldFirst = surveyContEl.querySelector('[name="' + item.field + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst;
                         isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
                     }));
@@ -494,7 +495,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 self.internals.storageName = internals.storageName.replace(/{{surveyFormName}}/g, formName);
                 var qaHtmlAll = generateQAcode(formEl, options, data.questions);
                 appendDomStringToNode(qaHtmlAll, formEl.querySelector("[data-surveyjs-body]")), 
-                options.useLocalStorage && populateAnswers(formEl, self.internals);
+                options.useWebStorage && populateAnswers(formEl, self.internals);
             }, destroy = function(formEl) {
                 formEl.formjs.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = "blur" === eventName;
@@ -509,14 +510,14 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     var customLang = "string" == typeof optionsObj.lang && optionsObj.lang.toLowerCase(), langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang, options = mergeObjects({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
                     -1 !== options.templates.input.indexOf("{{inputTagCode}}") && (options.templates.input = options.templates.input.replace(/{{inputTagCode}}/g, options.templates.inputTag)), 
                     options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label), 
-                    webStorage().isAvailable || (options.useLocalStorage = !1);
+                    webStorage().isAvailable || (options.useWebStorage = !1);
                     var self = _assertThisInitialized(_this = _super.call(this, formEl, options));
                     self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                         var useCapturing = "blur" === eventName;
                         self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
                     })), self.formEl.addEventListener("fjs.form:submit", (function(event) {
                         event.data.then((function() {
-                            self.options.useLocalStorage && localStorage.removeItem(self.internals.storageName);
+                            self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
                         }));
                     })), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
                     var retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions).then((function(response) {

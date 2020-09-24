@@ -74,5 +74,5 @@ export const options = {
                         '<textarea id="{{answerCode}}" data-answer-id="{{answerId}}" {{nestedAnswer}} name="surveyjs-answer-{{questionNumber}}" {{attrRequired}} class="surveyjs-textarea {{fieldClass}}" {{answerMaxlength}} rows="6" placeholder="{{answerPlaceholder}}"></textarea>'+
                     '</div>'
     },
-    useLocalStorage:        true
+    useWebStorage:          true
 }

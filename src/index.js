@@ -34,7 +34,7 @@ class Survey extends Form {
         options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label);
 
         if( !webStorage().isAvailable ){
-            options.useLocalStorage = false;
+            options.useWebStorage = false;
         }
 
         // CREATE FORM INSTANCE FOR SURVEY
@@ -47,8 +47,8 @@ class Survey extends Form {
         });
         self.formEl.addEventListener('fjs.form:submit', event => {
             event.data.then(() => {
-                if( self.options.useLocalStorage ){
-                    localStorage.removeItem( self.internals.storageName );
+                if( self.options.useWebStorage ){
+                    sessionStorage.removeItem( self.internals.storageName );
                 }
             });
         });

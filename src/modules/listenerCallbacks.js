@@ -1,6 +1,6 @@
 
 import { isEmptyObject, isFieldForChangeEvent } from './helpers';
-import { getAnswerIndexInLocalStorage }         from './utils/getAnswerIndexInLocalStorage';
+import { getAnswerIndexInWebStorage }           from './utils/getAnswerIndexInWebStorage';
 import { getQuestionObject }                    from './utils/getQuestionObject';
 
 export const callbackFns = {
@@ -34,9 +34,9 @@ export const callbackFns = {
         ){
             
             // MANAGE ITEMS IN LOCAL STORAGE ( IF AVAILABLE AND USABLE )
-            if( self.options.useLocalStorage && !fieldEl.matches('[data-exclude-storage]') ){
-                const inArrayPos = getAnswerIndexInLocalStorage( internals, fieldEl.name, (isMultiChoice ? fieldValue : false) ),
-                    inArrayRequireMorePos = getAnswerIndexInLocalStorage( internals, fieldEl.name + '-more' );
+            if( self.options.useWebStorage && !fieldEl.matches('[data-exclude-storage]') ){
+                const inArrayPos = getAnswerIndexInWebStorage( internals, fieldEl.name, (isMultiChoice ? fieldValue : false) ),
+                    inArrayRequireMorePos = getAnswerIndexInWebStorage( internals, fieldEl.name + '-more' );
 
                 let storageArray = internals.storageArray;
 
@@ -63,7 +63,7 @@ export const callbackFns = {
                 } else {
                     if( fieldValue !== '' ){
                         if( isRequiredFrom && fieldValue !== '' ){
-                            const oldFieldNamePos = getAnswerIndexInLocalStorage( internals, reqMoreEl.name );
+                            const oldFieldNamePos = getAnswerIndexInWebStorage( internals, reqMoreEl.name );
 
                             if( oldFieldNamePos !== -1 ){
                                 storageArray.splice(oldFieldNamePos, 1);
@@ -78,7 +78,7 @@ export const callbackFns = {
                     }
                 }
 
-                localStorage.setObject( internals.storageName, storageArray );
+                sessionStorage.setObject( internals.storageName, storageArray );
             }
 
             // BASED ON JSON DATA, FORCE REQUIRED FIELDS TO BE VALIDATED
