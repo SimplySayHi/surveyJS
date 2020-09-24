@@ -91,12 +91,12 @@ var onInitSuccess = function( ajaxData ){
         } else {
             var elemToRemove = surveyFormEl.querySelector('.surveyjs-footer');
             elemToRemove.parentNode.removeChild(elemToRemove);
-            surveyBody.innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
+            surveyBody.innerHTML = '<div class="surveyjs-message">Loading Error. Please, reload the page.</div>';
         }
     },
     onInitError = function( error ){
         var surveyFormEl = this.formEl;                
-        surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
+        surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Loading Error. Please, reload the page.</div>';
     },
     onValidation = function( fields ){
         console.log( 'onValidation', fields );

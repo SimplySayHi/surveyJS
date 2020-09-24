@@ -100,7 +100,8 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
     color: #073b4c;
 }
 
-.surveyjs-loading {
+.surveyjs-loading,
+.surveyjs-message {
     text-align: center;
     color: #fff;
 }

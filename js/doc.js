@@ -50,23 +50,17 @@ var options = {
         }
 };
 
-var onInitSuccess = function( ajaxData ){
-        var surveyFormEl = this.formEl,
-            surveyBody = surveyFormEl.querySelector('.surveyjs-body'),
-            initStatus = ajaxData.status;
-        
-        if( initStatus === 'success' ){
+var onInitSuccess = function( ajaxData ){        
+        if( ajaxData.status === 'success' ){
             console.log('init slider');
             $('.stackSlider').stackslider({ piles : false });
         } else {
-            var elemToRemove = surveyFormEl.querySelector('.surveyjs-footer');
-            elemToRemove.parentNode.removeChild(elemToRemove);
-            surveyBody.innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
+            onInitError.call(this);
         }
     },
     onInitError = function( error ){
         var surveyFormEl = this.formEl;
-        surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Errore durante il caricamento. Per favore, ricarica la pagina.</div>';
+        surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Loading Error. Please, reload the page.</div>';
     },
     onValidation = function( fields ){
         console.log( 'onValidation', fields );
