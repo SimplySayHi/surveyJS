@@ -32,9 +32,4 @@ export const buildSurvey = ( formEl, options, internals, data ) => {
         populateAnswers( formEl, self.internals );
     }
 
-    const loadingBoxEl = formEl.querySelector('[data-surveyjs-loading]');
-    if( loadingBoxEl ){
-        loadingBoxEl.parentNode.removeChild(loadingBoxEl);
-    }
-
 }

@@ -74,6 +74,12 @@ class Survey extends Form {
                         resolve(response);
                     }
                 });
+            })
+            .finally(() => {
+                const loadingBoxEl = self.formEl.querySelector('[data-surveyjs-loading]');
+                if( loadingBoxEl ){
+                    loadingBoxEl.parentNode.removeChild(loadingBoxEl);
+                }
             });
         
         dispatchCustomEvent( self.formEl, customEvents.init, retrieveSurvey );
