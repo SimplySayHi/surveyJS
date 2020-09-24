@@ -500,8 +500,6 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 var qaHtmlAll = generateQAcode(formEl, options, data.questions);
                 appendDomStringToNode(qaHtmlAll, formEl.querySelector("[data-surveyjs-body]")), 
                 options.useLocalStorage && populateAnswers(formEl, self.internals);
-                var loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
-                loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
             }, destroy = function(formEl) {
                 formEl.formjs.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = "blur" === eventName;
@@ -534,6 +532,9 @@ System.register([ "formjs-plugin" ], (function(exports) {
                                 resolve(response);
                             }))) : resolve(response);
                         }));
+                    })).finally((function() {
+                        var loadingBoxEl = self.formEl.querySelector("[data-surveyjs-loading]");
+                        loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
                     }));
                     return dispatchCustomEvent(self.formEl, customEvents.init, retrieveSurvey), _this;
                 }

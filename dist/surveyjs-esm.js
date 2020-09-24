@@ -372,8 +372,6 @@ const iterateAnswers = (formEl, options, obj, qID, qIdx, attrReq) => {
             });
         }
     })(formEl, self.internals);
-    const loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
-    loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
 };
 
 class Survey extends Form {
@@ -409,7 +407,10 @@ class Survey extends Form {
                 self.isInitialized = !0, self.data = response.data, deepFreeze(self.data), self.formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
                 resolve(response);
             })) : resolve(response);
-        }));
+        })).finally(() => {
+            const loadingBoxEl = self.formEl.querySelector("[data-surveyjs-loading]");
+            loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
+        });
         ((elem, eventName, data = {}, eventOptions = {}) => {
             eventOptions = mergeObjects({}, {
                 bubbles: !0
