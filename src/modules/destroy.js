@@ -7,5 +7,6 @@ export const destroy = formEl => {
         const useCapturing = eventName === 'blur' ? true : false;
         formEl.removeEventListener(eventName, callbackFns.validation, useCapturing);
     });
+    formEl.removeEventListener('fjs.form:submit', callbackFns.submit);
     
 }

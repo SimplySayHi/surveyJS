@@ -5,6 +5,15 @@ import { getQuestionObject }                    from './utils/getQuestionObject'
 
 export const callbackFns = {
 
+    submit: function( event ){
+        const self = event.target.formjs;
+        event.data.then(() => {
+            if( self.options.useWebStorage ){
+                sessionStorage.removeItem( self.internals.storageName );
+            }
+        });
+    },
+
     // THIS WILL RUN BEFORE FORMJS VALIDATION FUNCTION SO THAT USERS CANNOT SKIP REQUIRED FIELDS VALIDATION ( WHILE TYPING )
     validation: function( event ){
 

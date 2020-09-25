@@ -45,13 +45,7 @@ class Survey extends Form {
             const useCapturing = eventName === 'blur' ? true : false;
             self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
         });
-        self.formEl.addEventListener('fjs.form:submit', event => {
-            event.data.then(() => {
-                if( self.options.useWebStorage ){
-                    sessionStorage.removeItem( self.internals.storageName );
-                }
-            });
-        });
+        self.formEl.addEventListener('fjs.form:submit', callbackFns.submit);
 
         // CREATE SURVEY
         self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.loadingBox );

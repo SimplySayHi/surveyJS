@@ -151,6 +151,11 @@ const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnProperty
         }
     }
     return -1;
+}, callbackFns_submit = function(event) {
+    const self = event.target.formjs;
+    event.data.then(() => {
+        self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
+    });
 }, callbackFns_validation = function(event) {
     const eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[1] : "id-not-found", isFieldForChangeEventBoolean = (fieldEl => fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]'))(fieldEl), questionObj = getQuestionObject(self.data, questionId);
     if (isEmptyObject(questionObj)) return !0;
@@ -382,11 +387,7 @@ class Survey extends Form {
         self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
             const useCapturing = "blur" === eventName;
             self.formEl.addEventListener(eventName, callbackFns_validation, useCapturing);
-        }), self.formEl.addEventListener("fjs.form:submit", event => {
-            event.data.then(() => {
-                self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
-            });
-        }), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
+        }), self.formEl.addEventListener("fjs.form:submit", callbackFns_submit), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
         const retrieveSurvey = ((url = location.href, options = {}) => {
             let timeoutTimer;
             if (options.headers = new Headers(options.headers), options.timeout > 0) {
@@ -421,7 +422,7 @@ class Survey extends Form {
         (formEl = this.formEl).formjs.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
             const useCapturing = "blur" === eventName;
             formEl.removeEventListener(eventName, callbackFns_validation, useCapturing);
-        }), super.destroy();
+        }), formEl.removeEventListener("fjs.form:submit", callbackFns_submit), super.destroy();
     }
     static addLanguage(langString, langObject) {
         const langValue = langString.toLowerCase();

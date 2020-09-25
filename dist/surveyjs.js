@@ -293,6 +293,12 @@ var Survey = function(Form) {
         }
         return -1;
     }, callbackFns = {
+        submit: function(event) {
+            var self = event.target.formjs;
+            event.data.then((function() {
+                self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
+            }));
+        },
         validation: function(event) {
             var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[1] : "id-not-found", isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), questionObj = getQuestionObject(self.data, questionId);
             if (isEmptyObject(questionObj)) return !0;
@@ -500,7 +506,7 @@ var Survey = function(Form) {
         formEl.formjs.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
             var useCapturing = "blur" === eventName;
             formEl.removeEventListener(eventName, callbackFns.validation, useCapturing);
-        }));
+        })), formEl.removeEventListener("fjs.form:submit", callbackFns.submit);
     }, version = "3.0.0", Survey = function(_Form) {
         _inherits(Survey, _Form);
         var _super = _createSuper(Survey);
@@ -515,11 +521,7 @@ var Survey = function(Form) {
             self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                 var useCapturing = "blur" === eventName;
                 self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
-            })), self.formEl.addEventListener("fjs.form:submit", (function(event) {
-                event.data.then((function() {
-                    self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
-                }));
-            })), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
+            })), self.formEl.addEventListener("fjs.form:submit", callbackFns.submit), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
             var retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions).then((function(response) {
                 return "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise((function(resolve) {
                     response.data.questions && response.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, response.data), 
