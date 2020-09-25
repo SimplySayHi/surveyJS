@@ -404,7 +404,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 return fieldData.aHtml;
             }, progIds = [], iterateAnswers = function iterateAnswers(formEl, options, obj, qID, qIdx, attrReq) {
                 qID = obj.id ? obj.id : qID || 0;
-                var list = Array.isArray(obj) ? obj : obj.answers, listL = list.length, i = qIdx || 0, aLoopHtml = "", needsBinding = "hidden-privacy" === obj.question;
+                var list = Array.isArray(obj) ? obj : obj.answers, listL = list.length, i = qIdx || 0, aLoopHtml = "", needsBinding = "__external-field__" === obj.question;
                 list[0].sort && list.sort((function(a, b) {
                     return a.sort > b.sort;
                 }));
@@ -470,7 +470,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     return a.sort > b.sort;
                 })) : questionsList, qaDataLength = qaData.length, qaCodeAll = "", i = 0; i < qaDataLength; i++) {
                     var item = qaData[i], qaHtml = options.templates.question, answersHtml = iterateAnswers(formEl, options, item, item.id, i);
-                    if ("hidden-privacy" === item.question) {
+                    if ("__external-field__" === item.question) {
                         var bindAnswerEl = formEl.closest("[data-surveyjs-container]").querySelector('[data-name="bind-surveyjs-answer"]');
                         if (bindAnswerEl) {
                             bindAnswerEl.closest("[data-formjs-question]").setAttribute("data-question-id", item.id);

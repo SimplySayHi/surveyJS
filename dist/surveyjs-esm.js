@@ -269,7 +269,7 @@ let progIds = [];
 const iterateAnswers = (formEl, options, obj, qID, qIdx, attrReq) => {
     qID = obj.id ? obj.id : qID || 0;
     let list = Array.isArray(obj) ? obj : obj.answers, listL = list.length, i = qIdx || 0, aLoopHtml = "";
-    const needsBinding = "hidden-privacy" === obj.question;
+    const needsBinding = "__external-field__" === obj.question;
     list[0].sort && list.sort((a, b) => a.sort > b.sort);
     for (let a = 0; a < listL; a++) {
         let answer = list[a], aNum = a + 1, qNum = i + 1, aType = answer.type, aId = answer.id, progIdsLength = progIds.length, progIdsJoined = progIdsLength > 0 ? progIds.join("-") : "", getSettingsFieldClass = () => {
@@ -346,7 +346,7 @@ const iterateAnswers = (formEl, options, obj, qID, qIdx, attrReq) => {
         for (let i = 0; i < qaDataLength; i++) {
             const item = qaData[i];
             let qaHtml = options.templates.question, answersHtml = iterateAnswers(formEl, options, item, item.id, i);
-            if ("hidden-privacy" === item.question) {
+            if ("__external-field__" === item.question) {
                 const bindAnswerEl = formEl.closest("[data-surveyjs-container]").querySelector('[data-name="bind-surveyjs-answer"]');
                 if (bindAnswerEl) {
                     bindAnswerEl.closest("[data-formjs-question]").setAttribute("data-question-id", item.id);

@@ -341,7 +341,7 @@
             // PRIVACY CHECK
             {
                 "id": "22",
-                "question": "hidden-privacy",
+                "question": "__external-field__",
                 "answers": [
                             { "id": "44", "type": "radio", "answer": "Yes", "sort": 1 },
                             { "id": "45", "type": "radio", "answer": "No", "sort": 2 }
@@ -357,23 +357,23 @@
                     </div>
                     <div class="col-lg-6">
                 <p>
-                    To <b>bind the privacy acceptance field to the survey</b> you can set a question object as shown in the JSON above ( see PRIVACY CHECK ):
+                    To add an <b>external field</b> ( for example privacy acceptance ) you can set a question object as shown in the JSON ( see PRIVACY CHECK ):
                 </p>
                 <ul>
                     <li class="my-2">
-                        "question" must be the string "hidden-privacy";
+                        "question" must be the string <code>__external-field__</code>;
                     </li>
                     <li class="my-2">
-                        include a bit of HTML code ( see below ) inside the div ".surveyjs-container";
+                        include a bit of HTML code ( see below ) inside the div <code>.surveyjs-container</code>;
                         <ul>
                             <li class="my-2">
-                                attribute "data-formjs-question" is mandatory;
+                                attribute <code>data-formjs-question</code> is mandatory;
                             </li>
                             <li class="my-2">
-                                attribute data-name="bind-surveyjs-answer" is mandatory;
+                                attribute <code>data-name="bind-surveyjs-answer"</code> is mandatory;
                             </li>
                             <li class="my-2">
-                                attribute data-exclude-storage is optional ( used to avoid saving the answer in local storage );
+                                attribute <code>data-exclude-storage</code> is optional ( used to avoid saving the answer in session storage );
                             </li>
                         </ul>
                     </li>

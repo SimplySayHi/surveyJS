@@ -14,7 +14,7 @@ export const generateQAcode = ( formEl, options, questionsList = [] ) => {
         let qaHtml = options.templates.question;
         let answersHtml = iterateAnswers( formEl, options, item, item.id, i );
 
-        if( item.question === 'hidden-privacy' ){
+        if( item.question === '__external-field__' ){
             const bindAnswerEl = formEl.closest('[data-surveyjs-container]').querySelector('[data-name="bind-surveyjs-answer"]');
             if( bindAnswerEl ){
                 bindAnswerEl.closest('[data-formjs-question]').setAttribute('data-question-id', item.id);

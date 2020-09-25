@@ -101,7 +101,7 @@
             },
             {
                 "id": "22",
-                "question": "hidden-privacy",
+                "question": "__external-field__",
                 "answers": [
                             { "id": "44", "type": "radio", "answer": "Yes", "sort": 1 },
                             { "id": "45", "type": "radio", "answer": "No", "sort": 2 }

@@ -18,7 +18,7 @@ export const iterateAnswers = ( formEl, options, obj, qID, qIdx, attrReq ) => {
         i = qIdx || 0,
         aLoopHtml = '';
     
-    const needsBinding = obj.question === 'hidden-privacy' ? true : false;
+    const needsBinding = obj.question === '__external-field__' ? true : false;
 
     if( list[0]['sort'] ){
         list.sort((a, b) => {
