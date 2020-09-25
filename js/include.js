@@ -23,7 +23,7 @@ document.addEventListener('click', function(e){
             };
 
         // CLOSE ALL OPEN DROPDOWNS
-        if(
+        /* if(
             !checkElement(dropDownSelector) ||
             elem.matches(dropDownSelector+'[aria-expanded="false"]') ||
             elem.matches(dropDownSelector+':not([aria-expanded])')
@@ -35,7 +35,7 @@ document.addEventListener('click', function(e){
                     dropdownEl.nextElementSibling.classList.remove('show');
                 });
             }
-        }
+        } */
         
         if( checkElement(cardHeaderSelector) ){
             
@@ -52,7 +52,7 @@ document.addEventListener('click', function(e){
         } else if( checkElement(dropDownSelector) ){
 
             // OPEN DROPDOWN
-            e.preventDefault();
+            /* e.preventDefault();
 
             var dropDown = checkElement(dropDownSelector),
                 dropDownList = dropDown.nextElementSibling,
@@ -60,7 +60,7 @@ document.addEventListener('click', function(e){
                 ariaExpValue = ( !dropDownAriaExpanded || dropDownAriaExpanded === 'false' ? 'true' : 'false' );
 
             dropDown.setAttribute('aria-expanded', ariaExpValue);
-            dropDownList.classList.toggle('show');
+            dropDownList.classList.toggle('show'); */
 
         }
     }
