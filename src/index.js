@@ -1,11 +1,11 @@
 
 import { ajaxCall, customEvents, deepFreeze, dispatchCustomEvent, mergeObjects, webStorage } from './modules/helpers';
-import { messages }             from './modules/messages';
-import { options }              from './modules/options';
-import { internals }            from './modules/internals';
-import { callbackFns }          from './modules/listenerCallbacks';
-import { buildSurvey }          from './modules/buildSurvey/buildSurvey';
-import { destroy }              from './modules/destroy';
+import { messages }     from './modules/messages';
+import { options }      from './modules/options';
+import { internals }    from './modules/internals';
+import { callbackFns }  from './modules/listenerCallbacks';
+import { buildSurvey }  from './modules/buildSurvey/buildSurvey';
+import { destroy }      from './modules/destroy';
 
 import Form from 'formjs-plugin';
 
@@ -26,12 +26,6 @@ class Survey extends Form {
         
         // MERGE OPTIONS AND messages OF THE CHOSEN lang INSIDE options
         const options = mergeObjects( {}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj );
-
-        if( options.templates.input.indexOf('{{inputTagCode}}') !== -1 ){
-            options.templates.input = options.templates.input.replace( /{{inputTagCode}}/g, options.templates.inputTag );
-        }
-
-        options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label);
 
         if( !webStorage().isAvailable ){
             options.useWebStorage = false;

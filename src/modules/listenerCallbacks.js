@@ -14,7 +14,6 @@ export const callbackFns = {
         });
     },
 
-    // THIS WILL RUN BEFORE FORMJS VALIDATION FUNCTION SO THAT USERS CANNOT SKIP REQUIRED FIELDS VALIDATION ( WHILE TYPING )
     validation: function( event ){
 
         const eventName = event.type,

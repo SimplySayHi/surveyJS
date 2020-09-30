@@ -1,49 +1,85 @@
 
-import { iterateAnswers } from './generateQAcodeUtils/iterateAnswers';
+import { replaceObjectKeysInString, sortList } from '../helpers';
+import { generateAnswers } from './generateQAcodeUtils/generateAnswers';
 
-export const generateQAcode = ( formEl, options, questionsList = [] ) => {
+export const generateQAcode = ( formEl, options, surveyData ) => {
 
-    const qaData = questionsList[0]['sort'] ? questionsList.sort((a, b) => { return a['sort'] > b['sort']; }) : questionsList;
-    const qaDataLength = qaData.length;
+    const questionsList = sortList( surveyData.questions );
+    const qaDataLength = questionsList.length;
     
     let qaCodeAll = '';
     
     for(let i=0; i<qaDataLength; i++){
-        const item = qaData[i];
+        const questionObj = questionsList[i];
 
         let qaHtml = options.templates.question;
-        let answersHtml = iterateAnswers( formEl, options, item, item.id, i );
-
-        if( item.question === '__external-field__' ){
-            const bindAnswerEl = formEl.closest('[data-surveyjs-container]').querySelector('[data-name="bind-surveyjs-answer"]');
-            if( bindAnswerEl ){
-                bindAnswerEl.closest('[data-formjs-question]').setAttribute('data-question-id', item.id);
-                continue;
+        const questionId = questionObj.id;
+        const questionNumber = i + 1;
+        const extraData = {
+            surveyId: surveyData.id,
+            question: {
+                id: questionId,
+                index: i,
+                isRequired: !!questionObj.required
             }
+        };
+
+        if( questionObj.checks ){
+            extraData.question.checks = questionObj.checks;
+        }
+        
+        let answersHTML = generateAnswers( options, questionObj.answers, extraData );
+
+        // MANAGE EXTERNAL QUESTION
+        if( questionObj.external ){
+            const externalCont = formEl.closest('[data-surveyjs-container]').querySelector('[data-surveyjs-external]');
+            externalCont.setAttribute('data-question-id', questionId);
+
+            questionObj.answers.forEach((answer, index) => {
+                const bindAnswerEl = externalCont.querySelectorAll('[data-field]')[index];
+                const fieldProps = {
+                        id: `${answer.type}-${extraData.surveyId}-${questionId}-${answer.id}`,
+                        name: `${bindAnswerEl.name}${questionNumber}`,
+                        type: answer.type,
+                        value: answer.value,
+                        required: !!questionObj.required
+                    };
+                
+                Object.keys(fieldProps).forEach(name => {
+                    bindAnswerEl[name] = fieldProps[name];
+                });
+
+                bindAnswerEl.setAttribute('data-answer-id', answer.id);
+
+                const answerCont = bindAnswerEl.closest('[data-answer]');
+                answerCont.querySelector('label').setAttribute('for', fieldProps.id);
+                answerCont.querySelector('[data-label]').innerHTML = answer.label;
+                externalCont.querySelector('[data-question]').innerHTML = questionObj.question;
+            });
+
+            continue;
         }
 
-        const maxChoice = item.checks ? JSON.parse(item.checks) : '';
-        const checksMin = maxChoice.length > 0 ? maxChoice[0] : '';
-        const checksMax = maxChoice.length > 0 ? maxChoice[1] : '';
+        const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : '';
+        const checksMin = maxChoice[0] || '';
+        const checksMax = maxChoice[1] || '';
+        const maxChoiceText = maxChoice && options.maxChoice ? ' ('+ checksMax +' '+ options.maxChoice +')' : '';
 
-        const maxChoiceText = maxChoice !== '' ? ' ('+ checksMax +' '+ options.maxChoiceText +')' : '';
-        const questionText = item.question + maxChoiceText;
-        const fieldErrorTemplate = options.fieldErrorFeedback ? options.templates.fieldError : '';
+        const questionData = {
+            questionId,
+            questionNumber,
+            questionText: questionObj.question + maxChoiceText,
+            answersHTML,
+            fieldErrorTemplate: options.fieldErrorFeedback ? options.templates.fieldError : ''
+        };
+        qaHtml = replaceObjectKeysInString(questionData, qaHtml);
 
-        // REPLACE QUESTION DATA AND ANSWERS HTML IN LOCAL VARIABLE qaHtml
-        qaHtml = qaHtml.replace( /{{questionId}}/g, item.id );
-        qaHtml = qaHtml.replace( /{{questionNumber}}/g, (i+1) );
-        qaHtml = qaHtml.replace( /{{questionText}}/g, questionText );
-        qaHtml = qaHtml.replace( /{{answersHtml}}/g, answersHtml );
-        qaHtml = qaHtml.replace( /{{fieldErrorTemplate}}/g, fieldErrorTemplate );
         if( options.fieldErrorFeedback && options.templates.fieldError.indexOf('{{fieldErrorMessage}}') !== -1 ){
-            const fieldErrorMessage = maxChoice !== '' ? options.fieldErrorMessageMultiChoice : options.fieldErrorMessage;
-            qaHtml = qaHtml.replace( /{{fieldErrorMessage}}/g, fieldErrorMessage )
-                            .replace( /{{checksMin}}/g, checksMin )
-                            .replace( /{{checksMax}}/g, checksMax );
+            const fieldErrorMessage = maxChoice !== '' ? options.fieldErrorMessageMultiChoice : (questionObj.errorMessage || options.fieldErrorMessage);
+            qaHtml = qaHtml.replace( /{{fieldErrorMessage}}/g, fieldErrorMessage );
         }
 
-        qaCodeAll += qaHtml;
+        qaCodeAll += replaceObjectKeysInString({checksMin, checksMax}, qaHtml);
     }
     
     return qaCodeAll;

@@ -10,7 +10,11 @@ const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnProperty
             Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
         });
     }), out;
-}, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isEmptyObject = object => isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length, webStorage = () => {
+}, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isEmptyObject = object => isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce((accString, name) => {
+    const regexStr = new RegExp("{{" + name + "}}", "g");
+    return accString.replace(regexStr, obj[name]);
+}, stringHTML), sortList = list => (list[0].sort && list.sort((a, b) => a.sort > b.sort), 
+list), webStorage = () => {
     const isAvailable = (() => {
         const mod = "check_storage";
         try {
@@ -102,8 +106,11 @@ const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnProperty
         file: "form-control-file",
         label: "form-check-label",
         radio: "form-check-input",
-        select: "form-control",
-        textarea: "form-control"
+        wrapper: {
+            checkbox: "form-check",
+            default: "",
+            radio: "form-check"
+        }
     },
     fieldErrorFeedback: !0,
     formOptions: {
@@ -125,14 +132,16 @@ const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnProperty
     lang: "en",
     templates: {
         fieldError: '<div class="surveyjs-field-error-message">{{fieldErrorMessage}}</div>',
-        input: '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check" data-answer-index="{{answerIndex}}">{{inputTagCode}}{{labelTagCode}}</div>',
-        inputGroup: '<div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-answer-{{answerType}}"><input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" /><label for="{{answerCode}}" class="surveyjs-label form-check-label">{{answerString}}</label></div></div>{{relatedAnswerField}}</div>',
-        inputTag: '<input type="{{answerType}}" {{attrSubtype}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{validateIfFilled}} {{attrChecks}} {{attrRequiredFrom}} />',
-        labelTag: '<label for="{{answerCode}}" class="surveyjs-label {{labelClass}}">{{answerString}}</label>',
-        question: '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group clearfix">{{answersHtml}}{{fieldErrorTemplate}}</div></div></div>',
-        select: '<div class="surveyjs-single-answer surveyjs-answer-select" data-answer-index="{{answerIndex}}">{{selectTagCode}}</div>',
-        selectTag: '<select id="{{answerCode}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}>{{optionsHtml}}</select>',
-        textarea: '<div class="surveyjs-single-answer surveyjs-answer-textarea"><textarea id="{{answerCode}}" data-answer-id="{{answerId}}" {{nestedAnswer}} name="surveyjs-answer-{{questionNumber}}" {{attrRequired}} class="surveyjs-textarea {{fieldClass}}" {{answerMaxlength}} rows="6" placeholder="{{answerPlaceholder}}"></textarea></div>'
+        input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
+        label: '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
+        question: '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-box clearfix"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group clearfix">{{answersHTML}}{{fieldErrorTemplate}}</div></div></div>',
+        select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
+        textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
+        wrapper: {
+            default: '<div class="surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
+            nested: '<div class="surveyjs-nested-parent surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}}">{{labelTemplate}}<div class="surveyjs-nested-container surveyjs-field-indent">{{nestedFieldsHTML}}</div></div>',
+            related: '<div class="surveyjs-single-answer surveyjs-field-container input-group {{wrapperClasses}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-answer-radio">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
+        }
     },
     useWebStorage: !0
 }, internals = {
@@ -190,180 +199,131 @@ const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnProperty
         }
         void 0 !== questionObj.required && (fieldEl.required = !0);
     }
-}, generateOptionTags = (optionsList = [], options) => {
-    let optionsHtml = "" === optionsList[0].id ? "" : '<option value="">' + options.selectFirstOption + "</option>";
-    return optionsList.forEach(opt => {
-        optionsHtml += '<option value="' + opt.id + '" data-answer-id="' + opt.id + '">' + opt.answer + "</option>";
-    }), optionsHtml;
-}, generateFieldHTML = {
-    attribute: (options, data) => {
-        const objData = data.objData, aHtml = options.templates.inputGroup, attr = data.answer.attribute, attributeIsArray = Array.isArray(attr), relatedAnswerField = attributeIsArray ? options.templates.selectTag : options.templates.inputTag;
-        return objData.fieldClass = options.cssClasses.default, attributeIsArray && (objData.fieldClass = options.cssClasses.select, 
-        objData.optionsHtml = generateOptionTags(attr, options)), {
-            aHtml: aHtml,
-            relatedAnswerField: relatedAnswerField,
-            objData: objData
-        };
-    },
-    input: (options, data) => {
-        const objData = data.objData, aHtml = data.beforeCode + options.templates.input + data.afterCode;
-        return "checkbox" !== objData.answerType && "radio" !== objData.answerType && (objData.nestedAnswer += ' class="' + objData.fieldClass + '"'), 
-        {
-            aHtml: aHtml,
-            objData: objData
-        };
-    },
-    nested: (options, data) => {
-        const objData = data.objData;
-        let labelForNested = options.templates.labelTag;
-        labelForNested = labelForNested.replace(/{{answerCode}}/g, objData.answerCode), 
-        labelForNested = labelForNested.replace(/{{labelClass}}/g, options.cssClasses.label + " surveyjs-field-indent-0"), 
-        labelForNested = labelForNested.replace(/{{answerString}}/g, data.answer.answer);
-        return {
-            aHtml: data.beforeCode + '<div class="surveyjs-' + objData.answerType + '">' + labelForNested + "</div>" + data.afterCode,
-            objData: objData
-        };
-    },
-    select: (options, data) => {
-        const objData = data.objData, aHtml = data.beforeCode + options.templates.select + data.afterCode;
-        return objData.optionsHtml = generateOptionTags(data.obj.answers, options), {
-            aHtml: aHtml,
-            objData: objData
-        };
-    },
-    textarea: (options, data) => {
-        const objData = data.objData, aHtml = options.templates.textarea;
-        return objData.answerPlaceholder = data.answer.placeholder || options.textareaPlaceholder, 
-        {
-            aHtml: aHtml,
-            objData: objData
-        };
-    }
-}, replaceTemplateStrings = (options, fieldData, objData) => {
-    if ("" !== objData.optionsHtml && (fieldData.aHtml = fieldData.aHtml.replace(/{{selectTagCode}}/g, options.templates.selectTag)), 
-    fieldData.relatedAnswerField) {
-        const relatedAnswerKeys = {
-            answerCode: "",
-            answerType: "text",
-            fieldClass: objData.fieldClass,
-            answerIdValue: "",
-            attrRequired: "",
-            addMoreName: "-more",
-            attrRequiredFrom: 'data-required-from="#' + objData.answerCode + '"'
-        };
-        for (let reKey in relatedAnswerKeys) {
-            const regexStrRe = new RegExp("{{" + reKey + "}}", "g");
-            fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace(regexStrRe, relatedAnswerKeys[reKey]);
-        }
-        fieldData.aHtml = fieldData.aHtml.replace(/{{relatedAnswerField}}/g, fieldData.relatedAnswerField);
-    } else fieldData.aHtml = fieldData.aHtml.replace(/{{addMoreName}}/g, ""), fieldData.aHtml = fieldData.aHtml.replace(/{{attrRequiredFrom}}/g, "");
-    for (let key in objData) {
-        const regexStr = new RegExp("{{" + key + "}}", "g");
-        fieldData.aHtml = fieldData.aHtml.replace(regexStr, objData[key]);
-    }
-    return fieldData.aHtml;
-};
-
-let progIds = [];
-
-const iterateAnswers = (formEl, options, obj, qID, qIdx, attrReq) => {
-    qID = obj.id ? obj.id : qID || 0;
-    let list = Array.isArray(obj) ? obj : obj.answers, listL = list.length, i = qIdx || 0, aLoopHtml = "";
-    const needsBinding = "__external-field__" === obj.question;
-    list[0].sort && list.sort((a, b) => a.sort > b.sort);
-    for (let a = 0; a < listL; a++) {
-        let answer = list[a], aNum = a + 1, qNum = i + 1, aType = answer.type, aId = answer.id, progIdsLength = progIds.length, progIdsJoined = progIdsLength > 0 ? progIds.join("-") : "", getSettingsFieldClass = () => {
-            let aType = "option" === answer.type ? "select" : answer.type;
-            return options.cssClasses[aType] || options.cssClasses.default;
-        }, fieldData = {
-            aHtml: ""
-        }, objData = {
-            labelTagCode: "checkbox" === aType || "radio" === aType ? options.templates.labelTag : "",
-            answerId: aId,
-            answerIdValue: "text" === aType ? "" : aId,
-            answerIndex: aNum,
-            answerName: "surveyjs-answer-" + qNum,
-            answerPlaceholder: "",
-            answerMaxlength: answer.maxlength ? 'maxlength="' + answer.maxlength + '"' : "",
-            answerString: "string" == typeof answer.answer ? answer.answer : "",
-            answerType: aType,
-            attrRequired: void 0 !== obj.required ? "required" : void 0 !== attrReq ? attrReq : "",
-            fieldClass: getSettingsFieldClass(),
-            nestedAnswer: "" !== progIdsJoined ? 'data-nested-index="' + aNum + '"' : "",
-            optionsHtml: "",
-            progIdsJoined: progIdsJoined,
-            questionNumber: qNum,
-            answerCode: ("option" === aType ? "select" : aType) + "-" + qID + "-" + (aId || 0) + "-" + qNum + ("" !== progIdsJoined ? "-" + progIdsJoined : "") + "-" + aNum,
-            attrChecks: obj.checks ? 'data-checks="' + obj.checks + '"' : "",
-            attrSubtype: answer.subtype ? 'data-subtype="' + answer.subtype + '"' : "",
-            validateIfFilled: void 0 !== obj.validateIfFilled ? "data-validate-if-filled" : ""
-        };
-        if (needsBinding) {
-            const boundedFieldEl = formEl.closest("[data-surveyjs-container]").querySelectorAll('[data-name="bind-surveyjs-answer"]')[a], fieldProps = {
-                id: objData.answerCode,
-                name: objData.answerName,
-                type: aType,
-                value: objData.answerId
-            };
-            void 0 !== obj.required && (fieldProps.required = !0);
-            for (let key in fieldProps) boundedFieldEl[key] = fieldProps[key];
-            boundedFieldEl.setAttribute("data-answer-id", objData.answerId), boundedFieldEl.closest("div").querySelector("label").setAttribute("for", objData.answerCode), 
-            boundedFieldEl.closest("div").querySelector("label span").textContent = answer.answer;
-        } else {
-            if ("string" == typeof answer.answer || "number" == typeof answer.answer) {
-                let surveyFieldType = answer.attribute ? "attribute" : answer.nested ? "nested" : "option" === aType ? "select" : aType, data = {
-                    answer: answer,
-                    objData: objData,
-                    beforeCode: progIdsLength > 0 && 0 === a ? '<div class="surveyjs-field-indent">' : "",
-                    afterCode: progIdsLength > 0 && a === listL - 1 ? "</div>" : "",
-                    obj: obj
-                };
-                if (void 0 === generateFieldHTML[surveyFieldType] && (surveyFieldType = "input"), 
-                fieldData = generateFieldHTML[surveyFieldType](options, data), objData = fieldData.objData, 
-                answer.nested) {
-                    progIds.push(aNum), aLoopHtml += fieldData.aHtml, aLoopHtml += iterateAnswers(formEl, options, answer.nested, qID, i, objData.attrRequired);
-                    continue;
-                }
-                progIdsLength > 0 && a === listL - 1 && progIds.pop();
+}, generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((optionsHTML, opt) => optionsHTML + `<option value="${opt.value}">${opt.label}</option>`, ""), getAttributesStringHTML = (answerObj, answerCode, isRequired) => {
+    const excludedAttrs = [ "data", "id", "label", "nested", "related", "sort" ];
+    /^(option|textarea)$/.test(answerObj.type) && excludedAttrs.push("type");
+    let string = "";
+    return Object.keys(answerObj).filter(name => -1 === excludedAttrs.indexOf(name)).forEach(name => {
+        string += ` ${name}="${answerObj[name]}"`;
+    }), answerObj.data && Object.keys(answerObj.data).forEach(name => {
+        string += ` data-${((string = "", useAllCaps = !1) => {
+            let newString = string.trim().replace(/(([_ ])([a-z]))|(([a-z])?([A-Z]))/g, (match, p1, p2, p3, p4, p5, p6) => (p3 ? "-" + p3 : (p5 || "") + "-" + p6).toLowerCase());
+            return useAllCaps ? newString.toUpperCase() : newString;
+        })(name)}="${answerObj.data[name]}"`;
+    }), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
+    string += ` id="${answerCode}"`, string += ` data-answer-id="${answerObj.id}"`, 
+    string.trim();
+}, generateAnswers = (options, answersList, extraData) => {
+    let allAnswersHTML = "", previousType = "";
+    return sortList(answersList).forEach((answer, index) => {
+        let answerHTML = "";
+        const answerType = "option" === answer.type ? "select" : answer.type;
+        if ("select" === answerType && previousType === answerType) return;
+        previousType = answerType, extraData.question.checks && (answer = mergeObjects({}, answer, {
+            data: {
+                checks: extraData.question.checks
             }
-            fieldData.aHtml = replaceTemplateStrings(options, fieldData, objData), aLoopHtml += fieldData.aHtml, 
-            "option" === aType && (a += obj.answers.length);
+        }));
+        const answerCode = `${answerType}-${extraData.surveyId}-${extraData.question.id}-${"select" === answerType ? index + 1 : answer.id}`, answerData = {
+            questionNumber: extraData.question.index + 1,
+            wrapperClasses: options.cssClasses.wrapper[answerType] || options.cssClasses.wrapper.default,
+            fieldAttributes: getAttributesStringHTML(answer, answerCode, extraData.question.isRequired),
+            fieldClasses: options.cssClasses[answerType] || options.cssClasses.default,
+            answerType: answerType,
+            answerCode: answerCode,
+            addMoreName: "",
+            labelString: answer.label || "",
+            labelClasses: options.cssClasses.label
+        };
+        let relatedFieldHTML = "";
+        if (answer.related) {
+            const relatedType = answer.related.type || "select", relatedIsSelect = "select" === relatedType, relatedObj = relatedIsSelect ? mergeObjects({}, answer) : answer.related;
+            relatedObj.type = relatedIsSelect ? "option" : relatedType, relatedObj.id = answer.id + "-more", 
+            relatedObj.data = mergeObjects({}, relatedObj.data, {
+                requiredFrom: "#" + answerCode
+            }), delete relatedObj.related;
+            const answerDataRelated = {
+                fieldAttributes: getAttributesStringHTML(relatedObj, answerCode + "-more", !1),
+                answerType: relatedType,
+                addMoreName: "-more",
+                fieldClasses: relatedIsSelect ? options.cssClasses.select : options.cssClasses[relatedType] || options.cssClasses.default
+            };
+            if (relatedFieldHTML = options.templates[relatedType] || options.templates.input, 
+            relatedIsSelect) {
+                const optionsHtml = generateOptionTags(answer.related);
+                relatedFieldHTML = relatedFieldHTML.replace("{{optionsHtml}}", optionsHtml);
+            }
+            relatedFieldHTML = replaceObjectKeysInString(answerDataRelated, relatedFieldHTML);
         }
-    }
-    return aLoopHtml;
+        const answerTypeForTemplate = answer.related ? "related" : answer.nested ? "nested" : answerType, templates = ((templates, answerType) => ({
+            field: templates[answerType] || templates.input,
+            label: /^(checkbox|nested|radio|related)$/.test(answerType) ? templates.label : "",
+            wrapper: templates.wrapper[answerType] || templates.wrapper.default
+        }))(options.templates, answerTypeForTemplate);
+        let nestedFieldsHTML = "";
+        answer.nested && (nestedFieldsHTML = generateAnswers(options, answer.nested, extraData));
+        let optionsHtml = "";
+        "select" === answerType && (optionsHtml = generateOptionTags(answersList)), answerHTML = templates.wrapper.replace("{{relatedFieldHTML}}", relatedFieldHTML).replace("{{fieldTemplate}}", templates.field).replace("{{optionsHtml}}", optionsHtml).replace("{{labelTemplate}}", templates.label).replace("{{nestedFieldsHTML}}", nestedFieldsHTML), 
+        allAnswersHTML += replaceObjectKeysInString(answerData, answerHTML);
+    }), allAnswersHTML;
 }, buildSurvey = (formEl, options, internals, data) => {
-    const self = formEl.formjs, formName = formEl.getAttribute("name") || "";
-    self.internals.storageName = internals.storageName.replace(/{{surveyId}}/g, data.id), 
-    self.internals.storageName = internals.storageName.replace(/{{surveyFormName}}/g, formName);
-    ((HTMLstring, parentNode) => {
-        const tmpEl = document.createElement("div");
-        tmpEl.innerHTML = HTMLstring, Array.from(tmpEl.childNodes).forEach(elem => {
-            parentNode.appendChild(elem);
-        });
-    })(((formEl, options, questionsList = []) => {
-        const qaData = questionsList[0].sort ? questionsList.sort((a, b) => a.sort > b.sort) : questionsList, qaDataLength = qaData.length;
+    const formName = formEl.getAttribute("name") || "";
+    internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
+    internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
+    const qaHtmlAll = ((formEl, options, surveyData) => {
+        const questionsList = sortList(surveyData.questions), qaDataLength = questionsList.length;
         let qaCodeAll = "";
         for (let i = 0; i < qaDataLength; i++) {
-            const item = qaData[i];
-            let qaHtml = options.templates.question, answersHtml = iterateAnswers(formEl, options, item, item.id, i);
-            if ("__external-field__" === item.question) {
-                const bindAnswerEl = formEl.closest("[data-surveyjs-container]").querySelector('[data-name="bind-surveyjs-answer"]');
-                if (bindAnswerEl) {
-                    bindAnswerEl.closest("[data-formjs-question]").setAttribute("data-question-id", item.id);
-                    continue;
+            const questionObj = questionsList[i];
+            let qaHtml = options.templates.question;
+            const questionId = questionObj.id, questionNumber = i + 1, extraData = {
+                surveyId: surveyData.id,
+                question: {
+                    id: questionId,
+                    index: i,
+                    isRequired: !!questionObj.required
                 }
+            };
+            questionObj.checks && (extraData.question.checks = questionObj.checks);
+            let answersHTML = generateAnswers(options, questionObj.answers, extraData);
+            if (questionObj.external) {
+                const externalCont = formEl.closest("[data-surveyjs-container]").querySelector("[data-surveyjs-external]");
+                externalCont.setAttribute("data-question-id", questionId), questionObj.answers.forEach((answer, index) => {
+                    const bindAnswerEl = externalCont.querySelectorAll("[data-field]")[index], fieldProps = {
+                        id: `${answer.type}-${extraData.surveyId}-${questionId}-${answer.id}`,
+                        name: `${bindAnswerEl.name}${questionNumber}`,
+                        type: answer.type,
+                        value: answer.value,
+                        required: !!questionObj.required
+                    };
+                    Object.keys(fieldProps).forEach(name => {
+                        bindAnswerEl[name] = fieldProps[name];
+                    }), bindAnswerEl.setAttribute("data-answer-id", answer.id);
+                    const answerCont = bindAnswerEl.closest("[data-answer]");
+                    answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
+                    externalCont.querySelector("[data-question]").innerHTML = questionObj.question;
+                });
+                continue;
             }
-            const maxChoice = item.checks ? JSON.parse(item.checks) : "", checksMin = maxChoice.length > 0 ? maxChoice[0] : "", checksMax = maxChoice.length > 0 ? maxChoice[1] : "", maxChoiceText = "" !== maxChoice ? " (" + checksMax + " " + options.maxChoiceText + ")" : "", questionText = item.question + maxChoiceText, fieldErrorTemplate = options.fieldErrorFeedback ? options.templates.fieldError : "";
-            if (qaHtml = qaHtml.replace(/{{questionId}}/g, item.id), qaHtml = qaHtml.replace(/{{questionNumber}}/g, i + 1), 
-            qaHtml = qaHtml.replace(/{{questionText}}/g, questionText), qaHtml = qaHtml.replace(/{{answersHtml}}/g, answersHtml), 
-            qaHtml = qaHtml.replace(/{{fieldErrorTemplate}}/g, fieldErrorTemplate), options.fieldErrorFeedback && -1 !== options.templates.fieldError.indexOf("{{fieldErrorMessage}}")) {
-                const fieldErrorMessage = "" !== maxChoice ? options.fieldErrorMessageMultiChoice : options.fieldErrorMessage;
-                qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, fieldErrorMessage).replace(/{{checksMin}}/g, checksMin).replace(/{{checksMax}}/g, checksMax);
+            const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.maxChoice ? " (" + checksMax + " " + options.maxChoice + ")" : "", questionData = {
+                questionId: questionId,
+                questionNumber: questionNumber,
+                questionText: questionObj.question + maxChoiceText,
+                answersHTML: answersHTML,
+                fieldErrorTemplate: options.fieldErrorFeedback ? options.templates.fieldError : ""
+            };
+            if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback && -1 !== options.templates.fieldError.indexOf("{{fieldErrorMessage}}")) {
+                const fieldErrorMessage = "" !== maxChoice ? options.fieldErrorMessageMultiChoice : questionObj.errorMessage || options.fieldErrorMessage;
+                qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, fieldErrorMessage);
             }
-            qaCodeAll += qaHtml;
+            qaCodeAll += replaceObjectKeysInString({
+                checksMin: checksMin,
+                checksMax: checksMax
+            }, qaHtml);
         }
         return qaCodeAll;
-    })(formEl, options, data.questions), formEl.querySelector("[data-surveyjs-body]")), 
+    })(formEl, options, data);
+    formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll), 
     options.useWebStorage && ((formEl, internals) => {
         const WS = sessionStorage.getObject(internals.storageName);
         if (WS) {
@@ -373,15 +333,13 @@ const iterateAnswers = (formEl, options, obj, qID, qIdx, attrReq) => {
                 isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
             });
         }
-    })(formEl, self.internals);
+    })(formEl, internals);
 };
 
 class Survey extends Form {
     constructor(formEl, optionsObj = {}) {
         if (!optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
         const customLang = "string" == typeof optionsObj.lang && optionsObj.lang.toLowerCase(), langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang, options = mergeObjects({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
-        -1 !== options.templates.input.indexOf("{{inputTagCode}}") && (options.templates.input = options.templates.input.replace(/{{inputTagCode}}/g, options.templates.inputTag)), 
-        options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label), 
         webStorage().isAvailable || (options.useWebStorage = !1), super(formEl, options);
         const self = this;
         self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
@@ -436,19 +394,15 @@ class Survey extends Form {
 Survey.prototype.isInitialized = !1, Survey.prototype.messages = {
     it: {
         loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Caricamento in corso...</div>',
-        selectFirstOption: "Seleziona una risposta...",
-        textareaPlaceholder: "Scrivi la tua risposta...",
-        maxChoiceText: "RISPOSTE MAX",
+        maxChoice: "RISPOSTE MAX",
         fieldErrorMessage: "&Egrave; necessario rispondere.",
-        fieldErrorMessageMultiChoice: "Puoi scegliere da {{checksMin}} a {{checksMax}} risposte."
+        fieldErrorMessageMultiChoice: "Devi scegliere da {{checksMin}} a {{checksMax}} risposte."
     },
     en: {
         loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Loading...</div>',
-        selectFirstOption: "Select your answer...",
-        textareaPlaceholder: "Write here your answer...",
-        maxChoiceText: "ANSWERS MAX",
+        maxChoice: "ANSWERS MAX",
         fieldErrorMessage: "Answer is necessary.",
-        fieldErrorMessageMultiChoice: "You can choose from {{checksMin}} to {{checksMax}} answers."
+        fieldErrorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
     }
 }, Survey.prototype.options = options, Survey.prototype.version = "3.0.0";
 

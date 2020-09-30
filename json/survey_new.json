@@ -17,7 +17,8 @@
                 "answers": [
                     { "id": "1ca", "type": "text", "placeholder": "address@email.ext", "data": {"subtype": "email"} }
                 ],
-                "required": "",
+                "errorMessage": "We need your email in case you win :)",
+                "required": true,
                 "sort": 2
             },
             {
@@ -32,17 +33,17 @@
                     { "id": "11", "value": "value-11", "type": "radio", "label": "Wellness", "sort": 6 },
                     {
                         "id": "100", "type": "radio", "label": "Other...", "sort": 7,
-                        "related": { "id": "", "type": "text", "answers": "" }
+                        "related": { "type": "text", "placeholder": "Write your answer..." }
                     }
                 ],
-                "required": "",
+                "required": true,
                 "sort": 3
             },
             {
                 "id": "3",
                 "question": "Describe your daily routine in 300 chars:",
                 "answers": [
-                    { "id": "18", "type": "textarea", "maxlength": 300 }
+                    { "id": "18", "type": "textarea", "maxlength": 300, "rows": 6, "placeholder": "We want to better know you :)" }
                 ],
                 "sort": 4
             },
@@ -53,23 +54,24 @@
                     {
                         "id": "21", "type": "radio", "label": "Website 1",
                         "nested": [
-                            { "id": "21a", "type": "radio", "label": "Pc", "sort": 1 },
-                            { "id": "21b", "type": "radio", "label": "Smartphone", "sort": 2 },
-                            { "id": "21c", "type": "radio", "label": "Tablet", "sort": 3 }
+                            { "id": "21a", "type": "radio", "label": "Pc", "sort": 3 },
+                            { "id": "21b", "type": "radio", "label": "Smartphone", "sort": 1 },
+                            { "id": "21c", "type": "radio", "label": "Tablet", "sort": 2 }
                         ], "sort": 1
                     },
                     {
                         "id": "21aPlus", "type": "radio", "label": "Website 2",
                         "related": [
-                            { "id": "21aa", "value": "value-21aa", "type": "option", "label": "Pc", "sort": 1 },
-                            { "id": "21ba", "value": "value-21ba", "type": "option", "label": "Smartphone", "sort": 2 },
-                            { "id": "21ca", "value": "value-21ca", "type": "option", "label": "Tablet", "sort": 3 }
+                            { "value": "", "type": "option", "label": "Select your answer...", "sort": 0 },
+                            { "value": "value-21aa", "type": "option", "label": "Pc", "sort": 3 },
+                            { "value": "value-21ba", "type": "option", "label": "Smartphone", "sort": 1 },
+                            { "value": "value-21ca", "type": "option", "label": "Tablet", "sort": 2 }
                         ], "sort": 6
                     },
                     { "id": "24", "type": "radio", "label": "App", "sort": 3 },
                     { "id": "25", "type": "radio", "label": "Phone", "sort": 4 }
                 ],
-                "required": "",
+                "required": true,
                 "sort": 5
             },
             {
@@ -82,7 +84,7 @@
                     { "id": "46", "type": "checkbox", "label": "Duration", "sort": 4 }
                 ],
                 "checks": "[1,2]",
-                "required": "",
+                "required": true,
                 "sort": 6
             },
             {
@@ -95,17 +97,18 @@
                     { "id": "162", "value": "value-162", "type": "option", "label": "Much", "sort": 4 },
                     { "id": "163", "value": "value-163", "type": "option", "label": "True love", "sort": 5 }
                 ],
-                "required": "",
+                "required": true,
                 "sort": 7
             },
             {
                 "id": "22",
-                "question": "__external-field__",
+                "external": true,
+                "question": "The interested party gives his consent to the processing of his personal data for the creation of profiles and for the analysis of his habits or consumption choices based on the details of his purchases as well as the data provided directly by the customer.",
                 "answers": [
-                    { "id": "44", "type": "radio", "label": "Yes", "sort": 1 },
-                    { "id": "45", "type": "radio", "label": "No", "sort": 2 }
+                    { "id": "44", "value": "value-44", "type": "radio", "label": "Yes", "sort": 1 },
+                    { "id": "45", "value": "value-45", "type": "radio", "label": "No", "sort": 2 }
                 ],
-                "required": "",
+                "required": true,
                 "sort": 8
             }
         ]

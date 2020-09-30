@@ -17,7 +17,7 @@
                 "answers": [
                     { "id": "1ca", "type": "text", "placeholder": "address@email.ext", "data": {"subtype": "email"} }
                 ],
-                "required": "",
+                "required": true,
                 "sort": 2
             },
             {
@@ -29,20 +29,16 @@
                     { "id": "8", "value": "value-8", "type": "radio", "label": "Technology", "sort": 3 },
                     { "id": "9", "value": "value-9", "type": "radio", "label": "Games", "sort": 4 },
                     { "id": "10", "value": "value-10", "type": "radio", "label": "Reading", "sort": 1 },
-                    { "id": "11", "value": "value-11", "type": "radio", "label": "Wellness", "sort": 6 },
-                    {
-                        "id": "100", "type": "radio", "label": "Other...", "sort": 7,
-                        "related": { "id": "", "type": "text", "answers": "" }
-                    }
+                    { "id": "11", "value": "value-11", "type": "radio", "label": "Wellness", "sort": 6 }
                 ],
-                "required": "",
+                "required": true,
                 "sort": 3
             },
             {
                 "id": "3",
                 "question": "Describe your daily routine in 300 chars:",
                 "answers": [
-                    { "id": "18", "type": "textarea", "maxlength": 300 }
+                    { "id": "18", "type": "textarea", "maxlength": 300, "rows": 6, "placeholder": "We want to better know you :)" }
                 ],
                 "sort": 4
             },
@@ -50,26 +46,11 @@
                 "id": "6",
                 "question": "How do you prefer to interact with us?",
                 "answers": [
-                    {
-                        "id": "21", "type": "radio", "label": "Website 1",
-                        "nested": [
-                            { "id": "21a", "type": "radio", "label": "Pc", "sort": 1 },
-                            { "id": "21b", "type": "radio", "label": "Smartphone", "sort": 2 },
-                            { "id": "21c", "type": "radio", "label": "Tablet", "sort": 3 }
-                        ], "sort": 1
-                    },
-                    {
-                        "id": "21aPlus", "type": "radio", "label": "Website 2",
-                        "related": [
-                            { "id": "21aa", "value": "value-21aa", "type": "option", "label": "Pc", "sort": 1 },
-                            { "id": "21ba", "value": "value-21ba", "type": "option", "label": "Smartphone", "sort": 2 },
-                            { "id": "21ca", "value": "value-21ca", "type": "option", "label": "Tablet", "sort": 3 }
-                        ], "sort": 6
-                    },
+                    
                     { "id": "24", "type": "radio", "label": "App", "sort": 3 },
                     { "id": "25", "type": "radio", "label": "Phone", "sort": 4 }
                 ],
-                "required": "",
+                "required": true,
                 "sort": 5
             },
             {
@@ -82,21 +63,8 @@
                     { "id": "46", "type": "checkbox", "label": "Duration", "sort": 4 }
                 ],
                 "checks": "[1,2]",
-                "required": "",
+                "required": true,
                 "sort": 6
-            },
-            {
-                "id": "10",
-                "question": "How much do you like pizza?",
-                "answers": [
-                    { "id": "159", "value": "", "type": "option", "label": "Give your last answer...", "sort": 1 },
-                    { "id": "160", "value": "value-160", "type": "option", "label": "Not much", "sort": 2 },
-                    { "id": "161", "value": "value-161", "type": "option", "label": "Medium", "sort": 3 },
-                    { "id": "162", "value": "value-162", "type": "option", "label": "Much", "sort": 4 },
-                    { "id": "163", "value": "value-163", "type": "option", "label": "True love", "sort": 5 }
-                ],
-                "required": "",
-                "sort": 7
             },
             {
                 "id": "22",
@@ -105,7 +73,7 @@
                     { "id": "44", "type": "radio", "label": "Yes", "sort": 1 },
                     { "id": "45", "type": "radio", "label": "No", "sort": 2 }
                 ],
-                "required": "",
+                "required": true,
                 "sort": 8
             }
         ]

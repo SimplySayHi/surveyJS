@@ -105,11 +105,6 @@ var Survey = function(Form) {
         })).finally((function() {
             timeoutTimer && window.clearTimeout(timeoutTimer);
         }));
-    }, appendDomStringToNode = function(HTMLstring, parentNode) {
-        var tmpEl = document.createElement("div");
-        tmpEl.innerHTML = HTMLstring, Array.from(tmpEl.childNodes).forEach((function(elem) {
-            parentNode.appendChild(elem);
-        }));
     }, customEvents = {
         init: "sjs:init"
     }, deepFreeze = function deepFreeze(obj) {
@@ -139,6 +134,20 @@ var Survey = function(Form) {
         return isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length;
     }, isFieldForChangeEvent = function(fieldEl) {
         return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
+    }, replaceObjectKeysInString = function(obj, stringHTML) {
+        return Object.keys(obj).reduce((function(accString, name) {
+            var regexStr = new RegExp("{{" + name + "}}", "g");
+            return accString.replace(regexStr, obj[name]);
+        }), stringHTML);
+    }, sortList = function(list) {
+        return list[0].sort && list.sort((function(a, b) {
+            return a.sort > b.sort;
+        })), list;
+    }, toKebabCase = function() {
+        var string = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "", useAllCaps = arguments.length > 1 && void 0 !== arguments[1] && arguments[1], newString = string.trim().replace(/(([_ ])([a-z]))|(([a-z])?([A-Z]))/g, (function(match, p1, p2, p3, p4, p5, p6) {
+            return (p3 ? "-" + p3 : (p5 || "") + "-" + p6).toLowerCase();
+        }));
+        return useAllCaps ? newString.toUpperCase() : newString;
     }, webStorage = function() {
         var isAvailable = function() {
             var mod = "check_storage";
@@ -159,19 +168,15 @@ var Survey = function(Form) {
     }, messages = {
         it: {
             loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Caricamento in corso...</div>',
-            selectFirstOption: "Seleziona una risposta...",
-            textareaPlaceholder: "Scrivi la tua risposta...",
-            maxChoiceText: "RISPOSTE MAX",
+            maxChoice: "RISPOSTE MAX",
             fieldErrorMessage: "&Egrave; necessario rispondere.",
-            fieldErrorMessageMultiChoice: "Puoi scegliere da {{checksMin}} a {{checksMax}} risposte."
+            fieldErrorMessageMultiChoice: "Devi scegliere da {{checksMin}} a {{checksMax}} risposte."
         },
         en: {
             loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Loading...</div>',
-            selectFirstOption: "Select your answer...",
-            textareaPlaceholder: "Write here your answer...",
-            maxChoiceText: "ANSWERS MAX",
+            maxChoice: "ANSWERS MAX",
             fieldErrorMessage: "Answer is necessary.",
-            fieldErrorMessageMultiChoice: "You can choose from {{checksMin}} to {{checksMax}} answers."
+            fieldErrorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
         }
     }, getQuestionObject = function(data, questionId) {
         for (var questions = data.questions, qLength = questions.length, obj = {}, q = 0; q < qLength; q++) {
@@ -246,8 +251,11 @@ var Survey = function(Form) {
             file: "form-control-file",
             label: "form-check-label",
             radio: "form-check-input",
-            select: "form-control",
-            textarea: "form-control"
+            wrapper: {
+                checkbox: "form-check",
+                default: "",
+                radio: "form-check"
+            }
         },
         fieldErrorFeedback: !0,
         formOptions: {
@@ -269,14 +277,16 @@ var Survey = function(Form) {
         lang: "en",
         templates: {
             fieldError: '<div class="surveyjs-field-error-message">{{fieldErrorMessage}}</div>',
-            input: '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check" data-answer-index="{{answerIndex}}">{{inputTagCode}}{{labelTagCode}}</div>',
-            inputGroup: '<div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-answer-{{answerType}}"><input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" /><label for="{{answerCode}}" class="surveyjs-label form-check-label">{{answerString}}</label></div></div>{{relatedAnswerField}}</div>',
-            inputTag: '<input type="{{answerType}}" {{attrSubtype}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{validateIfFilled}} {{attrChecks}} {{attrRequiredFrom}} />',
-            labelTag: '<label for="{{answerCode}}" class="surveyjs-label {{labelClass}}">{{answerString}}</label>',
-            question: '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group clearfix">{{answersHtml}}{{fieldErrorTemplate}}</div></div></div>',
-            select: '<div class="surveyjs-single-answer surveyjs-answer-select" data-answer-index="{{answerIndex}}">{{selectTagCode}}</div>',
-            selectTag: '<select id="{{answerCode}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}>{{optionsHtml}}</select>',
-            textarea: '<div class="surveyjs-single-answer surveyjs-answer-textarea"><textarea id="{{answerCode}}" data-answer-id="{{answerId}}" {{nestedAnswer}} name="surveyjs-answer-{{questionNumber}}" {{attrRequired}} class="surveyjs-textarea {{fieldClass}}" {{answerMaxlength}} rows="6" placeholder="{{answerPlaceholder}}"></textarea></div>'
+            input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
+            label: '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
+            question: '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-box clearfix"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group clearfix">{{answersHTML}}{{fieldErrorTemplate}}</div></div></div>',
+            select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
+            textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
+            wrapper: {
+                default: '<div class="surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
+                nested: '<div class="surveyjs-nested-parent surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}}">{{labelTemplate}}<div class="surveyjs-nested-container surveyjs-field-indent">{{nestedFieldsHTML}}</div></div>',
+                related: '<div class="surveyjs-single-answer surveyjs-field-container input-group {{wrapperClasses}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-answer-radio">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
+            }
         },
         useWebStorage: !0
     }, internals = {
@@ -334,157 +344,121 @@ var Survey = function(Form) {
             }
         }
     }, generateOptionTags = function() {
-        var optionsList = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : [], options = arguments.length > 1 ? arguments[1] : void 0, optionsHtml = "" === optionsList[0].id ? "" : '<option value="">' + options.selectFirstOption + "</option>";
-        return optionsList.forEach((function(opt) {
-            optionsHtml += '<option value="' + opt.id + '" data-answer-id="' + opt.id + '">' + opt.answer + "</option>";
-        })), optionsHtml;
-    }, attribute = function(options, data) {
-        var objData = data.objData, aHtml = options.templates.inputGroup, attr = data.answer.attribute, attributeIsArray = Array.isArray(attr), relatedAnswerField = attributeIsArray ? options.templates.selectTag : options.templates.inputTag;
-        return objData.fieldClass = options.cssClasses.default, attributeIsArray && (objData.fieldClass = options.cssClasses.select, 
-        objData.optionsHtml = generateOptionTags(attr, options)), {
-            aHtml: aHtml,
-            relatedAnswerField: relatedAnswerField,
-            objData: objData
+        var optionsList = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : [];
+        return sortList(optionsList).reduce((function(optionsHTML, opt) {
+            return optionsHTML + '<option value="'.concat(opt.value, '">').concat(opt.label, "</option>");
+        }), "");
+    }, getAttributesStringHTML = function(answerObj, answerCode, isRequired) {
+        var excludedAttrs = [ "data", "id", "label", "nested", "related", "sort" ];
+        /^(option|textarea)$/.test(answerObj.type) && excludedAttrs.push("type");
+        var string = "";
+        return Object.keys(answerObj).filter((function(name) {
+            return -1 === excludedAttrs.indexOf(name);
+        })).forEach((function(name) {
+            string += " ".concat(name, '="').concat(answerObj[name], '"');
+        })), answerObj.data && Object.keys(answerObj.data).forEach((function(name) {
+            string += " data-".concat(toKebabCase(name), '="').concat(answerObj.data[name], '"');
+        })), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
+        string += ' id="'.concat(answerCode, '"'), (string += ' data-answer-id="'.concat(answerObj.id, '"')).trim();
+    }, getTemplates = function(templates, answerType) {
+        return {
+            field: templates[answerType] || templates.input,
+            label: /^(checkbox|nested|radio|related)$/.test(answerType) ? templates.label : "",
+            wrapper: templates.wrapper[answerType] || templates.wrapper.default
         };
-    }, input = function(options, data) {
-        var objData = data.objData, aHtml = data.beforeCode + options.templates.input + data.afterCode;
-        return "checkbox" !== objData.answerType && "radio" !== objData.answerType && (objData.nestedAnswer += ' class="' + objData.fieldClass + '"'), 
-        {
-            aHtml: aHtml,
-            objData: objData
-        };
-    }, nested = function(options, data) {
-        var objData = data.objData, labelForNested = options.templates.labelTag;
-        return labelForNested = (labelForNested = (labelForNested = labelForNested.replace(/{{answerCode}}/g, objData.answerCode)).replace(/{{labelClass}}/g, options.cssClasses.label + " surveyjs-field-indent-0")).replace(/{{answerString}}/g, data.answer.answer), 
-        {
-            aHtml: data.beforeCode + '<div class="surveyjs-' + objData.answerType + '">' + labelForNested + "</div>" + data.afterCode,
-            objData: objData
-        };
-    }, select = function(options, data) {
-        var objData = data.objData, aHtml = data.beforeCode + options.templates.select + data.afterCode;
-        return objData.optionsHtml = generateOptionTags(data.obj.answers, options), {
-            aHtml: aHtml,
-            objData: objData
-        };
-    }, textarea = function(options, data) {
-        var objData = data.objData, aHtml = options.templates.textarea;
-        return objData.answerPlaceholder = data.answer.placeholder || options.textareaPlaceholder, 
-        {
-            aHtml: aHtml,
-            objData: objData
-        };
-    }, generateFieldHTML = {
-        attribute: attribute,
-        input: input,
-        nested: nested,
-        select: select,
-        textarea: textarea
-    }, replaceTemplateStrings = function(options, fieldData, objData) {
-        if ("" !== objData.optionsHtml && (fieldData.aHtml = fieldData.aHtml.replace(/{{selectTagCode}}/g, options.templates.selectTag)), 
-        fieldData.relatedAnswerField) {
-            var relatedAnswerKeys = {
-                answerCode: "",
-                answerType: "text",
-                fieldClass: objData.fieldClass,
-                answerIdValue: "",
-                attrRequired: "",
-                addMoreName: "-more",
-                attrRequiredFrom: 'data-required-from="#' + objData.answerCode + '"'
-            };
-            for (var reKey in relatedAnswerKeys) {
-                var regexStrRe = new RegExp("{{" + reKey + "}}", "g");
-                fieldData.relatedAnswerField = fieldData.relatedAnswerField.replace(regexStrRe, relatedAnswerKeys[reKey]);
-            }
-            fieldData.aHtml = fieldData.aHtml.replace(/{{relatedAnswerField}}/g, fieldData.relatedAnswerField);
-        } else fieldData.aHtml = fieldData.aHtml.replace(/{{addMoreName}}/g, ""), fieldData.aHtml = fieldData.aHtml.replace(/{{attrRequiredFrom}}/g, "");
-        for (var key in objData) {
-            var regexStr = new RegExp("{{" + key + "}}", "g");
-            fieldData.aHtml = fieldData.aHtml.replace(regexStr, objData[key]);
-        }
-        return fieldData.aHtml;
-    }, progIds = [], iterateAnswers = function iterateAnswers(formEl, options, obj, qID, qIdx, attrReq) {
-        qID = obj.id ? obj.id : qID || 0;
-        var list = Array.isArray(obj) ? obj : obj.answers, listL = list.length, i = qIdx || 0, aLoopHtml = "", needsBinding = "__external-field__" === obj.question;
-        list[0].sort && list.sort((function(a, b) {
-            return a.sort > b.sort;
-        }));
-        for (var _loop = function(_a) {
-            var answer = list[_a], aNum = _a + 1, qNum = i + 1, aType = answer.type, aId = answer.id, progIdsLength = progIds.length, progIdsJoined = progIdsLength > 0 ? progIds.join("-") : "", fieldData = {
-                aHtml: ""
-            }, objData = {
-                labelTagCode: "checkbox" === aType || "radio" === aType ? options.templates.labelTag : "",
-                answerId: aId,
-                answerIdValue: "text" === aType ? "" : aId,
-                answerIndex: aNum,
-                answerName: "surveyjs-answer-" + qNum,
-                answerPlaceholder: "",
-                answerMaxlength: answer.maxlength ? 'maxlength="' + answer.maxlength + '"' : "",
-                answerString: "string" == typeof answer.answer ? answer.answer : "",
-                answerType: aType,
-                attrRequired: void 0 !== obj.required ? "required" : void 0 !== attrReq ? attrReq : "",
-                fieldClass: function() {
-                    var aType = "option" === answer.type ? "select" : answer.type;
-                    return a = _a, options.cssClasses[aType] || options.cssClasses.default;
-                }(),
-                nestedAnswer: "" !== progIdsJoined ? 'data-nested-index="' + aNum + '"' : "",
-                optionsHtml: "",
-                progIdsJoined: progIdsJoined,
-                questionNumber: qNum,
-                answerCode: ("option" === aType ? "select" : aType) + "-" + qID + "-" + (aId || 0) + "-" + qNum + ("" !== progIdsJoined ? "-" + progIdsJoined : "") + "-" + aNum,
-                attrChecks: obj.checks ? 'data-checks="' + obj.checks + '"' : "",
-                attrSubtype: answer.subtype ? 'data-subtype="' + answer.subtype + '"' : "",
-                validateIfFilled: void 0 !== obj.validateIfFilled ? "data-validate-if-filled" : ""
-            };
-            if (needsBinding) {
-                var boundedFieldEl = formEl.closest("[data-surveyjs-container]").querySelectorAll('[data-name="bind-surveyjs-answer"]')[_a], fieldProps = {
-                    id: objData.answerCode,
-                    name: objData.answerName,
-                    type: aType,
-                    value: objData.answerId
-                };
-                for (var key in void 0 !== obj.required && (fieldProps.required = !0), fieldProps) boundedFieldEl[key] = fieldProps[key];
-                return boundedFieldEl.setAttribute("data-answer-id", objData.answerId), boundedFieldEl.closest("div").querySelector("label").setAttribute("for", objData.answerCode), 
-                boundedFieldEl.closest("div").querySelector("label span").textContent = answer.answer, 
-                a = _a, "continue";
-            }
-            if ("string" == typeof answer.answer || "number" == typeof answer.answer) {
-                var surveyFieldType = answer.attribute ? "attribute" : answer.nested ? "nested" : "option" === aType ? "select" : aType, data = {
-                    answer: answer,
-                    objData: objData,
-                    beforeCode: progIdsLength > 0 && 0 === _a ? '<div class="surveyjs-field-indent">' : "",
-                    afterCode: progIdsLength > 0 && _a === listL - 1 ? "</div>" : "",
-                    obj: obj
-                };
-                if (void 0 === generateFieldHTML[surveyFieldType] && (surveyFieldType = "input"), 
-                objData = (fieldData = generateFieldHTML[surveyFieldType](options, data)).objData, 
-                answer.nested) return progIds.push(aNum), aLoopHtml += fieldData.aHtml, aLoopHtml += iterateAnswers(formEl, options, answer.nested, qID, i, objData.attrRequired), 
-                a = _a, "continue";
-                progIdsLength > 0 && _a === listL - 1 && progIds.pop();
-            }
-            fieldData.aHtml = replaceTemplateStrings(options, fieldData, objData), aLoopHtml += fieldData.aHtml, 
-            "option" === aType && (_a += obj.answers.length), a = _a;
-        }, a = 0; a < listL; a++) _loop(a);
-        return aLoopHtml;
-    }, generateQAcode = function(formEl, options) {
-        for (var questionsList = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : [], qaData = questionsList[0].sort ? questionsList.sort((function(a, b) {
-            return a.sort > b.sort;
-        })) : questionsList, qaDataLength = qaData.length, qaCodeAll = "", i = 0; i < qaDataLength; i++) {
-            var item = qaData[i], qaHtml = options.templates.question, answersHtml = iterateAnswers(formEl, options, item, item.id, i);
-            if ("__external-field__" === item.question) {
-                var bindAnswerEl = formEl.closest("[data-surveyjs-container]").querySelector('[data-name="bind-surveyjs-answer"]');
-                if (bindAnswerEl) {
-                    bindAnswerEl.closest("[data-formjs-question]").setAttribute("data-question-id", item.id);
-                    continue;
+    }, generateAnswers = function generateAnswers(options, answersList, extraData) {
+        var allAnswersHTML = "", previousType = "";
+        return sortList(answersList).forEach((function(answer, index) {
+            var answerHTML, answerType = "option" === answer.type ? "select" : answer.type;
+            if ("select" !== answerType || previousType !== answerType) {
+                previousType = answerType, extraData.question.checks && (answer = mergeObjects({}, answer, {
+                    data: {
+                        checks: extraData.question.checks
+                    }
+                }));
+                var answerCode = "".concat(answerType, "-").concat(extraData.surveyId, "-").concat(extraData.question.id, "-").concat("select" === answerType ? index + 1 : answer.id), answerData = {
+                    questionNumber: extraData.question.index + 1,
+                    wrapperClasses: options.cssClasses.wrapper[answerType] || options.cssClasses.wrapper.default,
+                    fieldAttributes: getAttributesStringHTML(answer, answerCode, extraData.question.isRequired),
+                    fieldClasses: options.cssClasses[answerType] || options.cssClasses.default,
+                    answerType: answerType,
+                    answerCode: answerCode,
+                    addMoreName: "",
+                    labelString: answer.label || "",
+                    labelClasses: options.cssClasses.label
+                }, relatedFieldHTML = "";
+                if (answer.related) {
+                    var relatedType = answer.related.type || "select", relatedIsSelect = "select" === relatedType, relatedObj = relatedIsSelect ? mergeObjects({}, answer) : answer.related;
+                    relatedObj.type = relatedIsSelect ? "option" : relatedType, relatedObj.id = "".concat(answer.id, "-more"), 
+                    relatedObj.data = mergeObjects({}, relatedObj.data, {
+                        requiredFrom: "#" + answerCode
+                    }), delete relatedObj.related;
+                    var answerDataRelated = {
+                        fieldAttributes: getAttributesStringHTML(relatedObj, "".concat(answerCode, "-more"), !1),
+                        answerType: relatedType,
+                        addMoreName: "-more",
+                        fieldClasses: relatedIsSelect ? options.cssClasses.select : options.cssClasses[relatedType] || options.cssClasses.default
+                    };
+                    if (relatedFieldHTML = options.templates[relatedType] || options.templates.input, 
+                    relatedIsSelect) {
+                        var _optionsHtml = generateOptionTags(answer.related);
+                        relatedFieldHTML = relatedFieldHTML.replace("{{optionsHtml}}", _optionsHtml);
+                    }
+                    relatedFieldHTML = replaceObjectKeysInString(answerDataRelated, relatedFieldHTML);
                 }
+                var answerTypeForTemplate = answer.related ? "related" : answer.nested ? "nested" : answerType, templates = getTemplates(options.templates, answerTypeForTemplate), nestedFieldsHTML = "";
+                answer.nested && (nestedFieldsHTML = generateAnswers(options, answer.nested, extraData));
+                var optionsHtml = "";
+                "select" === answerType && (optionsHtml = generateOptionTags(answersList)), answerHTML = templates.wrapper.replace("{{relatedFieldHTML}}", relatedFieldHTML).replace("{{fieldTemplate}}", templates.field).replace("{{optionsHtml}}", optionsHtml).replace("{{labelTemplate}}", templates.label).replace("{{nestedFieldsHTML}}", nestedFieldsHTML), 
+                allAnswersHTML += replaceObjectKeysInString(answerData, answerHTML);
             }
-            var maxChoice = item.checks ? JSON.parse(item.checks) : "", checksMin = maxChoice.length > 0 ? maxChoice[0] : "", checksMax = maxChoice.length > 0 ? maxChoice[1] : "", maxChoiceText = "" !== maxChoice ? " (" + checksMax + " " + options.maxChoiceText + ")" : "", questionText = item.question + maxChoiceText, fieldErrorTemplate = options.fieldErrorFeedback ? options.templates.fieldError : "";
-            if (qaHtml = (qaHtml = (qaHtml = (qaHtml = (qaHtml = qaHtml.replace(/{{questionId}}/g, item.id)).replace(/{{questionNumber}}/g, i + 1)).replace(/{{questionText}}/g, questionText)).replace(/{{answersHtml}}/g, answersHtml)).replace(/{{fieldErrorTemplate}}/g, fieldErrorTemplate), 
-            options.fieldErrorFeedback && -1 !== options.templates.fieldError.indexOf("{{fieldErrorMessage}}")) {
-                var fieldErrorMessage = "" !== maxChoice ? options.fieldErrorMessageMultiChoice : options.fieldErrorMessage;
-                qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, fieldErrorMessage).replace(/{{checksMin}}/g, checksMin).replace(/{{checksMax}}/g, checksMax);
+        })), allAnswersHTML;
+    }, generateQAcode = function(formEl, options, surveyData) {
+        for (var questionsList = sortList(surveyData.questions), qaDataLength = questionsList.length, qaCodeAll = "", _loop = function(i) {
+            var questionObj = questionsList[i], qaHtml = options.templates.question, questionId = questionObj.id, questionNumber = i + 1, extraData = {
+                surveyId: surveyData.id,
+                question: {
+                    id: questionId,
+                    index: i,
+                    isRequired: !!questionObj.required
+                }
+            };
+            questionObj.checks && (extraData.question.checks = questionObj.checks);
+            var answersHTML = generateAnswers(options, questionObj.answers, extraData);
+            if (questionObj.external) {
+                var externalCont = formEl.closest("[data-surveyjs-container]").querySelector("[data-surveyjs-external]");
+                return externalCont.setAttribute("data-question-id", questionId), questionObj.answers.forEach((function(answer, index) {
+                    var bindAnswerEl = externalCont.querySelectorAll("[data-field]")[index], fieldProps = {
+                        id: "".concat(answer.type, "-").concat(extraData.surveyId, "-").concat(questionId, "-").concat(answer.id),
+                        name: "".concat(bindAnswerEl.name).concat(questionNumber),
+                        type: answer.type,
+                        value: answer.value,
+                        required: !!questionObj.required
+                    };
+                    Object.keys(fieldProps).forEach((function(name) {
+                        bindAnswerEl[name] = fieldProps[name];
+                    })), bindAnswerEl.setAttribute("data-answer-id", answer.id);
+                    var answerCont = bindAnswerEl.closest("[data-answer]");
+                    answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
+                    externalCont.querySelector("[data-question]").innerHTML = questionObj.question;
+                })), "continue";
             }
-            qaCodeAll += qaHtml;
-        }
+            var maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.maxChoice ? " (" + checksMax + " " + options.maxChoice + ")" : "", questionData = {
+                questionId: questionId,
+                questionNumber: questionNumber,
+                questionText: questionObj.question + maxChoiceText,
+                answersHTML: answersHTML,
+                fieldErrorTemplate: options.fieldErrorFeedback ? options.templates.fieldError : ""
+            };
+            if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback && -1 !== options.templates.fieldError.indexOf("{{fieldErrorMessage}}")) {
+                var fieldErrorMessage = "" !== maxChoice ? options.fieldErrorMessageMultiChoice : questionObj.errorMessage || options.fieldErrorMessage;
+                qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, fieldErrorMessage);
+            }
+            qaCodeAll += replaceObjectKeysInString({
+                checksMin: checksMin,
+                checksMax: checksMax
+            }, qaHtml);
+        }, i = 0; i < qaDataLength; i++) _loop(i);
         return qaCodeAll;
     }, populateAnswers = function(formEl, internals) {
         var WS = sessionStorage.getObject(internals.storageName);
@@ -496,12 +470,12 @@ var Survey = function(Form) {
             }));
         }
     }, buildSurvey = function(formEl, options, internals, data) {
-        var self = formEl.formjs, formName = formEl.getAttribute("name") || "";
-        self.internals.storageName = internals.storageName.replace(/{{surveyId}}/g, data.id), 
-        self.internals.storageName = internals.storageName.replace(/{{surveyFormName}}/g, formName);
-        var qaHtmlAll = generateQAcode(formEl, options, data.questions);
-        appendDomStringToNode(qaHtmlAll, formEl.querySelector("[data-surveyjs-body]")), 
-        options.useWebStorage && populateAnswers(formEl, self.internals);
+        var formName = formEl.getAttribute("name") || "";
+        internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
+        internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
+        var qaHtmlAll = generateQAcode(formEl, options, data);
+        formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll), 
+        options.useWebStorage && populateAnswers(formEl, internals);
     }, destroy = function(formEl) {
         formEl.formjs.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
             var useCapturing = "blur" === eventName;
@@ -514,8 +488,6 @@ var Survey = function(Form) {
             var _thisSuper, _this, optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
             if (_classCallCheck(this, Survey), !optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
             var customLang = "string" == typeof optionsObj.lang && optionsObj.lang.toLowerCase(), langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang, options = mergeObjects({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
-            -1 !== options.templates.input.indexOf("{{inputTagCode}}") && (options.templates.input = options.templates.input.replace(/{{inputTagCode}}/g, options.templates.inputTag)), 
-            options.templates.labelTag = options.templates.labelTag.replace(/{{labelClass}}/g, options.cssClasses.label), 
             webStorage().isAvailable || (options.useWebStorage = !1);
             var self = _assertThisInitialized(_this = _super.call(this, formEl, options));
             self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {

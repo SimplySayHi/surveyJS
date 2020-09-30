@@ -24,10 +24,11 @@ Survey.addLanguage( 'it', myLang ); */
 var formEl = document.querySelector('[data-surveyjs-form]');
 var options = {
         //lang: 'de',
-        url: '../json/survey.json',
+        url: '../json/survey_new.json',
         cssClasses: {
             select: 'custom-select'
         },
+        // fieldErrorFeedback: false,
         // initAjaxOptions: { timeout: 1 },
         fieldOptions: {
             onValidationCheckAll: false

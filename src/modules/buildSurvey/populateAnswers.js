@@ -8,7 +8,7 @@ export const populateAnswers = ( formEl, internals ) => {
         WS.forEach(item => {
             const fieldFirst = surveyContEl.querySelector( '[name="' + item.field + '"]' ),
                   isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'),
-                  fieldEl = ( isRadioOrCheckbox ? surveyContEl.querySelector( '[name="' + item.field + '"][value="' + item.value + '"]' ) :   fieldFirst );
+                  fieldEl = ( isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst );
             
             if( isRadioOrCheckbox ){
                 fieldEl.checked = true;
