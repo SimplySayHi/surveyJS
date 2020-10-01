@@ -195,8 +195,8 @@ System.register([ "formjs-plugin" ], (function(exports) {
                             var type = fieldEl.type, name = fieldEl.name;
                             if (name !== fieldNameCheck || type !== fieldTypeCheck) {
                                 fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
-                                var questionIdEl = fieldEl.closest("[data-question-id]"), questionId = questionIdEl ? questionIdEl.getAttribute("data-question-id") : "", questionObj = getQuestionObject(instance.data, questionId);
-                                if ("" !== questionId && questionObj && void 0 !== questionObj.required) {
+                                var questionEl = fieldEl.closest("[data-question-id]"), questionId = questionEl ? questionEl.getAttribute("data-question-id") : "", questionObj = getQuestionObject(instance.data, questionId);
+                                if ("" !== questionId && questionObj && questionObj.required) {
                                     var isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
                                     (!isRequiredFrom || isRequiredFrom && reqMoreEl.checked) && (fieldEl.required || (isHacking = !0), 
                                     fieldEl.required = !0);
@@ -221,23 +221,20 @@ System.register([ "formjs-plugin" ], (function(exports) {
                             var type = fieldEl.type, name = fieldEl.name;
                             if (name !== fieldNameCheck || type !== fieldTypeCheck) {
                                 fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
-                                var questionIdEl = fieldEl.closest("[data-question-id]"), questionId = questionIdEl ? questionIdEl.getAttribute("data-question-id") : "", fieldValue = fieldEl.value, qaObj = {
+                                var questionEl = fieldEl.closest("[data-question-id]"), questionId = questionEl ? questionEl.getAttribute("data-question-id") : "", qaObj = {
                                     question: questionId,
                                     answer: {
-                                        id_answer: [ fieldValue ]
+                                        value: fieldEl.value || ""
                                     }
                                 };
                                 if (!fieldEl.matches("[data-required-from]") && "" !== questionId && !isEmptyObject(getQuestionObject(instance.data, questionId))) {
-                                    if (fieldEl.matches("textarea") && (qaObj.answer.id_answer = [ "" ], qaObj.answer.text = fieldValue), 
-                                    "radio" === type) {
-                                        var elem = (fieldEl.closest("form") ? formEl : fieldEl.closest("[data-formjs-question]")).querySelector('[name="' + name + '"]:checked');
-                                        elem ? (elem.matches("[data-require-more]") && (qaObj.answer.attributes = formEl.querySelector('[data-required-from="#' + elem.id + '"]').value.trim()), 
-                                        elem.matches("[data-nested-index]") && (qaObj.answer.attributes = elem.getAttribute("data-nested-index")), 
-                                        qaObj.answer.id_answer = [ elem.value.trim() ]) : qaObj.answer.id_answer = [ "" ];
+                                    if ("radio" === type) {
+                                        var checkedEl = (fieldEl.closest("form") ? formEl : fieldEl.closest(instance.options.fieldOptions.questionContainer)).querySelector('[name="' + name + '"]:checked');
+                                        qaObj.answer.value = checkedEl && checkedEl.value || "", checkedEl && checkedEl.matches("[data-require-more]") && (qaObj.answer.related = formEl.querySelector('[data-required-from="#' + checkedEl.id + '"]').value);
                                     }
-                                    "checkbox" === type && fieldEl.matches("[data-checks]") && (qaObj.answer.id_answer = [], 
+                                    "checkbox" === type && fieldEl.matches("[data-checks]") && (qaObj.answer.value = [], 
                                     Array.from(formEl.querySelectorAll('[name="' + name + '"]:checked')).forEach((function(el) {
-                                        qaObj.answer.id_answer.push(el.value.trim());
+                                        qaObj.answer.value.push(el.value);
                                     }))), obj.answers.push(qaObj);
                                 }
                             }
@@ -310,7 +307,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     }));
                 },
                 validation: function(event) {
-                    var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest("[data-formjs-question]"), fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[1] : "id-not-found", isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), questionObj = getQuestionObject(self.data, questionId);
+                    var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest(self.options.fieldOptions.questionContainer), fieldValue = fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[2] : "id-not-found", isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), questionObj = getQuestionObject(self.data, questionId);
                     if (isEmptyObject(questionObj)) return !0;
                     if (isFieldForChangeEventBoolean && "change" === eventName || !isFieldForChangeEventBoolean && "change" !== eventName) {
                         if (self.options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
@@ -324,7 +321,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                                     var oldFieldNamePos = getAnswerIndexInWebStorage(internals, reqMoreEl.name);
                                     -1 !== oldFieldNamePos && storageArray.splice(oldFieldNamePos, 1), storageArray.push({
                                         field: reqMoreEl.name,
-                                        value: reqMoreEl.value.trim()
+                                        value: reqMoreEl.value
                                     });
                                 }
                                 if (storageArray.push({
@@ -334,7 +331,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                                     var elReqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
                                     storageArray.push({
                                         field: elReqFromEl.name,
-                                        value: elReqFromEl.value.trim()
+                                        value: elReqFromEl.value
                                     });
                                 }
                             }

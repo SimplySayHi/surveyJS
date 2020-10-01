@@ -20,8 +20,8 @@ export const callbackFns = {
               fieldEl = event.target,
               self = fieldEl.closest('form').formjs,
               internals = self.internals,
-              containerEl = fieldEl.closest('[data-formjs-question]'),
-              fieldValue = fieldEl.value ? fieldEl.value.trim() : fieldEl.value,
+              containerEl = fieldEl.closest( self.options.fieldOptions.questionContainer ),
+              fieldValue = fieldEl.value,
               isMultiChoice = fieldEl.matches('[data-checks]'),
               isRequireMore = fieldEl.matches('[data-require-more]'),
               isRequiredFrom = fieldEl.matches('[data-required-from]'),
@@ -29,7 +29,7 @@ export const callbackFns = {
 
         // VARS USED TO VALIDATE THE FILED IF IT IS REQUIRED
         const itemEl = isRequiredFrom ? reqMoreEl : fieldEl,
-              questionId = itemEl.id ? itemEl.id.split('-')[1] : 'id-not-found',
+              questionId = itemEl.id ? itemEl.id.split('-')[2] : 'id-not-found',
               isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
               questionObj = getQuestionObject(self.data, questionId);
 
@@ -43,8 +43,8 @@ export const callbackFns = {
             
             // MANAGE ITEMS IN LOCAL STORAGE ( IF AVAILABLE AND USABLE )
             if( self.options.useWebStorage && !fieldEl.matches('[data-exclude-storage]') ){
-                const inArrayPos = getAnswerIndexInWebStorage( internals, fieldEl.name, (isMultiChoice ? fieldValue : false) ),
-                    inArrayRequireMorePos = getAnswerIndexInWebStorage( internals, fieldEl.name + '-more' );
+                const inArrayPos = getAnswerIndexInWebStorage( internals, fieldEl.name, (isMultiChoice ? fieldValue : false) );
+                const inArrayRequireMorePos = getAnswerIndexInWebStorage( internals, fieldEl.name + '-more' );
 
                 let storageArray = internals.storageArray;
 
@@ -72,16 +72,15 @@ export const callbackFns = {
                     if( fieldValue !== '' ){
                         if( isRequiredFrom && fieldValue !== '' ){
                             const oldFieldNamePos = getAnswerIndexInWebStorage( internals, reqMoreEl.name );
-
                             if( oldFieldNamePos !== -1 ){
                                 storageArray.splice(oldFieldNamePos, 1);
                             }
-                            storageArray.push( { field: reqMoreEl.name, value: reqMoreEl.value.trim() } );
+                            storageArray.push( { field: reqMoreEl.name, value: reqMoreEl.value } );
                         }
                         storageArray.push( { field: fieldEl.name, value: fieldValue } );
                         if( isRequireMore ){
                             const elReqFromEl = fieldEl.closest('form').querySelector( '[data-required-from="#' + fieldEl.id + '"]' );
-                            storageArray.push( { field: elReqFromEl.name, value: elReqFromEl.value.trim() } );
+                            storageArray.push( { field: elReqFromEl.name, value: elReqFromEl.value } );
                         }
                     }
                 }

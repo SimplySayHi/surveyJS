@@ -160,7 +160,7 @@ formEl.addEventListener('fjs.form:submit', function(event){
                     $('#modal-notification').modal('show');
                 } else {
                     // PRINT THE ERROR MESSAGE AFTER THE FORM
-                    $surveyCont.append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
+                    $surveyCont.append( '<div class="alert alert-danger text-center mx-3 mb-2" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
                 }
             }
         })
@@ -168,7 +168,7 @@ formEl.addEventListener('fjs.form:submit', function(event){
             console.log('catch', error);
             // PRINT THE ERROR MESSAGE AFTER THE FORM
             var surveyContEl = formEl.closest('[data-surveyjs-container]');
-            surveyContEl.innerHTML = surveyContEl.innerHTML + '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>';
+            surveyContEl.innerHTML = surveyContEl.innerHTML + '<div class="alert alert-danger text-center mx-3 mb-2" role="alert"><p class="my-3">Generic error, please retry.</p></div>';
         })
         .finally(function(){
             console.log('finally');
