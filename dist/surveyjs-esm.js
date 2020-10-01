@@ -126,11 +126,16 @@ list), webStorage = () => {
         redirect: "follow",
         timeout: 0
     },
-    lang: "en",
+    messages: {
+        maxChoice: "ANSWERS MAX",
+        fieldErrorMessage: "Answer is necessary.",
+        fieldErrorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
+    },
     templates: {
         fieldError: '<div class="surveyjs-field-error-message">{{fieldErrorMessage}}</div>',
         input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
         label: '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
+        loading: '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
         question: '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-box clearfix"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group clearfix">{{answersHTML}}{{fieldErrorTemplate}}</div></div></div>',
         select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
         textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
@@ -336,13 +341,13 @@ list), webStorage = () => {
 class Survey extends Form {
     constructor(formEl, optionsObj = {}) {
         if (!optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
-        const customLang = "string" == typeof optionsObj.lang && optionsObj.lang.toLowerCase(), langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang, options = mergeObjects({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
+        const options = mergeObjects({}, Survey.prototype.options, optionsObj);
         webStorage().isAvailable || (options.useWebStorage = !1), super(formEl, options);
         const self = this;
         self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
             const useCapturing = "blur" === eventName;
             self.formEl.addEventListener(eventName, callbackFns_validation, useCapturing);
-        }), self.formEl.addEventListener("fjs.form:submit", callbackFns_submit), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
+        }), self.formEl.addEventListener("fjs.form:submit", callbackFns_submit), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
         const retrieveSurvey = ((url = location.href, options = {}) => {
             let timeoutTimer;
             if (options.headers = new Headers(options.headers), options.timeout > 0) {
@@ -379,28 +384,11 @@ class Survey extends Form {
             formEl.removeEventListener(eventName, callbackFns_validation, useCapturing);
         }), formEl.removeEventListener("fjs.form:submit", callbackFns_submit), super.destroy();
     }
-    static addLanguage(langString, langObject) {
-        const langValue = langString.toLowerCase();
-        Survey.prototype.messages[langValue] = mergeObjects({}, Survey.prototype.messages[langValue], langObject);
-    }
     static setOptions(optionsObj) {
         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);
     }
 }
 
-Survey.prototype.isInitialized = !1, Survey.prototype.messages = {
-    it: {
-        loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Caricamento in corso...</div>',
-        maxChoice: "RISPOSTE MAX",
-        fieldErrorMessage: "&Egrave; necessario rispondere.",
-        fieldErrorMessageMultiChoice: "Devi scegliere da {{checksMin}} a {{checksMax}} risposte."
-    },
-    en: {
-        loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Loading...</div>',
-        maxChoice: "ANSWERS MAX",
-        fieldErrorMessage: "Answer is necessary.",
-        fieldErrorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
-    }
-}, Survey.prototype.options = options, Survey.prototype.version = "3.0.0";
+Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "3.0.0";
 
 export default Survey;

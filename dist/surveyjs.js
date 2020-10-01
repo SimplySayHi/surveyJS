@@ -165,19 +165,6 @@ var Survey = function(Form) {
         }), {
             isAvailable: isAvailable
         };
-    }, messages = {
-        it: {
-            loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Caricamento in corso...</div>',
-            maxChoice: "RISPOSTE MAX",
-            fieldErrorMessage: "&Egrave; necessario rispondere.",
-            fieldErrorMessageMultiChoice: "Devi scegliere da {{checksMin}} a {{checksMax}} risposte."
-        },
-        en: {
-            loadingBox: '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> Loading...</div>',
-            maxChoice: "ANSWERS MAX",
-            fieldErrorMessage: "Answer is necessary.",
-            fieldErrorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
-        }
     }, getQuestionObject = function(data, questionId) {
         for (var questions = data.questions, qLength = questions.length, obj = {}, q = 0; q < qLength; q++) {
             var question = questions[q];
@@ -271,11 +258,16 @@ var Survey = function(Form) {
             redirect: "follow",
             timeout: 0
         },
-        lang: "en",
+        messages: {
+            maxChoice: "ANSWERS MAX",
+            fieldErrorMessage: "Answer is necessary.",
+            fieldErrorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
+        },
         templates: {
             fieldError: '<div class="surveyjs-field-error-message">{{fieldErrorMessage}}</div>',
             input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
             label: '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
+            loading: '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
             question: '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-box clearfix"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group clearfix">{{answersHTML}}{{fieldErrorTemplate}}</div></div></div>',
             select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
             textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
@@ -484,13 +476,13 @@ var Survey = function(Form) {
         function Survey(formEl) {
             var _thisSuper, _this, optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
             if (_classCallCheck(this, Survey), !optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
-            var customLang = "string" == typeof optionsObj.lang && optionsObj.lang.toLowerCase(), langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang, options = mergeObjects({}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj);
+            var options = mergeObjects({}, Survey.prototype.options, optionsObj);
             webStorage().isAvailable || (options.useWebStorage = !1);
             var self = _assertThisInitialized(_this = _super.call(this, formEl, options));
             self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                 var useCapturing = "blur" === eventName;
                 self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
-            })), self.formEl.addEventListener("fjs.form:submit", callbackFns.submit), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.loadingBox);
+            })), self.formEl.addEventListener("fjs.form:submit", callbackFns.submit), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
             var retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions).then((function(response) {
                 return "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise((function(resolve) {
                     response.data.questions && response.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, response.data), 
@@ -511,18 +503,12 @@ var Survey = function(Form) {
                 destroy(this.formEl), _get(_getPrototypeOf(Survey.prototype), "destroy", this).call(this);
             }
         } ], [ {
-            key: "addLanguage",
-            value: function(langString, langObject) {
-                var langValue = langString.toLowerCase();
-                Survey.prototype.messages[langValue] = mergeObjects({}, Survey.prototype.messages[langValue], langObject);
-            }
-        }, {
             key: "setOptions",
             value: function(optionsObj) {
                 Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);
             }
         } ]), Survey;
     }(Form__default.default);
-    return Survey.prototype.isInitialized = !1, Survey.prototype.messages = messages, 
-    Survey.prototype.options = options, Survey.prototype.version = version, Survey;
+    return Survey.prototype.isInitialized = !1, Survey.prototype.options = options, 
+    Survey.prototype.version = version, Survey;
 }(Form);

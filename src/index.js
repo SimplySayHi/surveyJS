@@ -1,6 +1,5 @@
 
 import { ajaxCall, customEvents, deepFreeze, dispatchCustomEvent, mergeObjects, webStorage } from './modules/helpers';
-import { messages }     from './modules/messages';
 import { options }      from './modules/options';
 import { internals }    from './modules/internals';
 import { callbackFns }  from './modules/listenerCallbacks';
@@ -20,12 +19,7 @@ class Survey extends Form {
             throw new Error('"options.url" is missing or not a string!');
         }
 
-        // SET THE lang VALUE IN options ( MANDATORY FOR OTHER OPERATIONS )
-        const customLang = typeof optionsObj.lang === 'string' && optionsObj.lang.toLowerCase();
-        const langValue = customLang && Survey.prototype.messages[customLang] ? customLang : Survey.prototype.options.lang;
-        
-        // MERGE OPTIONS AND messages OF THE CHOSEN lang INSIDE options
-        const options = mergeObjects( {}, Survey.prototype.options, Survey.prototype.messages[langValue], optionsObj );
+        const options = mergeObjects( {}, Survey.prototype.options, optionsObj );
 
         if( !webStorage().isAvailable ){
             options.useWebStorage = false;
@@ -41,8 +35,9 @@ class Survey extends Form {
         });
         self.formEl.addEventListener('fjs.form:submit', callbackFns.submit);
 
+        self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.templates.loading );
+
         // CREATE SURVEY
-        self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.loadingBox );
         const retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions)
             .then(response => {
                 if( response.status.toLowerCase() !== 'success' ){
@@ -77,11 +72,6 @@ class Survey extends Form {
         destroy(this.formEl);
         super.destroy();
     }
-    
-    static addLanguage( langString, langObject ){
-        const langValue = langString.toLowerCase();
-        Survey.prototype.messages[langValue] = mergeObjects({}, Survey.prototype.messages[langValue], langObject);
-    }
 
     static setOptions( optionsObj ){
         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);
@@ -90,7 +80,6 @@ class Survey extends Form {
 }
 
 Survey.prototype.isInitialized = false;
-Survey.prototype.messages = messages;
 Survey.prototype.options = options;
 Survey.prototype.version = version;
 
