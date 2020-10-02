@@ -1,5 +1,5 @@
 
-import { replaceObjectKeysInString, sortList } from '../helpers';
+import { isPlainObject, replaceObjectKeysInString, sortList } from '../helpers';
 import { generateAnswers } from './generateQAcodeUtils/generateAnswers';
 
 export const generateQAcode = ( formEl, options, surveyData ) => {
@@ -63,20 +63,26 @@ export const generateQAcode = ( formEl, options, surveyData ) => {
         const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : '';
         const checksMin = maxChoice[0] || '';
         const checksMax = maxChoice[1] || '';
-        const maxChoiceText = maxChoice && options.maxChoice ? ' ('+ checksMax +' '+ options.maxChoice +')' : '';
+        const maxChoiceText = maxChoice && options.messages.maxChoice ? ' ('+ checksMax +' '+ options.messages.maxChoice +')' : '';
 
         const questionData = {
             questionId,
             questionNumber,
             questionText: questionObj.question + maxChoiceText,
             answersHTML,
-            fieldErrorTemplate: options.fieldErrorFeedback ? options.templates.fieldError : ''
+            errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ''
         };
         qaHtml = replaceObjectKeysInString(questionData, qaHtml);
 
-        if( options.fieldErrorFeedback && options.templates.fieldError.indexOf('{{fieldErrorMessage}}') !== -1 ){
-            const fieldErrorMessage = maxChoice !== '' ? options.fieldErrorMessageMultiChoice : (questionObj.errorMessage || options.fieldErrorMessage);
-            qaHtml = qaHtml.replace( /{{fieldErrorMessage}}/g, fieldErrorMessage );
+        if( options.fieldErrorFeedback ){
+            let errorMessage = maxChoice !== '' ? options.messages.errorMessageMultiChoice : (questionObj.errorMessage || options.messages.errorMessage);
+
+            // CASE OF MULTIPLE ERROR MESSAGES FROM JSON DATA => DYNAMICALLY MANAGED VIA EVENT LISTENER IN CONSTRUCTOR
+            if( isPlainObject(errorMessage) ){
+                errorMessage = '';
+            }
+
+            qaHtml = qaHtml.replace( /{{errorTemplates}}/g, errorMessage );
         }
 
         qaCodeAll += replaceObjectKeysInString({checksMin, checksMax}, qaHtml);

@@ -33,7 +33,6 @@ class Survey extends Form {
             const useCapturing = eventName === 'blur' ? true : false;
             self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
         });
-        self.formEl.addEventListener('fjs.form:submit', callbackFns.submit);
 
         self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.templates.loading );
 
@@ -44,12 +43,14 @@ class Survey extends Form {
                     return Promise.reject(response);
                 }
                 return new Promise(resolve => {
-                    if( response.data.questions && response.data.questions.length > 0 ){
-                        buildSurvey(self.formEl, self.options, self.internals, response.data);
+                    self.data = response.data;
+                    if( self.data.questions && self.data.questions.length > 0 ){
+                        buildSurvey(self.formEl, self.options, self.internals, self.data);
+                        deepFreeze(self.data);
+                        self.formEl.addEventListener('fjs.field:validation', callbackFns.validationEnd);
+                        self.formEl.addEventListener('fjs.form:submit', callbackFns.submit);
                         super.init().then(() => {
                             self.isInitialized = true;
-                            self.data = response.data;
-                            deepFreeze(self.data);
                             self.formEl.closest('[data-surveyjs-container]').classList.add('surveyjs-init-success');
                             resolve(response);
                         });

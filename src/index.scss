@@ -1,31 +1,5 @@
-@-webkit-keyframes surveyjs-icon-spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg);
-  }
-}
-
-@keyframes surveyjs-icon-spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg);
-  }
-}
 
 .surveyjs-container {
-    .icon-spin {
-        -webkit-animation: surveyjs-icon-spin 2s infinite linear;
-        animation: surveyjs-icon-spin 2s infinite linear;
-    }
-    
     .surveyjs-label {
         font-weight: inherit;
         font-size: inherit;
@@ -115,12 +89,12 @@
         }
     }
     
-    .surveyjs-field-error-message,
+    .surveyjs-errors-wrapper,
     .surveyjs-footer {
         display: none;
     }
     
-    .has-error .surveyjs-field-error-message,
+    .has-error .surveyjs-errors-wrapper,
     &.surveyjs-init-success .surveyjs-footer {
         display: block;
     }

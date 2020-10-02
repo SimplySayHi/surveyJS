@@ -1,5 +1,5 @@
 
-import { isEmptyObject, isFieldForChangeEvent } from './helpers';
+import { isEmptyObject, isFieldForChangeEvent, isPlainObject } from './helpers';
 import { getAnswerIndexInWebStorage }           from './utils/getAnswerIndexInWebStorage';
 import { getQuestionObject }                    from './utils/getQuestionObject';
 
@@ -95,6 +95,25 @@ export const callbackFns = {
 
         }
         
+    },
+
+    validationEnd: function( event ){
+        const fieldEl = event.data.fieldEl;
+        const errors = event.data.errors;
+        const instance = event.target.formjs;
+        
+        const questionId = fieldEl.id ? fieldEl.id.split('-')[2] : 'id-not-found';
+        const questionObj = getQuestionObject(instance.data, questionId);
+
+        if( errors && isPlainObject(questionObj.errorMessage) ){
+            const errorsWrapper = fieldEl.closest( instance.options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
+            const errorsHTML = Object.keys(errors).reduce((accHTML, name) => {
+                const errorMessage = questionObj.errorMessage[name] || '';
+                return accHTML += errorMessage ? instance.options.templates.error.replace('{{errorMessage}}', errorMessage) : '';
+            }, '');
+
+            errorsWrapper.innerHTML = errorsHTML;
+        }
     }
 
 }

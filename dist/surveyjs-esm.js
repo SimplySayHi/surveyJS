@@ -128,19 +128,20 @@ list), webStorage = () => {
     },
     messages: {
         maxChoice: "ANSWERS MAX",
-        fieldErrorMessage: "Answer is necessary.",
-        fieldErrorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
+        errorMessage: "Answer is necessary.",
+        errorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
     },
     templates: {
-        fieldError: '<div class="surveyjs-field-error-message">{{fieldErrorMessage}}</div>',
+        error: '<div class="surveyjs-field-error-message">{{errorMessage}}</div>',
         input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
         label: '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
         loading: '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
-        question: '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-box clearfix"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group clearfix">{{answersHTML}}{{fieldErrorTemplate}}</div></div></div>',
+        question: '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-box"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group">{{answersHTML}}{{errorsHTML}}</div></div></div>',
         select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
         textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
         wrapper: {
             default: '<div class="surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
+            errors: '<div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div>',
             nested: '<div class="surveyjs-nested-parent surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}}">{{labelTemplate}}<div class="surveyjs-nested-container surveyjs-field-indent">{{nestedFieldsHTML}}</div></div>',
             related: '<div class="surveyjs-single-answer surveyjs-field-container input-group {{wrapperClasses}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-answer-radio">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
         }
@@ -200,6 +201,15 @@ list), webStorage = () => {
             sessionStorage.setObject(internals.storageName, storageArray);
         }
         void 0 !== questionObj.required && (fieldEl.required = !0);
+    }
+}, callbackFns_validationEnd = function(event) {
+    const fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, questionId = fieldEl.id ? fieldEl.id.split("-")[2] : "id-not-found", questionObj = getQuestionObject(instance.data, questionId);
+    if (errors && isPlainObject(questionObj.errorMessage)) {
+        const errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), errorsHTML = Object.keys(errors).reduce((accHTML, name) => {
+            const errorMessage = questionObj.errorMessage[name] || "";
+            return accHTML + (errorMessage ? instance.options.templates.error.replace("{{errorMessage}}", errorMessage) : "");
+        }, "");
+        errorsWrapper.innerHTML = errorsHTML;
     }
 }, generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((optionsHTML, opt) => optionsHTML + `<option value="${opt.value}">${opt.label}</option>`, ""), getAttributesStringHTML = (answerObj, answerCode, isRequired) => {
     const excludedAttrs = [ "data", "id", "label", "nested", "related", "sort" ];
@@ -307,16 +317,16 @@ list), webStorage = () => {
                 });
                 continue;
             }
-            const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.maxChoice ? " (" + checksMax + " " + options.maxChoice + ")" : "", questionData = {
+            const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
                 questionId: questionId,
                 questionNumber: questionNumber,
                 questionText: questionObj.question + maxChoiceText,
                 answersHTML: answersHTML,
-                fieldErrorTemplate: options.fieldErrorFeedback ? options.templates.fieldError : ""
+                errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
             };
-            if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback && -1 !== options.templates.fieldError.indexOf("{{fieldErrorMessage}}")) {
-                const fieldErrorMessage = "" !== maxChoice ? options.fieldErrorMessageMultiChoice : questionObj.errorMessage || options.fieldErrorMessage;
-                qaHtml = qaHtml.replace(/{{fieldErrorMessage}}/g, fieldErrorMessage);
+            if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
+                let errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
+                isPlainObject(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
             }
             qaCodeAll += replaceObjectKeysInString({
                 checksMin: checksMin,
@@ -347,7 +357,7 @@ class Survey extends Form {
         self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
             const useCapturing = "blur" === eventName;
             self.formEl.addEventListener(eventName, callbackFns_validation, useCapturing);
-        }), self.formEl.addEventListener("fjs.form:submit", callbackFns_submit), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
+        }), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
         const retrieveSurvey = ((url = location.href, options = {}) => {
             let timeoutTimer;
             if (options.headers = new Headers(options.headers), options.timeout > 0) {
@@ -360,9 +370,10 @@ class Survey extends Form {
                 timeoutTimer && window.clearTimeout(timeoutTimer);
             });
         })(self.options.url, self.options.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
-            response.data.questions && response.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, response.data), 
-            super.init().then(() => {
-                self.isInitialized = !0, self.data = response.data, deepFreeze(self.data), self.formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
+            self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, self.data), 
+            deepFreeze(self.data), self.formEl.addEventListener("fjs.field:validation", callbackFns_validationEnd), 
+            self.formEl.addEventListener("fjs.form:submit", callbackFns_submit), super.init().then(() => {
+                self.isInitialized = !0, self.formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
                 resolve(response);
             })) : resolve(response);
         })).finally(() => {

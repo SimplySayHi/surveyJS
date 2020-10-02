@@ -1,30 +1,8 @@
 
 var $surveyCont = $('[data-surveyjs-container]');
-
-/* ADD A NEW LANGUAGE */
-/* var myLang = {
-    loadingBox:         '<div class="surveyjs-loading" data-surveyjs-loading><i class="glyphicon glyphicon-refresh icon-spin"></i> DE Caricamento in corso...</div>',
-    selectFirstOption:  'DE Seleziona una risposta...',
-    textareaPlaceholder:'DE Scrivi la tua risposta...',
-    maxChoiceText:      'DE RISPOSTE MAX',
-    fieldErrorMessage:  'DE &Egrave; necessario rispondere.',
-    fieldErrorMessageMultiChoice:  'DE &Egrave; necessario rispondere max-choice.'
-};
-Survey.addLanguage( 'de', myLang ); */
-
-
-/* OVERRIDE SOME VALUES OF AN EXISTING LANGUAGE */
-/* var myLang = {
-    selectFirstOption:  'IT Seleziona una risposta...',
-    textareaPlaceholder:'IT Scrivi la tua risposta...',
-    maxChoiceText:      'IT RISPOSTE MAX',
-};
-Survey.addLanguage( 'it', myLang ); */
-
 var formEl = document.querySelector('[data-surveyjs-form]');
 var options = {
-        //lang: 'de',
-        url: '../json/survey_new.json',
+        url: '../json/survey.json',
         cssClasses: {
             select: 'custom-select'
         },
