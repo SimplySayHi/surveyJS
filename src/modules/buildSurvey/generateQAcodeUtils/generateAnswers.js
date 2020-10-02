@@ -47,12 +47,12 @@ export const generateAnswers = ( options, answersList, extraData ) => {
             const relatedObj = relatedIsSelect ? mergeObjects({}, answer) : answer.related;
 
             relatedObj.type = relatedIsSelect ? 'option' : relatedType;
-            relatedObj.id = `${answer.id}-more`;
+            relatedObj.id = '';
             relatedObj.data = mergeObjects({}, relatedObj.data, {requiredFrom:'#'+answerCode});
             delete relatedObj.related;
 
             const answerDataRelated = {
-                fieldAttributes: getAttributesStringHTML(relatedObj, `${answerCode}-more`, false),
+                fieldAttributes: getAttributesStringHTML(relatedObj, '', false),
                 answerType: relatedType,
                 addMoreName: '-more',
                 fieldClasses: relatedIsSelect ? options.cssClasses.select : (options.cssClasses[relatedType] || options.cssClasses.default)

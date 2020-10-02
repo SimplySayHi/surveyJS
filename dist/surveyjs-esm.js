@@ -213,7 +213,7 @@ list), webStorage = () => {
     }
 }, generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((optionsHTML, opt) => optionsHTML + `<option value="${opt.value}">${opt.label}</option>`, ""), getAttributesStringHTML = (answerObj, answerCode, isRequired) => {
     const excludedAttrs = [ "data", "id", "label", "nested", "related", "sort" ];
-    /^(option|textarea)$/.test(answerObj.type) && excludedAttrs.push("type");
+    /^(option|textarea)$/.test(answerObj.type) && excludedAttrs.push("type", "value");
     let string = "";
     return Object.keys(answerObj).filter(name => -1 === excludedAttrs.indexOf(name)).forEach(name => {
         string += ` ${name}="${answerObj[name]}"`;
@@ -223,8 +223,7 @@ list), webStorage = () => {
             return useAllCaps ? newString.toUpperCase() : newString;
         })(name)}="${answerObj.data[name]}"`;
     }), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
-    string += ` id="${answerCode}"`, string += ` data-answer-id="${answerObj.id}"`, 
-    string.trim();
+    string += ` id="${answerCode}"`, string.trim();
 }, generateAnswers = (options, answersList, extraData) => {
     let allAnswersHTML = "", previousType = "";
     return sortList(answersList).forEach((answer, index) => {
@@ -250,12 +249,12 @@ list), webStorage = () => {
         let relatedFieldHTML = "";
         if (answer.related) {
             const relatedType = answer.related.type || "select", relatedIsSelect = "select" === relatedType, relatedObj = relatedIsSelect ? mergeObjects({}, answer) : answer.related;
-            relatedObj.type = relatedIsSelect ? "option" : relatedType, relatedObj.id = answer.id + "-more", 
+            relatedObj.type = relatedIsSelect ? "option" : relatedType, relatedObj.id = "", 
             relatedObj.data = mergeObjects({}, relatedObj.data, {
                 requiredFrom: "#" + answerCode
             }), delete relatedObj.related;
             const answerDataRelated = {
-                fieldAttributes: getAttributesStringHTML(relatedObj, answerCode + "-more", !1),
+                fieldAttributes: getAttributesStringHTML(relatedObj, "", !1),
                 answerType: relatedType,
                 addMoreName: "-more",
                 fieldClasses: relatedIsSelect ? options.cssClasses.select : options.cssClasses[relatedType] || options.cssClasses.default
@@ -310,7 +309,7 @@ list), webStorage = () => {
                     };
                     Object.keys(fieldProps).forEach(name => {
                         bindAnswerEl[name] = fieldProps[name];
-                    }), bindAnswerEl.setAttribute("data-answer-id", answer.id);
+                    });
                     const answerCont = bindAnswerEl.closest("[data-answer]");
                     answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
                     externalCont.querySelector("[data-question]").innerHTML = questionObj.question;

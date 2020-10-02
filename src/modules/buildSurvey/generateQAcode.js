@@ -49,8 +49,6 @@ export const generateQAcode = ( formEl, options, surveyData ) => {
                     bindAnswerEl[name] = fieldProps[name];
                 });
 
-                bindAnswerEl.setAttribute('data-answer-id', answer.id);
-
                 const answerCont = bindAnswerEl.closest('[data-answer]');
                 answerCont.querySelector('label').setAttribute('for', fieldProps.id);
                 answerCont.querySelector('[data-label]').innerHTML = answer.label;

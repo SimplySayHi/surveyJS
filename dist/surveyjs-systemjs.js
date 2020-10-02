@@ -350,7 +350,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 }), "");
             }, getAttributesStringHTML = function(answerObj, answerCode, isRequired) {
                 var excludedAttrs = [ "data", "id", "label", "nested", "related", "sort" ];
-                /^(option|textarea)$/.test(answerObj.type) && excludedAttrs.push("type");
+                /^(option|textarea)$/.test(answerObj.type) && excludedAttrs.push("type", "value");
                 var string = "";
                 return Object.keys(answerObj).filter((function(name) {
                     return -1 === excludedAttrs.indexOf(name);
@@ -359,7 +359,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 })), answerObj.data && Object.keys(answerObj.data).forEach((function(name) {
                     string += " data-".concat(toKebabCase(name), '="').concat(answerObj.data[name], '"');
                 })), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
-                string += ' id="'.concat(answerCode, '"'), (string += ' data-answer-id="'.concat(answerObj.id, '"')).trim();
+                (string += ' id="'.concat(answerCode, '"')).trim();
             }, getTemplates = function(templates, answerType) {
                 return {
                     field: templates[answerType] || templates.input,
@@ -389,12 +389,12 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         }, relatedFieldHTML = "";
                         if (answer.related) {
                             var relatedType = answer.related.type || "select", relatedIsSelect = "select" === relatedType, relatedObj = relatedIsSelect ? mergeObjects({}, answer) : answer.related;
-                            relatedObj.type = relatedIsSelect ? "option" : relatedType, relatedObj.id = "".concat(answer.id, "-more"), 
+                            relatedObj.type = relatedIsSelect ? "option" : relatedType, relatedObj.id = "", 
                             relatedObj.data = mergeObjects({}, relatedObj.data, {
                                 requiredFrom: "#" + answerCode
                             }), delete relatedObj.related;
                             var answerDataRelated = {
-                                fieldAttributes: getAttributesStringHTML(relatedObj, "".concat(answerCode, "-more"), !1),
+                                fieldAttributes: getAttributesStringHTML(relatedObj, "", !1),
                                 answerType: relatedType,
                                 addMoreName: "-more",
                                 fieldClasses: relatedIsSelect ? options.cssClasses.select : options.cssClasses[relatedType] || options.cssClasses.default
@@ -437,7 +437,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                             };
                             Object.keys(fieldProps).forEach((function(name) {
                                 bindAnswerEl[name] = fieldProps[name];
-                            })), bindAnswerEl.setAttribute("data-answer-id", answer.id);
+                            }));
                             var answerCont = bindAnswerEl.closest("[data-answer]");
                             answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
                             externalCont.querySelector("[data-question]").innerHTML = questionObj.question;

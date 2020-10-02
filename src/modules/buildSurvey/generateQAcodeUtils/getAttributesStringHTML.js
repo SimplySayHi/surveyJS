@@ -5,7 +5,7 @@ export const getAttributesStringHTML = ( answerObj, answerCode, isRequired ) => 
     const excludedAttrs = ['data', 'id', 'label', 'nested', 'related', 'sort'];
     
     if( /^(option|textarea)$/.test(answerObj.type) ){
-        excludedAttrs.push('type');
+        excludedAttrs.push('type', 'value');
     }
 
     let string = '';
@@ -31,7 +31,6 @@ export const getAttributesStringHTML = ( answerObj, answerCode, isRequired ) => 
     }
 
     string += ` id="${answerCode}"`;
-    string += ` data-answer-id="${answerObj.id}"`;
 
     return string.trim();
 }
