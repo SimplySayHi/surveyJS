@@ -90,28 +90,26 @@
                             <form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate="">
                                 <div class="surveyjs-body questionsList clearfix stackSlider" data-surveyjs-body></div>
                                 <div class="surveyjs-footer row">
-                                    <div class="surveyjs-question-box text-right" data-formjs-question>
-                                        <div class="surveyjs-question-box text-right" data-formjs-question="">
-                                            <div class="surveyjs-answers-box form-group">
-                                                <div class="text-left small">
-                                                    The interested party gives his consent to the processing of his personal data for the creation of profiles and for the analysis of his habits or consumption choices based on the details of his purchases as well as the data provided directly by the customer.
-                                                </div>
-                                                <div class="form-check-inline abc-radio">
-                                                    <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
-                                                    <label class="surveyjs-label form-check-label">
-                                                        <span></span>
-                                                    </label>
-                                                </div>
-                                                <div class="form-check-inline abc-radio">
-                                                    <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
-                                                    <label class="surveyjs-label form-check-label">
-                                                        <span></span>
-                                                    </label>
-                                                </div>
+                                    <div class="surveyjs-question-wrapper text-right" data-formjs-question="">
+                                        <div class="surveyjs-answers-wrapper form-group">
+                                            <div class="text-left small">
+                                                The interested party gives his consent to the processing of his personal data for the creation of profiles and for the analysis of his habits or consumption choices based on the details of his purchases as well as the data provided directly by the customer.
                                             </div>
-                                            <div class="surveyjs-field-error-message small">
-                                                To go on you must select an answer.
+                                            <div class="form-check-inline abc-radio">
+                                                <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
+                                                <label class="surveyjs-label form-check-label">
+                                                    <span></span>
+                                                </label>
                                             </div>
+                                            <div class="form-check-inline abc-radio">
+                                                <input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/>
+                                                <label class="surveyjs-label form-check-label">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="surveyjs-error-message small">
+                                            To go on you must select an answer.
                                         </div>
                                     </div>
                                     <button class="surveyjs-submit-btn btn btn-red d-block mx-auto" type="submit">

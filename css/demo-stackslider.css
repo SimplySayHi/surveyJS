@@ -107,7 +107,7 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
 }
 
 .surveyjs-form .surveyjs-body [data-formjs-question],
-.surveyjs-form .surveyjs-body .surveyjs-question-box {
+.surveyjs-form .surveyjs-body .surveyjs-question-wrapper {
     background-color: #fff;
     color: #073b4c;
     border-radius: 8px 8px 0 0;

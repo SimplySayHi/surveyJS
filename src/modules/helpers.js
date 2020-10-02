@@ -1,5 +1,6 @@
 
 export { ajaxCall }                     from './helpers/ajaxCall';
+export { arrayMove }                    from './helpers/arrayMove';
 export { checkFormEl }                  from './helpers/checkFormEl';
 export { concatFieldsLists }            from './helpers/concatFieldsLists';
 export { customEvents }                 from './helpers/customEvents';

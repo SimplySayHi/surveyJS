@@ -29,6 +29,7 @@
                 ],
                 "errorMessage": {
                     "empty": "We need your email in case you win :)",
+                    "rule": "Email is not valid",
                     "missingAtChar": "missing at char",
                     "missingUserName": "missing user name",
                     "missingDomain": "missing domain",

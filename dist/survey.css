@@ -7,10 +7,8 @@
 
 .surveyjs-container .surveyjs-field-indent {
   padding-left: 20px; }
-  .surveyjs-container .surveyjs-field-indent-0 {
-    padding-left: 0; }
 
-.surveyjs-container .form-check:not(.surveyjs-answer-checkbox):not(.surveyjs-answer-radio) {
+.surveyjs-container .form-check:not(.surveyjs-wrapper-checkbox):not(.surveyjs-wrapper-radio) {
   padding-left: 0; }
 
 .surveyjs-container.surveyjs-custom-inputs .form-check .surveyjs-input[type="checkbox"], .surveyjs-container.surveyjs-custom-inputs .form-check .surveyjs-input[type="radio"] {

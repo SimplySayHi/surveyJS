@@ -10,10 +10,10 @@ var options = {
         },
         templates: {
             question:   '<div class="st-item" data-title="#{{questionId}}">'+
-                            '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix">'+
+                            '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-wrapper clearfix">'+
                                 '<div class="surveyjs-question-body">'+
                                     '<div class="surveyjs-question-text">{{questionText}}</div>'+
-                                    '<div class="surveyjs-answers-box form-group clearfix">'+
+                                    '<div class="surveyjs-answers-wrapper form-group clearfix">'+
                                         '{{answersHtml}}'+
                                     '</div>'+
                                 '</div>'+
@@ -21,12 +21,12 @@ var options = {
                         '</div>',
 
             // FOR AWESOME BOOTSTRAP CHECKBOXES
-            input:  '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check abc-{{answerType}}" data-answer-index="{{answerIndex}}">'+
+            input:  '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-wrapper-{{answerType}} form-check abc-{{answerType}}" data-answer-index="{{answerIndex}}">'+
                         '{{inputTagCode}}'+
                         '{{labelTagCode}}'+
                     '</div>',
             inputGroup: '<div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}">'+
-                            '<div class="input-group-prepend form-check abc-radio surveyjs-answer-{{answerType}}">'+
+                            '<div class="input-group-prepend form-check abc-radio surveyjs-wrapper-{{answerType}}">'+
                                 '<div class="input-group-text">'+
                                     '<input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" />'+
                                     '<label for="{{answerCode}}" class="surveyjs-label form-check-label">{{answerString}}</label>'+

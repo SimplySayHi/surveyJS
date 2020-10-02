@@ -105,6 +105,8 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 })).finally((function() {
                     timeoutTimer && window.clearTimeout(timeoutTimer);
                 }));
+            }, arrayMove = function(array, from, to) {
+                return array.splice(to, 0, array.splice(from, 1)[0]), array;
             }, customEvents = {
                 init: "sjs:init"
             }, deepFreeze = function deepFreeze(obj) {
@@ -112,7 +114,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     var prop = obj[name];
                     "object" === _typeof(prop) && null !== prop && deepFreeze(prop);
                 })), Object.freeze(obj);
-            }, isPlainObject = function(object) {
+            }, isPlainObject$1 = function(object) {
                 return "[object Object]" === Object.prototype.toString.call(object);
             }, mergeObjects = function mergeObjects() {
                 var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
@@ -120,7 +122,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     return !!arg;
                 })).forEach((function(arg) {
                     Object.keys(arg).forEach((function(key) {
-                        Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+                        Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject$1(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
                     }));
                 })), out;
             }, dispatchCustomEvent = function(elem, eventName) {
@@ -131,7 +133,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 var eventObj = new Event(eventName, eventOptions);
                 eventObj.data = data, elem.dispatchEvent(eventObj);
             }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isEmptyObject = function(object) {
-                return isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length;
+                return isPlainObject$1(object) && 0 === Object.getOwnPropertyNames(object).length;
             }, isFieldForChangeEvent = function(fieldEl) {
                 return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
             }, replaceObjectKeysInString = function(obj, stringHTML) {
@@ -264,25 +266,32 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     errorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
                 },
                 templates: {
-                    error: '<div class="surveyjs-field-error-message">{{errorMessage}}</div>',
+                    error: '<div class="surveyjs-error-message">{{errorMessage}}</div>',
                     input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
                     label: '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
                     loading: '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
-                    question: '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-box"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group">{{answersHTML}}{{errorsHTML}}</div></div></div>',
+                    question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper form-group">{{answersHTML}}{{errorsHTML}}</div></div></div>',
                     select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
                     textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
                     wrapper: {
-                        default: '<div class="surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
+                        default: '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
                         errors: '<div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div>',
-                        nested: '<div class="surveyjs-nested-parent surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}}">{{labelTemplate}}<div class="surveyjs-nested-container surveyjs-field-indent">{{nestedFieldsHTML}}</div></div>',
-                        related: '<div class="surveyjs-single-answer surveyjs-field-container input-group {{wrapperClasses}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-answer-radio">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
+                        nested: '<div class="surveyjs-field-wrapper surveyjs-nested-parent surveyjs-wrapper-{{answerType}}">{{labelTemplate}}<div class="surveyjs-nested-container surveyjs-field-indent">{{nestedFieldsHTML}}</div></div>',
+                        related: '<div class="surveyjs-field-wrapper input-group {{wrapperClasses}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-wrapper-radio">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
                     }
                 },
                 useWebStorage: !0
             }, internals = {
                 storageArray: [],
                 storageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]"
-            }, getAnswerIndexInWebStorage = function(internals, fieldName) {
+            };
+            function submit(event) {
+                var self = event.target.formjs;
+                event.data.then((function() {
+                    self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
+                }));
+            }
+            var getAnswerIndexInWebStorage = function(internals, fieldName) {
                 var multiChoiceValue = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : "", wsSurvey = sessionStorage.getObject(internals.storageName);
                 if (wsSurvey) for (var wsSurveyLength = wsSurvey.length, ws = 0; ws < wsSurveyLength; ws++) {
                     var lsItem = wsSurvey[ws];
@@ -292,58 +301,57 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     }
                 }
                 return -1;
-            }, callbackFns = {
-                submit: function(event) {
-                    var self = event.target.formjs;
-                    event.data.then((function() {
-                        self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
-                    }));
-                },
-                validation: function(event) {
-                    var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest(self.options.fieldOptions.questionContainer), fieldValue = fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[2] : "id-not-found", isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), questionObj = getQuestionObject(self.data, questionId);
-                    if (isEmptyObject(questionObj)) return !0;
-                    if (isFieldForChangeEventBoolean && "change" === eventName || !isFieldForChangeEventBoolean && "change" !== eventName) {
-                        if (self.options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
-                            var inArrayPos = getAnswerIndexInWebStorage(internals, fieldEl.name, !!isMultiChoice && fieldValue), inArrayRequireMorePos = getAnswerIndexInWebStorage(internals, fieldEl.name + "-more"), storageArray = internals.storageArray;
-                            if (isRequireMore || isRequiredFrom || -1 === inArrayRequireMorePos || storageArray.splice(inArrayRequireMorePos, 1), 
-                            -1 !== inArrayPos) isMultiChoice ? fieldEl.checked || storageArray[inArrayPos].value !== fieldValue ? storageArray.push({
+            };
+            function validation(event) {
+                var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest(self.options.fieldOptions.questionContainer), fieldValue = fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[2] : "id-not-found", isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), questionObj = getQuestionObject(self.data, questionId);
+                if (isEmptyObject(questionObj)) return !0;
+                if (isFieldForChangeEventBoolean && "change" === eventName || !isFieldForChangeEventBoolean && "change" !== eventName) {
+                    if (self.options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
+                        var inArrayPos = getAnswerIndexInWebStorage(internals, fieldEl.name, !!isMultiChoice && fieldValue), inArrayRequireMorePos = getAnswerIndexInWebStorage(internals, fieldEl.name + "-more"), storageArray = internals.storageArray;
+                        if (isRequireMore || isRequiredFrom || -1 === inArrayRequireMorePos || storageArray.splice(inArrayRequireMorePos, 1), 
+                        -1 !== inArrayPos) isMultiChoice ? fieldEl.checked || storageArray[inArrayPos].value !== fieldValue ? storageArray.push({
+                            field: fieldEl.name,
+                            value: fieldValue
+                        }) : storageArray.splice(inArrayPos, 1) : "" !== fieldValue ? storageArray[inArrayPos].value = fieldValue : storageArray.splice(inArrayPos, 1); else if ("" !== fieldValue) {
+                            if (isRequiredFrom && "" !== fieldValue) {
+                                var oldFieldNamePos = getAnswerIndexInWebStorage(internals, reqMoreEl.name);
+                                -1 !== oldFieldNamePos && storageArray.splice(oldFieldNamePos, 1), storageArray.push({
+                                    field: reqMoreEl.name,
+                                    value: reqMoreEl.value
+                                });
+                            }
+                            if (storageArray.push({
                                 field: fieldEl.name,
                                 value: fieldValue
-                            }) : storageArray.splice(inArrayPos, 1) : "" !== fieldValue ? storageArray[inArrayPos].value = fieldValue : storageArray.splice(inArrayPos, 1); else if ("" !== fieldValue) {
-                                if (isRequiredFrom && "" !== fieldValue) {
-                                    var oldFieldNamePos = getAnswerIndexInWebStorage(internals, reqMoreEl.name);
-                                    -1 !== oldFieldNamePos && storageArray.splice(oldFieldNamePos, 1), storageArray.push({
-                                        field: reqMoreEl.name,
-                                        value: reqMoreEl.value
-                                    });
-                                }
-                                if (storageArray.push({
-                                    field: fieldEl.name,
-                                    value: fieldValue
-                                }), isRequireMore) {
-                                    var elReqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
-                                    storageArray.push({
-                                        field: elReqFromEl.name,
-                                        value: elReqFromEl.value
-                                    });
-                                }
+                            }), isRequireMore) {
+                                var elReqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
+                                storageArray.push({
+                                    field: elReqFromEl.name,
+                                    value: elReqFromEl.value
+                                });
                             }
-                            sessionStorage.setObject(internals.storageName, storageArray);
                         }
-                        void 0 !== questionObj.required && (fieldEl.required = !0);
+                        sessionStorage.setObject(internals.storageName, storageArray);
                     }
-                },
-                validationEnd: function(event) {
-                    var fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, questionId = fieldEl.id ? fieldEl.id.split("-")[2] : "id-not-found", questionObj = getQuestionObject(instance.data, questionId);
-                    if (errors && isPlainObject(questionObj.errorMessage)) {
-                        var errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), errorsHTML = Object.keys(errors).reduce((function(accHTML, name) {
-                            var errorMessage = questionObj.errorMessage[name] || "";
-                            return accHTML + (errorMessage ? instance.options.templates.error.replace("{{errorMessage}}", errorMessage) : "");
-                        }), "");
-                        errorsWrapper.innerHTML = errorsHTML;
-                    }
+                    void 0 !== questionObj.required && (fieldEl.required = !0);
                 }
-            }, generateOptionTags = function() {
+            }
+            function validationEnd(event) {
+                var fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, questionId = fieldEl.id ? fieldEl.id.split("-")[2] : "id-not-found", questionObj = getQuestionObject(instance.data, questionId);
+                if (errors && isPlainObject(questionObj.errorMessage)) {
+                    var errorsList = Object.keys(errors);
+                    if (errors.rule) {
+                        var ruleIndex = errorsList.indexOf("rule");
+                        errorsList = arrayMove(errorsList, ruleIndex, 0);
+                    }
+                    var errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), errorsHTML = errorsList.reduce((function(accHTML, name) {
+                        var errorMessage = questionObj.errorMessage[name] || "";
+                        return accHTML + (errorMessage ? instance.options.templates.error.replace("{{errorMessage}}", errorMessage) : "");
+                    }), "");
+                    errorsWrapper.innerHTML = errorsHTML;
+                }
+            }
+            var generateOptionTags = function() {
                 var optionsList = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : [];
                 return sortList(optionsList).reduce((function(optionsHTML, opt) {
                     return optionsHTML + '<option value="'.concat(opt.value, '">').concat(opt.label, "</option>");
@@ -452,7 +460,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     };
                     if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
                         var errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
-                        isPlainObject(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
+                        isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
                     }
                     qaCodeAll += replaceObjectKeysInString({
                         checksMin: checksMin,
@@ -479,8 +487,8 @@ System.register([ "formjs-plugin" ], (function(exports) {
             }, destroy = function(formEl) {
                 formEl.formjs.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = "blur" === eventName;
-                    formEl.removeEventListener(eventName, callbackFns.validation, useCapturing);
-                })), formEl.removeEventListener("fjs.form:submit", callbackFns.submit);
+                    formEl.removeEventListener(eventName, validation, useCapturing);
+                })), formEl.removeEventListener("fjs.field:validation", validationEnd), formEl.removeEventListener("fjs.form:submit", submit);
             }, version = "3.0.0", Survey = exports("default", function(_Form) {
                 _inherits(Survey, _Form);
                 var _super = _createSuper(Survey);
@@ -492,13 +500,13 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     var self = _assertThisInitialized(_this = _super.call(this, formEl, options));
                     self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                         var useCapturing = "blur" === eventName;
-                        self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
+                        self.formEl.addEventListener(eventName, validation, useCapturing);
                     })), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
                     var retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions).then((function(response) {
                         return "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise((function(resolve) {
                             self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, self.data), 
-                            deepFreeze(self.data), self.formEl.addEventListener("fjs.field:validation", callbackFns.validationEnd), 
-                            self.formEl.addEventListener("fjs.form:submit", callbackFns.submit), _get((_thisSuper = _assertThisInitialized(_this), 
+                            deepFreeze(self.data), self.formEl.addEventListener("fjs.field:validation", validationEnd), 
+                            self.formEl.addEventListener("fjs.form:submit", submit), _get((_thisSuper = _assertThisInitialized(_this), 
                             _getPrototypeOf(Survey.prototype)), "init", _thisSuper).call(_thisSuper).then((function() {
                                 self.isInitialized = !0, self.formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
                                 resolve(response);

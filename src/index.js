@@ -2,7 +2,7 @@
 import { ajaxCall, customEvents, deepFreeze, dispatchCustomEvent, mergeObjects, webStorage } from './modules/helpers';
 import { options }      from './modules/options';
 import { internals }    from './modules/internals';
-import { callbackFns }  from './modules/listenerCallbacks';
+import { submit, validation, validationEnd } from './modules/listenerCallbacks';
 import { buildSurvey }  from './modules/buildSurvey/buildSurvey';
 import { destroy }      from './modules/destroy';
 
@@ -31,7 +31,7 @@ class Survey extends Form {
         self.internals = internals;
         self.options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
             const useCapturing = eventName === 'blur' ? true : false;
-            self.formEl.addEventListener(eventName, callbackFns.validation, useCapturing);
+            self.formEl.addEventListener(eventName, validation, useCapturing);
         });
 
         self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.templates.loading );
@@ -47,8 +47,8 @@ class Survey extends Form {
                     if( self.data.questions && self.data.questions.length > 0 ){
                         buildSurvey(self.formEl, self.options, self.internals, self.data);
                         deepFreeze(self.data);
-                        self.formEl.addEventListener('fjs.field:validation', callbackFns.validationEnd);
-                        self.formEl.addEventListener('fjs.form:submit', callbackFns.submit);
+                        self.formEl.addEventListener('fjs.field:validation', validationEnd);
+                        self.formEl.addEventListener('fjs.form:submit', submit);
                         super.init().then(() => {
                             self.isInitialized = true;
                             self.formEl.closest('[data-surveyjs-container]').classList.add('surveyjs-init-success');

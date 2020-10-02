@@ -4,13 +4,13 @@ import Form from "formjs-plugin";
 const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
     const prop = obj[name];
     "object" == typeof prop && null !== prop && deepFreeze(prop);
-}), Object.freeze(obj)), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
+}), Object.freeze(obj)), isPlainObject$1 = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
     return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
         Object.keys(arg).forEach(key => {
-            Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+            Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject$1(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
         });
     }), out;
-}, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isEmptyObject = object => isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce((accString, name) => {
+}, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isEmptyObject = object => isPlainObject$1(object) && 0 === Object.getOwnPropertyNames(object).length, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce((accString, name) => {
     const regexStr = new RegExp("{{" + name + "}}", "g");
     return accString.replace(regexStr, obj[name]);
 }, stringHTML), sortList = list => (list[0].sort && list.sort((a, b) => a.sort > b.sort), 
@@ -132,25 +132,34 @@ list), webStorage = () => {
         errorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
     },
     templates: {
-        error: '<div class="surveyjs-field-error-message">{{errorMessage}}</div>',
+        error: '<div class="surveyjs-error-message">{{errorMessage}}</div>',
         input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
         label: '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
         loading: '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
-        question: '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-box"><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-box form-group">{{answersHTML}}{{errorsHTML}}</div></div></div>',
+        question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-header">Question {{questionNumber}}</div><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper form-group">{{answersHTML}}{{errorsHTML}}</div></div></div>',
         select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
         textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
         wrapper: {
-            default: '<div class="surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
+            default: '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
             errors: '<div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div>',
-            nested: '<div class="surveyjs-nested-parent surveyjs-single-answer surveyjs-field-container surveyjs-answer-{{answerType}}">{{labelTemplate}}<div class="surveyjs-nested-container surveyjs-field-indent">{{nestedFieldsHTML}}</div></div>',
-            related: '<div class="surveyjs-single-answer surveyjs-field-container input-group {{wrapperClasses}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-answer-radio">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
+            nested: '<div class="surveyjs-field-wrapper surveyjs-nested-parent surveyjs-wrapper-{{answerType}}">{{labelTemplate}}<div class="surveyjs-nested-container surveyjs-field-indent">{{nestedFieldsHTML}}</div></div>',
+            related: '<div class="surveyjs-field-wrapper input-group {{wrapperClasses}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-wrapper-radio">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
         }
     },
     useWebStorage: !0
 }, internals = {
     storageArray: [],
     storageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]"
-}, getAnswerIndexInWebStorage = (internals, fieldName, multiChoiceValue = "") => {
+};
+
+function submit(event) {
+    const self = event.target.formjs;
+    event.data.then(() => {
+        self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
+    });
+}
+
+const getAnswerIndexInWebStorage = (internals, fieldName, multiChoiceValue = "") => {
     const wsSurvey = sessionStorage.getObject(internals.storageName);
     if (wsSurvey) {
         const wsSurveyLength = wsSurvey.length;
@@ -163,12 +172,9 @@ list), webStorage = () => {
         }
     }
     return -1;
-}, callbackFns_submit = function(event) {
-    const self = event.target.formjs;
-    event.data.then(() => {
-        self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
-    });
-}, callbackFns_validation = function(event) {
+};
+
+function validation(event) {
     const eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest(self.options.fieldOptions.questionContainer), fieldValue = fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[2] : "id-not-found", isFieldForChangeEventBoolean = (fieldEl => fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]'))(fieldEl), questionObj = getQuestionObject(self.data, questionId);
     if (isEmptyObject(questionObj)) return !0;
     if (isFieldForChangeEventBoolean && "change" === eventName || !isFieldForChangeEventBoolean && "change" !== eventName) {
@@ -202,16 +208,27 @@ list), webStorage = () => {
         }
         void 0 !== questionObj.required && (fieldEl.required = !0);
     }
-}, callbackFns_validationEnd = function(event) {
+}
+
+function validationEnd(event) {
     const fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, questionId = fieldEl.id ? fieldEl.id.split("-")[2] : "id-not-found", questionObj = getQuestionObject(instance.data, questionId);
     if (errors && isPlainObject(questionObj.errorMessage)) {
-        const errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), errorsHTML = Object.keys(errors).reduce((accHTML, name) => {
+        let errorsList = Object.keys(errors);
+        if (errors.rule) {
+            const ruleIndex = errorsList.indexOf("rule");
+            from = ruleIndex, to = 0, (array = errorsList).splice(to, 0, array.splice(from, 1)[0]), 
+            errorsList = array;
+        }
+        const errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), errorsHTML = errorsList.reduce((accHTML, name) => {
             const errorMessage = questionObj.errorMessage[name] || "";
             return accHTML + (errorMessage ? instance.options.templates.error.replace("{{errorMessage}}", errorMessage) : "");
         }, "");
         errorsWrapper.innerHTML = errorsHTML;
     }
-}, generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((optionsHTML, opt) => optionsHTML + `<option value="${opt.value}">${opt.label}</option>`, ""), getAttributesStringHTML = (answerObj, answerCode, isRequired) => {
+    var array, from, to;
+}
+
+const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((optionsHTML, opt) => optionsHTML + `<option value="${opt.value}">${opt.label}</option>`, ""), getAttributesStringHTML = (answerObj, answerCode, isRequired) => {
     const excludedAttrs = [ "data", "id", "label", "nested", "related", "sort" ];
     /^(option|textarea)$/.test(answerObj.type) && excludedAttrs.push("type", "value");
     let string = "";
@@ -325,7 +342,7 @@ list), webStorage = () => {
             };
             if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
                 let errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
-                isPlainObject(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
+                isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
             }
             qaCodeAll += replaceObjectKeysInString({
                 checksMin: checksMin,
@@ -355,7 +372,7 @@ class Survey extends Form {
         const self = this;
         self.internals = internals, self.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
             const useCapturing = "blur" === eventName;
-            self.formEl.addEventListener(eventName, callbackFns_validation, useCapturing);
+            self.formEl.addEventListener(eventName, validation, useCapturing);
         }), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
         const retrieveSurvey = ((url = location.href, options = {}) => {
             let timeoutTimer;
@@ -370,8 +387,8 @@ class Survey extends Form {
             });
         })(self.options.url, self.options.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
             self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, self.data), 
-            deepFreeze(self.data), self.formEl.addEventListener("fjs.field:validation", callbackFns_validationEnd), 
-            self.formEl.addEventListener("fjs.form:submit", callbackFns_submit), super.init().then(() => {
+            deepFreeze(self.data), self.formEl.addEventListener("fjs.field:validation", validationEnd), 
+            self.formEl.addEventListener("fjs.form:submit", submit), super.init().then(() => {
                 self.isInitialized = !0, self.formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
                 resolve(response);
             })) : resolve(response);
@@ -391,8 +408,9 @@ class Survey extends Form {
         var formEl;
         (formEl = this.formEl).formjs.options.fieldOptions.validateOnEvents.split(" ").forEach(eventName => {
             const useCapturing = "blur" === eventName;
-            formEl.removeEventListener(eventName, callbackFns_validation, useCapturing);
-        }), formEl.removeEventListener("fjs.form:submit", callbackFns_submit), super.destroy();
+            formEl.removeEventListener(eventName, validation, useCapturing);
+        }), formEl.removeEventListener("fjs.field:validation", validationEnd), formEl.removeEventListener("fjs.form:submit", submit), 
+        super.destroy();
     }
     static setOptions(optionsObj) {
         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);

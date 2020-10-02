@@ -11,13 +11,9 @@
     
     .surveyjs-field-indent {
         padding-left: 20px;
-
-        &-0 {
-            padding-left: 0;
-        }
     }
     
-    .form-check:not(.surveyjs-answer-checkbox):not(.surveyjs-answer-radio) {
+    .form-check:not(.surveyjs-wrapper-checkbox):not(.surveyjs-wrapper-radio) {
         padding-left: 0;
     }
     

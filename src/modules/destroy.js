@@ -1,12 +1,13 @@
 
-import { callbackFns } from './listenerCallbacks';
+import { submit, validation, validationEnd } from './listenerCallbacks';
 
 export const destroy = formEl => {
 
     formEl.formjs.options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
         const useCapturing = eventName === 'blur' ? true : false;
-        formEl.removeEventListener(eventName, callbackFns.validation, useCapturing);
+        formEl.removeEventListener(eventName, validation, useCapturing);
     });
-    formEl.removeEventListener('fjs.form:submit', callbackFns.submit);
+    formEl.removeEventListener('fjs.field:validation', validationEnd);
+    formEl.removeEventListener('fjs.form:submit', submit);
     
 }
