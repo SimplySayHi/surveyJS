@@ -1,5 +1,5 @@
 
-import { defaultCallbacksInOptions } from './optionsUtils';
+import { optionsUtils } from './optionsUtils';
 
 export const options = {
     cssClasses: {
@@ -16,8 +16,7 @@ export const options = {
     },
     fieldErrorFeedback:     true,
     formOptions: {
-        beforeSend:         [defaultCallbacksInOptions.formOptions.beforeSend],
-        getFormData:        defaultCallbacksInOptions.formOptions.getFormData
+        getFormData:        optionsUtils.formOptions.getFormData
     },
     initAjaxOptions: {
         cache:              'no-store',

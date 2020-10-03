@@ -6,9 +6,9 @@ export const populateAnswers = ( formEl, internals ) => {
         const surveyContEl = formEl.closest('[data-surveyjs-container]');
         internals.storageArray = WS;
         WS.forEach(item => {
-            const fieldFirst = surveyContEl.querySelector( '[name="' + item.field + '"]' ),
+            const fieldFirst = surveyContEl.querySelector( '[name="' + item.name + '"]' ),
                   isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'),
-                  fieldEl = ( isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst );
+                  fieldEl = ( isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.name + '"][value="' + item.value + '"]') : fieldFirst );
             
             if( isRadioOrCheckbox ){
                 fieldEl.checked = true;

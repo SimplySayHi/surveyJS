@@ -2,65 +2,8 @@
 import { fieldsStringSelectorSurvey, getQuestionId, isEmptyObject, mergeObjects } from './helpers';
 import { getQuestionObject } from './utils/getQuestionObject';
 
-export const defaultCallbacksInOptions = {
+export const optionsUtils = {
     formOptions: {
-
-        beforeSend: function beforeSend_surveyDefault( data ){
-            let isHacking = false;
-            const instance = this;
-            const surveyContEl = instance.formEl.closest('[data-surveyjs-container]');
-            const fieldsList = Array.from( surveyContEl.querySelectorAll(fieldsStringSelectorSurvey) );
-
-            let fieldNameCheck = '',
-                fieldTypeCheck = '';
-
-            fieldsList.forEach(fieldEl => {
-                
-                const type = fieldEl.type,
-                      name = fieldEl.name;
-
-                // IF A FIELD HAS THE SAME NAME ATTRIBUTE AND IT IS OF THE SAME TYPE
-                // SKIP THE REST OF THE CODE FOR THIS FIELD AND GO TO THE NEXT
-                if( (name === fieldNameCheck && type === fieldTypeCheck) ){ return; }
-                
-                if( !fieldEl.matches('[data-required-from]') ){
-                    fieldNameCheck = name;
-                    fieldTypeCheck = type;
-                }
-
-                const questionId = getQuestionId(fieldEl);
-                const questionObj = getQuestionObject( instance.data, questionId );
-
-                // BASED ON SURVEY JSON FILE, FORCE REQUIRED FIELDS TO BE VALIDATED
-                // THIS AVOIDS USERS TO HACK THE SURVEY, FOR EXAMPLE REMOVING required ATTRIBUTE FROM THE HTML
-                if( questionId !== '' && questionObj && !!questionObj.required ){
-
-                    const isRequiredFrom = fieldEl.matches('[data-required-from]');
-                    const reqMoreEl = document.querySelector(fieldEl.getAttribute('data-required-from'));
-                    if( !isRequiredFrom || ( isRequiredFrom && reqMoreEl.checked ) ){
-                        if( !fieldEl.required ){
-                            // FIELD IS NOT REQUIRED BUT IT SHOULD => USER HACKED FIELD
-                            isHacking = true;
-                        }
-                        fieldEl.required = true;
-                    }
-                    
-                }
-
-            });
-
-            if( isHacking ){
-                // USER IS HACKING FORM ( REMOVING ATTRIBUTE required FROM A FIELD )
-                // => FORCE VALIDATION TO SHOW ERROR AND STOP SUBMIT
-                const fieldOptions = mergeObjects({}, instance.options.fieldOptions, {focusOnRelated: false});
-                return instance.validateForm( fieldOptions )
-                    .then(formRes => {
-                        data.stopExecution = true;
-                        return data;
-                    });
-            }
-            return data;
-        },
 
         getFormData: function getFormData_surveyDefault(){
             const formEl = this.formEl;

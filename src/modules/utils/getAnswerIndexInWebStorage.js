@@ -9,7 +9,7 @@ export const getAnswerIndexInWebStorage = ( internals, fieldName, multiChoiceVal
         for(let ws=0; ws<wsSurveyLength; ws++){
             const lsItem = wsSurvey[ws];
 
-            if( lsItem.field === fieldName ){
+            if( lsItem.name === fieldName ){
                 if( multiChoiceValue ){
                     if( lsItem.value !== multiChoiceValue ){
                         continue;

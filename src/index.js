@@ -2,7 +2,7 @@
 import { ajaxCall, customEvents, deepFreeze, dispatchCustomEvent, mergeObjects, webStorage } from './modules/helpers';
 import { options }          from './modules/options';
 import { internals }        from './modules/internals';
-import { submit, validation, validationEnd } from './modules/listenerCallbacks';
+import { submit, validationEnd } from './modules/listenerCallbacks';
 import { buildSurvey }      from './modules/buildSurvey/buildSurvey';
 import { populateAnswers }  from './modules/buildSurvey/populateAnswers';
 import { destroy }          from './modules/destroy';
@@ -30,10 +30,6 @@ class Survey extends Form {
         super( formEl, options );
         const self = this;
         self.internals = internals;
-        self.options.fieldOptions.validateOnEvents.split(' ').forEach(eventName => {
-            const useCapturing = eventName === 'blur' ? true : false;
-            self.formEl.addEventListener(eventName, validation, useCapturing);
-        });
 
         self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.templates.loading );
 
@@ -56,6 +52,12 @@ class Survey extends Form {
                         super.init().then(() => {
                             self.isInitialized = true;
                             self.formEl.closest('[data-surveyjs-container]').classList.add('surveyjs-init-success');
+                            // ON super.init() FOCUS IS SET ON FIELD [data-required-from] WHEN VALIDATING
+                            /* const activeEl = document.activeElement;
+                            const formSelector = 'form[name="'+ self.formEl.name +'"]';
+                            if( activeEl.matches(formSelector + ' [data-required-from]') ){
+                                activeEl.blur();
+                            } */
                             resolve(response);
                         });
                     } else {
