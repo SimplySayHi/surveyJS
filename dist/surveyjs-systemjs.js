@@ -421,53 +421,63 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         allAnswersHTML += replaceObjectKeysInString(answerData, answerHTML);
                     }
                 })), allAnswersHTML;
-            }, generateQAcode = function(formEl, options, surveyData) {
-                for (var questionsList = sortList(surveyData.questions), qaDataLength = questionsList.length, qaCodeAll = "", _loop = function(i) {
-                    var questionObj = questionsList[i], qaHtml = options.templates.question, questionId = questionObj.id, questionNumber = i + 1, extraData = {
-                        surveyId: surveyData.id,
-                        question: {
-                            id: questionId,
-                            index: i,
-                            isRequired: !!questionObj.required
+            }, generateQAcode = function(surveyData, options) {
+                for (var questionsList = sortList(surveyData.questions), qaDataLength = questionsList.length, qaCodeAll = "", i = 0; i < qaDataLength; i++) {
+                    var questionObj = questionsList[i];
+                    if (!questionObj.external) {
+                        var qaHtml = options.templates.question, questionId = questionObj.id, questionNumber = i + 1, extraData = {
+                            surveyId: surveyData.id,
+                            question: {
+                                id: questionId,
+                                index: i,
+                                isRequired: !!questionObj.required
+                            }
+                        };
+                        questionObj.checks && (extraData.question.checks = questionObj.checks);
+                        var answersHTML = generateAnswers(options, questionObj.answers, extraData), maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
+                            questionId: questionId,
+                            questionNumber: questionNumber,
+                            questionText: questionObj.question + maxChoiceText,
+                            answersHTML: answersHTML,
+                            errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
+                        };
+                        if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
+                            var errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
+                            isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
                         }
-                    };
-                    questionObj.checks && (extraData.question.checks = questionObj.checks);
-                    var answersHTML = generateAnswers(options, questionObj.answers, extraData);
-                    if (questionObj.external) {
-                        var externalCont = formEl.closest("[data-surveyjs-container]").querySelector("[data-surveyjs-external]");
-                        return externalCont.setAttribute("data-question-id", questionId), questionObj.answers.forEach((function(answer, index) {
-                            var bindAnswerEl = externalCont.querySelectorAll("[data-field]")[index], fieldProps = {
-                                id: "".concat(answer.type, "-").concat(extraData.surveyId, "-").concat(questionId, "-").concat(answer.id),
-                                name: "".concat(bindAnswerEl.name).concat(questionNumber),
-                                type: answer.type,
-                                value: answer.value,
-                                required: !!questionObj.required
-                            };
-                            Object.keys(fieldProps).forEach((function(name) {
-                                bindAnswerEl[name] = fieldProps[name];
-                            }));
-                            var answerCont = bindAnswerEl.closest("[data-answer]");
-                            answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
-                            externalCont.querySelector("[data-question]").innerHTML = questionObj.question;
-                        })), "continue";
+                        qaCodeAll += replaceObjectKeysInString({
+                            checksMin: checksMin,
+                            checksMax: checksMax
+                        }, qaHtml);
                     }
-                    var maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
-                        questionId: questionId,
-                        questionNumber: questionNumber,
-                        questionText: questionObj.question + maxChoiceText,
-                        answersHTML: answersHTML,
-                        errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
-                    };
-                    if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
-                        var errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
-                        isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
-                    }
-                    qaCodeAll += replaceObjectKeysInString({
-                        checksMin: checksMin,
-                        checksMax: checksMax
-                    }, qaHtml);
-                }, i = 0; i < qaDataLength; i++) _loop(i);
+                }
                 return qaCodeAll;
+            }, buildSurvey = function(formEl, options, internals, data) {
+                var formName = formEl.getAttribute("name") || "";
+                internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
+                internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
+                var qaHtmlAll = generateQAcode(data, options);
+                formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
+                var extQuestion = data.questions.filter((function(obj) {
+                    return obj.external;
+                }))[0];
+                if (extQuestion) {
+                    var externalCont = formEl.closest("[data-surveyjs-container]").querySelector("[data-surveyjs-external]");
+                    externalCont.setAttribute("data-question-id", extQuestion.id), extQuestion.answers.forEach((function(answer, index) {
+                        var externalField = externalCont.querySelectorAll("[data-field]")[index], fieldProps = {
+                            id: "".concat(answer.type, "-").concat(data.id, "-").concat(extQuestion.id, "-").concat(answer.id),
+                            type: answer.type,
+                            value: answer.value,
+                            required: !!extQuestion.required
+                        };
+                        Object.keys(fieldProps).forEach((function(name) {
+                            externalField[name] = fieldProps[name];
+                        }));
+                        var answerCont = externalField.closest("[data-answer]");
+                        answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
+                        externalCont.querySelector("[data-question]").innerHTML = extQuestion.question;
+                    }));
+                }
             }, populateAnswers = function(formEl, internals) {
                 var WS = sessionStorage.getObject(internals.storageName);
                 if (WS) {
@@ -477,13 +487,6 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
                     }));
                 }
-            }, buildSurvey = function(formEl, options, internals, data) {
-                var formName = formEl.getAttribute("name") || "";
-                internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
-                internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
-                var qaHtmlAll = generateQAcode(formEl, options, data);
-                formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll), 
-                options.useWebStorage && populateAnswers(formEl, internals);
             }, destroy = function(formEl) {
                 formEl.formjs.options.fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
                     var useCapturing = "blur" === eventName;
@@ -505,9 +508,9 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     var retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions).then((function(response) {
                         return "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise((function(resolve) {
                             self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, self.data), 
-                            deepFreeze(self.data), self.formEl.addEventListener("fjs.field:validation", validationEnd), 
-                            self.formEl.addEventListener("fjs.form:submit", submit), _get((_thisSuper = _assertThisInitialized(_this), 
-                            _getPrototypeOf(Survey.prototype)), "init", _thisSuper).call(_thisSuper).then((function() {
+                            self.options.useWebStorage && populateAnswers(self.formEl, self.internals), deepFreeze(self.data), 
+                            self.formEl.addEventListener("fjs.field:validation", validationEnd), self.formEl.addEventListener("fjs.form:submit", submit), 
+                            _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Survey.prototype)), "init", _thisSuper).call(_thisSuper).then((function() {
                                 self.isInitialized = !0, self.formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
                                 resolve(response);
                             }))) : resolve(response);

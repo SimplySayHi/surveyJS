@@ -2,7 +2,7 @@
 import { isPlainObject, replaceObjectKeysInString, sortList } from '../helpers';
 import { generateAnswers } from './generateQAcodeUtils/generateAnswers';
 
-export const generateQAcode = ( formEl, options, surveyData ) => {
+export const generateQAcode = ( surveyData, options ) => {
 
     const questionsList = sortList( surveyData.questions );
     const qaDataLength = questionsList.length;
@@ -11,6 +11,8 @@ export const generateQAcode = ( formEl, options, surveyData ) => {
     
     for(let i=0; i<qaDataLength; i++){
         const questionObj = questionsList[i];
+
+        if( questionObj.external ){ continue; }
 
         let qaHtml = options.templates.question;
         const questionId = questionObj.id;
@@ -29,34 +31,6 @@ export const generateQAcode = ( formEl, options, surveyData ) => {
         }
         
         let answersHTML = generateAnswers( options, questionObj.answers, extraData );
-
-        // MANAGE EXTERNAL QUESTION
-        if( questionObj.external ){
-            const externalCont = formEl.closest('[data-surveyjs-container]').querySelector('[data-surveyjs-external]');
-            externalCont.setAttribute('data-question-id', questionId);
-
-            questionObj.answers.forEach((answer, index) => {
-                const bindAnswerEl = externalCont.querySelectorAll('[data-field]')[index];
-                const fieldProps = {
-                        id: `${answer.type}-${extraData.surveyId}-${questionId}-${answer.id}`,
-                        name: `${bindAnswerEl.name}${questionNumber}`,
-                        type: answer.type,
-                        value: answer.value,
-                        required: !!questionObj.required
-                    };
-                
-                Object.keys(fieldProps).forEach(name => {
-                    bindAnswerEl[name] = fieldProps[name];
-                });
-
-                const answerCont = bindAnswerEl.closest('[data-answer]');
-                answerCont.querySelector('label').setAttribute('for', fieldProps.id);
-                answerCont.querySelector('[data-label]').innerHTML = answer.label;
-                externalCont.querySelector('[data-question]').innerHTML = questionObj.question;
-            });
-
-            continue;
-        }
 
         const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : '';
         const checksMin = maxChoice[0] || '';

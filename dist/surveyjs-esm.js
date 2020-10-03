@@ -298,11 +298,12 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
     const formName = formEl.getAttribute("name") || "";
     internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
     internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
-    const qaHtmlAll = ((formEl, options, surveyData) => {
+    const qaHtmlAll = ((surveyData, options) => {
         const questionsList = sortList(surveyData.questions), qaDataLength = questionsList.length;
         let qaCodeAll = "";
         for (let i = 0; i < qaDataLength; i++) {
             const questionObj = questionsList[i];
+            if (questionObj.external) continue;
             let qaHtml = options.templates.question;
             const questionId = questionObj.id, questionNumber = i + 1, extraData = {
                 surveyId: surveyData.id,
@@ -314,25 +315,6 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
             };
             questionObj.checks && (extraData.question.checks = questionObj.checks);
             let answersHTML = generateAnswers(options, questionObj.answers, extraData);
-            if (questionObj.external) {
-                const externalCont = formEl.closest("[data-surveyjs-container]").querySelector("[data-surveyjs-external]");
-                externalCont.setAttribute("data-question-id", questionId), questionObj.answers.forEach((answer, index) => {
-                    const bindAnswerEl = externalCont.querySelectorAll("[data-field]")[index], fieldProps = {
-                        id: `${answer.type}-${extraData.surveyId}-${questionId}-${answer.id}`,
-                        name: `${bindAnswerEl.name}${questionNumber}`,
-                        type: answer.type,
-                        value: answer.value,
-                        required: !!questionObj.required
-                    };
-                    Object.keys(fieldProps).forEach(name => {
-                        bindAnswerEl[name] = fieldProps[name];
-                    });
-                    const answerCont = bindAnswerEl.closest("[data-answer]");
-                    answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
-                    externalCont.querySelector("[data-question]").innerHTML = questionObj.question;
-                });
-                continue;
-            }
             const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
                 questionId: questionId,
                 questionNumber: questionNumber,
@@ -350,18 +332,26 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
             }, qaHtml);
         }
         return qaCodeAll;
-    })(formEl, options, data);
-    formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll), 
-    options.useWebStorage && ((formEl, internals) => {
-        const WS = sessionStorage.getObject(internals.storageName);
-        if (WS) {
-            const surveyContEl = formEl.closest("[data-surveyjs-container]");
-            internals.storageArray = WS, WS.forEach(item => {
-                const fieldFirst = surveyContEl.querySelector('[name="' + item.field + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst;
-                isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
+    })(data, options);
+    formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
+    const extQuestion = data.questions.filter(obj => obj.external)[0];
+    if (extQuestion) {
+        const externalCont = formEl.closest("[data-surveyjs-container]").querySelector("[data-surveyjs-external]");
+        externalCont.setAttribute("data-question-id", extQuestion.id), extQuestion.answers.forEach((answer, index) => {
+            const externalField = externalCont.querySelectorAll("[data-field]")[index], fieldProps = {
+                id: `${answer.type}-${data.id}-${extQuestion.id}-${answer.id}`,
+                type: answer.type,
+                value: answer.value,
+                required: !!extQuestion.required
+            };
+            Object.keys(fieldProps).forEach(name => {
+                externalField[name] = fieldProps[name];
             });
-        }
-    })(formEl, internals);
+            const answerCont = externalField.closest("[data-answer]");
+            answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
+            externalCont.querySelector("[data-question]").innerHTML = extQuestion.question;
+        });
+    }
 };
 
 class Survey extends Form {
@@ -387,7 +377,16 @@ class Survey extends Form {
             });
         })(self.options.url, self.options.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
             self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, self.data), 
-            deepFreeze(self.data), self.formEl.addEventListener("fjs.field:validation", validationEnd), 
+            self.options.useWebStorage && ((formEl, internals) => {
+                const WS = sessionStorage.getObject(internals.storageName);
+                if (WS) {
+                    const surveyContEl = formEl.closest("[data-surveyjs-container]");
+                    internals.storageArray = WS, WS.forEach(item => {
+                        const fieldFirst = surveyContEl.querySelector('[name="' + item.field + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.field + '"][value="' + item.value + '"]') : fieldFirst;
+                        isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
+                    });
+                }
+            })(self.formEl, self.internals), deepFreeze(self.data), self.formEl.addEventListener("fjs.field:validation", validationEnd), 
             self.formEl.addEventListener("fjs.form:submit", submit), super.init().then(() => {
                 self.isInitialized = !0, self.formEl.closest("[data-surveyjs-container]").classList.add("surveyjs-init-success"), 
                 resolve(response);

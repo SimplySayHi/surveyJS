@@ -1,10 +1,11 @@
 
 import { ajaxCall, customEvents, deepFreeze, dispatchCustomEvent, mergeObjects, webStorage } from './modules/helpers';
-import { options }      from './modules/options';
-import { internals }    from './modules/internals';
+import { options }          from './modules/options';
+import { internals }        from './modules/internals';
 import { submit, validation, validationEnd } from './modules/listenerCallbacks';
-import { buildSurvey }  from './modules/buildSurvey/buildSurvey';
-import { destroy }      from './modules/destroy';
+import { buildSurvey }      from './modules/buildSurvey/buildSurvey';
+import { populateAnswers }  from './modules/buildSurvey/populateAnswers';
+import { destroy }          from './modules/destroy';
 
 import Form from 'formjs-plugin';
 
@@ -46,6 +47,9 @@ class Survey extends Form {
                     self.data = response.data;
                     if( self.data.questions && self.data.questions.length > 0 ){
                         buildSurvey(self.formEl, self.options, self.internals, self.data);
+                        if( self.options.useWebStorage ){
+                            populateAnswers( self.formEl, self.internals );
+                        }
                         deepFreeze(self.data);
                         self.formEl.addEventListener('fjs.field:validation', validationEnd);
                         self.formEl.addEventListener('fjs.form:submit', submit);
