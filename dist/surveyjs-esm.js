@@ -298,41 +298,35 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
     const formName = formEl.getAttribute("name") || "";
     internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
     internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
-    const qaHtmlAll = ((surveyData, options) => {
-        const questionsList = sortList(surveyData.questions), qaDataLength = questionsList.length;
-        let qaCodeAll = "";
-        for (let i = 0; i < qaDataLength; i++) {
-            const questionObj = questionsList[i];
-            if (questionObj.external) continue;
-            let qaHtml = options.templates.question;
-            const questionId = questionObj.id, questionNumber = i + 1, extraData = {
-                surveyId: surveyData.id,
-                question: {
-                    id: questionId,
-                    index: i,
-                    isRequired: !!questionObj.required
-                }
-            };
-            questionObj.checks && (extraData.question.checks = questionObj.checks);
-            let answersHTML = generateAnswers(questionObj.answers, extraData, options);
-            const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
-                questionId: questionId,
-                questionNumber: questionNumber,
-                questionText: questionObj.question + maxChoiceText,
-                answersHTML: answersHTML,
-                errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
-            };
-            if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
-                let errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
-                isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
+    const qaHtmlAll = ((questions, surveyId, options) => sortList(questions).reduce((accCode, questionObj, index) => {
+        if (questionObj.external) return accCode;
+        let qaHtml = options.templates.question;
+        const questionId = questionObj.id, questionNumber = index + 1, extraData = {
+            surveyId: surveyId,
+            question: {
+                id: questionId,
+                index: index,
+                isRequired: !!questionObj.required
             }
-            qaCodeAll += replaceObjectKeysInString({
-                checksMin: checksMin,
-                checksMax: checksMax
-            }, qaHtml);
+        };
+        questionObj.checks && (extraData.question.checks = questionObj.checks);
+        let answersHTML = generateAnswers(questionObj.answers, extraData, options);
+        const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
+            questionId: questionId,
+            questionNumber: questionNumber,
+            questionText: questionObj.question + maxChoiceText,
+            answersHTML: answersHTML,
+            errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
+        };
+        if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
+            let errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
+            isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
         }
-        return qaCodeAll;
-    })(data, options);
+        return accCode + replaceObjectKeysInString({
+            checksMin: checksMin,
+            checksMax: checksMax
+        }, qaHtml);
+    }, ""))(data.questions, data.id, options);
     formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
     const extQuestion = data.questions.filter(obj => obj.external)[0];
     if (extQuestion) {

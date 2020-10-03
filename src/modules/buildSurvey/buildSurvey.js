@@ -9,7 +9,7 @@ export const buildSurvey = ( data, formEl, options, internals ) => {
     internals.storageName = internals.storageName.replace( /{{surveyId}}/, data.id );
     internals.storageName = internals.storageName.replace( /{{surveyFormName}}/, formName );
     
-    const qaHtmlAll = generateQAcode( data, options );
+    const qaHtmlAll = generateQAcode( data.questions, data.id, options );
     formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforeend', qaHtmlAll );
 
     // MANAGE EXTERNAL QUESTION

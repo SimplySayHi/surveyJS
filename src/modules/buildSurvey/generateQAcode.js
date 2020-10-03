@@ -2,26 +2,19 @@
 import { isPlainObject, replaceObjectKeysInString, sortList } from '../helpers';
 import { generateAnswers } from './generateQAcodeUtils/generateAnswers';
 
-export const generateQAcode = ( surveyData, options ) => {
+export const generateQAcode = ( questions, surveyId, options ) => {
 
-    const questionsList = sortList( surveyData.questions );
-    const qaDataLength = questionsList.length;
-    
-    let qaCodeAll = '';
-    
-    for(let i=0; i<qaDataLength; i++){
-        const questionObj = questionsList[i];
-
-        if( questionObj.external ){ continue; }
+    return sortList( questions ).reduce((accCode, questionObj, index) => {
+        if( questionObj.external ){ return accCode; }
 
         let qaHtml = options.templates.question;
         const questionId = questionObj.id;
-        const questionNumber = i + 1;
+        const questionNumber = index + 1;
         const extraData = {
-            surveyId: surveyData.id,
+            surveyId,
             question: {
                 id: questionId,
-                index: i,
+                index,
                 isRequired: !!questionObj.required
             }
         };
@@ -57,9 +50,7 @@ export const generateQAcode = ( surveyData, options ) => {
             qaHtml = qaHtml.replace( /{{errorTemplates}}/g, errorMessage );
         }
 
-        qaCodeAll += replaceObjectKeysInString({checksMin, checksMax}, qaHtml);
-    }
-    
-    return qaCodeAll;
+        return accCode += replaceObjectKeysInString({checksMin, checksMax}, qaHtml);
+    }, '');
 
 }

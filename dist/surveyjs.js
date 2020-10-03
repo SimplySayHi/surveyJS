@@ -421,42 +421,39 @@ var Survey = function(Form) {
                 allAnswersHTML += replaceObjectKeysInString(answerData, answerHTML);
             }
         })), allAnswersHTML;
-    }, generateQAcode = function(surveyData, options) {
-        for (var questionsList = sortList(surveyData.questions), qaDataLength = questionsList.length, qaCodeAll = "", i = 0; i < qaDataLength; i++) {
-            var questionObj = questionsList[i];
-            if (!questionObj.external) {
-                var qaHtml = options.templates.question, questionId = questionObj.id, questionNumber = i + 1, extraData = {
-                    surveyId: surveyData.id,
-                    question: {
-                        id: questionId,
-                        index: i,
-                        isRequired: !!questionObj.required
-                    }
-                };
-                questionObj.checks && (extraData.question.checks = questionObj.checks);
-                var answersHTML = generateAnswers(questionObj.answers, extraData, options), maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
-                    questionId: questionId,
-                    questionNumber: questionNumber,
-                    questionText: questionObj.question + maxChoiceText,
-                    answersHTML: answersHTML,
-                    errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
-                };
-                if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
-                    var errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
-                    isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
+    }, generateQAcode = function(questions, surveyId, options) {
+        return sortList(questions).reduce((function(accCode, questionObj, index) {
+            if (questionObj.external) return accCode;
+            var qaHtml = options.templates.question, questionId = questionObj.id, questionNumber = index + 1, extraData = {
+                surveyId: surveyId,
+                question: {
+                    id: questionId,
+                    index: index,
+                    isRequired: !!questionObj.required
                 }
-                qaCodeAll += replaceObjectKeysInString({
-                    checksMin: checksMin,
-                    checksMax: checksMax
-                }, qaHtml);
+            };
+            questionObj.checks && (extraData.question.checks = questionObj.checks);
+            var answersHTML = generateAnswers(questionObj.answers, extraData, options), maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
+                questionId: questionId,
+                questionNumber: questionNumber,
+                questionText: questionObj.question + maxChoiceText,
+                answersHTML: answersHTML,
+                errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
+            };
+            if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
+                var errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
+                isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
             }
-        }
-        return qaCodeAll;
+            return accCode + replaceObjectKeysInString({
+                checksMin: checksMin,
+                checksMax: checksMax
+            }, qaHtml);
+        }), "");
     }, buildSurvey = function(data, formEl, options, internals) {
         var formName = formEl.getAttribute("name") || "";
         internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
         internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
-        var qaHtmlAll = generateQAcode(data, options);
+        var qaHtmlAll = generateQAcode(data.questions, data.id, options);
         formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
         var extQuestion = data.questions.filter((function(obj) {
             return obj.external;
