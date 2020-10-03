@@ -1,18 +1,19 @@
 
-import { fieldsStringSelectorSurvey, getQuestionId, isEmptyObject, mergeObjects } from './helpers';
+import { fieldsStringSelectorSurvey, getQuestionId, isEmptyObject } from './helpers';
 import { getQuestionObject } from './utils/getQuestionObject';
 
 export const optionsUtils = {
     formOptions: {
 
         getFormData: function getFormData_surveyDefault(){
-            const formEl = this.formEl;
-            const instance = formEl.formjs;
+            const instance = this;
+            const formEl = instance.formEl;
             const fieldsList = Array.from( formEl.closest('[data-surveyjs-container]').querySelectorAll(fieldsStringSelectorSurvey) );
             const obj = {
                     answers: [],
                     id: instance.data.id
                 };
+            
             let fieldNameCheck = '',
                 fieldTypeCheck = '';
 

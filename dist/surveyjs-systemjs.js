@@ -180,7 +180,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
             }, optionsUtils = {
                 formOptions: {
                     getFormData: function() {
-                        var formEl = this.formEl, instance = formEl.formjs, fieldsList = Array.from(formEl.closest("[data-surveyjs-container]").querySelectorAll(fieldsStringSelectorSurvey)), obj = {
+                        var instance = this, formEl = instance.formEl, fieldsList = Array.from(formEl.closest("[data-surveyjs-container]").querySelectorAll(fieldsStringSelectorSurvey)), obj = {
                             answers: [],
                             id: instance.data.id
                         }, fieldNameCheck = "", fieldTypeCheck = "";
