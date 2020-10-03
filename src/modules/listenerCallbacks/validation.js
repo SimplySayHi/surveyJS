@@ -1,7 +1,7 @@
 
-import { isEmptyObject, isFieldForChangeEvent } from '../helpers';
-import { getAnswerIndexInWebStorage }           from '../utils/getAnswerIndexInWebStorage';
-import { getQuestionObject }                    from '../utils/getQuestionObject';
+import { getQuestionId, isEmptyObject, isFieldForChangeEvent } from '../helpers';
+import { getAnswerIndexInWebStorage }   from '../utils/getAnswerIndexInWebStorage';
+import { getQuestionObject }            from '../utils/getQuestionObject';
 
 export function validation( event ){
 
@@ -18,7 +18,7 @@ export function validation( event ){
 
     // VARS USED TO VALIDATE THE FILED IF IT IS REQUIRED
     const itemEl = isRequiredFrom ? reqMoreEl : fieldEl,
-          questionId = itemEl.id ? itemEl.id.split('-')[2] : 'id-not-found',
+          questionId = getQuestionId(itemEl),
           isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl),
           questionObj = getQuestionObject(self.data, questionId);
 

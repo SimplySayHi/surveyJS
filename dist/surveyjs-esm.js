@@ -10,7 +10,10 @@ const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnProperty
             Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject$1(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
         });
     }), out;
-}, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isEmptyObject = object => isPlainObject$1(object) && 0 === Object.getOwnPropertyNames(object).length, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce((accString, name) => {
+}, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', getQuestionId = fieldEl => {
+    const containerEl = fieldEl.closest("[data-question-id]");
+    return containerEl && containerEl.getAttribute("data-question-id") || "";
+}, isEmptyObject = object => isPlainObject$1(object) && 0 === Object.getOwnPropertyNames(object).length, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce((accString, name) => {
     const regexStr = new RegExp("{{" + name + "}}", "g");
     return accString.replace(regexStr, obj[name]);
 }, stringHTML), sortList = list => (list[0].sort && list.sort((a, b) => a.sort > b.sort), 
@@ -52,7 +55,7 @@ list), webStorage = () => {
                 const type = fieldEl.type, name = fieldEl.name;
                 if (name === fieldNameCheck && type === fieldTypeCheck) return;
                 fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
-                const questionEl = fieldEl.closest("[data-question-id]"), questionId = questionEl ? questionEl.getAttribute("data-question-id") : "", questionObj = getQuestionObject(instance.data, questionId);
+                const questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
                 if ("" !== questionId && questionObj && questionObj.required) {
                     const isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
                     (!isRequiredFrom || isRequiredFrom && reqMoreEl.checked) && (fieldEl.required || (isHacking = !0), 
@@ -77,7 +80,7 @@ list), webStorage = () => {
                 const type = fieldEl.type, name = fieldEl.name;
                 if (name === fieldNameCheck && type === fieldTypeCheck) return;
                 fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
-                const questionEl = fieldEl.closest("[data-question-id]"), questionId = questionEl ? questionEl.getAttribute("data-question-id") : "", qaObj = {
+                const questionId = getQuestionId(fieldEl), qaObj = {
                     question: questionId,
                     answer: {
                         value: fieldEl.value || ""
@@ -175,7 +178,7 @@ const getAnswerIndexInWebStorage = (internals, fieldName, multiChoiceValue = "")
 };
 
 function validation(event) {
-    const eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest(self.options.fieldOptions.questionContainer), fieldValue = fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[2] : "id-not-found", isFieldForChangeEventBoolean = (fieldEl => fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]'))(fieldEl), questionObj = getQuestionObject(self.data, questionId);
+    const eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest(self.options.fieldOptions.questionContainer), fieldValue = fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, questionId = getQuestionId(isRequiredFrom ? reqMoreEl : fieldEl), isFieldForChangeEventBoolean = (fieldEl => fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]'))(fieldEl), questionObj = getQuestionObject(self.data, questionId);
     if (isEmptyObject(questionObj)) return !0;
     if (isFieldForChangeEventBoolean && "change" === eventName || !isFieldForChangeEventBoolean && "change" !== eventName) {
         if (self.options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
@@ -211,7 +214,7 @@ function validation(event) {
 }
 
 function validationEnd(event) {
-    const fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, questionId = fieldEl.id ? fieldEl.id.split("-")[2] : "id-not-found", questionObj = getQuestionObject(instance.data, questionId);
+    const fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
     if (errors && isPlainObject(questionObj.errorMessage)) {
         let errorsList = Object.keys(errors);
         if (errors.rule) {

@@ -7,6 +7,7 @@ export { customEvents }                 from './helpers/customEvents';
 export { deepFreeze }                   from './helpers/deepFreeze';
 export { dispatchCustomEvent }          from './helpers/dispatchCustomEvent';
 export { fieldsStringSelectorSurvey }   from './helpers/fieldsStringSelectorSurvey';
+export { getQuestionId }                from './helpers/getQuestionId';
 export { isDOMNode }                    from './helpers/isDOMNode';
 export { isEmptyObject }                from './helpers/isEmptyObject';
 export { isFieldForChangeEvent }        from './helpers/isFieldForChangeEvent';

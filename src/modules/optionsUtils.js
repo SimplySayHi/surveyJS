@@ -1,5 +1,5 @@
 
-import { fieldsStringSelectorSurvey, isEmptyObject, mergeObjects } from './helpers';
+import { fieldsStringSelectorSurvey, getQuestionId, isEmptyObject, mergeObjects } from './helpers';
 import { getQuestionObject } from './utils/getQuestionObject';
 
 export const defaultCallbacksInOptions = {
@@ -28,8 +28,7 @@ export const defaultCallbacksInOptions = {
                     fieldTypeCheck = type;
                 }
 
-                const questionEl = fieldEl.closest('[data-question-id]');
-                const questionId = questionEl ? questionEl.getAttribute('data-question-id') : '';
+                const questionId = getQuestionId(fieldEl);
                 const questionObj = getQuestionObject( instance.data, questionId );
 
                 // BASED ON SURVEY JSON FILE, FORCE REQUIRED FIELDS TO BE VALIDATED
@@ -92,8 +91,7 @@ export const defaultCallbacksInOptions = {
                 // answer       AN OBJECT THAT CONTAINS THE FOLLOWS:
                 //                  value:      THE ANSWER VALUE
                 //                  related:    IF THE ANSWER IS REQUIRED FROM ANOTHER ANSWER (SEE BELOW)
-                const questionEl = fieldEl.closest('[data-question-id]'),
-                      questionId = questionEl ? questionEl.getAttribute('data-question-id') : '',
+                const questionId = getQuestionId(fieldEl),
                       qaObj = {
                         question: questionId,
                         answer: {

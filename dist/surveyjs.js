@@ -132,7 +132,10 @@ var Survey = function(Form) {
         }, eventOptions);
         var eventObj = new Event(eventName, eventOptions);
         eventObj.data = data, elem.dispatchEvent(eventObj);
-    }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', isEmptyObject = function(object) {
+    }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', getQuestionId = function(fieldEl) {
+        var containerEl = fieldEl.closest("[data-question-id]");
+        return containerEl && containerEl.getAttribute("data-question-id") || "";
+    }, isEmptyObject = function(object) {
         return isPlainObject$1(object) && 0 === Object.getOwnPropertyNames(object).length;
     }, isFieldForChangeEvent = function(fieldEl) {
         return fieldEl.matches('select, [type="radio"], [type="checkbox"], [type="file"]');
@@ -184,7 +187,7 @@ var Survey = function(Form) {
                     var type = fieldEl.type, name = fieldEl.name;
                     if (name !== fieldNameCheck || type !== fieldTypeCheck) {
                         fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
-                        var questionEl = fieldEl.closest("[data-question-id]"), questionId = questionEl ? questionEl.getAttribute("data-question-id") : "", questionObj = getQuestionObject(instance.data, questionId);
+                        var questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
                         if ("" !== questionId && questionObj && questionObj.required) {
                             var isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
                             (!isRequiredFrom || isRequiredFrom && reqMoreEl.checked) && (fieldEl.required || (isHacking = !0), 
@@ -210,7 +213,7 @@ var Survey = function(Form) {
                     var type = fieldEl.type, name = fieldEl.name;
                     if (name !== fieldNameCheck || type !== fieldTypeCheck) {
                         fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
-                        var questionEl = fieldEl.closest("[data-question-id]"), questionId = questionEl ? questionEl.getAttribute("data-question-id") : "", qaObj = {
+                        var questionId = getQuestionId(fieldEl), qaObj = {
                             question: questionId,
                             answer: {
                                 value: fieldEl.value || ""
@@ -303,7 +306,7 @@ var Survey = function(Form) {
         return -1;
     };
     function validation(event) {
-        var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest(self.options.fieldOptions.questionContainer), fieldValue = fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, itemEl = isRequiredFrom ? reqMoreEl : fieldEl, questionId = itemEl.id ? itemEl.id.split("-")[2] : "id-not-found", isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), questionObj = getQuestionObject(self.data, questionId);
+        var eventName = event.type, fieldEl = event.target, self = fieldEl.closest("form").formjs, internals = self.internals, containerEl = fieldEl.closest(self.options.fieldOptions.questionContainer), fieldValue = fieldEl.value, isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), isRequiredFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = isRequiredFrom ? containerEl.querySelector(fieldEl.getAttribute("data-required-from")) : null, questionId = getQuestionId(isRequiredFrom ? reqMoreEl : fieldEl), isFieldForChangeEventBoolean = isFieldForChangeEvent(fieldEl), questionObj = getQuestionObject(self.data, questionId);
         if (isEmptyObject(questionObj)) return !0;
         if (isFieldForChangeEventBoolean && "change" === eventName || !isFieldForChangeEventBoolean && "change" !== eventName) {
             if (self.options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
@@ -337,7 +340,7 @@ var Survey = function(Form) {
         }
     }
     function validationEnd(event) {
-        var fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, questionId = fieldEl.id ? fieldEl.id.split("-")[2] : "id-not-found", questionObj = getQuestionObject(instance.data, questionId);
+        var fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
         if (errors && isPlainObject(questionObj.errorMessage)) {
             var errorsList = Object.keys(errors);
             if (errors.rule) {
