@@ -4,7 +4,7 @@ import { generateOptionTags }       from './generateOptionTags';
 import { getAttributesStringHTML }  from './getAttributesStringHTML';
 import { getTemplates }             from './getTemplates';
 
-export const generateAnswers = ( options, answersList, extraData ) => {
+export const generateAnswers = ( answersList, extraData, options ) => {
 
     let allAnswersHTML = '';
     let previousType = '';
@@ -70,11 +70,11 @@ export const generateAnswers = ( options, answersList, extraData ) => {
         // TAKE RIGHT TEMPLATES ( wrapper, field and label ) AND PUT ALL TOGETHER
         // answerTypeForTemplate => related, input, nested, select, textarea, etc...
         const answerTypeForTemplate = answer.related ? 'related' : (answer.nested ? 'nested' : answerType);
-        const templates = getTemplates( options.templates, answerTypeForTemplate );
+        const templates = getTemplates( answerTypeForTemplate, options.templates );
 
         let nestedFieldsHTML = '';
         if( answer.nested ){
-            nestedFieldsHTML = generateAnswers( options, answer.nested, extraData );
+            nestedFieldsHTML = generateAnswers( answer.nested, extraData, options );
         }
 
         let optionsHtml = '';

@@ -368,13 +368,13 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     string += " data-".concat(toKebabCase(name), '="').concat(answerObj.data[name], '"');
                 })), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
                 (string += ' id="'.concat(answerCode, '"')).trim();
-            }, getTemplates = function(templates, answerType) {
+            }, getTemplates = function(answerType, templates) {
                 return {
                     field: templates[answerType] || templates.input,
                     label: /^(checkbox|nested|radio|related)$/.test(answerType) ? templates.label : "",
                     wrapper: templates.wrapper[answerType] || templates.wrapper.default
                 };
-            }, generateAnswers = function generateAnswers(options, answersList, extraData) {
+            }, generateAnswers = function generateAnswers(answersList, extraData, options) {
                 var allAnswersHTML = "", previousType = "";
                 return sortList(answersList).forEach((function(answer, index) {
                     var answerHTML, answerType = "option" === answer.type ? "select" : answer.type;
@@ -414,8 +414,8 @@ System.register([ "formjs-plugin" ], (function(exports) {
                             }
                             relatedFieldHTML = replaceObjectKeysInString(answerDataRelated, relatedFieldHTML);
                         }
-                        var answerTypeForTemplate = answer.related ? "related" : answer.nested ? "nested" : answerType, templates = getTemplates(options.templates, answerTypeForTemplate), nestedFieldsHTML = "";
-                        answer.nested && (nestedFieldsHTML = generateAnswers(options, answer.nested, extraData));
+                        var answerTypeForTemplate = answer.related ? "related" : answer.nested ? "nested" : answerType, templates = getTemplates(answerTypeForTemplate, options.templates), nestedFieldsHTML = "";
+                        answer.nested && (nestedFieldsHTML = generateAnswers(answer.nested, extraData, options));
                         var optionsHtml = "";
                         "select" === answerType && (optionsHtml = generateOptionTags(answersList)), answerHTML = templates.wrapper.replace("{{relatedFieldHTML}}", relatedFieldHTML).replace("{{fieldTemplate}}", templates.field).replace("{{optionsHtml}}", optionsHtml).replace("{{labelTemplate}}", templates.label).replace("{{nestedFieldsHTML}}", nestedFieldsHTML), 
                         allAnswersHTML += replaceObjectKeysInString(answerData, answerHTML);
@@ -434,7 +434,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                             }
                         };
                         questionObj.checks && (extraData.question.checks = questionObj.checks);
-                        var answersHTML = generateAnswers(options, questionObj.answers, extraData), maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
+                        var answersHTML = generateAnswers(questionObj.answers, extraData, options), maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
                             questionId: questionId,
                             questionNumber: questionNumber,
                             questionText: questionObj.question + maxChoiceText,
@@ -452,7 +452,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     }
                 }
                 return qaCodeAll;
-            }, buildSurvey = function(formEl, options, internals, data) {
+            }, buildSurvey = function(data, formEl, options, internals) {
                 var formName = formEl.getAttribute("name") || "";
                 internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
                 internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
@@ -507,7 +507,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     })), self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
                     var retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions).then((function(response) {
                         return "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise((function(resolve) {
-                            self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, self.data), 
+                            self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.data, self.formEl, self.options, self.internals), 
                             self.options.useWebStorage && populateAnswers(self.formEl, self.internals), deepFreeze(self.data), 
                             self.formEl.addEventListener("fjs.field:validation", validationEnd), self.formEl.addEventListener("fjs.form:submit", submit), 
                             _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Survey.prototype)), "init", _thisSuper).call(_thisSuper).then((function() {

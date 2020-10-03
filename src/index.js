@@ -46,9 +46,9 @@ class Survey extends Form {
                 return new Promise(resolve => {
                     self.data = response.data;
                     if( self.data.questions && self.data.questions.length > 0 ){
-                        buildSurvey(self.formEl, self.options, self.internals, self.data);
+                        buildSurvey(self.data, self.formEl, self.options, self.internals);
                         if( self.options.useWebStorage ){
-                            populateAnswers( self.formEl, self.internals );
+                            populateAnswers(self.formEl, self.internals);
                         }
                         deepFreeze(self.data);
                         self.formEl.addEventListener('fjs.field:validation', validationEnd);

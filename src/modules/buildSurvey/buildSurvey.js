@@ -1,7 +1,7 @@
 
 import { generateQAcode } from './generateQAcode';
 
-export const buildSurvey = ( formEl, options, internals, data ) => {
+export const buildSurvey = ( data, formEl, options, internals ) => {
     
     const formName = formEl.getAttribute('name') || '';
     

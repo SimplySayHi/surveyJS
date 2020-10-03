@@ -241,7 +241,7 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
         })(name)}="${answerObj.data[name]}"`;
     }), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
     string += ` id="${answerCode}"`, string.trim();
-}, generateAnswers = (options, answersList, extraData) => {
+}, generateAnswers = (answersList, extraData, options) => {
     let allAnswersHTML = "", previousType = "";
     return sortList(answersList).forEach((answer, index) => {
         let answerHTML = "";
@@ -283,18 +283,18 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
             }
             relatedFieldHTML = replaceObjectKeysInString(answerDataRelated, relatedFieldHTML);
         }
-        const answerTypeForTemplate = answer.related ? "related" : answer.nested ? "nested" : answerType, templates = ((templates, answerType) => ({
+        const templates = ((answerType, templates) => ({
             field: templates[answerType] || templates.input,
             label: /^(checkbox|nested|radio|related)$/.test(answerType) ? templates.label : "",
             wrapper: templates.wrapper[answerType] || templates.wrapper.default
-        }))(options.templates, answerTypeForTemplate);
+        }))(answer.related ? "related" : answer.nested ? "nested" : answerType, options.templates);
         let nestedFieldsHTML = "";
-        answer.nested && (nestedFieldsHTML = generateAnswers(options, answer.nested, extraData));
+        answer.nested && (nestedFieldsHTML = generateAnswers(answer.nested, extraData, options));
         let optionsHtml = "";
         "select" === answerType && (optionsHtml = generateOptionTags(answersList)), answerHTML = templates.wrapper.replace("{{relatedFieldHTML}}", relatedFieldHTML).replace("{{fieldTemplate}}", templates.field).replace("{{optionsHtml}}", optionsHtml).replace("{{labelTemplate}}", templates.label).replace("{{nestedFieldsHTML}}", nestedFieldsHTML), 
         allAnswersHTML += replaceObjectKeysInString(answerData, answerHTML);
     }), allAnswersHTML;
-}, buildSurvey = (formEl, options, internals, data) => {
+}, buildSurvey = (data, formEl, options, internals) => {
     const formName = formEl.getAttribute("name") || "";
     internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
     internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
@@ -314,7 +314,7 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
                 }
             };
             questionObj.checks && (extraData.question.checks = questionObj.checks);
-            let answersHTML = generateAnswers(options, questionObj.answers, extraData);
+            let answersHTML = generateAnswers(questionObj.answers, extraData, options);
             const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
                 questionId: questionId,
                 questionNumber: questionNumber,
@@ -376,7 +376,7 @@ class Survey extends Form {
                 timeoutTimer && window.clearTimeout(timeoutTimer);
             });
         })(self.options.url, self.options.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
-            self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.formEl, self.options, self.internals, self.data), 
+            self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.data, self.formEl, self.options, self.internals), 
             self.options.useWebStorage && ((formEl, internals) => {
                 const WS = sessionStorage.getObject(internals.storageName);
                 if (WS) {

@@ -30,7 +30,7 @@ export const generateQAcode = ( surveyData, options ) => {
             extraData.question.checks = questionObj.checks;
         }
         
-        let answersHTML = generateAnswers( options, questionObj.answers, extraData );
+        let answersHTML = generateAnswers( questionObj.answers, extraData, options );
 
         const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : '';
         const checksMin = maxChoice[0] || '';
