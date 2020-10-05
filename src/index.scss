@@ -9,12 +9,42 @@
         display: none;
     }
     
-    .surveyjs-field-indent {
+    .surveyjs-nested-container {
         padding-left: 20px;
     }
     
     .form-check:not(.surveyjs-wrapper-checkbox):not(.surveyjs-wrapper-radio) {
         padding-left: 0;
+    }
+
+    .input-group {
+        margin-left: -0.75em;
+        margin-top: 0.3125em;
+        margin-bottom: 0.3125em;
+        width: auto;
+
+        .surveyjs-select:not([size]):not([multiple]) {
+            height: auto;
+        }
+        .form-check-input {
+            position: static;
+            margin: 0;
+        }
+        .surveyjs-label {
+            font-weight: inherit;
+            margin: 0;
+            padding-left: 5px;
+        }
+    }
+    
+    .surveyjs-errors-wrapper,
+    .surveyjs-footer {
+        display: none;
+    }
+    
+    .has-error .surveyjs-errors-wrapper,
+    &.surveyjs-init-success .surveyjs-footer {
+        display: block;
     }
     
     &.surveyjs-custom-inputs {
@@ -26,13 +56,20 @@
                 padding: 0;
             }
         }
+        .surveyjs-field-container.custom-select {
+            // all: inherit; // NOT SUPPORTED IN IE
+            height: inherit;
+            padding: inherit;
+            background: inherit;
+            border: inherit;
+        }
         .surveyjs-label{
             &:before,
             &:after {
                 margin-left: -17px;
             }
         }
-        .surveyjs-radio .surveyjs-label.custom-control-label {
+        .surveyjs-nested-parent > .surveyjs-label.custom-control-label {
             &:before,
             &:after {
                 display: none;
@@ -64,34 +101,5 @@
             }
         }
     }
-    
-    .input-group {
-        margin-left: -0.8125em;
-        margin-top: 0.3125em;
-        margin-bottom: 0.3125em;
-        width: auto;
 
-        .surveyjs-select:not([size]):not([multiple]) {
-            height: auto;
-        }
-        .form-check-input {
-            position: static;
-            margin: 0;
-        }
-        .surveyjs-label {
-            font-weight: inherit;
-            margin: 0;
-            padding-left: 5px;
-        }
-    }
-    
-    .surveyjs-errors-wrapper,
-    .surveyjs-footer {
-        display: none;
-    }
-    
-    .has-error .surveyjs-errors-wrapper,
-    &.surveyjs-init-success .surveyjs-footer {
-        display: block;
-    }
 }

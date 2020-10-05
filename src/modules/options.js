@@ -45,7 +45,6 @@ export const options = {
         loading:    '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
 
         question:   '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question>'+
-                        '<div class="surveyjs-question-header">Question {{questionNumber}}</div>'+
                         '<div class="surveyjs-question-body">'+
                             '<div class="surveyjs-question-text">{{questionText}}</div>'+
                             '<div class="surveyjs-answers-wrapper form-group">'+

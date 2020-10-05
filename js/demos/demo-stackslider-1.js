@@ -5,7 +5,6 @@ var $surveyCont = $('[data-surveyjs-container]'),
 var formEl = document.querySelector('[data-surveyjs-form]');
 var options = {
         url: '../json/survey.json',
-        // FOR BOOTSTRAP 4 CUSTOM INPUTS
         cssClasses: {
             checkbox:   'custom-control-input',
             radio:      'custom-control-input',
@@ -14,30 +13,32 @@ var options = {
         },
         templates: {
             question:   '<div class="st-item" data-title="#{{questionNumber}}">'+
-                            '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-wrapper clearfix">'+
+                            '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-wrapper">'+
                                 '<div class="surveyjs-question-body">'+
                                     '<div class="surveyjs-question-text">{{questionText}}</div>'+
-                                    '<div class="surveyjs-answers-wrapper form-group clearfix">'+
-                                        '{{answersHtml}}'+
+                                    '<div class="surveyjs-answers-wrapper form-group">'+
+                                        '{{answersHTML}}'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>',
 
-            // FOR BOOTSTRAP 4 CUSTOM INPUTS
-            input:  '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-wrapper-{{answerType}} custom-control form-check custom-{{answerType}}" data-answer-index="{{answerIndex}}">'+
-                        '{{inputTagCode}}'+
-                        '{{labelTagCode}}'+
-                    '</div>',
-            inputGroup: '<div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}">'+
+            wrapper: {
+                default: '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} custom-control form-check custom-{{answerType}} {{wrapperClasses}}">'+
+                            '{{fieldTemplate}}'+
+                            '{{labelTemplate}}'+
+                        '</div>',
+                
+                related: '<div class="surveyjs-field-wrapper input-group {{wrapperClasses}}">'+
                             '<div class="input-group-prepend">'+
-                                '<div class="input-group-text custom-control custom-radio surveyjs-wrapper-{{answerType}}">'+
-                                    '<input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio custom-control-input" />'+
-                                    '<label for="{{answerCode}}" class="surveyjs-label custom-control-label">{{answerString}}</label>'+
+                                '<div class="input-group-text custom-control custom-radio surveyjs-wrapper-radio">'+
+                                    '{{fieldTemplate}}'+
+                                    '{{labelTemplate}}'+
                                 '</div>'+
                             '</div>'+
-                            '{{relatedAnswerField}}'+
+                            '{{relatedFieldHTML}}'+
                         '</div>'
+            }
         },
         formOptions: {
             beforeSend: function beforeSend_doc( data ){

@@ -9,31 +9,33 @@ var options = {
             select: 'custom-select'
         },
         templates: {
-            question:   '<div class="st-item" data-title="#{{questionId}}">'+
-                            '<div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-wrapper clearfix">'+
+            question:   '<div class="st-item" data-title="#{{questionNumber}}">'+
+                            '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-wrapper">'+
                                 '<div class="surveyjs-question-body">'+
                                     '<div class="surveyjs-question-text">{{questionText}}</div>'+
-                                    '<div class="surveyjs-answers-wrapper form-group clearfix">'+
-                                        '{{answersHtml}}'+
+                                    '<div class="surveyjs-answers-wrapper form-group">'+
+                                        '{{answersHTML}}'+
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
                         '</div>',
 
-            // FOR AWESOME BOOTSTRAP CHECKBOXES
-            input:  '<div class="surveyjs-single-answer surveyjs-input-container surveyjs-wrapper-{{answerType}} form-check abc-{{answerType}}" data-answer-index="{{answerIndex}}">'+
-                        '{{inputTagCode}}'+
-                        '{{labelTagCode}}'+
-                    '</div>',
-            inputGroup: '<div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}">'+
-                            '<div class="input-group-prepend form-check abc-radio surveyjs-wrapper-{{answerType}}">'+
+            wrapper: {
+                default: '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} abc-{{answerType}}">'+
+                            '{{fieldTemplate}}'+
+                            '{{labelTemplate}}'+
+                        '</div>',
+                
+                related: '<div class="surveyjs-field-wrapper input-group {{wrapperClasses}}">'+
+                            '<div class="input-group-prepend form-check abc-radio surveyjs-answer-radio">'+
                                 '<div class="input-group-text">'+
-                                    '<input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" />'+
-                                    '<label for="{{answerCode}}" class="surveyjs-label form-check-label">{{answerString}}</label>'+
+                                    '{{fieldTemplate}}'+
+                                    '{{labelTemplate}}'+
                                 '</div>'+
                             '</div>'+
-                            '{{relatedAnswerField}}'+
+                            '{{relatedFieldHTML}}'+
                         '</div>'
+            }
         },
         formOptions: {
             beforeSend: function beforeSend_doc( data ){
