@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Demo Basic | surveyJS - JavaScript Survey Creation &amp; Management. Made Easy</title>
+    <title>Demo Basic Plus | surveyJS - JavaScript Survey Creation &amp; Management. Made Easy</title>
     <meta name="description" content="JavaScript Survey Creation & Management. Made Easy">
     <meta name="keywords" content="survey, question, answer, javascript, plugin, ajax, json">
     <meta name="author" content="Valerio Di Punzio">
@@ -16,22 +16,6 @@
     <link rel="stylesheet" type="text/css" href="../css/doc.css">
     <link rel="stylesheet" type="text/css" href="../css/demo.css">
     <link rel="stylesheet" type="text/css" href="../css/prism.css">
-
-    <style>
-        .surveyjs-form .surveyjs-question-body {
-            padding: 0;
-        }
-        .surveyjs-form .surveyjs-question-text,
-        .surveyjs-form .surveyjs-answers-wrapper {
-            padding: 15px;
-        }
-
-        .surveyjs-form .surveyjs-question-text {
-            background-color: #06d6a0;
-            color: #fff;
-            border-radius: 8px;
-        }
-    </style>
 
     <script src="../js/vendors/jquery-1.12.4.min.js"></script>
     <script src="../js/vendors/bootstrap.bundle.min.js"></script>
@@ -92,7 +76,7 @@
                 <h4 class="my-0">Demos</h4>
             </div>
             
-            <h2 class="border-0 mt-2 mb-4 pt-0">Demo Basic</h2>
+            <h2 class="border-0 mt-2 mb-4 pt-0">Demo Basic Plus</h2>
 
             <div class="row justify-content-center">
                 <div class="col-lg-6 order-6 order-lg-1">
@@ -105,7 +89,7 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-html">&lt;div class="surveyjs-container card panel-primary mb-4 pt-2" data-surveyjs-container&gt;
+<code class="language-html">&lt;div class="surveyjs-container card panel-primary mb-4 py-2" data-surveyjs-container&gt;
     &lt;div class="card-header no-bg"&gt;
         &lt;div class="card-header-inner"&gt;
             &lt;h3 class="surveyjs-title panel-title text-green mt-0"&gt;My Survey&lt;/h3&gt;
@@ -114,9 +98,51 @@
     &lt;/div&gt;
     &lt;div class="card-body"&gt;
         &lt;form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate&gt;
-            &lt;div class="surveyjs-body questionsList" data-surveyjs-body&gt;&lt;/div&gt;
+            &lt;div class="surveyjs-body questionsList clearfix" data-surveyjs-body&gt;&lt;/div&gt;
             &lt;div class="surveyjs-footer"&gt;
-                &lt;button class="btn btn-primary d-block mx-auto" type="submit"&gt;SEND&lt;/button&gt;
+                &lt;div class="surveyjs-question-wrapper text-right" data-formjs-question data-surveyjs-external&gt;
+                    &lt;div class="surveyjs-answers-wrapper form-group"&gt;
+                        &lt;div class="text-left small" data-question&gt;&lt;/div&gt;
+                        &lt;div class="radio form-check-inline" data-answer&gt;
+                            &lt;input class="form-check-input" name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
+                            &lt;label class="form-check-label"&gt;
+                                &lt;span data-label&gt;&lt;/span&gt;
+                            &lt;/label&gt;
+                        &lt;/div&gt;
+                        &lt;div class="radio form-check-inline" data-answer&gt;
+                            &lt;input class="form-check-input" name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
+                            &lt;label class="form-check-label"&gt;
+                                &lt;span data-label&gt;&lt;/span&gt;
+                            &lt;/label&gt;
+                        &lt;/div&gt;
+                        &lt;div class="surveyjs-errors-wrapper small"&gt;
+                            To go on you must select an answer.
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="surveyjs-question-wrapper text-right" data-formjs-question&gt;
+                    &lt;div class="surveyjs-answers-wrapper form-group"&gt;
+                        &lt;div class="text-left small"&gt;
+                            You must accept this condition in order to enable the submit button.
+                        &lt;/div&gt;
+                        &lt;div class="radio form-check-inline"&gt;
+                            &lt;input class="form-check-input" type="radio" name="prova-00" id="radio-prova-00-a" value="yeee" required="" /&gt;
+                            &lt;label class="form-check-label" for="radio-prova-00-a"&gt;
+                                &lt;span&gt;Yes&lt;/span&gt;
+                            &lt;/label&gt;
+                        &lt;/div&gt;
+                        &lt;div class="radio form-check-inline"&gt;
+                            &lt;input class="form-check-input" type="radio" name="prova-00" id="radio-prova-00-b" value="" required="" /&gt;
+                            &lt;label class="form-check-label" for="radio-prova-00-b"&gt;
+                                &lt;span&gt;No&lt;/span&gt;
+                            &lt;/label&gt;
+                        &lt;/div&gt;
+                        &lt;div class="surveyjs-errors-wrapper small"&gt;
+                            To go on you must select an answer.
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;button class="btn btn-primary d-block mx-auto" disabled type="submit"&gt;SEND&lt;/button&gt;
             &lt;/div&gt;
         &lt;/form&gt;
     &lt;/div&gt;
@@ -137,14 +163,38 @@
                                 <pre class="m-0">
 <code class="language-js">// FULL CODE: /js/demos/demo-basic.js
 const formEl = document.querySelector('[data-surveyjs-form]');
-const options = { url: '../json/survey.json' };
+const options = {
+    url: '../json/survey.json',
+    cssClasses: {
+        select: 'custom-select'
+    },
+    fieldOptions: {
+        onValidationCheckAll: false
+    }
+};
+
+const onValidation = fields => {...};
+
+formEl.addEventListener('fjs.field:validation', event => {
+    onValidation([event.data]);
+}, false);
+
+formEl.addEventListener('fjs.form:validation', event => {
+    onValidation(event.data.fields);
+}, false);
 
 formEl.addEventListener('fjs.form:submit', event => {
     event.data
-        .then(response => {...})
+        .then(ajaxData => {...})
         .catch(error => {...})
         .finally(() => {...});
-});
+}, false);
+
+formEl.addEventListener('sjs:init', event => {
+    event.data
+        .then(data => {...})
+        .catch(error => {...});
+}, false);
 
 const mySurvey = new Survey( formEl, options );
 
@@ -154,7 +204,7 @@ const mySurvey = new Survey( formEl, options );
                     </div>
                 </div>
                 <div class="col-lg-6 mx-auto order-1 order-lg-6">
-                    <div class="surveyjs-container card panel-primary mb-4 pt-2" data-surveyjs-container>
+                    <div class="surveyjs-container card panel-primary mb-4 py-2" data-surveyjs-container>
                         <div class="card-header no-bg">
                             <div class="card-header-inner">
                                 <h3 class="surveyjs-title panel-title text-green mt-0">My Survey</h3>
@@ -162,10 +212,52 @@ const mySurvey = new Survey( formEl, options );
                             </div>
                         </div>
                         <div class="card-body">
-                            <form action="../json/survey-simple.json" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate>
-                                <div class="surveyjs-body questionsList" data-surveyjs-body></div>
+                            <form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate>
+                                <div class="surveyjs-body questionsList clearfix" data-surveyjs-body></div>
                                 <div class="surveyjs-footer">
-                                    <button class="btn btn-primary d-block mx-auto" type="submit">SEND</button>
+                                    <div class="surveyjs-question-wrapper text-right" data-formjs-question data-surveyjs-external>
+                                        <div class="surveyjs-answers-wrapper form-group">
+                                            <div class="text-left small" data-question></div>
+                                            <div class="radio form-check-inline" data-answer>
+                                                <input class="form-check-input" name="surveyjs-answer-external" data-exclude-storage data-field/>
+                                                <label class="form-check-label">
+                                                    <span data-label></span>
+                                                </label>
+                                            </div>
+                                            <div class="radio form-check-inline" data-answer>
+                                                <input class="form-check-input" name="surveyjs-answer-external" data-exclude-storage data-field/>
+                                                <label class="form-check-label">
+                                                    <span data-label></span>
+                                                </label>
+                                            </div>
+                                            <div class="surveyjs-errors-wrapper small">
+                                                To go on you must select an answer.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="surveyjs-question-wrapper text-right" data-formjs-question>
+                                        <div class="surveyjs-answers-wrapper form-group">
+                                            <div class="text-left small">
+                                                You must accept this condition in order to enable the submit button.
+                                            </div>
+                                            <div class="radio form-check-inline">
+                                                <input class="form-check-input" type="radio" name="prova-00" id="radio-prova-00-a" value="yeee" required="" />
+                                                <label class="form-check-label" for="radio-prova-00-a">
+                                                    <span>Yes</span>
+                                                </label>
+                                            </div>
+                                            <div class="radio form-check-inline">
+                                                <input class="form-check-input" type="radio" name="prova-00" id="radio-prova-00-b" value="" required="" />
+                                                <label class="form-check-label" for="radio-prova-00-b">
+                                                    <span>No</span>
+                                                </label>
+                                            </div>
+                                            <div class="surveyjs-errors-wrapper small">
+                                                To go on you must select an answer.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary d-block mx-auto" disabled type="submit">SEND</button>
                                 </div>
                             </form>
                         </div>
