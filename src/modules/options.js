@@ -31,9 +31,9 @@ export const options = {
         timeout:            0
     },
     messages:{
-        maxChoice:                 'ANSWERS MAX',
-        errorMessage:              'Answer is necessary.',
-        errorMessageMultiChoice:   'You must choose from {{checksMin}} to {{checksMax}} answers.'
+        maxChoice:          'ANSWERS MAX',
+        error:              'Answer is necessary.',
+        errorMultiChoice:   'You must choose from {{checksMin}} to {{checksMax}} answers.'
     },
     templates: {
         error:      '<div class="surveyjs-error-message">{{errorMessage}}</div>',

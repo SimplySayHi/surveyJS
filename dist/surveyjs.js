@@ -239,8 +239,8 @@ var Survey = function(Form) {
         },
         messages: {
             maxChoice: "ANSWERS MAX",
-            errorMessage: "Answer is necessary.",
-            errorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
+            error: "Answer is necessary.",
+            errorMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
         },
         templates: {
             error: '<div class="surveyjs-error-message">{{errorMessage}}</div>',
@@ -413,7 +413,7 @@ var Survey = function(Form) {
                 errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
             };
             if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
-                var errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
+                var errorMessage = "" !== maxChoice ? options.messages.errorMultiChoice : questionObj.errorMessage || options.messages.error;
                 isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
             }
             return accCode + replaceObjectKeysInString({

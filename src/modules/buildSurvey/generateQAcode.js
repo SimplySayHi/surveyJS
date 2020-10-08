@@ -40,7 +40,7 @@ export const generateQAcode = ( questions, surveyId, options ) => {
         qaHtml = replaceObjectKeysInString(questionData, qaHtml);
 
         if( options.fieldErrorFeedback ){
-            let errorMessage = maxChoice !== '' ? options.messages.errorMessageMultiChoice : (questionObj.errorMessage || options.messages.errorMessage);
+            let errorMessage = maxChoice !== '' ? options.messages.errorMultiChoice : (questionObj.errorMessage || options.messages.error);
 
             // CASE OF MULTIPLE ERROR MESSAGES FROM JSON DATA => DYNAMICALLY MANAGED VIA EVENT LISTENER IN CONSTRUCTOR
             if( isPlainObject(errorMessage) ){

@@ -107,8 +107,8 @@ list), webStorage = () => {
     },
     messages: {
         maxChoice: "ANSWERS MAX",
-        errorMessage: "Answer is necessary.",
-        errorMessageMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
+        error: "Answer is necessary.",
+        errorMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
     },
     templates: {
         error: '<div class="surveyjs-error-message">{{errorMessage}}</div>',
@@ -292,7 +292,7 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
             errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
         };
         if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
-            let errorMessage = "" !== maxChoice ? options.messages.errorMessageMultiChoice : questionObj.errorMessage || options.messages.errorMessage;
+            let errorMessage = "" !== maxChoice ? options.messages.errorMultiChoice : questionObj.errorMessage || options.messages.error;
             isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
         }
         return accCode + replaceObjectKeysInString({
