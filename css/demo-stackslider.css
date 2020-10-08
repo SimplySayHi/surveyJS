@@ -77,7 +77,7 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
     border-color: transparent transparent transparent #eee;
 }
 
-.surveyjs-container {
+.surveyjs-wrapper {
     background-color: transparent;
     color: #fff;
     border-radius: 8px;
@@ -138,7 +138,7 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
     max-width: 600px;
 }
 
-.surveyjs-container .alert {
+.surveyjs-wrapper .alert {
     margin-bottom: 0;
     margin-top: 15px;
 }

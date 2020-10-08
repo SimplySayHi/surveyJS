@@ -1,13 +1,13 @@
 
 /* SURVEY */
-.surveyjs-container {
+.surveyjs-wrapper {
     background-color: #fff;
     color: #073B4C;
     border-radius: 8px;
     border: 0 none;
 }
 
-.surveyjs-container .card-header-inner {
+.surveyjs-wrapper .card-header-inner {
     padding-bottom: 1rem;
     border-bottom: 4px dotted #06d6a0;
 }
@@ -53,7 +53,7 @@
     padding-top: 15px;
 }
 
-.surveyjs-container .alert {
+.surveyjs-wrapper .alert {
     margin-bottom: 0;
     margin-top: 15px;
 }

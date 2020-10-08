@@ -15,7 +15,7 @@ export const buildSurvey = ( data, formEl, options, internals ) => {
     // MANAGE EXTERNAL QUESTION
     const extQuestion = data.questions.filter(obj => obj.external)[0];
     if( extQuestion ){
-        const externalCont = formEl.closest('[data-surveyjs-container]').querySelector('[data-surveyjs-external]');
+        const externalCont = formEl.closest('[data-surveyjs-wrapper]').querySelector('[data-surveyjs-external]');
         
         externalCont.setAttribute('data-question-id', extQuestion.id);
         extQuestion.answers.forEach((answer, index) => {

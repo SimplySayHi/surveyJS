@@ -3,7 +3,7 @@ export const populateAnswers = ( formEl, internals ) => {
 
     const WS = sessionStorage.getObject( internals.storageName );
     if( WS ){
-        const surveyContEl = formEl.closest('[data-surveyjs-container]');
+        const surveyContEl = formEl.closest('[data-surveyjs-wrapper]');
         internals.storageArray = WS;
         WS.forEach(item => {
             const fieldFirst = surveyContEl.querySelector( '[name="' + item.name + '"]' ),

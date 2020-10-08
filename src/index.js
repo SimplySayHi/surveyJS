@@ -51,7 +51,7 @@ class Survey extends Form {
                         self.formEl.addEventListener('fjs.form:submit', submit);
                         super.init().then(() => {
                             self.isInitialized = true;
-                            self.formEl.closest('[data-surveyjs-container]').classList.add('surveyjs-init-success');
+                            self.formEl.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
                             // ON super.init() FOCUS IS SET ON FIELD [data-required-from] WHEN VALIDATING
                             /* const activeEl = document.activeElement;
                             const formSelector = 'form[name="'+ self.formEl.name +'"]';

@@ -134,16 +134,15 @@
                             Element with <code>data-surveyjs-body</code> will be filled with questions &amp; answers.
                         </p>
                         <pre>
-<code class="language-html">&lt;div class="surveyjs-container" data-surveyjs-container&gt;
+<code class="language-html">&lt;div class="surveyjs-wrapper" data-surveyjs-wrapper&gt;
     &lt;form action="page.jsp" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate&gt;
-        &lt;div class="surveyjs-body questionsList clearfix" data-surveyjs-body&gt;&lt;/div&gt;
+        &lt;div class="surveyjs-body" data-surveyjs-body&gt;&lt;/div&gt;
         &lt;div class="surveyjs-footer"&gt;
             &lt;button type="submit"&gt;SEND&lt;/button&gt;
         &lt;/div&gt;
     &lt;/form&gt;
-&lt;/div&gt;</code></pre>
-                    </div>
-                    <div class="col-lg-6">
+&lt;/div&gt;
+</code></pre>
                         <p>
                             Mandatory attributes:
                         </p>
@@ -157,8 +156,41 @@
                         </ul>
                         <p>
                             CSS classes ( like <code>.surveyjs-*</code> ) are optional but used to give styles to the demos.<br />
-                            For custom graphic inputs, using CSS class <code>surveyjs-custom-inputs</code> on the Survey container ( with class "surveyjs-container" ) is suggested in order to default Survey CSS be applied.
+                            For custom graphic inputs, using CSS class <code>surveyjs-custom-inputs</code> on the Survey container ( with class "surveyjs-wrapper" ) is suggested in order to default Survey CSS be applied.
                         </p>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>
+                            To add an <b>external field</b> ( for example privacy acceptance ) you can set a question object as shown in the JSON ( see question with <code>external: true</code> ):
+                        </p>
+                        <pre>
+<code class="language-html">&lt;div class="surveyjs-question-wrapper" data-formjs-question data-surveyjs-external&gt;
+    &lt;div class="surveyjs-answers-wrapper"&gt;
+        &lt;div data-question&gt;&lt;/div&gt;
+        &lt;div data-answer&gt;
+            &lt;input name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
+            &lt;label&gt;
+                &lt;span data-label&gt;&lt;/span&gt;
+            &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="form-check-inline" data-answer&gt;
+            &lt;input name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
+            &lt;label&gt;
+                &lt;span data-label&gt;&lt;/span&gt;
+            &lt;/label&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+</code></pre>
+                        <p>
+                            Include a bit of HTML code ( see below ) inside element <code>data-surveyjs-wrapper</code>
+                        </p>
+                        <ul>
+                            <li class="my-2">
+                                attribute <code>data-exclude-storage</code> is optional ( used to avoid saving the answer in session storage );
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -173,228 +205,27 @@
                     <br />
                     During initialization, the survey will fetch data from url passed in <code>options.url</code>.
                     <br />
-                    The survey will be built if <code>status</code> is "success" and <code>questions</code> is a non-empty array.
+                    The survey will be built if <code>status</code> is "success" and array <code>questions</code> has items.
                 </p>
             <pre>
 <code class="language-js">{
-    "status": "success", // MANDATORY, IF "success" THE SURVEY WILL BE BUILT
+    "status": "success",
     "data": {
-        "id": 0,
-        "title": "My Survey",
-        "description": "Answer the questions",
-
-        // LIST OF ALL QUESTIONS
+        "id": 1,
         "questions": [
-
-            // RADIO ANSWER
             {
                 "id": "1",
-                "question": "Do you have pets?",
-                "answers": [
-                    // EACH ANSWER IS AN OBJECT WITH SOME DATA
-                    { "id": "1", "type": "radio", "answer": "Yes" },
-                    { "id": "2", "type": "radio", "answer": "No" }
-                ],
-                // IF required IF FOUND, THE ANSWER FIELDS WILL HAVE THE required ATTRIBUTE (SO THIS QUESTION REQUIRE AN ANSWER)
-                "required": "",
-                // THE POSITION TO SET FOR THE QUESTION (USED ALSO FOR ANSWERS - SEE ABOVE) - THIS IS OPTIONAL
-                "sort": 1
-            },
-
-            // VALIDATE INPUT FIELD ONLY IF FILLED ( validateIfFilled ) AND WITH SPECIFIC subtype VALIDATION ( SEE FORM JS PLUGIN )
-            {
-                "id": "1b0",
                 "question": "What's your name?",
-                "answers": [
-                    { "id": "1ba0", "type": "text", "answer": "", "subtype": "alphabeticExtended" }
-                ],
-                "validateIfFilled": "",
-                "sort": 0
-            },
-
-            // TEXT INPUT ANSWER NOT MANDATORY
-            {
-                "id": "1b",
-                "question": "Do you have pets?",
-                "answers": [
-                    { "id": "1ba", "type": "text", "answer": "" }
-                ],
-                "sort": 2
-            },
-
-            // INPUT WITH SUBTYPE ( IF TYPE EXISTS IN HTML YOU CAN SET IT AS "type" -> "type": "email" )
-            {
-                "id": "1c",
-                "question": "What's your email address?",
-                "answers": [
-                    { "id": "1c", "type": "text", "answer": "", "subtype": "email" }
-                ],
-                "required": "",
-                "sort": 1
-            },
-
-            {
-                "id": "2",
-                "question": "Which are your hobbies/interests?",
-                "answers": [
-                    { "id": "6", "type": "radio", "answer": "Music", "sort": 5 },
-                    { "id": "7", "type": "radio", "answer": "Photography", "sort": 2 },
-                    { "id": "8", "type": "radio", "answer": "Technology", "sort": 3 },
-                    { "id": "9", "type": "radio", "answer": "Games", "sort": 4 },
-                    { "id": "10", "type": "radio", "answer": "Reading", "sort": 1 },
-                    { "id": "11", "type": "radio", "answer": "Wellness", "sort": 6 },
-                    {
-                        "id": "100", "type": "radio", "answer": "Other...", "sort": 7
-                    }
-                ],
-                "required": "",
-                "sort": 3
-            },
-
-            // TEXTARE
-            {
-                "id": "3",
-                "question": "If yes, specify which sport:",
-                "answers": [
-                    { "id": "18", "type": "textarea", "answer": "", "maxlength": 300 }
-                ],
-                "sort": 4
-            },
-
-            // RELATED FIELD ANSWER WITH INPUT TEXT ( SEE attribute FIELD )
-            {
-                "id": "5",
-                "question": "What is important for you about the loyalty program?",
-                "answers": [
-                    { "id": "19", "type": "radio", "answer": "It should be funny" },
-                    { "id": "20", "type": "radio", "answer": "It does not require much time" },
-                    {
-                        "id": "200", "type": "radio", "answer": "Other...",
-                        "attribute": {
-                            "id": "", "type": "text", "answers": ""
-                        }
-                    }
-                ],
-                "required": "",
-                "sort": 6
-            },
-
-            // NESTED ANSWERS ( SEE nested ATTRIBUTE )
-            // RELATED FIELD ANSWER WITH SELECT FIELD ( SEE attribute FIELD )
-            {
-                "id": "6",
-                "question": "How do you prefer to be interact with the loyalty program?",
-                "answers": [
-                    {
-                        "id": "21", "type": "radio", "answer": "Website",
-                        "nested": [
-                            { "id": "21a", "type": "radio", "answer": "Pc", "sort": 1 },
-                            { "id": "21b", "type": "radio", "answer": "Smartphone", "sort": 2 },
-                            { "id": "21c", "type": "radio", "answer": "Tablet", "sort": 3 }
-                        ], "sort": 1
-                    },
-                    {
-                        "id": "21aPlus", "type": "radio", "answer": "Website",
-                        "attribute": [
-                            { "id": "21aa", "type": "option", "answer": "Pc", "sort": 1 },
-                            { "id": "21ba", "type": "option", "answer": "Smartphone", "sort": 2 },
-                            { "id": "21ca", "type": "option", "answer": "Tablet", "sort": 3 }
-                        ], "sort": 6
-                    },
-                    { "id": "24", "type": "radio", "answer": "App", "sort": 3 },
-                    { "id": "25", "type": "radio", "answer": "Phone", "sort": 4 },
-                    { "id": "26", "type": "radio", "answer": "With loyalty card", "sort": 5 }
-                ],
-                "required": "",
-                "sort": 7
-            },
-
-            // CHECKBOX ANSWER WITH MULTIPLE CHOICE ( maxChoice: NUMBER OF MAXIMUM SELECTABLE ANSWERS )
-            {
-                "id": "8",
-                "question": "What do you like the most about this edition?",
-                "answers": [
-                    { "id": "43", "type": "checkbox", "answer": "Clear of communication", "sort": 1 },
-                    { "id": "44", "type": "checkbox", "answer": "Simplicity of usage", "sort": 2 },
-                    { "id": "45", "type": "checkbox", "answer": "Graphic style and language", "sort": 3 },
-                    { "id": "46", "type": "checkbox", "answer": "Duration", "sort": 4 },
-                    { "id": "47", "type": "checkbox", "answer": "Content/prizes", "sort": 5 }
-                ],
-                "checks": "[1,2]",
-                "required": "",
-                "sort": 9
-            },
-
-            // SELECT ANSWER
-            {
-                "id": "9",
-                "question": "How much is important that the loyalty program is funny?",
-                "answers": [
-                            { "id": "160", "type": "option", "answer": "Not much", "sort": 1 },
-                            { "id": "161", "type": "option", "answer": "Medium", "sort": 2 },
-                            { "id": "162", "type": "option", "answer": "Much", "sort": 3 }
-                ],
-                "required": "",
-                "sort": 10
-            },
-            
-            // PRIVACY CHECK
-            {
-                "id": "22",
-                "question": "__external-field__",
-                "answers": [
-                            { "id": "44", "type": "radio", "answer": "Yes", "sort": 1 },
-                            { "id": "45", "type": "radio", "answer": "No", "sort": 2 }
-                ],
-                "required": "",
-                "sort": 12
+                "answers": [ { "id": "1", "type": "text" } ]
             }
-
         ]
     }
-}</code>
+}
+</code>
 </pre>
                     </div>
                     <div class="col-lg-6">
-                <p>
-                    To add an <b>external field</b> ( for example privacy acceptance ) you can set a question object as shown in the JSON ( see PRIVACY CHECK ):
-                </p>
-                <ul>
-                    <li class="my-2">
-                        "question" must be the string <code>__external-field__</code>;
-                    </li>
-                    <li class="my-2">
-                        include a bit of HTML code ( see below ) inside the div <code>.surveyjs-container</code>;
-                        <ul>
-                            <li class="my-2">
-                                attribute <code>data-formjs-question</code> is mandatory;
-                            </li>
-                            <li class="my-2">
-                                attribute <code>data-name="bind-surveyjs-answer"</code> is mandatory;
-                            </li>
-                            <li class="my-2">
-                                attribute <code>data-exclude-storage</code> is optional ( used to avoid saving the answer in session storage );
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <pre>
-<code class="language-html">&lt;div class="surveyjs-question-box" data-formjs-question&gt;
-    &lt;div class="surveyjs-answers-box"&gt;
-        &lt;div class="form-check-inline"&gt;
-            &lt;input data-exclude-storage data-name="bind-surveyjs-answer"/&gt;
-            &lt;label&gt;
-                &lt;span&gt;&lt;/span&gt;
-            &lt;/label&gt;
-        &lt;/div&gt;
-        &lt;div class="form-check-inline"&gt;
-            &lt;input data-exclude-storage data-name="bind-surveyjs-answer"/&gt;
-            &lt;label&gt;
-                &lt;span&gt;&lt;/span&gt;
-            &lt;/label&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</code></pre>
+                        // ADD ANSWERS EXPLANATION HERE
                     </div>
                 </div>
             </div>
@@ -429,9 +260,6 @@ const mySurvey = new Survey( formEl, options );
                         <ul>
                             <li>
                                 <code>data</code> the survey data structure returned from the AJAX call.
-                            </li>
-                            <li>
-                                <code>internals</code> extra properties for internal use.
                             </li>
                             <li>
                                 <code>isInitialized</code> set to true after retrieving the JSON data and completing initialization.

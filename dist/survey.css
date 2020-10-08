@@ -1,60 +1,60 @@
-.surveyjs-container .surveyjs-label {
+.surveyjs-wrapper .surveyjs-label {
   font-weight: inherit;
   font-size: inherit; }
 
-.surveyjs-container .surveyjs-input:not([type]) {
+.surveyjs-wrapper .surveyjs-input:not([type]) {
   display: none; }
 
-.surveyjs-container .surveyjs-nested-container {
+.surveyjs-wrapper .surveyjs-nested-container {
   padding-left: 20px; }
 
-.surveyjs-container .form-check:not(.surveyjs-wrapper-checkbox):not(.surveyjs-wrapper-radio) {
+.surveyjs-wrapper .form-check:not(.surveyjs-wrapper-checkbox):not(.surveyjs-wrapper-radio) {
   padding-left: 0; }
 
-.surveyjs-container .input-group {
+.surveyjs-wrapper .input-group {
   margin-left: -0.75em;
   margin-top: 0.3125em;
   margin-bottom: 0.3125em;
   width: auto; }
-  .surveyjs-container .input-group .surveyjs-select:not([size]):not([multiple]) {
+  .surveyjs-wrapper .input-group .surveyjs-select:not([size]):not([multiple]) {
     height: auto; }
-  .surveyjs-container .input-group .form-check-input {
+  .surveyjs-wrapper .input-group .form-check-input {
     position: static;
     margin: 0; }
-  .surveyjs-container .input-group .surveyjs-label {
+  .surveyjs-wrapper .input-group .surveyjs-label {
     font-weight: inherit;
     margin: 0;
     padding-left: 5px; }
 
-.surveyjs-container .surveyjs-errors-wrapper,
-.surveyjs-container .surveyjs-footer {
+.surveyjs-wrapper .surveyjs-errors-wrapper,
+.surveyjs-wrapper .surveyjs-footer {
   display: none; }
 
-.surveyjs-container .has-error .surveyjs-errors-wrapper,
-.surveyjs-container.surveyjs-init-success .surveyjs-footer {
+.surveyjs-wrapper .has-error .surveyjs-errors-wrapper,
+.surveyjs-wrapper.surveyjs-init-success .surveyjs-footer {
   display: block; }
 
-.surveyjs-container.surveyjs-custom-inputs .form-check .surveyjs-input[type="checkbox"], .surveyjs-container.surveyjs-custom-inputs .form-check .surveyjs-input[type="radio"] {
+.surveyjs-wrapper.surveyjs-custom-inputs .form-check .surveyjs-input[type="checkbox"], .surveyjs-wrapper.surveyjs-custom-inputs .form-check .surveyjs-input[type="radio"] {
   width: 17px;
   margin: 0;
   padding: 0; }
 
-.surveyjs-container.surveyjs-custom-inputs .surveyjs-field-container.custom-select {
+.surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-field-container.custom-select {
   height: inherit;
   padding: inherit;
   background: inherit;
   border: inherit; }
 
-.surveyjs-container.surveyjs-custom-inputs .surveyjs-label:before, .surveyjs-container.surveyjs-custom-inputs .surveyjs-label:after {
+.surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-label:after {
   margin-left: -17px; }
 
-.surveyjs-container.surveyjs-custom-inputs .surveyjs-nested-parent > .surveyjs-label.custom-control-label:before, .surveyjs-container.surveyjs-custom-inputs .surveyjs-nested-parent > .surveyjs-label.custom-control-label:after {
+.surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-nested-parent > .surveyjs-label.custom-control-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-nested-parent > .surveyjs-label.custom-control-label:after {
   display: none; }
 
-.surveyjs-container.surveyjs-custom-inputs .input-group .custom-control {
+.surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control {
   padding-left: 2rem; }
 
-.surveyjs-container.surveyjs-custom-inputs .input-group .custom-control-label:before, .surveyjs-container.surveyjs-custom-inputs .input-group .custom-control-label:after {
+.surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control-label:after {
   top: auto;
   left: auto;
   right: 100%;
@@ -64,8 +64,8 @@
   -webkit-transform: translateY(100%);
   transform: translateY(100%); }
 
-.surveyjs-container.surveyjs-custom-inputs .input-group .custom-control .surveyjs-label {
+.surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control .surveyjs-label {
   position: relative; }
 
-.surveyjs-container.surveyjs-custom-inputs .custom-control .surveyjs-label:before, .surveyjs-container.surveyjs-custom-inputs .custom-control .surveyjs-label:after {
+.surveyjs-wrapper.surveyjs-custom-inputs .custom-control .surveyjs-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .custom-control .surveyjs-label:after {
   margin-left: 0; }

@@ -8,7 +8,7 @@ export const optionsUtils = {
         getFormData: function getFormData_surveyDefault(){
             const instance = this;
             const formEl = instance.formEl;
-            const fieldsList = Array.from( formEl.closest('[data-surveyjs-container]').querySelectorAll(fieldsStringSelectorSurvey) );
+            const fieldsList = Array.from( formEl.closest('[data-surveyjs-wrapper]').querySelectorAll(fieldsStringSelectorSurvey) );
             const obj = {
                     answers: [],
                     id: instance.data.id

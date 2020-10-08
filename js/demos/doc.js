@@ -1,5 +1,5 @@
 
-var $surveyCont = $('[data-surveyjs-container]'),
+var $surveyCont = $('[data-surveyjs-wrapper]'),
     $surveyForm = $surveyCont.find('[data-surveyjs-form]'),
     $surveyBtn = $surveyForm.find('.surveyjs-submit-btn');
 
@@ -139,7 +139,7 @@ formEl.addEventListener('fjs.form:submit', function(event){
         .catch(function(error){
             console.log('catch', error);
             // PRINT THE ERROR MESSAGE AFTER THE FORM
-            $surveyForm.closest('.surveyjs-container').append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
+            $surveyForm.closest('.surveyjs-wrapper').append( '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>' );
         })
         .finally(function(){
             console.log('finally');
