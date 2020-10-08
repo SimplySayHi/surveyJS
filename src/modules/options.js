@@ -43,16 +43,6 @@ export const options = {
         label:      '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
 
         loading:    '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
-
-        question:   '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question>'+
-                        '<div class="surveyjs-question-body">'+
-                            '<div class="surveyjs-question-text">{{questionText}}</div>'+
-                            '<div class="surveyjs-answers-wrapper form-group">'+
-                                '{{answersHTML}}'+
-                                '{{errorsHTML}}'+
-                            '</div>'+
-                        '</div>'+
-                    '</div>',
         
         select:     '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">'+
                         '{{optionsHtml}}'+
@@ -72,6 +62,16 @@ export const options = {
                             '{{labelTemplate}}'+
                             '<div class="surveyjs-nested-container surveyjs-field-indent">'+
                                 '{{nestedFieldsHTML}}'+
+                            '</div>'+
+                        '</div>',
+
+            question:   '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question>'+
+                            '<div class="surveyjs-question-body">'+
+                                '<div class="surveyjs-question-text">{{questionText}}</div>'+
+                                '<div class="surveyjs-answers-wrapper form-group">'+
+                                    '{{answersHTML}}'+
+                                    '{{errorsHTML}}'+
+                                '</div>'+
                             '</div>'+
                         '</div>',
             

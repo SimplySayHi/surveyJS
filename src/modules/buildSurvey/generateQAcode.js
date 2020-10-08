@@ -7,7 +7,7 @@ export const generateQAcode = ( questions, surveyId, options ) => {
     return sortList( questions ).reduce((accCode, questionObj, index) => {
         if( questionObj.external ){ return accCode; }
 
-        let qaHtml = options.templates.question;
+        let qaHtml = options.templates.wrapper.question;
         const questionId = questionObj.id;
         const questionNumber = index + 1;
         const extraData = {

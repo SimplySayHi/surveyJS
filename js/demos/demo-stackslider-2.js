@@ -9,7 +9,13 @@ var options = {
             select: 'custom-select'
         },
         templates: {
-            question:   '<div class="st-item" data-title="#{{questionNumber}}">'+
+            wrapper: {
+                default: '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} abc-{{answerType}}">'+
+                            '{{fieldTemplate}}'+
+                            '{{labelTemplate}}'+
+                        '</div>',
+
+                question: '<div class="st-item" data-title="#{{questionNumber}}">'+
                             '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-wrapper">'+
                                 '<div class="surveyjs-question-body">'+
                                     '<div class="surveyjs-question-text">{{questionText}}</div>'+
@@ -18,12 +24,6 @@ var options = {
                                     '</div>'+
                                 '</div>'+
                             '</div>'+
-                        '</div>',
-
-            wrapper: {
-                default: '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} abc-{{answerType}}">'+
-                            '{{fieldTemplate}}'+
-                            '{{labelTemplate}}'+
                         '</div>',
                 
                 related: '<div class="surveyjs-field-wrapper input-group {{wrapperClasses}}">'+
