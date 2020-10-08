@@ -4,13 +4,13 @@ import { optionsUtils } from './optionsUtils';
 export const options = {
     cssClasses: {
         checkbox:           'form-check-input',
-        default:            'form-control',
+        field:              'form-control',
         file:               'form-control-file',
         label:              'form-check-label',
         radio:              'form-check-input',
         wrapper: {
             checkbox:       'form-check',
-            default:        '',
+            field:          '',
             radio:          'form-check'
         }
     },
@@ -51,7 +51,7 @@ export const options = {
         textarea:   '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
 
         wrapper: {
-            default:    '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">'+
+            field:      '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">'+
                             '{{fieldTemplate}}'+
                             '{{labelTemplate}}'+
                         '</div>',

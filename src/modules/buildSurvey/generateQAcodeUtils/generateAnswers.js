@@ -28,9 +28,9 @@ export const generateAnswers = ( answersList, extraData, options ) => {
         const answerCode = `${answerType}-${extraData.surveyId}-${extraData.question.id}-${answerType === 'select' ? (index + 1) : answer.id}`;
         const answerData = {
             questionNumber: extraData.question.index + 1,
-            wrapperClasses: options.cssClasses.wrapper[answerType] || options.cssClasses.wrapper.default,
+            wrapperClasses: options.cssClasses.wrapper[answerType] || options.cssClasses.wrapper.field,
             fieldAttributes: getAttributesStringHTML( answer, answerCode, extraData.question.isRequired ),
-            fieldClasses: options.cssClasses[answerType] || options.cssClasses.default,
+            fieldClasses: options.cssClasses[answerType] || options.cssClasses.field,
 
             answerType,
             answerCode,
@@ -55,7 +55,7 @@ export const generateAnswers = ( answersList, extraData, options ) => {
                 fieldAttributes: getAttributesStringHTML(relatedObj, '', false),
                 answerType: relatedType,
                 addMoreName: '-more',
-                fieldClasses: relatedIsSelect ? options.cssClasses.select : (options.cssClasses[relatedType] || options.cssClasses.default)
+                fieldClasses: relatedIsSelect ? options.cssClasses.select : (options.cssClasses[relatedType] || options.cssClasses.field)
             };
 
             relatedFieldHTML = options.templates[relatedType] || options.templates.input;

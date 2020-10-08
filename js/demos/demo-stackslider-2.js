@@ -10,7 +10,7 @@ var options = {
         },
         templates: {
             wrapper: {
-                default: '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} abc-{{answerType}}">'+
+                field:  '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} abc-{{answerType}}">'+
                             '{{fieldTemplate}}'+
                             '{{labelTemplate}}'+
                         '</div>',

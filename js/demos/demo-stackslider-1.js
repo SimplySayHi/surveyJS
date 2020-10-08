@@ -13,7 +13,7 @@ var options = {
         },
         templates: {
             wrapper: {
-                default: '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} custom-control form-check custom-{{answerType}} {{wrapperClasses}}">'+
+                field:  '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} custom-control form-check custom-{{answerType}} {{wrapperClasses}}">'+
                             '{{fieldTemplate}}'+
                             '{{labelTemplate}}'+
                         '</div>',

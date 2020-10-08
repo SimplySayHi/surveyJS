@@ -211,13 +211,13 @@ var Survey = function(Form) {
     }, options = {
         cssClasses: {
             checkbox: "form-check-input",
-            default: "form-control",
+            field: "form-control",
             file: "form-control-file",
             label: "form-check-label",
             radio: "form-check-input",
             wrapper: {
                 checkbox: "form-check",
-                default: "",
+                field: "",
                 radio: "form-check"
             }
         },
@@ -250,7 +250,7 @@ var Survey = function(Form) {
             select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
             textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
             wrapper: {
-                default: '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
+                field: '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
                 errors: '<div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div>',
                 nested: '<div class="surveyjs-field-wrapper surveyjs-nested-parent surveyjs-wrapper-{{answerType}}">{{labelTemplate}}<div class="surveyjs-nested-container surveyjs-field-indent">{{nestedFieldsHTML}}</div></div>',
                 question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper form-group">{{answersHTML}}{{errorsHTML}}</div></div></div>',
@@ -344,7 +344,7 @@ var Survey = function(Form) {
         return {
             field: templates[answerType] || templates.input,
             label: /^(checkbox|nested|radio|related)$/.test(answerType) ? templates.label : "",
-            wrapper: templates.wrapper[answerType] || templates.wrapper.default
+            wrapper: templates.wrapper[answerType] || templates.wrapper.field
         };
     }, generateAnswers = function generateAnswers(answersList, extraData, options) {
         var allAnswersHTML = "", previousType = "";
@@ -358,9 +358,9 @@ var Survey = function(Form) {
                 }));
                 var answerCode = "".concat(answerType, "-").concat(extraData.surveyId, "-").concat(extraData.question.id, "-").concat("select" === answerType ? index + 1 : answer.id), answerData = {
                     questionNumber: extraData.question.index + 1,
-                    wrapperClasses: options.cssClasses.wrapper[answerType] || options.cssClasses.wrapper.default,
+                    wrapperClasses: options.cssClasses.wrapper[answerType] || options.cssClasses.wrapper.field,
                     fieldAttributes: getAttributesStringHTML(answer, answerCode, extraData.question.isRequired),
-                    fieldClasses: options.cssClasses[answerType] || options.cssClasses.default,
+                    fieldClasses: options.cssClasses[answerType] || options.cssClasses.field,
                     answerType: answerType,
                     answerCode: answerCode,
                     addMoreName: "",
@@ -377,7 +377,7 @@ var Survey = function(Form) {
                         fieldAttributes: getAttributesStringHTML(relatedObj, "", !1),
                         answerType: relatedType,
                         addMoreName: "-more",
-                        fieldClasses: relatedIsSelect ? options.cssClasses.select : options.cssClasses[relatedType] || options.cssClasses.default
+                        fieldClasses: relatedIsSelect ? options.cssClasses.select : options.cssClasses[relatedType] || options.cssClasses.field
                     };
                     if (relatedFieldHTML = options.templates[relatedType] || options.templates.input, 
                     relatedIsSelect) {
