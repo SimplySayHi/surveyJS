@@ -221,7 +221,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         radio: "form-check"
                     }
                 },
-                fieldErrorFeedback: !0,
+                showErrorMessage: !0,
                 formOptions: {
                     getFormData: optionsUtils.formOptions.getFormData
                 },
@@ -238,7 +238,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     timeout: 0
                 },
                 messages: {
-                    maxChoice: "ANSWERS MAX",
+                    maxChoice: "answers max",
                     error: "Answer is necessary.",
                     errorMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
                 },
@@ -251,10 +251,9 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
                     wrapper: {
                         field: '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
-                        errors: '<div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div>',
-                        nested: '<div class="surveyjs-field-wrapper surveyjs-nested-parent surveyjs-wrapper-{{answerType}}">{{labelTemplate}}<div class="surveyjs-nested-container surveyjs-field-indent">{{nestedFieldsHTML}}</div></div>',
-                        question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper form-group">{{answersHTML}}{{errorsHTML}}</div></div></div>',
-                        related: '<div class="surveyjs-field-wrapper input-group {{wrapperClasses}}"><div class="input-group-prepend"><div class="input-group-text form-check surveyjs-wrapper-radio">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
+                        nested: '<div class="surveyjs-field-wrapper surveyjs-nested-parent">{{labelTemplate}}<div class="surveyjs-nested-container">{{nestedFieldsHTML}}</div></div>',
+                        question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper">{{answersHTML}}</div><div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div></div></div>',
+                        related: '<div class="surveyjs-field-wrapper input-group"><div class="input-group-prepend"><div class="surveyjs-wrapper-radio input-group-text form-check">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
                     }
                 },
                 useWebStorage: !0
@@ -396,7 +395,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
             }, generateQAcode = function(questions, surveyId, options) {
                 return sortList(questions).reduce((function(accCode, questionObj, index) {
                     if (questionObj.external) return accCode;
-                    var qaHtml = options.templates.wrapper.question, questionId = questionObj.id, questionNumber = index + 1, extraData = {
+                    var questionHTML = options.templates.wrapper.question, questionId = questionObj.id, questionNumber = index + 1, extraData = {
                         surveyId: surveyId,
                         question: {
                             id: questionId,
@@ -409,17 +408,16 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         questionId: questionId,
                         questionNumber: questionNumber,
                         questionText: questionObj.question + maxChoiceText,
-                        answersHTML: answersHTML,
-                        errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ""
+                        answersHTML: answersHTML
                     };
-                    if (qaHtml = replaceObjectKeysInString(questionData, qaHtml), options.fieldErrorFeedback) {
+                    if (questionHTML = replaceObjectKeysInString(questionData, questionHTML), options.showErrorMessage) {
                         var errorMessage = "" !== maxChoice ? options.messages.errorMultiChoice : questionObj.errorMessage || options.messages.error;
-                        isPlainObject$1(errorMessage) && (errorMessage = ""), qaHtml = qaHtml.replace(/{{errorTemplates}}/g, errorMessage);
+                        isPlainObject$1(errorMessage) && (errorMessage = ""), questionHTML = questionHTML.replace(/{{errorTemplates}}/g, errorMessage);
                     }
                     return accCode + replaceObjectKeysInString({
                         checksMin: checksMin,
                         checksMax: checksMax
-                    }, qaHtml);
+                    }, questionHTML);
                 }), "");
             }, buildSurvey = function(data, formEl, options, internals) {
                 var formName = formEl.getAttribute("name") || "";

@@ -14,7 +14,7 @@ export const options = {
             radio:          'form-check'
         }
     },
-    fieldErrorFeedback:     true,
+    showErrorMessage:     true,
     formOptions: {
         getFormData:        optionsUtils.formOptions.getFormData
     },
@@ -31,59 +31,57 @@ export const options = {
         timeout:            0
     },
     messages:{
-        maxChoice:          'ANSWERS MAX',
+        maxChoice:          'answers max',
         error:              'Answer is necessary.',
         errorMultiChoice:   'You must choose from {{checksMin}} to {{checksMax}} answers.'
     },
     templates: {
-        error:      '<div class="surveyjs-error-message">{{errorMessage}}</div>',
+        error:              '<div class="surveyjs-error-message">{{errorMessage}}</div>',
         
-        input:      '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
+        input:              '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
 
-        label:      '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
+        label:              '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
 
-        loading:    '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
+        loading:            '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
         
-        select:     '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">'+
-                        '{{optionsHtml}}'+
-                    '</select>',
+        select:             '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">'+
+                                '{{optionsHtml}}'+
+                            '</select>',
         
-        textarea:   '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
+        textarea:           '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
 
         wrapper: {
-            field:      '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">'+
-                            '{{fieldTemplate}}'+
-                            '{{labelTemplate}}'+
-                        '</div>',
-
-            errors:     '<div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div>',
+            field:          '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">'+
+                                '{{fieldTemplate}}'+
+                                '{{labelTemplate}}'+
+                            '</div>',
             
-            nested:     '<div class="surveyjs-field-wrapper surveyjs-nested-parent surveyjs-wrapper-{{answerType}}">'+
-                            '{{labelTemplate}}'+
-                            '<div class="surveyjs-nested-container surveyjs-field-indent">'+
-                                '{{nestedFieldsHTML}}'+
-                            '</div>'+
-                        '</div>',
+            nested:         '<div class="surveyjs-field-wrapper surveyjs-nested-parent">'+
+                                '{{labelTemplate}}'+
+                                '<div class="surveyjs-nested-container">'+
+                                    '{{nestedFieldsHTML}}'+
+                                '</div>'+
+                            '</div>',
 
-            question:   '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question>'+
-                            '<div class="surveyjs-question-body">'+
-                                '<div class="surveyjs-question-text">{{questionText}}</div>'+
-                                '<div class="surveyjs-answers-wrapper form-group">'+
-                                    '{{answersHTML}}'+
-                                    '{{errorsHTML}}'+
+            question:       '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question>'+
+                                '<div class="surveyjs-question-body">'+
+                                    '<div class="surveyjs-question-text">{{questionText}}</div>'+
+                                    '<div class="surveyjs-answers-wrapper">'+
+                                        '{{answersHTML}}'+
+                                    '</div>'+
+                                    '<div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div>'+
                                 '</div>'+
-                            '</div>'+
-                        '</div>',
+                            '</div>',
             
-            related:    '<div class="surveyjs-field-wrapper input-group {{wrapperClasses}}">'+
-                            '<div class="input-group-prepend">'+
-                                '<div class="input-group-text form-check surveyjs-wrapper-radio">'+
-                                    '{{fieldTemplate}}'+
-                                    '{{labelTemplate}}'+
+            related:        '<div class="surveyjs-field-wrapper input-group">'+
+                                '<div class="input-group-prepend">'+
+                                    '<div class="surveyjs-wrapper-radio input-group-text form-check">'+
+                                        '{{fieldTemplate}}'+
+                                        '{{labelTemplate}}'+
+                                    '</div>'+
                                 '</div>'+
-                            '</div>'+
-                            '{{relatedFieldHTML}}'+
-                        '</div>'
+                                '{{relatedFieldHTML}}'+
+                            '</div>'
         }
     },
     useWebStorage:          true

@@ -7,7 +7,7 @@ export const generateQAcode = ( questions, surveyId, options ) => {
     return sortList( questions ).reduce((accCode, questionObj, index) => {
         if( questionObj.external ){ return accCode; }
 
-        let qaHtml = options.templates.wrapper.question;
+        let questionHTML = options.templates.wrapper.question;
         const questionId = questionObj.id;
         const questionNumber = index + 1;
         const extraData = {
@@ -34,12 +34,11 @@ export const generateQAcode = ( questions, surveyId, options ) => {
             questionId,
             questionNumber,
             questionText: questionObj.question + maxChoiceText,
-            answersHTML,
-            errorsHTML: options.fieldErrorFeedback ? options.templates.wrapper.errors : ''
+            answersHTML
         };
-        qaHtml = replaceObjectKeysInString(questionData, qaHtml);
+        questionHTML = replaceObjectKeysInString(questionData, questionHTML);
 
-        if( options.fieldErrorFeedback ){
+        if( options.showErrorMessage ){
             let errorMessage = maxChoice !== '' ? options.messages.errorMultiChoice : (questionObj.errorMessage || options.messages.error);
 
             // CASE OF MULTIPLE ERROR MESSAGES FROM JSON DATA => DYNAMICALLY MANAGED VIA EVENT LISTENER IN CONSTRUCTOR
@@ -47,10 +46,10 @@ export const generateQAcode = ( questions, surveyId, options ) => {
                 errorMessage = '';
             }
 
-            qaHtml = qaHtml.replace( /{{errorTemplates}}/g, errorMessage );
+            questionHTML = questionHTML.replace( /{{errorTemplates}}/g, errorMessage );
         }
 
-        return accCode += replaceObjectKeysInString({checksMin, checksMax}, qaHtml);
+        return accCode += replaceObjectKeysInString({checksMin, checksMax}, questionHTML);
     }, '');
 
 }

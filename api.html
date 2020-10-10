@@ -126,7 +126,7 @@
                                     <span class="text-green">checkbox</span>: ( string ) css class(es) to be applied to checkbox fields
                                 </li>
                                 <li>
-                                    <span class="text-green">default</span>: ( string ) css class(es) to be applied to input fields in general ( if the specific one is not set - eg for checkboxes or radios )
+                                    <span class="text-green">field</span>: ( string ) css class(es) to be applied to input fields in general ( if the specific one is not found )
                                 </li>
                                 <li>
                                     <span class="text-green">file</span>: ( string ) css class(es) to be applied to field with type="file"
@@ -138,55 +138,22 @@
                                     <span class="text-green">radio</span>: ( string ) css class(es) to be applied to radio fields
                                 </li>
                                 <li>
-                                    <span class="text-green">select</span>: ( string ) css class(es) to be applied to select fields
-                                </li>
-                                <li>
-                                    <span class="text-green">textarea</span>: ( string ) css class(es) to be applied to textarea fields
+                                    <span class="text-green">wrapper</span>: ( string ) css class(es) to be applied to select fields
+                                    <ul>
+                                        <li>
+                                            <span class="text-green">checkbox</span>:  ( string ) css class(es) to be applied to checkbox fields wrapper ( wrapper HTML is defined in <code>options.tempaltes.wrapper.field</code> )
+                                        </li>
+                                        <li>
+                                            <span class="text-green">field</span>:  ( string ) css class(es) to be applied to form fields wrapper in general ( if the specific one is not found. Wrapper HTML is defined in <code>options.tempaltes.wrapper.field</code> )
+                                        </li>
+                                        <li>
+                                            <span class="text-green">radio</span>:  ( string ) css class(es) to be applied to radio fields wrapper ( wrapper HTML is defined in <code>options.tempaltes.wrapper.field</code> )
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">fieldErrorFeedback</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>boolean</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
                             <p>
-                                whether or not to load the field error message inside the HTML ( shown on failed field validation )
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">fieldErrorMessage <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                Text to show on generic field error validation.<br />
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">fieldErrorMessageMultiChoice <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                Text to show on error validation of checkboxes with multiple choice.<br />
-                                See below for default messages ( depending on the language ).
+                                NOTE: specific field types can be added. For example you can add <code>email: 'field-email'</code> and the specified CSS class(es) will be added to all inputs with of type "email".
                             </p>
                         </div>
                     </div>
@@ -236,213 +203,95 @@
                     </div>
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">lang</pre>
+                            <pre class="text-green">messages</pre>
                         </div>
                         <div class="w-100 d-xl-none"></div>
                         <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
+                            <p><span class="d-inline d-lg-none">Type: </span>object</p>
                         </div>
                         <div class="col-lg-8 col-xl-5">
                             <p>
-                                language for messages (eg: loading box), select default option etc...<br />
-                                other values: 'it' 
+                                JS object with keys:
+                            </p>
+                            <ul>
+                                <li>
+                                    <span class="text-green">error</span>: ( string ) Text to show on generic field error validation. You can also specify a custom error message in JSON file ( see <a href="./get-started.html#json-file">JSON File</a> )
+                                </li>
+                                <li>
+                                    <span class="text-green">errorMultiChoice</span>: ( string ) Text to show on error validation of checkboxes with multiple choice.
+                                </li>
+                                <li>
+                                    <span class="text-green">maxChoice</span>: ( string ) This text can be used for quesions that let the user choose more than one answer ( checkboxes ).
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
+                        <div class="col-lg-auto col-xl-4">
+                            <pre class="text-green">showErrorMessage</pre>
+                        </div>
+                        <div class="w-100 d-xl-none"></div>
+                        <div class="col-lg-4 col-xl-3">
+                            <p><span class="d-inline d-lg-none">Type: </span>boolean</p>
+                        </div>
+                        <div class="col-lg-8 col-xl-5">
+                            <p>
+                                whether or not to create the field error message inside the HTML ( shown on failed field validation )
                             </p>
                         </div>
                     </div>
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">loadingBox <span class="text-yellow">*</span></pre>
+                            <pre class="text-green">templates</pre>
                         </div>
                         <div class="w-100 d-xl-none"></div>
                         <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
+                            <p><span class="d-inline d-lg-none">Type: </span>object</p>
                         </div>
                         <div class="col-lg-8 col-xl-5">
                             <p>
-                                HTML container and text for the loading box (used when requesting the survey JSON file).<br />
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">maxChoiceText <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                This text can be used for quesions that let the user choose more than one answer (checkboxes).<br />
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">selectFirstOption <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                Used if an option with empty id is NOT found in the JSON.<br />
-                                See below for default messages ( depending on the language ).
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.fieldError</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used as field error container ( when showing an error message on failed field validation ).<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.input</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for input fields when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.inputGroup</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for input group answers when generating the survey.<br />
-                                See <a href="https://getbootstrap.com/docs/4.0/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a>
+                                Templates used to create the survey.<br />
+                                See <a href="#templates">Templates</a> section for details.
                                 <br /><br />
-                                See <a href="#templates">Templates</a> section.
+                                JS object with keys:
                             </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.inputTag</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used as input tags when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.labelTag</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for label tags when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.question</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used as question (and answers) container when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.select</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for select answers when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.selectTag</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for select tags when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">templates.textarea</pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                HTML string to be used for textarea answers when generating the survey<br />
-                                See <a href="#templates">Templates</a> section.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                        <div class="col-lg-auto col-xl-4">
-                            <pre class="text-green">textareaPlaceholder <span class="text-yellow">*</span></pre>
-                        </div>
-                        <div class="w-100 d-xl-none"></div>
-                        <div class="col-lg-4 col-xl-3">
-                            <p><span class="d-inline d-lg-none">Type: </span>string</p>
-                        </div>
-                        <div class="col-lg-8 col-xl-5">
-                            <p>
-                                See below for default messages ( depending on the language ).
-                            </p>
+                            <ul>
+                                <li>
+                                    <span class="text-green">error</span>: ( string ) HTML string to be used as field error message container ( on failed field validation ).
+                                </li>
+                                <li>
+                                    <span class="text-green">input</span>: ( string ) HTML string to be used for input fields
+                                </li>
+                                <li>
+                                    <span class="text-green">label</span>: ( string ) HTML string to be used for label elements
+                                </li>
+                                <li>
+                                    <span class="text-green">loading</span>: ( string ) HTML container and text for the loading box. Used when waiting survey data
+                                </li>
+                                <li>
+                                    <span class="text-green">select</span>: ( string ) HTML string to be used for select fields
+                                </li>
+                                <li>
+                                    <span class="text-green">textarea</span>: ( string ) HTML string to be used for textarea fields
+                                </li>
+                                <li>
+                                    <span class="text-green">wrapper</span>: ( object )
+                                    <ul>
+                                        <li>
+                                            <span class="text-green">field</span>: ( string ) HTML string to be used as wrapper for each field ( input, select, textarea )
+                                        </li>
+                                        <li>
+                                            <span class="text-green">nested</span>: ( string ) HTML string to be used as wrapper for nested fields ( see example in <a href="./demos/">demos</a> )
+                                        </li>
+                                        <li>
+                                            <span class="text-green">question</span>: ( string ) HTML string to be used as question ( and answers ) container
+                                        </li>
+                                        <li>
+                                            <span class="text-green">related</span>: ( string ) HTML string to be used as wrapper for related fields ( see example in <a href="./demos/">demos</a> )
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
@@ -468,21 +317,22 @@
                     </p>
                     <pre>
 <code class="language-js">{
-    cssClasses:             {
+    cssClasses: {
         checkbox:           'form-check-input',
-        default:            'form-control',
+        field:              'form-control',
         file:               'form-control-file',
         label:              'form-check-label',
         radio:              'form-check-input',
-        select:             'form-control',
-        textarea:           'form-control'
+        wrapper: {
+            checkbox:       'form-check',
+            field:          '',
+            radio:          'form-check'
+        }
     },
-    fieldErrorFeedback:     true,
     formOptions: {
-        beforeSend:         [beforeSend],
-        getFormData:        getFormData,
+        getFormData:        getFormData
     },
-    initAjaxOptions:        {
+    initAjaxOptions: {
         cache:              'no-store',
         credentials:        'same-origin',
         headers: {
@@ -494,45 +344,30 @@
         redirect:           'follow',
         timeout:            0
     },
-    lang:                   'en',
+    messages:{
+        maxChoice:          'answers max',
+        error:              'Answer is necessary.',
+        errorMultiChoice:   'You must choose from {{checksMin}} to {{checksMax}} answers.'
+    },
+    showErrorMessage:       true,
     templates: {
-        fieldError:         // SEE TEMPLATES SECTION,
-        inputGroup:         // SEE TEMPLATES SECTION,
-        inputTag:           // SEE TEMPLATES SECTION,
-        input:              // SEE TEMPLATES SECTION,
-        labelTag:           // SEE TEMPLATES SECTION,
-        question:           // SEE TEMPLATES SECTION,
-        selectTag:          // SEE TEMPLATES SECTION,
-        select:             // SEE TEMPLATES SECTION,
-        textarea:           // SEE TEMPLATES SECTION,
+        error:              // SEE TEMPLATES SECTION
+        input:              // SEE TEMPLATES SECTION
+        label:              // SEE TEMPLATES SECTION
+        loading:            // SEE TEMPLATES SECTION
+        select:             // SEE TEMPLATES SECTION
+        textarea:           // SEE TEMPLATES SECTION
+        wrapper: {
+            field:          // SEE TEMPLATES SECTION
+            nested:         // SEE TEMPLATES SECTION
+            question:       // SEE TEMPLATES SECTION
+            related:        // SEE TEMPLATES SECTION
+        }
     },
     useWebStorage:          true
-}</code></pre>
-                    <p>
-                        Default messages:
-                    </p>
-                    <pre>
-<code class="language-js">{
-    it: {
-        fieldErrorMessage:  '&Egrave; necessario rispondere.',
-        fieldErrorMessageMultiChoice:  'Puoi scegliere da {{checksMin}} a {{checksMax}} risposte.',
-        loadingBox:         // SEE TEMPLATES SECTION,
-        maxChoiceText:      'RISPOSTE MAX',        
-        selectFirstOption:  'Seleziona una risposta...',
-        textareaPlaceholder:'Scrivi la tua risposta...'
-    },
-    en: {
-        fieldErrorMessage:  'Answer is necessary.',
-        fieldErrorMessageMultiChoice:  'You can choose from {{checksMin}} to {{checksMax}} answers.',
-        loadingBox:         // SEE TEMPLATES SECTION,
-        maxChoiceText:      'ANSWERS MAX',
-        selectFirstOption:  'Select your answer...',
-        textareaPlaceholder:'Write here your answer...'
-    }
-}</code></pre>
-                    <p class="mt-3">
-                        <span class="text-yellow">*</span> can also be set via <code>Survey.addLanguage( langString, langMessages )</code>
-                    </p>
+}
+
+</code></pre>
                 </div>
             </div>
 
@@ -571,7 +406,7 @@
                                     Description:
                                 </p>
                                 <p>
-                                    Remove all events listeners from the Survey and Form instances ( by also calling Form method <code>destroy()</code> ).
+                                    Remove all events listeners from the form.
                                 </p>
                             </div>
                             <div class="col-lg-6 col-xl-5">
@@ -586,7 +421,7 @@
         <div id="prototype-methods">
             <h3 class="sticky-title">Prototype Methods</h3>
             <p>
-                You can use these methods <b>ONLY</b> from the original Survey object ( not from a new instance - but you can always set each single property/method from the class prototype ):
+                You can use these methods <b>ONLY</b> from the original Survey object ( not from a new instance ):
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
@@ -604,40 +439,6 @@
                 </div>
                 <div class="card-body">
                     <div>
-                        <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
-                            <div class="col-lg-auto col-xl-4">
-                                <pre class="text-green">addLanguage( langString, langObject )</pre>
-                            </div>
-                            <div class="w-100 d-xl-none"></div>
-                            <div class="col-lg-6 col-xl-5">
-                                <p class="d-lg-none m-0">
-                                    Parameters:
-                                </p>
-                                <ul>
-                                    <li>
-                                        <span class="text-green">langString</span>: a string representing the name of the language to add/override
-                                    </li>
-                                    <li>
-                                        <span class="text-green">langObject</span>: object with key/value pairs
-                                    </li>
-                                </ul>
-                                <p>
-                                    You MUST pass all the key/value pairs to set a new language.<br />
-                                    You can pass only new key/value pairs if you want to override an existing language.
-                                </p>
-                            </div>
-                            <div class="col-lg-6 col-xl-3">
-                                <p class="d-lg-none m-0">
-                                    Description:
-                                </p>
-                                <p>
-                                    This will affect <b>ONLY</b> new instances
-                                </p>
-                                <p>
-                                    This can be used to add a new language or override an existing one.
-                                </p>
-                            </div>
-                        </div>
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">setOptions( options )</pre>
@@ -669,17 +470,7 @@
                             Examples of usage:
                         </p>
                         <pre>
-<code class="language-js">const newLang = {
-    fieldErrorMessage:  'Du musst antworten',
-    fieldErrorMessageMultiChoice:  'Sie K&ouml;nnen zwischen 1 und 3 Antworten w&auml;hlen.',
-    loadingBox:         '&lt;div class="surveyjs-loading" data-surveyjs-loading&gt;&lt;i class="glyphicon glyphicon-refresh icon-spin"&gt;&lt;/i&gt; Wird geladen...&lt;/div&gt;',
-    maxChoiceText:      'ANTWORTEN MAX',
-    selectFirstOption:  'W&auml;hle eine Antwort...',
-    textareaPlaceholder:'Schreibe eine Antwort...'
-};
-Survey.addLanguage( 'de', newLang );
-
-Survey.setOptions( { fieldErrorFeedback: false } );</code></pre>
+<code class="language-js">Survey.setOptions( { showErrorMessage: false } );</code></pre>
                 </div>
             </div>
         </div>
