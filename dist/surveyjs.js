@@ -279,7 +279,7 @@ var Survey = function(Form) {
         return -1;
     };
     function validationEnd(event) {
-        var fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
+        var fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
         if (isEmptyObject(questionObj)) return !0;
         if (errorsWrapper && errors && isPlainObject(questionObj.errorMessage)) {
             var errorsList = Object.keys(errors);

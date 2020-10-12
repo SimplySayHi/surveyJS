@@ -6,7 +6,7 @@ import { getAnswerIndexInWebStorage }   from '../utils/getAnswerIndexInWebStorag
 export function validationEnd( event ){
     const fieldEl = event.data.fieldEl;
     const errors = event.data.errors;
-    const instance = event.target.formjs;
+    const instance = fieldEl.closest('form').formjs;
     const errorsWrapper = fieldEl.closest( instance.options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
     
     const questionId = getQuestionId(fieldEl);
