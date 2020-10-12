@@ -284,7 +284,7 @@
                                             <span class="text-green">nested</span>: ( string ) HTML string to be used as wrapper for nested fields ( see example in <a href="./demos/">demos</a> )
                                         </li>
                                         <li>
-                                            <span class="text-green">question</span>: ( string ) HTML string to be used as question ( and answers ) container
+                                            <span class="text-green">question</span>: ( string ) HTML string to be used as wrapper for each question
                                         </li>
                                         <li>
                                             <span class="text-green">related</span>: ( string ) HTML string to be used as wrapper for related fields ( see example in <a href="./demos/">demos</a> )
@@ -480,7 +480,7 @@
             <h3 class="sticky-title">Built-in Events</h3>
             <p>
                 surveyJS inherits all formJS built-in events and has its own.<br />
-                Each built-in event has the extra object <code>data</code> attahched to the event object as defined in "additional event data" ( eg. <code>event.data.result</code> ).
+                Each built-in event has the extra object <code>data</code> attahched to the event object as defined in "additional event data" ( eg. <code>event.data.result</code> ). By default all built-in events will bubble.
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
