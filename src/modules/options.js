@@ -14,7 +14,6 @@ export const options = {
             radio:          'form-check'
         }
     },
-    showErrorMessage:     true,
     formOptions: {
         getFormData:        optionsUtils.formOptions.getFormData
     },
@@ -35,6 +34,7 @@ export const options = {
         error:              'Answer is necessary.',
         errorMultiChoice:   'You must choose from {{checksMin}} to {{checksMax}} answers.'
     },
+    showErrorMessage:     true,
     templates: {
         error:              '<div class="surveyjs-error-message">{{errorMessage}}</div>',
         

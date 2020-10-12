@@ -7,6 +7,7 @@ export function validationEnd( event ){
     const fieldEl = event.data.fieldEl;
     const errors = event.data.errors;
     const instance = event.target.formjs;
+    const errorsWrapper = fieldEl.closest( instance.options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
     
     const questionId = getQuestionId(fieldEl);
     const questionObj = getQuestionObject(instance.data, questionId);
@@ -15,14 +16,13 @@ export function validationEnd( event ){
     if( isEmptyObject(questionObj) ){ return true; }
 
     // MANAGE MULTIPLE ERROR MESSAGES
-    if( errors && isPlainObject(questionObj.errorMessage) ){
+    if( errorsWrapper && errors && isPlainObject(questionObj.errorMessage) ){
         let errorsList = Object.keys(errors);
         if( errors.rule ){
             // PUT ERROR "rule" AS FIRST, SO THAT A GENERIC ERROR IS SHOWN BEFORE ALL OTHERS
             const ruleIndex = errorsList.indexOf('rule');
             errorsList = arrayMove(errorsList, ruleIndex, 0);
         }
-        const errorsWrapper = fieldEl.closest( instance.options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
         const errorsHTML = errorsList.reduce((accHTML, name) => {
             const errorMessage = questionObj.errorMessage[name] || '';
             return accHTML += errorMessage ? instance.options.templates.error.replace('{{errorMessage}}', errorMessage) : '';
@@ -87,7 +87,7 @@ export function validationEnd( event ){
     }
 
     // BASED ON JSON DATA, FORCE REQUIRED FIELDS TO BE VALIDATED
-    if( questionObj.required && !fieldEl.required ){
+    if( questionObj.required && !fieldEl.required && !fieldEl.matches('[data-required-from]') ){
         fieldEl.required = true;
         instance.validateField(fieldEl);
     }

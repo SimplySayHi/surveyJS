@@ -221,7 +221,6 @@ var Survey = function(Form) {
                 radio: "form-check"
             }
         },
-        showErrorMessage: !0,
         formOptions: {
             getFormData: optionsUtils.formOptions.getFormData
         },
@@ -242,6 +241,7 @@ var Survey = function(Form) {
             error: "Answer is necessary.",
             errorMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
         },
+        showErrorMessage: !0,
         templates: {
             error: '<div class="surveyjs-error-message">{{errorMessage}}</div>',
             input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
@@ -279,15 +279,15 @@ var Survey = function(Form) {
         return -1;
     };
     function validationEnd(event) {
-        var fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
+        var fieldEl = event.data.fieldEl, errors = event.data.errors, instance = event.target.formjs, errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
         if (isEmptyObject(questionObj)) return !0;
-        if (errors && isPlainObject(questionObj.errorMessage)) {
+        if (errorsWrapper && errors && isPlainObject(questionObj.errorMessage)) {
             var errorsList = Object.keys(errors);
             if (errors.rule) {
                 var ruleIndex = errorsList.indexOf("rule");
                 errorsList = arrayMove(errorsList, ruleIndex, 0);
             }
-            var errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), errorsHTML = errorsList.reduce((function(accHTML, name) {
+            var errorsHTML = errorsList.reduce((function(accHTML, name) {
                 var errorMessage = questionObj.errorMessage[name] || "";
                 return accHTML + (errorMessage ? instance.options.templates.error.replace("{{errorMessage}}", errorMessage) : "");
             }), "");
@@ -320,7 +320,8 @@ var Survey = function(Form) {
             }
             sessionStorage.setObject(internals.storageName, storageArray);
         }
-        questionObj.required && !fieldEl.required && (fieldEl.required = !0, instance.validateField(fieldEl));
+        !questionObj.required || fieldEl.required || fieldEl.matches("[data-required-from]") || (fieldEl.required = !0, 
+        instance.validateField(fieldEl));
     }
     var generateOptionTags = function() {
         var optionsList = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : [];
@@ -468,9 +469,10 @@ var Survey = function(Form) {
             self.internals = internals, self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
             var retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions).then((function(response) {
                 return "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise((function(resolve) {
-                    self.data = response.data, self.data.questions && self.data.questions.length > 0 ? (buildSurvey(self.data, self.formEl, self.options, self.internals), 
-                    self.options.useWebStorage && populateAnswers(self.formEl, self.internals), deepFreeze(self.data), 
-                    self.formEl.addEventListener("fjs.field:validation", validationEnd), self.formEl.addEventListener("fjs.form:submit", submit), 
+                    response.data.questions && response.data.questions.length > 0 ? (buildSurvey(response.data, self.formEl, self.options, self.internals), 
+                    self.options.useWebStorage && populateAnswers(self.formEl, self.internals), Object.defineProperty(self, "data", {
+                        value: deepFreeze(response.data)
+                    }), self.formEl.addEventListener("fjs.field:validation", validationEnd), self.formEl.addEventListener("fjs.form:submit", submit), 
                     _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Survey.prototype)), "init", _thisSuper).call(_thisSuper).then((function() {
                         self.isInitialized = !0, self.formEl.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
                         resolve(response);

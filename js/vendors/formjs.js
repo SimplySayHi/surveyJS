@@ -1,4 +1,4 @@
-/* formJS v4.2.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v4.2.3 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 var Form = function() {
     "use strict";
     function _typeof(obj) {
@@ -406,25 +406,19 @@ var Form = function() {
             }));
         }
     }, validationEnd = function(event) {
-        var fieldsArray = event.data.fieldEl ? [ event.data ] : event.data.fields, options = fieldsArray[0].fieldEl.closest("form").formjs.options.fieldOptions;
-        fieldsArray.forEach((function(obj) {
-            var fieldEl = obj.fieldEl;
-            if (fieldEl.matches(fieldsStringSelector)) {
-                var containerEl = fieldEl.closest(options.questionContainer), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
-                if (null !== containerEl && removeClass(containerEl, options.cssClasses.pending), 
-                null !== containerEl && !options.skipUIfeedback) if (obj.result) {
-                    if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
-                        var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                        removeClass(containerEl, errorClasses), addClass(containerEl, options.cssClasses.valid);
-                    }
-                } else {
-                    var extraErrorClass = options.cssClasses.errorRule, isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
-                    (!isChecks && obj.errors && obj.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = options.cssClasses.errorEmpty);
-                    var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
-                    removeClass(containerEl, options.cssClasses.valid + " " + errorClassToRemove), addClass(containerEl, _errorClasses);
-                }
+        var eventData = event.data, fieldEl = eventData.fieldEl, options = fieldEl.closest("form").formjs.options.fieldOptions, containerEl = fieldEl.closest(options.questionContainer), isReqFrom = fieldEl.matches("[data-required-from]"), reqMoreEl = document.querySelector(fieldEl.getAttribute("data-required-from"));
+        if (null !== containerEl && removeClass(containerEl, options.cssClasses.pending), 
+        null !== containerEl && !options.skipUIfeedback) if (eventData.result) {
+            if (!isReqFrom || isReqFrom && reqMoreEl.checked) {
+                var errorClasses = options.cssClasses.error + " " + options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+                removeClass(containerEl, errorClasses), addClass(containerEl, options.cssClasses.valid);
             }
-        }));
+        } else {
+            var extraErrorClass = options.cssClasses.errorRule, isChecks = fieldEl.matches("[data-checks]"), checkedElLength = isChecks ? containerEl.querySelectorAll('[name="' + fieldEl.name + '"]:checked').length : 0;
+            (!isChecks && eventData.errors && eventData.errors.empty || isChecks && 0 === checkedElLength) && (extraErrorClass = options.cssClasses.errorEmpty);
+            var _errorClasses = options.cssClasses.error + " " + extraErrorClass, errorClassToRemove = options.cssClasses.errorEmpty + " " + options.cssClasses.errorRule;
+            removeClass(containerEl, options.cssClasses.valid + " " + errorClassToRemove), addClass(containerEl, _errorClasses);
+        }
     };
     function formStartup(formEl, options) {
         formEl.noValidate = !0;
@@ -619,9 +613,7 @@ var Form = function() {
                 fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
                 var formEl = self.formEl;
                 return checkFieldValidity(fieldEl, fieldOptions, self.validationRules, self.validationErrors).then((function(obj) {
-                    return dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj, {
-                        bubbles: !1
-                    }), dispatchCustomEvent(formEl, customEvents_field.validation, obj), obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, 
+                    return dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj), obj.result && fieldOptions.onValidationCheckAll ? (fieldOptions.skipUIfeedback = !0, 
                     checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors, obj.fieldEl).then((function(dataForm) {
                         var clMethodName = dataForm.result ? "add" : "remove";
                         formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), dispatchCustomEvent(formEl, customEvents_form.validation, dataForm);
@@ -638,9 +630,9 @@ var Form = function() {
                 return checkFormValidity(formEl, fieldOptions, self.validationRules, self.validationErrors).then((function(data) {
                     var clMethodName = data.result ? "add" : "remove";
                     return formEl.classList[clMethodName](self.options.formOptions.cssClasses.valid), 
-                    validationEnd({
-                        data: data
-                    }), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
+                    data.fields.forEach((function(obj) {
+                        dispatchCustomEvent(obj.fieldEl, customEvents_field.validation, obj);
+                    })), dispatchCustomEvent(formEl, customEvents_form.validation, data), data;
                 }));
             }
         } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
@@ -660,6 +652,6 @@ var Form = function() {
             }
             return obj;
         }
-    }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.2", 
+    }, Form.prototype.validationRules = validationRules, Form.prototype.version = "4.2.3", 
     Form;
 }();

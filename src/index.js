@@ -40,19 +40,20 @@ class Survey extends Form {
                     return Promise.reject(response);
                 }
                 return new Promise(resolve => {
-                    self.data = response.data;
-                    if( self.data.questions && self.data.questions.length > 0 ){
-                        buildSurvey(self.data, self.formEl, self.options, self.internals);
+                    if( response.data.questions && response.data.questions.length > 0 ){
+                        buildSurvey(response.data, self.formEl, self.options, self.internals);
                         if( self.options.useWebStorage ){
                             populateAnswers(self.formEl, self.internals);
                         }
-                        deepFreeze(self.data);
+                        Object.defineProperty(self, 'data', {
+                            value: deepFreeze(response.data)
+                        });
                         self.formEl.addEventListener('fjs.field:validation', validationEnd);
                         self.formEl.addEventListener('fjs.form:submit', submit);
                         super.init().then(() => {
                             self.isInitialized = true;
                             self.formEl.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
-                            // ON super.init() FOCUS IS SET ON FIELD [data-required-from] WHEN VALIDATING
+                            // WORKAROUND FOR super.init() BECAUSE FOCUS IS SET ON FIELD [data-required-from] WHEN VALIDATING
                             /* const activeEl = document.activeElement;
                             const formSelector = 'form[name="'+ self.formEl.name +'"]';
                             if( activeEl.matches(formSelector + ' [data-required-from]') ){
