@@ -518,77 +518,43 @@
         <div id="templates">
             <h3 class="sticky-title">Templates</h3>
             <p>
-                You can initialize the survey with your custom HTML templates for:
-            </p>
-            <ul>
-                <li>
-                    <span class="text-green">error</span>: as field error message container ( on failed field validation )
-                </li>
-                <li>
-                    <span class="text-green">input</span>: for input fields
-                </li>
-                <li>
-                    <span class="text-green">label</span>: for label elements
-                </li>
-                <li>
-                    <span class="text-green">loading</span>: HTML container and text for the loading box. Used when waiting survey data
-                </li>
-                <li>
-                    <span class="text-green">select</span>: for select fields
-                </li>
-                <li>
-                    <span class="text-green">textarea</span>: for textarea fields
-                </li>
-                <li>
-                    <span class="text-green">wrapper</span>: ( object )
-                    <ul>
-                        <li>
-                            <span class="text-green">field</span>: as wrapper for each field ( input, select, textarea )
-                        </li>
-                        <li>
-                            <span class="text-green">nested</span>: as wrapper for nested fields ( see example in <a href="./demos.html">demos</a> )
-                        </li>
-                        <li>
-                            <span class="text-green">question</span>: as wrapper for each question
-                        </li>
-                        <li>
-                            <span class="text-green">related</span>: as wrapper for related fields ( see example in <a href="./demos.html">demos</a> and <a href="https://getbootstrap.com/docs/4.3/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a> )
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <p>
-                NOTE: Use ALL the <code>data-*</code> attributes and placeholders with the curly braces, for example <code>{{questionId}}</code>, in your custom templates.<br />
+                You can initialize the survey with your custom HTML templates.<br />
+                NOTE: Use ALL the <code>data-*</code> attributes and placeholders with the curly braces, for example <code>{{answerType}}</code>, in your custom templates.<br />
                 Below, the default templates:
             </p>
 
             <div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>error</code></p>
+                    <p class="m-0">For field error message container ( on failed field validation )</p>
                     <pre>
 <code class="language-html">&lt;div class="surveyjs-error-message"&gt;{{errorMessage}}&lt;/div&gt;</code>
 </pre>
                 </div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>input</code></p>
+                    <p class="m-0">For input fields</p>
                     <pre>
 <code class="language-html">&lt;input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" /&gt;</code>
 </pre>
                 </div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>label</code></p>
+                    <p class="m-0">For label elements</p>
                     <pre>
 <code class="language-html">&lt;label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}"&gt;{{labelString}}&lt;/label&gt;</code>
 </pre>
                 </div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>loading</code></p>
+                    <p class="m-0">For the loading box. Used when waiting survey data</p>
                     <pre>
 <code class="language-html">&lt;div class="surveyjs-loading" data-surveyjs-loading&gt;Loading...&lt;/div&gt;</code>
 </pre>
                 </div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>select</code></p>
+                    <p class="m-0">For select fields</p>
                     <pre>
 <code class="language-html">&lt;select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}"&gt;
     {{optionsHtml}}
@@ -597,12 +563,14 @@
                 </div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>textarea</code></p>
+                    <p class="m-0">For textarea fields</p>
                     <pre>
 <code class="language-html">&lt;textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"&gt;&lt;/textarea&gt;</code>
 </pre>
                 </div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>wrapper.field</code></p>
+                    <p class="m-0">As wrapper for each field ( input, select, textarea )</p>
                     <pre>
 <code class="language-html">&lt;div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}"&gt;
     {{fieldTemplate}}
@@ -612,6 +580,7 @@
                 </div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>wrapper.nested</code></p>
+                    <p class="m-0">As wrapper for nested fields ( see example in <a href="./demos.html">demos</a> )</p>
                     <pre>
 <code class="language-html">&lt;div class="surveyjs-field-wrapper surveyjs-nested-wrapper"&gt;
     {{labelTemplate}}
@@ -623,6 +592,7 @@
                 </div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>wrapper.question</code></p>
+                    <p class="m-0">As wrapper for each question</p>
                     <pre>
 <code class="language-html">&lt;div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question&gt;
     &lt;div class="surveyjs-question-body"&gt;
@@ -637,6 +607,7 @@
                 </div>
                 <div class="mt-5">
                     <p class="m-0">Template <code>wrapper.related</code></p>
+                    <p class="m-0">As wrapper for related fields ( see example in <a href="./demos.html">demos</a> and <a href="https://getbootstrap.com/docs/4.3/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a> )</p>
                     <pre>
 <code class="language-html">&lt;div class="surveyjs-field-wrapper input-group"&gt;
     &lt;div class="input-group-prepend"&gt;
