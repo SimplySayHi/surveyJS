@@ -207,7 +207,7 @@
                     <br />
                     The survey will be built if <code>status</code> is "success" and array <code>questions</code> has items.
                 </p>
-            <pre>
+            <pre class="mh-100">
 <code class="language-js">{
     "status": "success",
     "data": {
@@ -216,7 +216,28 @@
             {
                 "id": "1",
                 "question": "What's your name?",
-                "answers": [ { "id": "1", "type": "text" } ]
+                "answers": [ { "id": "1", "type": "text", { "subtype": "alphabeticExtended" } } ]
+            },
+            {
+                "id": "1c",
+                "question": "What's your email address?",
+                "answers": [
+                    { "id": "1ca", "type": "email", "placeholder": "address@email.ext" }
+                ],
+                "errorMessage": "We need your email in case you win :)",
+                "required": true
+            },
+            {
+                "id": "8",
+                "question": "What do you like about this survey?",
+                "answers": [
+                    { "id": "43", "value": "value-43", "type": "checkbox", "label": "Clear of communication", "sort": 1 },
+                    { "id": "44", "value": "value-44", "type": "checkbox", "label": "Simplicity of usage", "sort": 2 },
+                    { "id": "45", "value": "value-45", "type": "checkbox", "label": "Graphic style and language", "sort": 3 },
+                    { "id": "46", "value": "value-46", "type": "checkbox", "label": "Duration", "sort": 4 }
+                ],
+                "checks": "[1,2]",
+                "required": true
             }
         ]
     }
@@ -225,7 +246,78 @@
 </pre>
                     </div>
                     <div class="col-lg-6">
-                        // ADD ANSWERS EXPLANATION HERE
+                        <p>
+                            <a href="json/survey.json" target="_blank">JSON file</a> is pretty self explanatory but here you can find a reference for less clear items.
+                        </p>
+                        
+                        <p class="m-0">
+                            For each question, each answer in <code>answers</code> will be used to build the HTML field.
+                            <br /><br />
+                            All keys of the object will generate the equivalent HTML attribute ( except for <code>data</code> <code>id</code> <code>label</code> <code>nested</code> <code>related</code> <code>sort</code> ) with the specified value ( in case answer <code>type</code> is equal to "option" or "textarea", also these keys will be ignored for this purpose: <code>type</code> <code>value</code> ).
+                            <br /><br />
+                            All keys in <code>data</code> will generate the equivalent data-attribute <code>data-*</code>.
+                            <br />
+                            In particular, you can use them to enable formJS superpowers ( see <a href="json/survey.json" target="_blank">JSON file</a> and <a href="https://www.valeriodipunzio.com/plugins/formJS/api.html" target="_blank">formJS API</a> for details ), for example:
+                        </p>
+                        <ul class="mb-4">
+                            <li>
+                                <code>subtype</code> to specify a custom validation method
+                            </li>
+                            <li>
+                                <code>validateIfFilled</code> to validate a field only if filled
+                            </li>
+                        </ul>
+
+                        <p class="m-0">
+                            HTML attribute <code>id</code> is automatically generated like:<br />
+                            <code>`${answerType}-${surveyId}-${questionId}-${answerId}`</code><br />
+                            where:
+                            <br />
+                        </p>
+                        <ul class="mb-4">
+                            <li>
+                                <code>answerType</code> same as <code>type</code> ( if "option", it will be "select" )
+                            </li>
+                            <li>
+                                <code>surveyId</code> the id of the survey. See <code>data.id</code>
+                            </li>
+                            <li>
+                                <code>questionId</code> the id of the question
+                            </li>
+                            <li>
+                                <code>answerId</code> the answer id ( or answer index in case <code>answerType => 'select'</code> )
+                            </li>
+                        </ul>
+
+                        <p class="m-0">
+                            In case you need, answers can also be "nested" or "related":
+                        </p>
+                        <ul>
+                            <li>
+                                <code>nested</code> when some answers are "grouped" as child ( see key "nested" in <a href="json/survey.json" target="_blank">JSON file</a> )
+                            </li>
+                            <li>
+                                <code>related</code> when an answer, if selected, requires an additional answer ( tipically a radio and an input field - see key "related" in <a href="json/survey.json" target="_blank">JSON file</a> )
+                            </li>
+                        </ul>
+                        
+                        <p class="m-0">
+                            You can use these keys on each question object:
+                        </p>
+                        <ul>
+                            <li>
+                                <code>checks</code> ( string ) to enable formJS mutliple-checks validation ( see <a href="https://www.valeriodipunzio.com/plugins/formJS/api.html#builtin-validations" target="_blank">formJS doc</a> )
+                            </li>
+                            <li>
+                                <code>errorMessage</code> ( string | object ) the error message that will be shown to the user if answered is given. It can also be an object to show detailed error messages based on validation rule ( <a href="https://www.valeriodipunzio.com/plugins/formJS/api.html#builtin-errors" target="_blank">formJS doc</a> )
+                            </li>
+                            <li>
+                                <code>required</code> ( boolean ) if the user must give an answer ( if omitted, it will be considered as <code>false</code> )
+                            </li>
+                            <li>
+                                <code>sort</code> ( number ) used to set the order of the questions ( it's also available in answers )
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
