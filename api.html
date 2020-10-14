@@ -281,13 +281,13 @@
                                             <span class="text-green">field</span>: ( string ) HTML string to be used as wrapper for each field ( input, select, textarea )
                                         </li>
                                         <li>
-                                            <span class="text-green">nested</span>: ( string ) HTML string to be used as wrapper for nested fields ( see example in <a href="./demos/">demos</a> )
+                                            <span class="text-green">nested</span>: ( string ) HTML string to be used as wrapper for nested fields ( see example in <a href="./demos.html">demos</a> )
                                         </li>
                                         <li>
                                             <span class="text-green">question</span>: ( string ) HTML string to be used as wrapper for each question
                                         </li>
                                         <li>
-                                            <span class="text-green">related</span>: ( string ) HTML string to be used as wrapper for related fields ( see example in <a href="./demos/">demos</a> )
+                                            <span class="text-green">related</span>: ( string ) HTML string to be used as wrapper for related fields ( see example in <a href="./demos.html">demos</a> )
                                         </li>
                                     </ul>
                                 </li>
@@ -522,148 +522,134 @@
             </p>
             <ul>
                 <li>
-                    Loading Box ( loadingBox: in setup or when adding a new language - see above )
+                    <span class="text-green">error</span>: as field error message container ( on failed field validation )
                 </li>
                 <li>
-                    Fields Error ( fieldError )
+                    <span class="text-green">input</span>: for input fields
                 </li>
                 <li>
-                    Inputs - the type will be taken from JSON ( input, inputTag )
+                    <span class="text-green">label</span>: for label elements
                 </li>
                 <li>
-                    Label tags ( labelTag )
+                    <span class="text-green">loading</span>: HTML container and text for the loading box. Used when waiting survey data
                 </li>
                 <li>
-                    Input Groups - as of <a href="https://getbootstrap.com/docs/4.3/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a> ( inputGroup )
+                    <span class="text-green">select</span>: for select fields
                 </li>
                 <li>
-                    Questions ( question )
+                    <span class="text-green">textarea</span>: for textarea fields
                 </li>
                 <li>
-                    Selects ( select and selectTag )
-                </li>
-                <li>
-                    Textareas ( textarea )
+                    <span class="text-green">wrapper</span>: ( object )
+                    <ul>
+                        <li>
+                            <span class="text-green">field</span>: as wrapper for each field ( input, select, textarea )
+                        </li>
+                        <li>
+                            <span class="text-green">nested</span>: as wrapper for nested fields ( see example in <a href="./demos.html">demos</a> )
+                        </li>
+                        <li>
+                            <span class="text-green">question</span>: as wrapper for each question
+                        </li>
+                        <li>
+                            <span class="text-green">related</span>: as wrapper for related fields ( see example in <a href="./demos.html">demos</a> and <a href="https://getbootstrap.com/docs/4.3/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a> )
+                        </li>
+                    </ul>
                 </li>
             </ul>
             <p>
-                Remember to use ALL the data-* attributes and placeholders with the curly braces, for example {{questionId}}, in your custom code.<br />
-                Here some examples of initialization with custom templates ( these are, actually, the basic templates ):
+                NOTE: Use ALL the <code>data-*</code> attributes and placeholders with the curly braces, for example <code>{{questionId}}</code>, in your custom templates.<br />
+                Below, the default templates:
             </p>
 
-            <br /><p>Custom Template for Loading Box</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    loadingBox: '&lt;div class="surveyjs-loading" data-surveyjs-loading&gt;&lt;i class="glyphicon glyphicon-refresh icon-spin"&gt;&lt;/i&gt; Loading...&lt;/div&gt;'
-}</code></pre>
-            
-            <br /><p>Custom Template for Fields Error</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    templates: {
-        fieldError: '&lt;div class="surveyjs-field-error-message"&gt;{{fieldErrorMessage}}&lt;/div&gt;'
-    }
-}</code></pre>
-            
-            <br /><p>Custom Template for Inputs</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    templates: {
-        input:  '&lt;div class="surveyjs-single-answer surveyjs-input-container surveyjs-answer-{{answerType}} form-check" data-answer-index="{{answerIndex}}"&gt;'+
-                    '{{inputTagCode}}'+
-                    '{{labelTagCode}}'+
-                '&lt;/div&gt;'
-    }
-}</code></pre>
-            
-            <br /><p>Custom Template for Input Groups</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    templates: {
-        inputGroup: '&lt;div class="surveyjs-single-answer input-group" data-answer-index="{{answerIndex}}"&gt;'+
-                        '&lt;div class="input-group-prepend"&gt;'+
-                            '&lt;div class="input-group-text form-check surveyjs-answer-{{answerType}}"&gt;'+
-                                '&lt;input type="{{answerType}}" name="surveyjs-answer-{{questionNumber}}" id="{{answerCode}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} data-require-more="" class="surveyjs-input surveyjs-radio form-check-input" /&gt;'+
-                                '&lt;label for="{{answerCode}}" class="surveyjs-label form-check-label"&gt;{{answerString}}&lt;/label&gt;'+
-                            '&lt;/div&gt;'+
-                        '&lt;/div&gt;'+
-                        '{{relatedAnswerField}}'+
-                    '&lt;/div&gt;'
-    }
-}</code></pre>
-
-            <br /><p>Custom Template for Input Tags</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    templates: {
-        inputTag: '&lt;input type="{{answerType}}" {{attrSubtype}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClass}}" id="{{answerCode}}" {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" data-answer-id="{{answerId}}" value="{{answerIdValue}}" {{attrRequired}} {{attrChecks}} {{attrRequiredFrom}} /&gt;'
-    }
-}</code></pre>
-
-            <br /><p>Custom Template for Label Tags</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    templates: {
-        labelTag: '&lt;label for="{{answerCode}}" class="surveyjs-label {{labelClass}}">{{answerString}}&lt;/label&gt;'
-    }
-}</code></pre>
-
-            <br /><p>Custom Template for Questions</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    templates: {
-        question:   '&lt;div data-question-id="{{questionId}}" data-question-index="{{questionNumber}}" data-formjs-question class="surveyjs-question-box clearfix"&gt;'+
-                        '&lt;div class="surveyjs-question-header"&gt;Question {{questionNumber}}&lt;/div&gt;'+
-                        '&lt;div class="surveyjs-question-body"&gt;'+
-                            '&lt;div class="surveyjs-question-text"&gt;{{questionText}}&lt;/div&gt;'+
-                            '&lt;div class="surveyjs-answers-box form-group clearfix"&gt;'+
-                                '{{answersHtml}}'+
-                                '{{fieldErrorTemplate}}'+
-                            '&lt;/div&gt;'+
-                        '&lt;/div&gt;'+
-                    '&lt;/div&gt;'
-    }
-}</code></pre>
-
-            <br /><p>Custom Template for Selects</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    templates: {
-        select: '&lt;div class="surveyjs-single-answer surveyjs-answer-select" data-answer-index="{{answerIndex}}"&gt;'+
-                    '{{selectTagCode}}'+
-                '&lt;/div&gt;'
-    }
-}</code></pre>
-            
-            <br /><p>Custom Template for Select Tags</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    templates: {
-        selectTag:  '&lt;select id="{{answerCode}}" name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClass}}" {{attrRequired}} {{nestedAnswer}} data-answer-root="{{progIdsJoined}}" {{attrRequiredFrom}}&gt;'+
-                        '{{optionsHtml}}'+
-                    '&lt;/select&gt;'
-    }
-}</code></pre>
-
-            <br /><p>Custom Template for Textareas</p>
-            <pre>
-<code class="language-js">{
-    url: 'json/survey.json',
-    templates: {
-        textarea:   '&lt;div class="surveyjs-single-answer surveyjs-answer-textarea"&gt;'+
-                        '&lt;textarea id="{{answerCode}}" data-answer-id="{{answerId}}" {{nestedAnswer}} name="surveyjs-answer-{{questionNumber}}" {{attrRequired}} class="surveyjs-textarea {{fieldClass}}" {{answerMaxlength}} rows="6" placeholder="{{answerPlaceholder}}"&gt;&lt;/textarea&gt;'+
-                    '&lt;/div&gt;'
-    }
-}</code></pre>
+            <div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>error</code></p>
+                    <pre>
+<code class="language-html">&lt;div class="surveyjs-error-message"&gt;{{errorMessage}}&lt;/div&gt;</code>
+</pre>
+                </div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>input</code></p>
+                    <pre>
+<code class="language-html">&lt;input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" /&gt;</code>
+</pre>
+                </div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>label</code></p>
+                    <pre>
+<code class="language-html">&lt;label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}"&gt;{{labelString}}&lt;/label&gt;</code>
+</pre>
+                </div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>loading</code></p>
+                    <pre>
+<code class="language-html">&lt;div class="surveyjs-loading" data-surveyjs-loading&gt;Loading...&lt;/div&gt;</code>
+</pre>
+                </div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>select</code></p>
+                    <pre>
+<code class="language-html">&lt;select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}"&gt;
+    {{optionsHtml}}
+&lt;/select&gt;</code>
+</pre>
+                </div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>textarea</code></p>
+                    <pre>
+<code class="language-html">&lt;textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"&gt;&lt;/textarea&gt;</code>
+</pre>
+                </div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>wrapper.field</code></p>
+                    <pre>
+<code class="language-html">&lt;div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}"&gt;
+    {{fieldTemplate}}
+    {{labelTemplate}}
+&lt;/div&gt;</code>
+</pre>
+                </div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>wrapper.nested</code></p>
+                    <pre>
+<code class="language-html">&lt;div class="surveyjs-field-wrapper surveyjs-nested-wrapper"&gt;
+    {{labelTemplate}}
+    &lt;div class="surveyjs-nested-inner"&gt;
+        {{nestedFieldsHTML}}
+    &lt;/div&gt;
+&lt;/div&gt;</code>
+</pre>
+                </div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>wrapper.question</code></p>
+                    <pre>
+<code class="language-html">&lt;div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question&gt;
+    &lt;div class="surveyjs-question-body"&gt;
+        &lt;div class="surveyjs-question-text"&gt;{{questionText}}&lt;/div&gt;
+        &lt;div class="surveyjs-answers-wrapper"&gt;
+            {{answersHTML}}
+        &lt;/div&gt;
+        &lt;div class="surveyjs-errors-wrapper" data-surveyjs-errors&gt;{{errorTemplates}}&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code>
+</pre>
+                </div>
+                <div class="mt-5">
+                    <p class="m-0">Template <code>wrapper.related</code></p>
+                    <pre>
+<code class="language-html">&lt;div class="surveyjs-field-wrapper input-group"&gt;
+    &lt;div class="input-group-prepend"&gt;
+        &lt;div class="surveyjs-wrapper-radio input-group-text form-check"&gt;
+            {{fieldTemplate}}
+            {{labelTemplate}}
+        &lt;/div&gt;
+    &lt;/div&gt;
+    {{relatedFieldHTML}}
+&lt;/div&gt;</code>
+</pre>
+                </div>
+            </div>
         </div>
 
         </div>
