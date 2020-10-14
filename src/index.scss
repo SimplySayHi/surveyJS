@@ -9,7 +9,7 @@
         display: none;
     }
     
-    .surveyjs-nested-container {
+    .surveyjs-nested-inner {
         padding-left: 20px;
     }
     
@@ -69,7 +69,7 @@
                 margin-left: -17px;
             }
         }
-        .surveyjs-nested-parent > .surveyjs-label.custom-control-label {
+        .surveyjs-nested-wrapper > .surveyjs-label.custom-control-label {
             &:before,
             &:after {
                 display: none;

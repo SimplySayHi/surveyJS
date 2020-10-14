@@ -5,7 +5,7 @@
 .surveyjs-wrapper .surveyjs-input:not([type]) {
   display: none; }
 
-.surveyjs-wrapper .surveyjs-nested-container {
+.surveyjs-wrapper .surveyjs-nested-inner {
   padding-left: 20px; }
 
 .surveyjs-wrapper .form-check:not(.surveyjs-wrapper-checkbox):not(.surveyjs-wrapper-radio) {
@@ -48,7 +48,7 @@
 .surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-label:after {
   margin-left: -17px; }
 
-.surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-nested-parent > .surveyjs-label.custom-control-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-nested-parent > .surveyjs-label.custom-control-label:after {
+.surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-nested-wrapper > .surveyjs-label.custom-control-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-nested-wrapper > .surveyjs-label.custom-control-label:after {
   display: none; }
 
 .surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control {

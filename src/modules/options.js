@@ -56,9 +56,9 @@ export const options = {
                                 '{{labelTemplate}}'+
                             '</div>',
             
-            nested:         '<div class="surveyjs-field-wrapper surveyjs-nested-parent">'+
+            nested:         '<div class="surveyjs-field-wrapper surveyjs-nested-wrapper">'+
                                 '{{labelTemplate}}'+
-                                '<div class="surveyjs-nested-container">'+
+                                '<div class="surveyjs-nested-inner">'+
                                     '{{nestedFieldsHTML}}'+
                                 '</div>'+
                             '</div>',
