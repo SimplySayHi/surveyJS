@@ -34,7 +34,7 @@ export const options = {
         error:              'Answer is necessary.',
         errorMultiChoice:   'You must choose from {{checksMin}} to {{checksMax}} answers.'
     },
-    showErrorMessage:     true,
+    showErrorMessage:       true,
     templates: {
         error:              '<div class="surveyjs-error-message">{{errorMessage}}</div>',
         

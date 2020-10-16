@@ -182,38 +182,42 @@ const formEl = document.querySelector('[data-surveyjs-form]');
 const options = {
     url: '../json/survey.json',
     cssClasses: {
-        checkbox:   'custom-control-input',
-        radio:      'custom-control-input',
-        label:      'custom-control-label',
-        select:     'custom-select'
+        checkbox:       'custom-control-input',
+        radio:          'custom-control-input',
+        label:          'custom-control-label',
+        select:         'custom-select',
+        wrapper: {
+            checkbox:   'custom-control form-check',
+            radio:      'custom-control form-check'
+        }
     },
     templates: {
-        question:   '&lt;div class="st-item" data-title="#{{questionNumber}}"&gt;'+
-                        '&lt;div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-wrapper"&gt;'+
-                            '&lt;div class="surveyjs-question-body"&gt;'+
-                                '&lt;div class="surveyjs-question-text"&gt;{{questionText}}&lt;/div&gt;'+
-                                '&lt;div class="surveyjs-answers-wrapper form-group"&gt;'+
-                                    '{{answersHTML}}'+
+        wrapper: {
+            field:      '&lt;div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} custom-{{answerType}} {{wrapperClasses}}"&gt;'+
+                            '{{fieldTemplate}}'+
+                            '{{labelTemplate}}'+
+                        '&lt;/div&gt;',
+
+            question:   '&lt;div class="st-item" data-title="#{{questionNumber}}"&gt;'+
+                            '&lt;div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-wrapper"&gt;'+
+                                '&lt;div class="surveyjs-question-body"&gt;'+
+                                    '&lt;div class="surveyjs-question-text"&gt;{{questionText}}&lt;/div&gt;'+
+                                    '&lt;div class="surveyjs-answers-wrapper form-group"&gt;'+
+                                        '{{answersHTML}}'+
+                                    '&lt;/div&gt;'+
                                 '&lt;/div&gt;'+
                             '&lt;/div&gt;'+
-                        '&lt;/div&gt;'+
-                    '&lt;/div&gt;',
-
-        wrapper: {
-            default: '&lt;div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} custom-control form-check custom-{{answerType}}"&gt;'+
-                        '{{fieldTemplate}}'+
-                        '{{labelTemplate}}'+
-                    '&lt;/div&gt;',
+                        '&lt;/div&gt;',
             
-            related: '&lt;div class="surveyjs-field-wrapper input-group {{wrapperClasses}}"&gt;'+
-                        '&lt;div class="input-group-prepend"&gt;'+
-                            '&lt;div class="input-group-text custom-control custom-radio surveyjs-wrapper-radio"&gt;'+
-                                '{{fieldTemplate}}'+
-                                '{{labelTemplate}}'+
+            related:    '&lt;div class="surveyjs-field-wrapper input-group"&gt;'+
+                            '&lt;div class="input-group-prepend"&gt;'+
+                                '&lt;div class="input-group-text custom-control custom-radio surveyjs-wrapper-radio"&gt;'+
+                                    '{{fieldTemplate}}'+
+                                    '{{labelTemplate}}'+
+                                '&lt;/div&gt;'+
                             '&lt;/div&gt;'+
-                        '&lt;/div&gt;'+
-                        '{{relatedFieldHTML}}'+
-                    '&lt;/div&gt;'
+                            '{{relatedFieldHTML}}'+
+                        '&lt;/div&gt;'
         }
     },
     formOptions: {

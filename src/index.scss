@@ -1,20 +1,7 @@
 
 .surveyjs-wrapper {
-    .surveyjs-label {
-        font-weight: inherit;
-        font-size: inherit;
-    }
-    
-    .surveyjs-input:not([type]){
-        display: none;
-    }
-    
     .surveyjs-nested-inner {
         padding-left: 20px;
-    }
-    
-    .form-check:not(.surveyjs-wrapper-checkbox):not(.surveyjs-wrapper-radio) {
-        padding-left: 0;
     }
 
     .input-group {
@@ -23,17 +10,12 @@
         margin-bottom: 0.3125em;
         width: auto;
 
-        .surveyjs-select:not([size]):not([multiple]) {
-            height: auto;
-        }
         .form-check-input {
             position: static;
             margin: 0;
         }
         .surveyjs-label {
-            font-weight: inherit;
-            margin: 0;
-            padding-left: 5px;
+            padding-left: .3125rem;
         }
     }
     
@@ -75,24 +57,25 @@
                 display: none;
             }
         }
-        .input-group .custom-control {
-            padding-left: 2rem;
-        }
-        .input-group .custom-control-label{
-            &:before,
-            &:after {
-                top: auto;
-                left: auto;
-                right: 100%;
-                bottom: 100%;
-                margin-bottom: -3px;
-                margin-right: 5px;
-                -webkit-transform: translateY(100%);
-                transform: translateY(100%);
+        .input-group {
+            .input-group-prepend {
+                padding: 0;
             }
-        }
-        .input-group .custom-control .surveyjs-label {
-            position: relative;
+            .custom-control {
+                padding-left: 2rem;
+
+                &-label{
+                    &:before,
+                    &:after {
+                        left: auto;
+                        right: 100%;
+                        margin-right: 5px;
+                    }
+                }
+                .surveyjs-label {
+                    position: relative;
+                }
+            }
         }
         .custom-control .surveyjs-label{
             &:before,

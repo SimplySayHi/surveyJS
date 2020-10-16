@@ -27,7 +27,7 @@ var options = {
                             '</div>'+
                         '</div>',
                 
-                related: '<div class="surveyjs-field-wrapper input-group {{wrapperClasses}}">'+
+                related: '<div class="surveyjs-field-wrapper input-group">'+
                             '<div class="input-group-prepend form-check abc-radio surveyjs-answer-radio">'+
                                 '<div class="input-group-text">'+
                                     '{{fieldTemplate}}'+

@@ -9,11 +9,15 @@ var options = {
             checkbox:   'custom-control-input',
             radio:      'custom-control-input',
             label:      'custom-control-label',
-            select:     'custom-select'
+            select:     'custom-select',
+            wrapper: {
+                checkbox:   'custom-control form-check',
+                radio:      'custom-control form-check'
+            }
         },
         templates: {
             wrapper: {
-                field:  '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} custom-control form-check custom-{{answerType}} {{wrapperClasses}}">'+
+                field:  '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} custom-{{answerType}} {{wrapperClasses}}">'+
                             '{{fieldTemplate}}'+
                             '{{labelTemplate}}'+
                         '</div>',
@@ -29,7 +33,7 @@ var options = {
                             '</div>'+
                         '</div>',
                 
-                related: '<div class="surveyjs-field-wrapper input-group {{wrapperClasses}}">'+
+                related: '<div class="surveyjs-field-wrapper input-group">'+
                             '<div class="input-group-prepend">'+
                                 '<div class="input-group-text custom-control custom-radio surveyjs-wrapper-radio">'+
                                     '{{fieldTemplate}}'+

@@ -1,30 +1,16 @@
-.surveyjs-wrapper .surveyjs-label {
-  font-weight: inherit;
-  font-size: inherit; }
-
-.surveyjs-wrapper .surveyjs-input:not([type]) {
-  display: none; }
-
 .surveyjs-wrapper .surveyjs-nested-inner {
   padding-left: 20px; }
-
-.surveyjs-wrapper .form-check:not(.surveyjs-wrapper-checkbox):not(.surveyjs-wrapper-radio) {
-  padding-left: 0; }
 
 .surveyjs-wrapper .input-group {
   margin-left: -0.75em;
   margin-top: 0.3125em;
   margin-bottom: 0.3125em;
   width: auto; }
-  .surveyjs-wrapper .input-group .surveyjs-select:not([size]):not([multiple]) {
-    height: auto; }
   .surveyjs-wrapper .input-group .form-check-input {
     position: static;
     margin: 0; }
   .surveyjs-wrapper .input-group .surveyjs-label {
-    font-weight: inherit;
-    margin: 0;
-    padding-left: 5px; }
+    padding-left: .3125rem; }
 
 .surveyjs-wrapper .surveyjs-errors-wrapper,
 .surveyjs-wrapper .surveyjs-footer {
@@ -51,21 +37,17 @@
 .surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-nested-wrapper > .surveyjs-label.custom-control-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .surveyjs-nested-wrapper > .surveyjs-label.custom-control-label:after {
   display: none; }
 
+.surveyjs-wrapper.surveyjs-custom-inputs .input-group .input-group-prepend {
+  padding: 0; }
+
 .surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control {
   padding-left: 2rem; }
-
-.surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control-label:after {
-  top: auto;
-  left: auto;
-  right: 100%;
-  bottom: 100%;
-  margin-bottom: -3px;
-  margin-right: 5px;
-  -webkit-transform: translateY(100%);
-  transform: translateY(100%); }
-
-.surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control .surveyjs-label {
-  position: relative; }
+  .surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control-label:after {
+    left: auto;
+    right: 100%;
+    margin-right: 5px; }
+  .surveyjs-wrapper.surveyjs-custom-inputs .input-group .custom-control .surveyjs-label {
+    position: relative; }
 
 .surveyjs-wrapper.surveyjs-custom-inputs .custom-control .surveyjs-label:before, .surveyjs-wrapper.surveyjs-custom-inputs .custom-control .surveyjs-label:after {
   margin-left: 0; }
