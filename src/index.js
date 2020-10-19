@@ -53,12 +53,6 @@ class Survey extends Form {
                         super.init().then(() => {
                             self.isInitialized = true;
                             self.formEl.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
-                            // WORKAROUND FOR super.init() BECAUSE FOCUS IS SET ON FIELD [data-required-from] WHEN VALIDATING
-                            /* const activeEl = document.activeElement;
-                            const formSelector = 'form[name="'+ self.formEl.name +'"]';
-                            if( activeEl.matches(formSelector + ' [data-required-from]') ){
-                                activeEl.blur();
-                            } */
                             resolve(response);
                         });
                     } else {
