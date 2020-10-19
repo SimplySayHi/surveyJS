@@ -9,8 +9,6 @@ import { destroy }          from './modules/destroy';
 
 import Form from 'formjs-plugin';
 
-import './index.scss';
-
 const version = '3.0.0';
 
 class Survey extends Form {

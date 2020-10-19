@@ -2,25 +2,18 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
-import postcss from 'rollup-plugin-postcss';
 import myPackage from './package.json';
-import path from 'path';
 
 const initialComment = `/* ${myPackage.title} v${myPackage.version} | ${myPackage.author.name} (@${myPackage.customData.repository.accountName}) | ${myPackage.homepage} | ${myPackage.customData.repository.homepage} | ${myPackage.license} license */`;
 
 const libraryFileName = myPackage.customData.libraryFileName;
 const libraryNamespace = myPackage.customData.libraryNamespace;
 
-const postCssOptions = {
-    extract: path.resolve('dist/survey.css')
-};
-
 const
 
 optionsESM = {
     input: 'src/index.js',
     external: ['formjs-plugin'],
-    plugins: [postcss(postCssOptions)],
     output: [
 
         // ES MODULE
@@ -95,7 +88,7 @@ optionsSYS = {
         }
 
     ],
-    plugins: [ nodeResolve(), babel({babelHelpers: 'bundled'}), postcss(postCssOptions) ]
+    plugins: [ nodeResolve(), babel({babelHelpers: 'bundled'}) ]
 },
 
 optionsIIFE = {
@@ -143,7 +136,7 @@ optionsIIFE = {
         }
 
     ],
-    plugins: [ nodeResolve(), babel({babelHelpers: 'bundled'}), postcss(postCssOptions) ]
+    plugins: [ nodeResolve(), babel({babelHelpers: 'bundled'}) ]
 }
 
 ;
