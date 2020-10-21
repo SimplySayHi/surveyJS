@@ -160,10 +160,10 @@
                     </div>
                     <div class="col-lg-6">
                         <p>
-                            To add an <b>external field</b> ( for example privacy acceptance ) you can set a question object as shown in the JSON ( see question with <code>external: true</code> ):
+                            To add one ( or more ) <b>external questions</b> ( for example privacy acceptance ) you can set a question object as shown in the JSON ( see question with <code>external: true</code> ):
                         </p>
                         <pre>
-<code class="language-html">&lt;div class="surveyjs-question-wrapper" data-formjs-question data-surveyjs-external&gt;
+<code class="language-html">&lt;div class="surveyjs-question-wrapper" data-formjs-question data-surveyjs-external="1"&gt;
     &lt;div class="surveyjs-answers-wrapper"&gt;
         &lt;div data-question&gt;&lt;/div&gt;
         &lt;div data-answer&gt;
@@ -183,11 +183,17 @@
 
 </code></pre>
                         <p>
-                            Include a bit of HTML code ( see below ) inside element <code>data-surveyjs-wrapper</code>
+                            Include a bit of HTML code ( see above ), keeping in mind that:
                         </p>
                         <ul>
                             <li class="my-2">
-                                attribute <code>data-exclude-storage</code> is optional ( used to avoid saving the answer in session storage );
+                                It must be a child of element with attribute <code>data-surveyjs-wrapper</code> ( see <a href="./demos.html">demos</a> )
+                            </li>
+                            <li class="my-2">
+                                Attribute <code>data-surveyjs-external</code> must have an integer number as value ( see example above ). The number is equal to the item position of the external question ( considering only external questions )
+                            </li>
+                            <li class="my-2">
+                                Attribute <code>data-exclude-storage</code> is optional ( used to avoid saving the answer in session storage )
                             </li>
                         </ul>
                     </div>

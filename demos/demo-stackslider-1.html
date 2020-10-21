@@ -84,29 +84,9 @@
 
             <div class="row justify-content-center overflow-hidden">
                 <div class="col-12 col-md-10 col-lg-8 col-xl-6 mx-auto mb-5">
-                    <div class="surveyjs-wrapper surveyjs-custom-inputs panel" data-surveyjs-wrapper>
-                        <div class="panel-body">
+                    <div class="panel border-0">
+                        <div class="surveyjs-wrapper surveyjs-custom-inputs panel-body" data-surveyjs-wrapper>
                             <form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form surveyjs-cards" data-surveyjs-form novalidate>
-                                <div class="surveyjs-question-wrapper text-right text-white margin-lg" data-formjs-question data-surveyjs-external>
-                                    <div class="surveyjs-answers-wrapper form-group">
-                                        <div class="text-left small" data-question></div>
-                                        <div class="radio custom-radio custom-control custom-control-inline" data-answer>
-                                            <input class="custom-control-input" name="surveyjs-answer-external" data-exclude-storage data-field/>
-                                            <label class="custom-control-label">
-                                                <span data-label></span>
-                                            </label>
-                                        </div>
-                                        <div class="radio custom-radio custom-control custom-control-inline" data-answer>
-                                            <input class="custom-control-input" name="surveyjs-answer-external" data-exclude-storage data-field/>
-                                            <label class="custom-control-label">
-                                                <span data-label></span>
-                                            </label>
-                                        </div>
-                                        <div class="surveyjs-errors-wrapper small">
-                                            To go on you must select an answer.
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="surveyjs-body questionsList stackSlider" data-surveyjs-body></div>
                                 <div class="surveyjs-footer row">
                                     <button class="surveyjs-submit-btn btn btn-red d-block mx-auto" type="submit">
@@ -114,6 +94,26 @@
                                     </button>
                                 </div>
                             </form>
+                            <div class="surveyjs-question-wrapper text-right text-white margin-lg" data-formjs-question data-surveyjs-external="1">
+                                <div class="surveyjs-answers-wrapper form-group">
+                                    <div class="text-left small" data-question></div>
+                                    <div class="radio custom-radio custom-control custom-control-inline" data-answer>
+                                        <input class="custom-control-input" name="surveyjs-answer-external" data-exclude-storage data-field/>
+                                        <label class="custom-control-label">
+                                            <span data-label></span>
+                                        </label>
+                                    </div>
+                                    <div class="radio custom-radio custom-control custom-control-inline" data-answer>
+                                        <input class="custom-control-input" name="surveyjs-answer-external" data-exclude-storage data-field/>
+                                        <label class="custom-control-label">
+                                            <span data-label></span>
+                                        </label>
+                                    </div>
+                                    <div class="surveyjs-errors-wrapper small">
+                                        To go on you must select an answer.
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -128,36 +128,34 @@
                             </div>
                             <div class="card-body p-0">
                                 <pre class="m-0">
-<code class="language-html">&lt;div class="surveyjs-wrapper surveyjs-custom-inputs panel" data-surveyjs-wrapper&gt;
-    &lt;div class="panel-body"&gt;
-        &lt;form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form surveyjs-cards" data-surveyjs-form novalidate&gt;
-            &lt;div class="surveyjs-question-wrapper text-right text-white margin-lg" data-formjs-question data-surveyjs-external&gt;
-                &lt;div class="surveyjs-answers-wrapper form-group"&gt;
-                    &lt;div class="text-left small" data-question&gt;&lt;/div&gt;
-                    &lt;div class="radio custom-radio custom-control custom-control-inline" data-answer&gt;
-                        &lt;input class="custom-control-input" name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
-                        &lt;label class="custom-control-label"&gt;
-                            &lt;span data-label&gt;&lt;/span&gt;
-                        &lt;/label&gt;
-                    &lt;/div&gt;
-                    &lt;div class="radio custom-radio custom-control custom-control-inline" data-answer&gt;
-                        &lt;input class="custom-control-input" name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
-                        &lt;label class="custom-control-label"&gt;
-                            &lt;span data-label&gt;&lt;/span&gt;
-                        &lt;/label&gt;
-                    &lt;/div&gt;
-                    &lt;div class="surveyjs-errors-wrapper small"&gt;
-                        To go on you must select an answer.
-                    &lt;/div&gt;
-                &lt;/div&gt;
+<code class="language-html">&lt;div class="surveyjs-wrapper surveyjs-custom-inputs panel-body" data-surveyjs-wrapper&gt;
+    &lt;form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form surveyjs-cards" data-surveyjs-form novalidate&gt;
+        &lt;div class="surveyjs-body questionsList stackSlider" data-surveyjs-body&gt;&lt;/div&gt;
+        &lt;div class="surveyjs-footer row"&gt;
+            &lt;button class="surveyjs-submit-btn btn btn-red d-block mx-auto" type="submit"&gt;
+                &lt;span class="surveyjs-submit-text"&gt;SEND&lt;/span&gt;
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+    &lt;div class="surveyjs-question-wrapper text-right text-white margin-lg" data-formjs-question data-surveyjs-external="1"&gt;
+        &lt;div class="surveyjs-answers-wrapper form-group"&gt;
+            &lt;div class="text-left small" data-question&gt;&lt;/div&gt;
+            &lt;div class="radio custom-radio custom-control custom-control-inline" data-answer&gt;
+                &lt;input class="custom-control-input" name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
+                &lt;label class="custom-control-label"&gt;
+                    &lt;span data-label&gt;&lt;/span&gt;
+                &lt;/label&gt;
             &lt;/div&gt;
-            &lt;div class="surveyjs-body questionsList stackSlider" data-surveyjs-body&gt;&lt;/div&gt;
-            &lt;div class="surveyjs-footer row"&gt;
-                &lt;button class="surveyjs-submit-btn btn btn-red d-block mx-auto" type="submit"&gt;
-                    &lt;span class="surveyjs-submit-text"&gt;SEND&lt;/span&gt;
-                &lt;/button&gt;
+            &lt;div class="radio custom-radio custom-control custom-control-inline" data-answer&gt;
+                &lt;input class="custom-control-input" name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
+                &lt;label class="custom-control-label"&gt;
+                    &lt;span data-label&gt;&lt;/span&gt;
+                &lt;/label&gt;
             &lt;/div&gt;
-        &lt;/form&gt;
+            &lt;div class="surveyjs-errors-wrapper small"&gt;
+                To go on you must select an answer.
+            &lt;/div&gt;
+        &lt;/div&gt;
     &lt;/div&gt;
 &lt;/div&gt;
 

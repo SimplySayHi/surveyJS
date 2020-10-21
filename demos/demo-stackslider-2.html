@@ -89,7 +89,7 @@
                             <form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate>
                                 <div class="surveyjs-body questionsList stackSlider" data-surveyjs-body></div>
                                 <div class="surveyjs-footer row">
-                                    <div class="surveyjs-question-wrapper text-right" data-formjs-question data-surveyjs-external>
+                                    <div class="surveyjs-question-wrapper text-right" data-formjs-question data-surveyjs-external="1">
                                         <div class="surveyjs-answers-wrapper form-group">
                                             <div class="text-left small" data-question></div>
                                             <div class="form-check-inline abc-radio" data-answer>
@@ -133,28 +133,24 @@
         &lt;form action="../json/survey.json" name="surveyjs-form" class="surveyjs-form" data-surveyjs-form novalidate&gt;
             &lt;div class="surveyjs-body questionsList stackSlider" data-surveyjs-body&gt;&lt;/div&gt;
             &lt;div class="surveyjs-footer row"&gt;
-                &lt;div class="surveyjs-question-box text-right" data-formjs-question&gt;
-                    &lt;div class="surveyjs-question-box text-right" data-formjs-question=""&gt;
-                        &lt;div class="surveyjs-answers-box form-group"&gt;
-                            &lt;div class="text-left small"&gt;
-                                The interested party gives his consent to the processing of his personal data for the creation of profiles and for the analysis of his habits or consumption choices based on the details of his purchases as well as the data provided directly by the customer.
-                            &lt;/div&gt;
-                            &lt;div class="form-check-inline abc-radio"&gt;
-                                &lt;input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/&gt;
-                                &lt;label class="surveyjs-label form-check-label"&gt;
-                                    &lt;span&gt;&lt;/span&gt;
-                                &lt;/label&gt;
-                            &lt;/div&gt;
-                            &lt;div class="form-check-inline abc-radio"&gt;
-                                &lt;input class="form-check-input" data-exclude-storage="" data-name="bind-surveyjs-answer"/&gt;
-                                &lt;label class="surveyjs-label form-check-label"&gt;
-                                    &lt;span&gt;&lt;/span&gt;
-                                &lt;/label&gt;
-                            &lt;/div&gt;
+                &lt;div class="surveyjs-question-wrapper text-right" data-formjs-question data-surveyjs-external="1"&gt;
+                    &lt;div class="surveyjs-answers-wrapper form-group"&gt;
+                        &lt;div class="text-left small" data-question&gt;&lt;/div&gt;
+                        &lt;div class="form-check-inline abc-radio" data-answer&gt;
+                            &lt;input class="form-check-input" name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
+                            &lt;label class="surveyjs-label form-check-label"&gt;
+                                &lt;span data-label&gt;&lt;/span&gt;
+                            &lt;/label&gt;
                         &lt;/div&gt;
-                        &lt;div class="surveyjs-field-error-message small"&gt;
-                            To go on you must select an answer.
+                        &lt;div class="form-check-inline abc-radio" data-answer&gt;
+                            &lt;input class="form-check-input" name="surveyjs-answer-external" data-exclude-storage data-field/&gt;
+                            &lt;label class="surveyjs-label form-check-label"&gt;
+                                &lt;span data-label&gt;&lt;/span&gt;
+                            &lt;/label&gt;
                         &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class="surveyjs-errors-wrapper small"&gt;
+                        To go on you must select an answer.
                     &lt;/div&gt;
                 &lt;/div&gt;
                 &lt;button class="surveyjs-submit-btn btn btn-red d-block mx-auto" type="submit"&gt;

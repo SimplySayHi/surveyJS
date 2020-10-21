@@ -132,7 +132,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 }, eventOptions);
                 var eventObj = new Event(eventName, eventOptions);
                 eventObj.data = data, elem.dispatchEvent(eventObj);
-            }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]', getQuestionId = function(fieldEl) {
+            }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-surveyjs-wrapper] [data-surveyjs-external] [data-field]', getQuestionId = function(fieldEl) {
                 var containerEl = fieldEl.closest("[data-question-id]");
                 return containerEl && containerEl.getAttribute("data-question-id") || "";
             }, isEmptyObject = function(object) {
@@ -420,30 +420,30 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         checksMax: checksMax
                     }, questionHTML);
                 }), "");
-            }, buildSurvey = function(data, formEl, options, internals) {
-                var formName = formEl.getAttribute("name") || "";
-                internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
-                internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
+            }, buildSurvey = function(data, formEl, options) {
                 var qaHtmlAll = generateQAcode(data.questions, data.id, options);
                 formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
-                var extQuestion = data.questions.filter((function(obj) {
+                var extQuestions = data.questions.filter((function(obj) {
                     return obj.external;
-                }))[0];
-                if (extQuestion) {
-                    var externalCont = formEl.closest("[data-surveyjs-wrapper]").querySelector("[data-surveyjs-external]");
-                    externalCont.setAttribute("data-question-id", extQuestion.id), extQuestion.answers.forEach((function(answer, index) {
-                        var externalField = externalCont.querySelectorAll("[data-field]")[index], fieldProps = {
-                            id: "".concat(answer.type, "-").concat(data.id, "-").concat(extQuestion.id, "-").concat(answer.id),
-                            type: answer.type,
-                            value: answer.value,
-                            required: !!extQuestion.required
-                        };
-                        Object.keys(fieldProps).forEach((function(name) {
-                            externalField[name] = fieldProps[name];
+                }));
+                if (extQuestions.length > 0) {
+                    var surveyWrapperEl = formEl.closest("[data-surveyjs-wrapper]");
+                    extQuestions.forEach((function(question, qIndex) {
+                        var externalCont = surveyWrapperEl.querySelector('[data-surveyjs-external="' + (qIndex + 1) + '"]');
+                        externalCont.setAttribute("data-question-id", question.id), question.answers.forEach((function(answer, aIndex) {
+                            var externalField = externalCont.querySelectorAll("[data-field]")[aIndex], fieldProps = {
+                                id: "".concat(answer.type, "-").concat(data.id, "-").concat(question.id, "-").concat(answer.id),
+                                type: answer.type,
+                                value: answer.value,
+                                required: !!question.required
+                            };
+                            Object.keys(fieldProps).forEach((function(name) {
+                                externalField[name] = fieldProps[name];
+                            }));
+                            var answerCont = externalField.closest("[data-answer]");
+                            answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
+                            externalCont.querySelector("[data-question]").innerHTML = question.question;
                         }));
-                        var answerCont = externalField.closest("[data-answer]");
-                        answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
-                        externalCont.querySelector("[data-question]").innerHTML = extQuestion.question;
                     }));
                 }
             }, populateAnswers = function(formEl, internals) {
@@ -466,23 +466,27 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     var options = mergeObjects({}, Survey.prototype.options, optionsObj);
                     webStorage().isAvailable || (options.useWebStorage = !1);
                     var self = _assertThisInitialized(_this = _super.call(this, formEl, options));
-                    self.internals = internals, self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
-                    var retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions).then((function(response) {
+                    self.internals = internals, formEl = self.formEl;
+                    var selfOptions = self.options, selfInternals = self.internals;
+                    formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", selfOptions.templates.loading);
+                    var retrieveSurvey = ajaxCall(selfOptions.url, selfOptions.initAjaxOptions).then((function(response) {
                         return "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise((function(resolve) {
-                            response.data.questions && response.data.questions.length > 0 ? (buildSurvey(response.data, self.formEl, self.options, self.internals), 
-                            self.options.useWebStorage && populateAnswers(self.formEl, self.internals), Object.defineProperty(self, "data", {
+                            response.data.questions && response.data.questions.length > 0 ? (selfInternals.storageName = selfInternals.storageName.replace(/{{surveyId}}/, response.data.id), 
+                            selfInternals.storageName = selfInternals.storageName.replace(/{{surveyFormName}}/, formEl.getAttribute("name") || ""), 
+                            buildSurvey(response.data, formEl, selfOptions), selfOptions.useWebStorage && populateAnswers(formEl, selfInternals), 
+                            Object.defineProperty(self, "data", {
                                 value: deepFreeze(response.data)
-                            }), self.formEl.addEventListener("fjs.field:validation", validationEnd), self.formEl.addEventListener("fjs.form:submit", submit), 
+                            }), formEl.addEventListener("fjs.field:validation", validationEnd), formEl.addEventListener("fjs.form:submit", submit), 
                             _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Survey.prototype)), "init", _thisSuper).call(_thisSuper).then((function() {
-                                self.isInitialized = !0, self.formEl.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
+                                self.isInitialized = !0, formEl.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
                                 resolve(response);
                             }))) : resolve(response);
                         }));
                     })).finally((function() {
-                        var loadingBoxEl = self.formEl.querySelector("[data-surveyjs-loading]");
+                        var loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
                         loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
                     }));
-                    return dispatchCustomEvent(self.formEl, customEvents.init, retrieveSurvey), _this;
+                    return dispatchCustomEvent(formEl, customEvents.init, retrieveSurvey), _this;
                 }
                 return _createClass(Survey, [ {
                     key: "destroy",

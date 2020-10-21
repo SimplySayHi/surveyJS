@@ -29,43 +29,53 @@ class Survey extends Form {
         const self = this;
         self.internals = internals;
 
-        self.formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', self.options.templates.loading );
+        formEl = self.formEl;
+        const selfOptions = self.options;
+        const selfInternals = self.internals;
+
+        formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', selfOptions.templates.loading );
 
         // CREATE SURVEY
-        const retrieveSurvey = ajaxCall(self.options.url, self.options.initAjaxOptions)
+        const retrieveSurvey = ajaxCall(selfOptions.url, selfOptions.initAjaxOptions)
             .then(response => {
                 if( response.status.toLowerCase() !== 'success' ){
                     return Promise.reject(response);
                 }
                 return new Promise(resolve => {
                     if( response.data.questions && response.data.questions.length > 0 ){
-                        buildSurvey(response.data, self.formEl, self.options, self.internals);
-                        if( self.options.useWebStorage ){
-                            populateAnswers(self.formEl, self.internals);
+    
+                        // REPLACE SURVEY ID AND FORM NAME IN WEB STORAGE NAME
+                        selfInternals.storageName = selfInternals.storageName.replace( /{{surveyId}}/, response.data.id );
+                        selfInternals.storageName = selfInternals.storageName.replace( /{{surveyFormName}}/, (formEl.getAttribute('name') || '') );
+
+                        buildSurvey(response.data, formEl, selfOptions);
+                        if( selfOptions.useWebStorage ){
+                            populateAnswers(formEl, selfInternals);
                         }
                         Object.defineProperty(self, 'data', {
                             value: deepFreeze(response.data)
                         });
-                        self.formEl.addEventListener('fjs.field:validation', validationEnd);
-                        self.formEl.addEventListener('fjs.form:submit', submit);
+                        formEl.addEventListener('fjs.field:validation', validationEnd);
+                        formEl.addEventListener('fjs.form:submit', submit);
                         super.init().then(() => {
                             self.isInitialized = true;
-                            self.formEl.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
+                            formEl.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
                             resolve(response);
                         });
+
                     } else {
                         resolve(response);
                     }
                 });
             })
             .finally(() => {
-                const loadingBoxEl = self.formEl.querySelector('[data-surveyjs-loading]');
+                const loadingBoxEl = formEl.querySelector('[data-surveyjs-loading]');
                 if( loadingBoxEl ){
                     loadingBoxEl.parentNode.removeChild(loadingBoxEl);
                 }
             });
         
-        dispatchCustomEvent( self.formEl, customEvents.init, retrieveSurvey );
+        dispatchCustomEvent( formEl, customEvents.init, retrieveSurvey );
     }
 
     destroy(){

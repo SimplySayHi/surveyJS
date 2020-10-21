@@ -62,7 +62,7 @@ list), webStorage = () => {
         getFormData: {
             formOptions: {
                 getFormData: function() {
-                    const instance = this, formEl = instance.formEl, fieldsList = Array.from(formEl.closest("[data-surveyjs-wrapper]").querySelectorAll('[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-name="bind-surveyjs-answer"]')), obj = {
+                    const instance = this, formEl = instance.formEl, fieldsList = Array.from(formEl.closest("[data-surveyjs-wrapper]").querySelectorAll('[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-surveyjs-wrapper] [data-surveyjs-external] [data-field]')), obj = {
                         answers: [],
                         id: instance.data.id
                     };
@@ -267,10 +267,7 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
         "select" === answerType && (optionsHtml = generateOptionTags(answersList)), answerHTML = templates.wrapper.replace("{{relatedFieldHTML}}", relatedFieldHTML).replace("{{fieldTemplate}}", templates.field).replace("{{optionsHtml}}", optionsHtml).replace("{{labelTemplate}}", templates.label).replace("{{nestedFieldsHTML}}", nestedFieldsHTML), 
         allAnswersHTML += replaceObjectKeysInString(answerData, answerHTML);
     }), allAnswersHTML;
-}, buildSurvey = (data, formEl, options, internals) => {
-    const formName = formEl.getAttribute("name") || "";
-    internals.storageName = internals.storageName.replace(/{{surveyId}}/, data.id), 
-    internals.storageName = internals.storageName.replace(/{{surveyFormName}}/, formName);
+}, buildSurvey = (data, formEl, options) => {
     const qaHtmlAll = ((questions, surveyId, options) => sortList(questions).reduce((accCode, questionObj, index) => {
         if (questionObj.external) return accCode;
         let questionHTML = options.templates.wrapper.question;
@@ -300,22 +297,25 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
         }, questionHTML);
     }, ""))(data.questions, data.id, options);
     formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
-    const extQuestion = data.questions.filter(obj => obj.external)[0];
-    if (extQuestion) {
-        const externalCont = formEl.closest("[data-surveyjs-wrapper]").querySelector("[data-surveyjs-external]");
-        externalCont.setAttribute("data-question-id", extQuestion.id), extQuestion.answers.forEach((answer, index) => {
-            const externalField = externalCont.querySelectorAll("[data-field]")[index], fieldProps = {
-                id: `${answer.type}-${data.id}-${extQuestion.id}-${answer.id}`,
-                type: answer.type,
-                value: answer.value,
-                required: !!extQuestion.required
-            };
-            Object.keys(fieldProps).forEach(name => {
-                externalField[name] = fieldProps[name];
+    const extQuestions = data.questions.filter(obj => obj.external);
+    if (extQuestions.length > 0) {
+        const surveyWrapperEl = formEl.closest("[data-surveyjs-wrapper]");
+        extQuestions.forEach((question, qIndex) => {
+            const externalCont = surveyWrapperEl.querySelector('[data-surveyjs-external="' + (qIndex + 1) + '"]');
+            externalCont.setAttribute("data-question-id", question.id), question.answers.forEach((answer, aIndex) => {
+                const externalField = externalCont.querySelectorAll("[data-field]")[aIndex], fieldProps = {
+                    id: `${answer.type}-${data.id}-${question.id}-${answer.id}`,
+                    type: answer.type,
+                    value: answer.value,
+                    required: !!question.required
+                };
+                Object.keys(fieldProps).forEach(name => {
+                    externalField[name] = fieldProps[name];
+                });
+                const answerCont = externalField.closest("[data-answer]");
+                answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
+                externalCont.querySelector("[data-question]").innerHTML = question.question;
             });
-            const answerCont = externalField.closest("[data-answer]");
-            answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
-            externalCont.querySelector("[data-question]").innerHTML = extQuestion.question;
         });
     }
 };
@@ -326,7 +326,9 @@ class Survey extends Form {
         const options = mergeObjects({}, Survey.prototype.options, optionsObj);
         webStorage().isAvailable || (options.useWebStorage = !1), super(formEl, options);
         const self = this;
-        self.internals = internals, self.formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", self.options.templates.loading);
+        self.internals = internals, formEl = self.formEl;
+        const selfOptions = self.options, selfInternals = self.internals;
+        formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", selfOptions.templates.loading);
         const retrieveSurvey = ((url = location.href, options = {}) => {
             let timeoutTimer;
             if (options.headers = new Headers(options.headers), options.timeout > 0) {
@@ -338,9 +340,10 @@ class Survey extends Form {
             return fetch(url, options).then(response => response.ok ? response.json() : Promise.reject(response)).catch(error => Promise.reject(error)).finally(() => {
                 timeoutTimer && window.clearTimeout(timeoutTimer);
             });
-        })(self.options.url, self.options.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
-            response.data.questions && response.data.questions.length > 0 ? (buildSurvey(response.data, self.formEl, self.options, self.internals), 
-            self.options.useWebStorage && ((formEl, internals) => {
+        })(selfOptions.url, selfOptions.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
+            response.data.questions && response.data.questions.length > 0 ? (selfInternals.storageName = selfInternals.storageName.replace(/{{surveyId}}/, response.data.id), 
+            selfInternals.storageName = selfInternals.storageName.replace(/{{surveyFormName}}/, formEl.getAttribute("name") || ""), 
+            buildSurvey(response.data, formEl, selfOptions), selfOptions.useWebStorage && ((formEl, internals) => {
                 const WS = sessionStorage.getObject(internals.storageName);
                 if (WS) {
                     const surveyContEl = formEl.closest("[data-surveyjs-wrapper]");
@@ -349,15 +352,15 @@ class Survey extends Form {
                         isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
                     });
                 }
-            })(self.formEl, self.internals), Object.defineProperty(self, "data", {
+            })(formEl, selfInternals), Object.defineProperty(self, "data", {
                 value: deepFreeze(response.data)
-            }), self.formEl.addEventListener("fjs.field:validation", validationEnd), self.formEl.addEventListener("fjs.form:submit", submit), 
+            }), formEl.addEventListener("fjs.field:validation", validationEnd), formEl.addEventListener("fjs.form:submit", submit), 
             super.init().then(() => {
-                self.isInitialized = !0, self.formEl.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
+                self.isInitialized = !0, formEl.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
                 resolve(response);
             })) : resolve(response);
         })).finally(() => {
-            const loadingBoxEl = self.formEl.querySelector("[data-surveyjs-loading]");
+            const loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
             loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
         });
         ((elem, eventName, data = {}, eventOptions = {}) => {
@@ -366,7 +369,7 @@ class Survey extends Form {
             }, eventOptions);
             const eventObj = new Event(eventName, eventOptions);
             eventObj.data = data, elem.dispatchEvent(eventObj);
-        })(self.formEl, customEvents_init, retrieveSurvey);
+        })(formEl, customEvents_init, retrieveSurvey);
     }
     destroy() {
         var formEl;

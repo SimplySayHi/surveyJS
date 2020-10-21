@@ -76,7 +76,7 @@ var onInitSuccess = function( ajaxData ){
                 $invalidField = (function(){
                     for( var f=0; f<fields.length; f++ ){
                         var obj = fields[f];
-                        if( !obj.result && !$(obj.fieldEl).is('[data-name="bind-surveyjs-answer"]') ){
+                        if( !obj.result && !$(obj.fieldEl).is('[data-field]') ){
                             return $(obj.fieldEl);
                         }
                     }
