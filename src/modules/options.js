@@ -51,7 +51,7 @@ export const options = {
         textarea:           '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
 
         wrapper: {
-            field:          '<div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}">'+
+            field:          '<div class="surveyjs-field-wrapper surveyjs-{{answerType}}-wrapper {{wrapperClasses}}">'+
                                 '{{fieldTemplate}}'+
                                 '{{labelTemplate}}'+
                             '</div>',
@@ -73,9 +73,9 @@ export const options = {
                                 '</div>'+
                             '</div>',
             
-            related:        '<div class="surveyjs-field-wrapper input-group">'+
+            related:        '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group">'+
                                 '<div class="input-group-prepend">'+
-                                    '<div class="surveyjs-wrapper-radio input-group-text form-check">'+
+                                    '<div class="surveyjs-radio-wrapper input-group-text form-check">'+
                                         '{{fieldTemplate}}'+
                                         '{{labelTemplate}}'+
                                     '</div>'+

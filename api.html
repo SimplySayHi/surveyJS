@@ -572,7 +572,7 @@
                     <p class="m-0">Template <code>wrapper.field</code></p>
                     <p class="m-0">As wrapper for each field ( input, select, textarea )</p>
                     <pre>
-<code class="language-html">&lt;div class="surveyjs-field-wrapper surveyjs-wrapper-{{answerType}} {{wrapperClasses}}"&gt;
+<code class="language-html">&lt;div class="surveyjs-field-wrapper surveyjs-{{answerType}}-wrapper {{wrapperClasses}}"&gt;
     {{fieldTemplate}}
     {{labelTemplate}}
 &lt;/div&gt;</code>
@@ -609,9 +609,9 @@
                     <p class="m-0">Template <code>wrapper.related</code></p>
                     <p class="m-0">As wrapper for related fields ( see example in <a href="./demos.html">demos</a> and <a href="https://getbootstrap.com/docs/4.3/components/input-group/#checkboxes-and-radios" target="_blank">Bootstrap Input Group</a> )</p>
                     <pre>
-<code class="language-html">&lt;div class="surveyjs-field-wrapper input-group"&gt;
+<code class="language-html">&lt;div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group"&gt;
     &lt;div class="input-group-prepend"&gt;
-        &lt;div class="surveyjs-wrapper-radio input-group-text form-check"&gt;
+        &lt;div class="surveyjs-radio-wrapper input-group-text form-check"&gt;
             {{fieldTemplate}}
             {{labelTemplate}}
         &lt;/div&gt;

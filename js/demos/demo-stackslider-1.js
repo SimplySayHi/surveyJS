@@ -17,7 +17,7 @@ var options = {
         },
         templates: {
             wrapper: {
-                field:  '<div class="surveyjs-field-container surveyjs-wrapper-{{answerType}} custom-{{answerType}} {{wrapperClasses}}">'+
+                field:  '<div class="surveyjs-field-container surveyjs-{{answerType}}-wrapper custom-{{answerType}} {{wrapperClasses}}">'+
                             '{{fieldTemplate}}'+
                             '{{labelTemplate}}'+
                         '</div>',
@@ -33,9 +33,9 @@ var options = {
                             '</div>'+
                         '</div>',
                 
-                related: '<div class="surveyjs-field-wrapper input-group">'+
+                related: '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group">'+
                             '<div class="input-group-prepend">'+
-                                '<div class="input-group-text custom-control custom-radio surveyjs-wrapper-radio">'+
+                                '<div class="input-group-text custom-control custom-radio surveyjs-radio-wrapper">'+
                                     '{{fieldTemplate}}'+
                                     '{{labelTemplate}}'+
                                 '</div>'+
