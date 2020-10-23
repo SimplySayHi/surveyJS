@@ -71,7 +71,7 @@
                 <hr>
                 <p class="m-0">
                     <b>NOTE</b><br />
-                    surveyJS class extends formJS class, so it:
+                    surveyJS class extends formJS class ( NOT <span class="badge badge-pill badge-yellow">Lite</span> version ), so it:
                 </p>
                 <ul>
                     <li>
@@ -84,6 +84,66 @@
                 <p>
                     Keep in mind that <code>options.url</code> is mandatory as shown in page <a href="get-started.html#initialize">Get Started</a>
                 </p>
+                <hr>
+                <p class="m-0">
+                    Features included in Lite version have this badge: <span class="badge badge-pill badge-yellow">Lite</span>
+                </p>
+                <div class="toggable-content-outer">
+                    Get a quick peek of features included in Lite version:
+                    <input type="checkbox" class="fake-checkbox btn-toggable-content" id="lite-show-more">
+                    <label class="toggable-label text-red" for="lite-show-more">
+                        <span>show more</span>
+                        <span>close</span>
+                    </label>
+                    <div class="toggable-content">
+                        <div class="d-flex flex-wrap">
+                            <div class="col-sm-6 col-md-3">
+                                <h3 class="small-title mt-3">Options</h3>
+                                <ul>
+                                    <li>
+                                        cssClasses ( all )
+                                    </li>
+                                    <li>
+                                        initAjaxOptions ( all )
+                                    </li>
+                                    <li>
+                                        messages ( all )
+                                    </li>
+                                    <li>
+                                        showErrorMessage
+                                    </li>
+                                    <li>
+                                        templates ( all )
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <h3 class="small-title mt-3">Prototype</h3>
+                                <ul>
+                                    <li>
+                                        as main version
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <h3 class="small-title mt-3">Events</h3>
+                                <ul>
+                                    <li>
+                                        as main version
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <h3 class="small-title mt-3">Templates</h3>
+                                <ul>
+                                    <li>
+                                        as main version
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <hr>
             </div>
 
@@ -112,6 +172,7 @@
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-auto col-xl-4">
                             <pre class="text-green">cssClasses</pre>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
                         </div>
                         <div class="w-100 d-xl-none"></div>
                         <div class="col-lg-4 col-xl-3">
@@ -190,6 +251,7 @@
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-auto col-xl-4">
                             <pre class="text-green">initAjaxOptions</pre>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
                         </div>
                         <div class="w-100 d-xl-none"></div>
                         <div class="col-lg-4 col-xl-3">
@@ -204,6 +266,7 @@
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-auto col-xl-4">
                             <pre class="text-green">messages</pre>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
                         </div>
                         <div class="w-100 d-xl-none"></div>
                         <div class="col-lg-4 col-xl-3">
@@ -229,6 +292,7 @@
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-auto col-xl-4">
                             <pre class="text-green">showErrorMessage</pre>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
                         </div>
                         <div class="w-100 d-xl-none"></div>
                         <div class="col-lg-4 col-xl-3">
@@ -243,6 +307,7 @@
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-auto col-xl-4">
                             <pre class="text-green">templates</pre>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
                         </div>
                         <div class="w-100 d-xl-none"></div>
                         <div class="col-lg-4 col-xl-3">
@@ -442,6 +507,7 @@
                         <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                             <div class="col-lg-auto col-xl-4">
                                 <pre class="text-green">setOptions( options )</pre>
+                                <span class="badge badge-pill badge-yellow">Lite</span>
                             </div>
                             <div class="w-100 d-xl-none"></div>
                             <div class="col-lg-6 col-xl-5">
@@ -497,7 +563,8 @@
                     <div class="clearfix padding-tb-md row-list-separator d-flex flex-wrap">
                         <div class="col-lg-6">
                             <pre class="text-green">sjs:init</pre>
-                            <p>
+                            <span class="badge badge-pill badge-yellow">Lite</span>
+                            <p class="mt-2">
                                 Fires on the form element just after survey constructor is called.
                             </p>
                         </div>
@@ -518,7 +585,7 @@
         <div id="templates">
             <h3 class="sticky-title">Templates</h3>
             <p>
-                You can initialize the survey with your custom HTML templates.<br />
+                You can initialize the survey with your custom HTML templates ( all templates are also included in <span class="badge badge-pill badge-yellow">Lite</span> version ).<br />
                 NOTE: Use ALL the <code>data-*</code> attributes and placeholders with the curly braces, for example <code>{{answerType}}</code>, in your custom templates.<br />
                 Below, the default templates:
             </p>
