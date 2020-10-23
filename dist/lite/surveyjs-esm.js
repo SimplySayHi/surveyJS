@@ -91,8 +91,7 @@ list), generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((
             }
         };
         questionObj.checks && (extraData.question.checks = questionObj.checks);
-        let answersHTML = generateAnswers(questionObj.answers, extraData, options);
-        const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
+        const answersHTML = generateAnswers(questionObj.answers, extraData, options), maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
             questionId: questionId,
             questionNumber: questionNumber,
             questionText: questionObj.question + maxChoiceText,

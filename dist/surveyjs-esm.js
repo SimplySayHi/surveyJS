@@ -62,7 +62,7 @@ list), webStorage = () => {
         getFormData: {
             formOptions: {
                 getFormData: function() {
-                    const instance = this, formEl = instance.formEl, fieldsList = Array.from(formEl.closest("[data-surveyjs-wrapper]").querySelectorAll('[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-surveyjs-wrapper] [data-surveyjs-external] [data-field]')), obj = {
+                    const instance = this, formEl = instance.formEl, fieldsList = Array.from(formEl.closest("[data-surveyjs-wrapper]").querySelectorAll('[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-surveyjs-external] [data-field]')), obj = {
                         answers: [],
                         id: instance.data.id
                     };
@@ -280,8 +280,7 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
             }
         };
         questionObj.checks && (extraData.question.checks = questionObj.checks);
-        let answersHTML = generateAnswers(questionObj.answers, extraData, options);
-        const maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
+        const answersHTML = generateAnswers(questionObj.answers, extraData, options), maxChoice = questionObj.checks ? JSON.parse(questionObj.checks) : "", checksMin = maxChoice[0] || "", checksMax = maxChoice[1] || "", maxChoiceText = maxChoice && options.messages.maxChoice ? " (" + checksMax + " " + options.messages.maxChoice + ")" : "", questionData = {
             questionId: questionId,
             questionNumber: questionNumber,
             questionText: questionObj.question + maxChoiceText,

@@ -132,7 +132,7 @@ var Survey = function(Form) {
         }, eventOptions);
         var eventObj = new Event(eventName, eventOptions);
         eventObj.data = data, elem.dispatchEvent(eventObj);
-    }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-surveyjs-wrapper] [data-surveyjs-external] [data-field]', getQuestionId = function(fieldEl) {
+    }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-surveyjs-external] [data-field]', getQuestionId = function(fieldEl) {
         var containerEl = fieldEl.closest("[data-question-id]");
         return containerEl && containerEl.getAttribute("data-question-id") || "";
     }, isEmptyObject = function(object) {
