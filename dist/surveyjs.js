@@ -90,7 +90,7 @@ var Survey = function(Form) {
             }
         })(target, property, receiver || target);
     }
-    var ajaxCall = function() {
+    var version = "3.0.0", ajaxCall = function() {
         var timeoutTimer, url = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : location.href, options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
         if (options.headers = new Headers(options.headers), options.timeout > 0) {
             var controller = new AbortController, signal = controller.signal;
@@ -457,23 +457,22 @@ var Survey = function(Form) {
         }
     }, destroy = function(formEl) {
         formEl.removeEventListener("fjs.field:validation", validationEnd), formEl.removeEventListener("fjs.form:submit", submit);
-    }, version = "3.0.0", Survey = function(_Form) {
+    }, Survey = function(_Form) {
         _inherits(Survey, _Form);
         var _super = _createSuper(Survey);
         function Survey(formEl) {
             var _thisSuper, _this, optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
             if (_classCallCheck(this, Survey), !optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
-            var options = mergeObjects({}, Survey.prototype.options, optionsObj);
-            webStorage().isAvailable || (options.useWebStorage = !1);
-            var self = _assertThisInitialized(_this = _super.call(this, formEl, options));
-            self.internals = internals, formEl = self.formEl;
-            var selfOptions = self.options, selfInternals = self.internals;
-            formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", selfOptions.templates.loading);
-            var retrieveSurvey = ajaxCall(selfOptions.url, selfOptions.initAjaxOptions).then((function(response) {
+            optionsObj = mergeObjects({}, Survey.prototype.options, optionsObj), webStorage().isAvailable || (optionsObj.useWebStorage = !1);
+            var self = _assertThisInitialized(_this = _super.call(this, formEl, optionsObj));
+            self.internals = internals, formEl = self.formEl, optionsObj = self.options;
+            var selfInternals = self.internals;
+            formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", optionsObj.templates.loading);
+            var retrieveSurvey = ajaxCall(optionsObj.url, optionsObj.initAjaxOptions).then((function(response) {
                 return "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise((function(resolve) {
                     response.data.questions && response.data.questions.length > 0 ? (selfInternals.storageName = selfInternals.storageName.replace(/{{surveyId}}/, response.data.id), 
                     selfInternals.storageName = selfInternals.storageName.replace(/{{surveyFormName}}/, formEl.getAttribute("name") || ""), 
-                    buildSurvey(response.data, formEl, selfOptions), selfOptions.useWebStorage && populateAnswers(formEl, selfInternals), 
+                    buildSurvey(response.data, formEl, optionsObj), optionsObj.useWebStorage && populateAnswers(formEl, selfInternals), 
                     Object.defineProperty(self, "data", {
                         value: deepFreeze(response.data)
                     }), formEl.addEventListener("fjs.field:validation", validationEnd), formEl.addEventListener("fjs.form:submit", submit), 

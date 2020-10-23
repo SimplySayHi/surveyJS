@@ -323,12 +323,12 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
 class Survey extends Form {
     constructor(formEl, optionsObj = {}) {
         if (!optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
-        const options = mergeObjects({}, Survey.prototype.options, optionsObj);
-        webStorage().isAvailable || (options.useWebStorage = !1), super(formEl, options);
+        optionsObj = mergeObjects({}, Survey.prototype.options, optionsObj), webStorage().isAvailable || (optionsObj.useWebStorage = !1), 
+        super(formEl, optionsObj);
         const self = this;
-        self.internals = internals, formEl = self.formEl;
-        const selfOptions = self.options, selfInternals = self.internals;
-        formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", selfOptions.templates.loading);
+        self.internals = internals, formEl = self.formEl, optionsObj = self.options;
+        const selfInternals = self.internals;
+        formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", optionsObj.templates.loading);
         const retrieveSurvey = ((url = location.href, options = {}) => {
             let timeoutTimer;
             if (options.headers = new Headers(options.headers), options.timeout > 0) {
@@ -340,10 +340,10 @@ class Survey extends Form {
             return fetch(url, options).then(response => response.ok ? response.json() : Promise.reject(response)).catch(error => Promise.reject(error)).finally(() => {
                 timeoutTimer && window.clearTimeout(timeoutTimer);
             });
-        })(selfOptions.url, selfOptions.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
+        })(optionsObj.url, optionsObj.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
             response.data.questions && response.data.questions.length > 0 ? (selfInternals.storageName = selfInternals.storageName.replace(/{{surveyId}}/, response.data.id), 
             selfInternals.storageName = selfInternals.storageName.replace(/{{surveyFormName}}/, formEl.getAttribute("name") || ""), 
-            buildSurvey(response.data, formEl, selfOptions), selfOptions.useWebStorage && ((formEl, internals) => {
+            buildSurvey(response.data, formEl, optionsObj), optionsObj.useWebStorage && ((formEl, internals) => {
                 const WS = sessionStorage.getObject(internals.storageName);
                 if (WS) {
                     const surveyContEl = formEl.closest("[data-surveyjs-wrapper]");

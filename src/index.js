@@ -1,4 +1,5 @@
 
+import { version }          from './modules/version';
 import { ajaxCall, customEvents, deepFreeze, dispatchCustomEvent, mergeObjects, webStorage } from './modules/helpers';
 import { options }          from './modules/options';
 import { internals }        from './modules/internals';
@@ -9,8 +10,6 @@ import { destroy }          from './modules/destroy';
 
 import Form from 'formjs-plugin';
 
-const version = '3.0.0';
-
 class Survey extends Form {
 
     constructor( formEl, optionsObj = {} ){
@@ -18,25 +17,24 @@ class Survey extends Form {
             throw new Error('"options.url" is missing or not a string!');
         }
 
-        const options = mergeObjects( {}, Survey.prototype.options, optionsObj );
+        optionsObj = mergeObjects( {}, Survey.prototype.options, optionsObj );
 
         if( !webStorage().isAvailable ){
-            options.useWebStorage = false;
+            optionsObj.useWebStorage = false;
         }
 
         // CREATE FORM INSTANCE FOR SURVEY
-        super( formEl, options );
+        super( formEl, optionsObj );
         const self = this;
         self.internals = internals;
-
         formEl = self.formEl;
-        const selfOptions = self.options;
+        optionsObj = self.options;
         const selfInternals = self.internals;
 
-        formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', selfOptions.templates.loading );
+        formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', optionsObj.templates.loading );
 
         // CREATE SURVEY
-        const retrieveSurvey = ajaxCall(selfOptions.url, selfOptions.initAjaxOptions)
+        const retrieveSurvey = ajaxCall(optionsObj.url, optionsObj.initAjaxOptions)
             .then(response => {
                 if( response.status.toLowerCase() !== 'success' ){
                     return Promise.reject(response);
@@ -48,8 +46,8 @@ class Survey extends Form {
                         selfInternals.storageName = selfInternals.storageName.replace( /{{surveyId}}/, response.data.id );
                         selfInternals.storageName = selfInternals.storageName.replace( /{{surveyFormName}}/, (formEl.getAttribute('name') || '') );
 
-                        buildSurvey(response.data, formEl, selfOptions);
-                        if( selfOptions.useWebStorage ){
+                        buildSurvey(response.data, formEl, optionsObj);
+                        if( optionsObj.useWebStorage ){
                             populateAnswers(formEl, selfInternals);
                         }
                         Object.defineProperty(self, 'data', {
