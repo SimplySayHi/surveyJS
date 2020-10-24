@@ -24,20 +24,6 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
                 }
             }
-            function _createClass(Constructor, protoProps, staticProps) {
-                return protoProps && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
-                Constructor;
-            }
-            function _inherits(subClass, superClass) {
-                if ("function" != typeof superClass && null !== superClass) throw new TypeError("Super expression must either be null or a function");
-                subClass.prototype = Object.create(superClass && superClass.prototype, {
-                    constructor: {
-                        value: subClass,
-                        writable: !0,
-                        configurable: !0
-                    }
-                }), superClass && _setPrototypeOf(subClass, superClass);
-            }
             function _getPrototypeOf(o) {
                 return (_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function(o) {
                     return o.__proto__ || Object.getPrototypeOf(o);
@@ -48,17 +34,6 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     return o.__proto__ = p, o;
                 })(o, p);
             }
-            function _isNativeReflectConstruct() {
-                if ("undefined" == typeof Reflect || !Reflect.construct) return !1;
-                if (Reflect.construct.sham) return !1;
-                if ("function" == typeof Proxy) return !0;
-                try {
-                    return Date.prototype.toString.call(Reflect.construct(Date, [], (function() {}))), 
-                    !0;
-                } catch (e) {
-                    return !1;
-                }
-            }
             function _assertThisInitialized(self) {
                 if (void 0 === self) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
                 return self;
@@ -67,7 +42,17 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 return !call || "object" != typeof call && "function" != typeof call ? _assertThisInitialized(self) : call;
             }
             function _createSuper(Derived) {
-                var hasNativeReflectConstruct = _isNativeReflectConstruct();
+                var hasNativeReflectConstruct = function() {
+                    if ("undefined" == typeof Reflect || !Reflect.construct) return !1;
+                    if (Reflect.construct.sham) return !1;
+                    if ("function" == typeof Proxy) return !0;
+                    try {
+                        return Date.prototype.toString.call(Reflect.construct(Date, [], (function() {}))), 
+                        !0;
+                    } catch (e) {
+                        return !1;
+                    }
+                }();
                 return function() {
                     var result, Super = _getPrototypeOf(Derived);
                     if (hasNativeReflectConstruct) {
@@ -77,20 +62,19 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     return _possibleConstructorReturn(this, result);
                 };
             }
-            function _superPropBase(object, property) {
-                for (;!Object.prototype.hasOwnProperty.call(object, property) && null !== (object = _getPrototypeOf(object)); ) ;
-                return object;
-            }
             function _get(target, property, receiver) {
                 return (_get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get : function(target, property, receiver) {
-                    var base = _superPropBase(target, property);
+                    var base = function(object, property) {
+                        for (;!Object.prototype.hasOwnProperty.call(object, property) && null !== (object = _getPrototypeOf(object)); ) ;
+                        return object;
+                    }(target, property);
                     if (base) {
                         var desc = Object.getOwnPropertyDescriptor(base, property);
                         return desc.get ? desc.get.call(receiver) : desc.value;
                     }
                 })(target, property, receiver || target);
             }
-            var version = "3.0.0", ajaxCall = function() {
+            var ajaxCall = function() {
                 var timeoutTimer, url = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : location.href, options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
                 if (options.headers = new Headers(options.headers), options.timeout > 0) {
                     var controller = new AbortController, signal = controller.signal;
@@ -105,11 +89,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 })).finally((function() {
                     timeoutTimer && window.clearTimeout(timeoutTimer);
                 }));
-            }, arrayMove = function(array, from, to) {
-                return array.splice(to, 0, array.splice(from, 1)[0]), array;
-            }, customEvents = {
-                init: "sjs:init"
-            }, deepFreeze = function deepFreeze(obj) {
+            }, customEvents_init = "sjs:init", deepFreeze = function deepFreeze(obj) {
                 return Object.getOwnPropertyNames(obj).forEach((function(name) {
                     var prop = obj[name];
                     "object" === _typeof(prop) && null !== prop && deepFreeze(prop);
@@ -132,7 +112,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 }, eventOptions);
                 var eventObj = new Event(eventName, eventOptions);
                 eventObj.data = data, elem.dispatchEvent(eventObj);
-            }, fieldsStringSelectorSurvey = '[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-surveyjs-external] [data-field]', getQuestionId = function(fieldEl) {
+            }, getQuestionId = function(fieldEl) {
                 var containerEl = fieldEl.closest("[data-question-id]");
                 return containerEl && containerEl.getAttribute("data-question-id") || "";
             }, isEmptyObject = function(object) {
@@ -146,11 +126,6 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 return list[0].sort && list.sort((function(a, b) {
                     return a.sort > b.sort;
                 })), list;
-            }, toKebabCase = function() {
-                var string = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "", useAllCaps = arguments.length > 1 && void 0 !== arguments[1] && arguments[1], newString = string.trim().replace(/(([_ ])([a-z]))|(([a-z])?([A-Z]))/g, (function(match, p1, p2, p3, p4, p5, p6) {
-                    return (p3 ? "-" + p3 : (p5 || "") + "-" + p6).toLowerCase();
-                }));
-                return useAllCaps ? newString.toUpperCase() : newString;
             }, webStorage = function() {
                 var isAvailable = function() {
                     var mod = "check_storage";
@@ -177,37 +152,6 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     }
                 }
                 return obj;
-            }, optionsUtils = {
-                formOptions: {
-                    getFormData: function() {
-                        var instance = this, formEl = instance.formEl, fieldsList = Array.from(formEl.closest("[data-surveyjs-wrapper]").querySelectorAll(fieldsStringSelectorSurvey)), obj = {
-                            answers: [],
-                            id: instance.data.id
-                        }, fieldNameCheck = "", fieldTypeCheck = "";
-                        return fieldsList.forEach((function(fieldEl) {
-                            var type = fieldEl.type, name = fieldEl.name;
-                            if (name !== fieldNameCheck || type !== fieldTypeCheck) {
-                                fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
-                                var questionId = getQuestionId(fieldEl), qaObj = {
-                                    question: questionId,
-                                    answer: {
-                                        value: fieldEl.value || ""
-                                    }
-                                };
-                                if (!fieldEl.matches("[data-required-from]") && "" !== questionId && !isEmptyObject(getQuestionObject(instance.data, questionId))) {
-                                    if ("radio" === type) {
-                                        var checkedEl = (fieldEl.closest("form") ? formEl : fieldEl.closest(instance.options.fieldOptions.questionContainer)).querySelector('[name="' + name + '"]:checked');
-                                        qaObj.answer.value = checkedEl && checkedEl.value || "", checkedEl && checkedEl.matches("[data-require-more]") && (qaObj.answer.related = formEl.querySelector('[data-required-from="#' + checkedEl.id + '"]').value);
-                                    }
-                                    "checkbox" === type && fieldEl.matches("[data-checks]") && (qaObj.answer.value = [], 
-                                    Array.from(formEl.querySelectorAll('[name="' + name + '"]:checked')).forEach((function(el) {
-                                        qaObj.answer.value.push(el.value);
-                                    }))), obj.answers.push(qaObj);
-                                }
-                            }
-                        })), obj;
-                    }
-                }
             }, options = {
                 cssClasses: {
                     checkbox: "form-check-input",
@@ -222,7 +166,38 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     }
                 },
                 formOptions: {
-                    getFormData: optionsUtils.formOptions.getFormData
+                    getFormData: {
+                        formOptions: {
+                            getFormData: function() {
+                                var instance = this, formEl = instance.formEl, fieldsList = Array.from(formEl.closest("[data-surveyjs-wrapper]").querySelectorAll('[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-surveyjs-external] [data-field]')), obj = {
+                                    answers: [],
+                                    id: instance.data.id
+                                }, fieldNameCheck = "", fieldTypeCheck = "";
+                                return fieldsList.forEach((function(fieldEl) {
+                                    var type = fieldEl.type, name = fieldEl.name;
+                                    if (name !== fieldNameCheck || type !== fieldTypeCheck) {
+                                        fieldEl.matches("[data-required-from]") || (fieldNameCheck = name, fieldTypeCheck = type);
+                                        var questionId = getQuestionId(fieldEl), qaObj = {
+                                            question: questionId,
+                                            answer: {
+                                                value: fieldEl.value || ""
+                                            }
+                                        };
+                                        if (!fieldEl.matches("[data-required-from]") && "" !== questionId && !isEmptyObject(getQuestionObject(instance.data, questionId))) {
+                                            if ("radio" === type) {
+                                                var checkedEl = (fieldEl.closest("form") ? formEl : fieldEl.closest(instance.options.fieldOptions.questionContainer)).querySelector('[name="' + name + '"]:checked');
+                                                qaObj.answer.value = checkedEl && checkedEl.value || "", checkedEl && checkedEl.matches("[data-require-more]") && (qaObj.answer.related = formEl.querySelector('[data-required-from="#' + checkedEl.id + '"]').value);
+                                            }
+                                            "checkbox" === type && fieldEl.matches("[data-checks]") && (qaObj.answer.value = [], 
+                                            Array.from(formEl.querySelectorAll('[name="' + name + '"]:checked')).forEach((function(el) {
+                                                qaObj.answer.value.push(el.value);
+                                            }))), obj.answers.push(qaObj);
+                                        }
+                                    }
+                                })), obj;
+                            }
+                        }
+                    }.formOptions.getFormData
                 },
                 initAjaxOptions: {
                     cache: "no-store",
@@ -279,13 +254,14 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 return -1;
             };
             function validationEnd(event) {
-                var fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
+                var array, from, to, fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
                 if (isEmptyObject(questionObj)) return !0;
                 if (errorsWrapper && errors && isPlainObject(questionObj.errorMessage)) {
                     var errorsList = Object.keys(errors);
                     if (errors.rule) {
                         var ruleIndex = errorsList.indexOf("rule");
-                        errorsList = arrayMove(errorsList, ruleIndex, 0);
+                        from = ruleIndex, to = 0, (array = errorsList).splice(to, 0, array.splice(from, 1)[0]), 
+                        errorsList = array;
                     }
                     var errorsHTML = errorsList.reduce((function(accHTML, name) {
                         var errorMessage = questionObj.errorMessage[name] || "";
@@ -337,15 +313,14 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 })).forEach((function(name) {
                     string += " ".concat(name, '="').concat(answerObj[name], '"');
                 })), answerObj.data && Object.keys(answerObj.data).forEach((function(name) {
-                    string += " data-".concat(toKebabCase(name), '="').concat(answerObj.data[name], '"');
+                    string += " data-".concat(function() {
+                        var useAllCaps = arguments.length > 1 && void 0 !== arguments[1] && arguments[1], newString = (arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "").trim().replace(/(([_ ])([a-z]))|(([a-z])?([A-Z]))/g, (function(match, p1, p2, p3, p4, p5, p6) {
+                            return (p3 ? "-" + p3 : (p5 || "") + "-" + p6).toLowerCase();
+                        }));
+                        return useAllCaps ? newString.toUpperCase() : newString;
+                    }(name), '="').concat(answerObj.data[name], '"');
                 })), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
                 (string += ' id="'.concat(answerCode, '"')).trim();
-            }, getTemplates = function(answerType, templates) {
-                return {
-                    field: templates[answerType] || templates.input,
-                    label: /^(checkbox|nested|radio|related)$/.test(answerType) ? templates.label : "",
-                    wrapper: templates.wrapper[answerType] || templates.wrapper.field
-                };
             }, generateAnswers = function generateAnswers(answersList, extraData, options) {
                 var allAnswersHTML = "", previousType = "";
                 return sortList(answersList).forEach((function(answer, index) {
@@ -386,7 +361,13 @@ System.register([ "formjs-plugin" ], (function(exports) {
                             }
                             relatedFieldHTML = replaceObjectKeysInString(answerDataRelated, relatedFieldHTML);
                         }
-                        var answerTypeForTemplate = answer.related ? "related" : answer.nested ? "nested" : answerType, templates = getTemplates(answerTypeForTemplate, options.templates), nestedFieldsHTML = "";
+                        var templates = function(answerType, templates) {
+                            return {
+                                field: templates[answerType] || templates.input,
+                                label: /^(checkbox|nested|radio|related)$/.test(answerType) ? templates.label : "",
+                                wrapper: templates.wrapper[answerType] || templates.wrapper.field
+                            };
+                        }(answer.related ? "related" : answer.nested ? "nested" : answerType, options.templates), nestedFieldsHTML = "";
                         answer.nested && (nestedFieldsHTML = generateAnswers(answer.nested, extraData, options));
                         var optionsHtml = "";
                         "select" === answerType && (optionsHtml = generateOptionTags(answersList)), answerHTML = templates.wrapper.replace("{{relatedFieldHTML}}", relatedFieldHTML).replace("{{fieldTemplate}}", templates.field).replace("{{optionsHtml}}", optionsHtml).replace("{{labelTemplate}}", templates.label).replace("{{nestedFieldsHTML}}", nestedFieldsHTML), 
@@ -455,11 +436,18 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
                     }));
                 }
-            }, destroy = function(formEl) {
-                formEl.removeEventListener("fjs.field:validation", validationEnd), formEl.removeEventListener("fjs.form:submit", submit);
             }, Survey = exports("default", function(_Form) {
-                _inherits(Survey, _Form);
-                var _super = _createSuper(Survey);
+                !function(subClass, superClass) {
+                    if ("function" != typeof superClass && null !== superClass) throw new TypeError("Super expression must either be null or a function");
+                    subClass.prototype = Object.create(superClass && superClass.prototype, {
+                        constructor: {
+                            value: subClass,
+                            writable: !0,
+                            configurable: !0
+                        }
+                    }), superClass && _setPrototypeOf(subClass, superClass);
+                }(Survey, _Form);
+                var Constructor, protoProps, staticProps, _super = _createSuper(Survey);
                 function Survey(formEl) {
                     var _thisSuper, _this, optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
                     if (_classCallCheck(this, Survey), !optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
@@ -485,21 +473,24 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         var loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
                         loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
                     }));
-                    return dispatchCustomEvent(formEl, customEvents.init, retrieveSurvey), _this;
+                    return dispatchCustomEvent(formEl, customEvents_init, retrieveSurvey), _this;
                 }
-                return _createClass(Survey, [ {
-                    key: "destroy",
-                    value: function() {
-                        destroy(this.formEl), _get(_getPrototypeOf(Survey.prototype), "destroy", this).call(this);
-                    }
-                } ], [ {
+                return Constructor = Survey, staticProps = [ {
                     key: "setOptions",
                     value: function(optionsObj) {
                         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);
                     }
-                } ]), Survey;
+                } ], (protoProps = [ {
+                    key: "destroy",
+                    value: function() {
+                        var formEl;
+                        (formEl = this.formEl).removeEventListener("fjs.field:validation", validationEnd), 
+                        formEl.removeEventListener("fjs.form:submit", submit), _get(_getPrototypeOf(Survey.prototype), "destroy", this).call(this);
+                    }
+                } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
+                Survey;
             }(Form));
-            Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = version;
+            Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "3.0.0";
         }
     };
 }));

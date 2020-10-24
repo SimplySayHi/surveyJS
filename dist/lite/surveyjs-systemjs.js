@@ -20,11 +20,7 @@ System.register([], (function(exports) {
                     "value" in descriptor && (descriptor.writable = !0), Object.defineProperty(target, descriptor.key, descriptor);
                 }
             }
-            function _createClass(Constructor, protoProps, staticProps) {
-                return protoProps && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
-                Constructor;
-            }
-            var version = "3.0.0", ajaxCall = function() {
+            var ajaxCall = function() {
                 var timeoutTimer, url = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : location.href, options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
                 if (options.headers = new Headers(options.headers), options.timeout > 0) {
                     var controller = new AbortController, signal = controller.signal;
@@ -47,9 +43,7 @@ System.register([], (function(exports) {
                     result: isDOMNode(formEl) || isFormSelector,
                     element: "string" === isString ? document.querySelector(formEl) : formEl
                 };
-            }, customEvents = {
-                init: "sjs:init"
-            }, deepFreeze = function deepFreeze(obj) {
+            }, customEvents_init = "sjs:init", deepFreeze = function deepFreeze(obj) {
                 return Object.getOwnPropertyNames(obj).forEach((function(name) {
                     var prop = obj[name];
                     "object" === _typeof(prop) && null !== prop && deepFreeze(prop);
@@ -83,56 +77,6 @@ System.register([], (function(exports) {
                 return list[0].sort && list.sort((function(a, b) {
                     return a.sort > b.sort;
                 })), list;
-            }, toKebabCase = function() {
-                var string = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "", useAllCaps = arguments.length > 1 && void 0 !== arguments[1] && arguments[1], newString = string.trim().replace(/(([_ ])([a-z]))|(([a-z])?([A-Z]))/g, (function(match, p1, p2, p3, p4, p5, p6) {
-                    return (p3 ? "-" + p3 : (p5 || "") + "-" + p6).toLowerCase();
-                }));
-                return useAllCaps ? newString.toUpperCase() : newString;
-            }, options = {
-                cssClasses: {
-                    checkbox: "form-check-input",
-                    field: "form-control",
-                    file: "form-control-file",
-                    label: "form-check-label",
-                    radio: "form-check-input",
-                    wrapper: {
-                        checkbox: "form-check",
-                        field: "",
-                        radio: "form-check"
-                    }
-                },
-                initAjaxOptions: {
-                    cache: "no-store",
-                    credentials: "same-origin",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json"
-                    },
-                    method: "GET",
-                    mode: "same-origin",
-                    redirect: "follow",
-                    timeout: 0
-                },
-                messages: {
-                    maxChoice: "answers max",
-                    error: "Answer is necessary.",
-                    errorMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
-                },
-                showErrorMessage: !0,
-                templates: {
-                    error: '<div class="surveyjs-error-message">{{errorMessage}}</div>',
-                    input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
-                    label: '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
-                    loading: '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
-                    select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
-                    textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
-                    wrapper: {
-                        field: '<div class="surveyjs-field-wrapper surveyjs-{{answerType}}-wrapper {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
-                        nested: '<div class="surveyjs-field-wrapper surveyjs-nested-wrapper">{{labelTemplate}}<div class="surveyjs-nested-inner">{{nestedFieldsHTML}}</div></div>',
-                        question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper">{{answersHTML}}</div><div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div></div></div>',
-                        related: '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group"><div class="input-group-prepend"><div class="surveyjs-radio-wrapper input-group-text form-check">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
-                    }
-                }
             }, generateOptionTags = function() {
                 var optionsList = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : [];
                 return sortList(optionsList).reduce((function(optionsHTML, opt) {
@@ -147,15 +91,14 @@ System.register([], (function(exports) {
                 })).forEach((function(name) {
                     string += " ".concat(name, '="').concat(answerObj[name], '"');
                 })), answerObj.data && Object.keys(answerObj.data).forEach((function(name) {
-                    string += " data-".concat(toKebabCase(name), '="').concat(answerObj.data[name], '"');
+                    string += " data-".concat(function() {
+                        var useAllCaps = arguments.length > 1 && void 0 !== arguments[1] && arguments[1], newString = (arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "").trim().replace(/(([_ ])([a-z]))|(([a-z])?([A-Z]))/g, (function(match, p1, p2, p3, p4, p5, p6) {
+                            return (p3 ? "-" + p3 : (p5 || "") + "-" + p6).toLowerCase();
+                        }));
+                        return useAllCaps ? newString.toUpperCase() : newString;
+                    }(name), '="').concat(answerObj.data[name], '"');
                 })), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
                 (string += ' id="'.concat(answerCode, '"')).trim();
-            }, getTemplates = function(answerType, templates) {
-                return {
-                    field: templates[answerType] || templates.input,
-                    label: /^(checkbox|nested|radio|related)$/.test(answerType) ? templates.label : "",
-                    wrapper: templates.wrapper[answerType] || templates.wrapper.field
-                };
             }, generateAnswers = function generateAnswers(answersList, extraData, options) {
                 var allAnswersHTML = "", previousType = "";
                 return sortList(answersList).forEach((function(answer, index) {
@@ -196,7 +139,13 @@ System.register([], (function(exports) {
                             }
                             relatedFieldHTML = replaceObjectKeysInString(answerDataRelated, relatedFieldHTML);
                         }
-                        var answerTypeForTemplate = answer.related ? "related" : answer.nested ? "nested" : answerType, templates = getTemplates(answerTypeForTemplate, options.templates), nestedFieldsHTML = "";
+                        var templates = function(answerType, templates) {
+                            return {
+                                field: templates[answerType] || templates.input,
+                                label: /^(checkbox|nested|radio|related)$/.test(answerType) ? templates.label : "",
+                                wrapper: templates.wrapper[answerType] || templates.wrapper.field
+                            };
+                        }(answer.related ? "related" : answer.nested ? "nested" : answerType, options.templates), nestedFieldsHTML = "";
                         answer.nested && (nestedFieldsHTML = generateAnswers(answer.nested, extraData, options));
                         var optionsHtml = "";
                         "select" === answerType && (optionsHtml = generateOptionTags(answersList)), answerHTML = templates.wrapper.replace("{{relatedFieldHTML}}", relatedFieldHTML).replace("{{fieldTemplate}}", templates.field).replace("{{optionsHtml}}", optionsHtml).replace("{{labelTemplate}}", templates.label).replace("{{nestedFieldsHTML}}", nestedFieldsHTML), 
@@ -278,16 +227,63 @@ System.register([], (function(exports) {
                         var loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
                         loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
                     }));
-                    dispatchCustomEvent(formEl, customEvents.init, retrieveSurvey);
+                    dispatchCustomEvent(formEl, customEvents_init, retrieveSurvey);
                 }
-                return _createClass(Survey, null, [ {
+                var Constructor, protoProps, staticProps;
+                return Constructor = Survey, staticProps = [ {
                     key: "setOptions",
                     value: function(optionsObj) {
                         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);
                     }
-                } ]), Survey;
+                } ], (protoProps = null) && _defineProperties(Constructor.prototype, protoProps), 
+                staticProps && _defineProperties(Constructor, staticProps), Survey;
             }());
-            Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = version;
+            Survey.prototype.isInitialized = !1, Survey.prototype.options = {
+                cssClasses: {
+                    checkbox: "form-check-input",
+                    field: "form-control",
+                    file: "form-control-file",
+                    label: "form-check-label",
+                    radio: "form-check-input",
+                    wrapper: {
+                        checkbox: "form-check",
+                        field: "",
+                        radio: "form-check"
+                    }
+                },
+                initAjaxOptions: {
+                    cache: "no-store",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json"
+                    },
+                    method: "GET",
+                    mode: "same-origin",
+                    redirect: "follow",
+                    timeout: 0
+                },
+                messages: {
+                    maxChoice: "answers max",
+                    error: "Answer is necessary.",
+                    errorMultiChoice: "You must choose from {{checksMin}} to {{checksMax}} answers."
+                },
+                showErrorMessage: !0,
+                templates: {
+                    error: '<div class="surveyjs-error-message">{{errorMessage}}</div>',
+                    input: '<input {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-input surveyjs-{{answerType}} {{fieldClasses}}" />',
+                    label: '<label for="{{answerCode}}" class="surveyjs-label {{labelClasses}}">{{labelString}}</label>',
+                    loading: '<div class="surveyjs-loading" data-surveyjs-loading>Loading...</div>',
+                    select: '<select {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}{{addMoreName}}" class="surveyjs-select {{fieldClasses}}">{{optionsHtml}}</select>',
+                    textarea: '<textarea {{fieldAttributes}} name="surveyjs-answer-{{questionNumber}}" class="surveyjs-textarea {{fieldClasses}}"></textarea>',
+                    wrapper: {
+                        field: '<div class="surveyjs-field-wrapper surveyjs-{{answerType}}-wrapper {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
+                        nested: '<div class="surveyjs-field-wrapper surveyjs-nested-wrapper">{{labelTemplate}}<div class="surveyjs-nested-inner">{{nestedFieldsHTML}}</div></div>',
+                        question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper">{{answersHTML}}</div><div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div></div></div>',
+                        related: '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group"><div class="input-group-prepend"><div class="surveyjs-radio-wrapper input-group-text form-check">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
+                    }
+                }
+            }, Survey.prototype.version = "3.0.0";
         }
     };
 }));
