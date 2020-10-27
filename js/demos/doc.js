@@ -18,11 +18,9 @@ var options = {
 
                 question: '<div class="st-item" data-title="#{{questionNumber}}">'+
                             '<div data-question-id="{{questionId}}" data-formjs-question class="surveyjs-question-wrapper">'+
-                                '<div class="surveyjs-question-body">'+
-                                    '<div class="surveyjs-question-text">{{questionText}}</div>'+
-                                    '<div class="surveyjs-answers-wrapper form-group">'+
-                                        '{{answersHTML}}'+
-                                    '</div>'+
+                                '<div class="surveyjs-question-text">{{questionText}}</div>'+
+                                '<div class="surveyjs-answers-wrapper form-group">'+
+                                    '{{answersHTML}}'+
                                 '</div>'+
                             '</div>'+
                         '</div>',

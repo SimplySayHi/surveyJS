@@ -113,20 +113,22 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
     border-radius: 8px 8px 0 0;
 }
 
-.surveyjs-form .surveyjs-body .surveyjs-question-body {
+.surveyjs-form .surveyjs-body .surveyjs-question-wrapper {
     padding: 60px 30px 20px;
 }
 
-.surveyjs-form .surveyjs-question-header {
-    text-transform: uppercase;
-    background-color: #666;
-    color: #fff;
-    border-radius: 8px;
+.surveyjs-form .surveyjs-question-text {
+    text-transform: inherit;
+    background-color: inherit;
+    color: inherit;
+    border-radius: 0;
 }
 
-/* .surveyjs-form .input-group .form-control {
-    width: auto;
-} */
+.surveyjs-form .surveyjs-question-text,
+.surveyjs-form .surveyjs-answers-wrapper,
+.surveyjs-form .surveyjs-question-wrapper {
+    padding: 0;
+}
 
 .surveyjs-footer {
     border-top: 4px dashed #073b4c;

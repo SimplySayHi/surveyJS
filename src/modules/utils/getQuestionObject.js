@@ -1,8 +1,7 @@
 
-export const getQuestionObject = ( data, questionId ) => {
+export const getQuestionObject = ( questions, questionId ) => {
 
-    const questions = data.questions,
-          qLength = questions.length;
+    const qLength = questions.length;
 
     let obj = {};
     

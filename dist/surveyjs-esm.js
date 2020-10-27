@@ -34,8 +34,8 @@ list), webStorage = () => {
     }), {
         isAvailable: isAvailable
     };
-}, getQuestionObject = (data, questionId) => {
-    const questions = data.questions, qLength = questions.length;
+}, getQuestionObject = (questions, questionId) => {
+    const qLength = questions.length;
     let obj = {};
     for (let q = 0; q < qLength; q++) {
         const question = questions[q];
@@ -77,7 +77,7 @@ list), webStorage = () => {
                                 value: fieldEl.value || ""
                             }
                         };
-                        if (!fieldEl.matches("[data-required-from]") && "" !== questionId && !isEmptyObject(getQuestionObject(instance.data, questionId))) {
+                        if (!fieldEl.matches("[data-required-from]") && "" !== questionId && !isEmptyObject(getQuestionObject(instance.data.questions, questionId))) {
                             if ("radio" === type) {
                                 const checkedEl = (fieldEl.closest("form") ? formEl : fieldEl.closest(instance.options.fieldOptions.questionContainer)).querySelector('[name="' + name + '"]:checked');
                                 qaObj.answer.value = checkedEl && checkedEl.value || "", checkedEl && checkedEl.matches("[data-require-more]") && (qaObj.answer.related = formEl.querySelector('[data-required-from="#' + checkedEl.id + '"]').value);
@@ -120,13 +120,12 @@ list), webStorage = () => {
         wrapper: {
             field: '<div class="surveyjs-field-wrapper surveyjs-{{answerType}}-wrapper {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
             nested: '<div class="surveyjs-field-wrapper surveyjs-nested-wrapper">{{labelTemplate}}<div class="surveyjs-nested-inner">{{nestedFieldsHTML}}</div></div>',
-            question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper">{{answersHTML}}</div><div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div></div></div>',
+            question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper">{{answersHTML}}</div><div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div></div>',
             related: '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group"><div class="input-group-prepend"><div class="surveyjs-radio-wrapper input-group-text form-check">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
         }
     },
     useWebStorage: !0
 }, internals = {
-    storageArray: [],
     storageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]"
 };
 
@@ -137,23 +136,20 @@ function submit(event) {
     });
 }
 
-const getAnswerIndexInWebStorage = (internals, fieldName, multiChoiceValue = "") => {
-    const wsSurvey = sessionStorage.getObject(internals.storageName);
-    if (wsSurvey) {
-        const wsSurveyLength = wsSurvey.length;
-        for (let ws = 0; ws < wsSurveyLength; ws++) {
-            const lsItem = wsSurvey[ws];
-            if (lsItem.name === fieldName) {
-                if (multiChoiceValue && lsItem.value !== multiChoiceValue) continue;
-                return ws;
-            }
+const getAnswerIndex = (list, fieldName, multiChoiceValue = "") => {
+    const listLength = list.length;
+    for (let item = 0; item < listLength; item++) {
+        const lsItem = list[item];
+        if (lsItem.name === fieldName) {
+            if (multiChoiceValue && lsItem.value !== multiChoiceValue) continue;
+            return item;
         }
     }
     return -1;
 };
 
 function validationEnd(event) {
-    const fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
+    const fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, options = instance.options, errorsWrapper = fieldEl.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), isFormSubmitting = fieldEl.closest("form").classList.contains(options.formOptions.cssClasses.submit), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data.questions, questionId);
     if (isEmptyObject(questionObj)) return !0;
     if (errorsWrapper && errors && isPlainObject(questionObj.errorMessage)) {
         let errorsList = Object.keys(errors);
@@ -164,38 +160,40 @@ function validationEnd(event) {
         }
         const errorsHTML = errorsList.reduce((accHTML, name) => {
             const errorMessage = questionObj.errorMessage[name] || "";
-            return accHTML + (errorMessage ? instance.options.templates.error.replace("{{errorMessage}}", errorMessage) : "");
+            return accHTML + (errorMessage ? options.templates.error.replace("{{errorMessage}}", errorMessage) : "");
         }, "");
         errorsWrapper.innerHTML = errorsHTML;
     }
     var array, from, to;
-    if (instance.options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
-        const internals = instance.internals, fieldValue = fieldEl.value, isRequiredFrom = fieldEl.matches("[data-required-from]"), isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), reqMoreEl = isRequiredFrom ? document.querySelector(fieldEl.getAttribute("data-required-from")) : null, inArrayPos = getAnswerIndexInWebStorage(internals, fieldEl.name, !!isMultiChoice && fieldValue), inArrayRequireMorePos = getAnswerIndexInWebStorage(internals, fieldEl.name + "-more");
-        let storageArray = internals.storageArray;
-        if (isRequireMore || isRequiredFrom || -1 === inArrayRequireMorePos || storageArray.splice(inArrayRequireMorePos, 1), 
-        -1 !== inArrayPos) isMultiChoice ? fieldEl.checked || storageArray[inArrayPos].value !== fieldValue ? storageArray.push({
-            name: fieldEl.name,
-            value: fieldValue
-        }) : storageArray.splice(inArrayPos, 1) : "" !== fieldValue ? storageArray[inArrayPos].value = fieldValue : storageArray.splice(inArrayPos, 1); else if ("" !== fieldValue) {
-            if (isRequiredFrom && "" !== fieldValue) {
-                const oldFieldNamePos = getAnswerIndexInWebStorage(internals, reqMoreEl.name);
-                -1 !== oldFieldNamePos && storageArray.splice(oldFieldNamePos, 1), storageArray.push({
+    if (!isFormSubmitting && options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
+        const storageName = instance.internals.storageName;
+        let storageArray = sessionStorage.getObject(storageName) || [];
+        const name = fieldEl.name, value = fieldEl.value, isRequiredFrom = fieldEl.matches("[data-required-from]"), isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), reqMoreEl = isRequiredFrom ? document.querySelector(fieldEl.getAttribute("data-required-from")) : null, inArrayRequireMorePos = getAnswerIndex(storageArray, name + "-more");
+        !isRequireMore && !isRequiredFrom && inArrayRequireMorePos >= 0 && storageArray.splice(inArrayRequireMorePos, 1);
+        const inArrayPos = getAnswerIndex(storageArray, name, !!isMultiChoice && value);
+        if (inArrayPos >= 0) storageArray.splice(inArrayPos, 1), (isMultiChoice && fieldEl.checked || !isMultiChoice && "" !== value) && storageArray.push({
+            name: name,
+            value: value
+        }); else if ("" !== value) {
+            if (isRequiredFrom && "" !== value) {
+                const reqMorePos = getAnswerIndex(storageArray, reqMoreEl.name);
+                reqMorePos >= 0 && storageArray.splice(reqMorePos, 1), storageArray.push({
                     name: reqMoreEl.name,
                     value: reqMoreEl.value
                 });
             }
             if (storageArray.push({
-                name: fieldEl.name,
-                value: fieldValue
+                name: name,
+                value: value
             }), isRequireMore) {
-                const elReqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
+                const reqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
                 storageArray.push({
-                    name: elReqFromEl.name,
-                    value: elReqFromEl.value
+                    name: reqFromEl.name,
+                    value: reqFromEl.value
                 });
             }
         }
-        sessionStorage.setObject(internals.storageName, storageArray);
+        sessionStorage.setObject(storageName, storageArray);
     }
     !questionObj.required || fieldEl.required || fieldEl.matches("[data-required-from]") || (fieldEl.required = !0, 
     instance.validateField(fieldEl));
@@ -346,7 +344,7 @@ class Survey extends Form {
                 const WS = sessionStorage.getObject(internals.storageName);
                 if (WS) {
                     const surveyContEl = formEl.closest("[data-surveyjs-wrapper]");
-                    internals.storageArray = WS, WS.forEach(item => {
+                    WS.forEach(item => {
                         const fieldFirst = surveyContEl.querySelector('[name="' + item.name + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.name + '"][value="' + item.value + '"]') : fieldFirst;
                         isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
                     });

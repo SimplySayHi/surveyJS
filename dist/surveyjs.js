@@ -143,8 +143,8 @@ var Survey = function(Form) {
         }), {
             isAvailable: isAvailable
         };
-    }, getQuestionObject = function(data, questionId) {
-        for (var questions = data.questions, qLength = questions.length, obj = {}, q = 0; q < qLength; q++) {
+    }, getQuestionObject = function(questions, questionId) {
+        for (var qLength = questions.length, obj = {}, q = 0; q < qLength; q++) {
             var question = questions[q];
             if (question.id == questionId) {
                 obj = question;
@@ -183,7 +183,7 @@ var Survey = function(Form) {
                                         value: fieldEl.value || ""
                                     }
                                 };
-                                if (!fieldEl.matches("[data-required-from]") && "" !== questionId && !isEmptyObject(getQuestionObject(instance.data, questionId))) {
+                                if (!fieldEl.matches("[data-required-from]") && "" !== questionId && !isEmptyObject(getQuestionObject(instance.data.questions, questionId))) {
                                     if ("radio" === type) {
                                         var checkedEl = (fieldEl.closest("form") ? formEl : fieldEl.closest(instance.options.fieldOptions.questionContainer)).querySelector('[name="' + name + '"]:checked');
                                         qaObj.answer.value = checkedEl && checkedEl.value || "", checkedEl && checkedEl.matches("[data-require-more]") && (qaObj.answer.related = formEl.querySelector('[data-required-from="#' + checkedEl.id + '"]').value);
@@ -227,13 +227,12 @@ var Survey = function(Form) {
             wrapper: {
                 field: '<div class="surveyjs-field-wrapper surveyjs-{{answerType}}-wrapper {{wrapperClasses}}">{{fieldTemplate}}{{labelTemplate}}</div>',
                 nested: '<div class="surveyjs-field-wrapper surveyjs-nested-wrapper">{{labelTemplate}}<div class="surveyjs-nested-inner">{{nestedFieldsHTML}}</div></div>',
-                question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-body"><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper">{{answersHTML}}</div><div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div></div></div>',
+                question: '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question><div class="surveyjs-question-text">{{questionText}}</div><div class="surveyjs-answers-wrapper">{{answersHTML}}</div><div class="surveyjs-errors-wrapper" data-surveyjs-errors>{{errorTemplates}}</div></div>',
                 related: '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group"><div class="input-group-prepend"><div class="surveyjs-radio-wrapper input-group-text form-check">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
             }
         },
         useWebStorage: !0
     }, internals = {
-        storageArray: [],
         storageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]"
     };
     function submit(event) {
@@ -242,19 +241,18 @@ var Survey = function(Form) {
             self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
         }));
     }
-    var getAnswerIndexInWebStorage = function(internals, fieldName) {
-        var multiChoiceValue = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : "", wsSurvey = sessionStorage.getObject(internals.storageName);
-        if (wsSurvey) for (var wsSurveyLength = wsSurvey.length, ws = 0; ws < wsSurveyLength; ws++) {
-            var lsItem = wsSurvey[ws];
+    var getAnswerIndex = function(list, fieldName) {
+        for (var multiChoiceValue = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : "", listLength = list.length, item = 0; item < listLength; item++) {
+            var lsItem = list[item];
             if (lsItem.name === fieldName) {
                 if (multiChoiceValue && lsItem.value !== multiChoiceValue) continue;
-                return ws;
+                return item;
             }
         }
         return -1;
     };
     function validationEnd(event) {
-        var array, from, to, fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, errorsWrapper = fieldEl.closest(instance.options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data, questionId);
+        var array, from, to, fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, options = instance.options, errorsWrapper = fieldEl.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), isFormSubmitting = fieldEl.closest("form").classList.contains(options.formOptions.cssClasses.submit), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data.questions, questionId);
         if (isEmptyObject(questionObj)) return !0;
         if (errorsWrapper && errors && isPlainObject(questionObj.errorMessage)) {
             var errorsList = Object.keys(errors);
@@ -265,36 +263,37 @@ var Survey = function(Form) {
             }
             var errorsHTML = errorsList.reduce((function(accHTML, name) {
                 var errorMessage = questionObj.errorMessage[name] || "";
-                return accHTML + (errorMessage ? instance.options.templates.error.replace("{{errorMessage}}", errorMessage) : "");
+                return accHTML + (errorMessage ? options.templates.error.replace("{{errorMessage}}", errorMessage) : "");
             }), "");
             errorsWrapper.innerHTML = errorsHTML;
         }
-        if (instance.options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
-            var internals = instance.internals, fieldValue = fieldEl.value, isRequiredFrom = fieldEl.matches("[data-required-from]"), isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), reqMoreEl = isRequiredFrom ? document.querySelector(fieldEl.getAttribute("data-required-from")) : null, inArrayPos = getAnswerIndexInWebStorage(internals, fieldEl.name, !!isMultiChoice && fieldValue), inArrayRequireMorePos = getAnswerIndexInWebStorage(internals, fieldEl.name + "-more"), storageArray = internals.storageArray;
-            if (isRequireMore || isRequiredFrom || -1 === inArrayRequireMorePos || storageArray.splice(inArrayRequireMorePos, 1), 
-            -1 !== inArrayPos) isMultiChoice ? fieldEl.checked || storageArray[inArrayPos].value !== fieldValue ? storageArray.push({
-                name: fieldEl.name,
-                value: fieldValue
-            }) : storageArray.splice(inArrayPos, 1) : "" !== fieldValue ? storageArray[inArrayPos].value = fieldValue : storageArray.splice(inArrayPos, 1); else if ("" !== fieldValue) {
-                if (isRequiredFrom && "" !== fieldValue) {
-                    var oldFieldNamePos = getAnswerIndexInWebStorage(internals, reqMoreEl.name);
-                    -1 !== oldFieldNamePos && storageArray.splice(oldFieldNamePos, 1), storageArray.push({
+        if (!isFormSubmitting && options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
+            var storageName = instance.internals.storageName, storageArray = sessionStorage.getObject(storageName) || [], name = fieldEl.name, value = fieldEl.value, isRequiredFrom = fieldEl.matches("[data-required-from]"), isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), reqMoreEl = isRequiredFrom ? document.querySelector(fieldEl.getAttribute("data-required-from")) : null, inArrayRequireMorePos = getAnswerIndex(storageArray, name + "-more");
+            !isRequireMore && !isRequiredFrom && inArrayRequireMorePos >= 0 && storageArray.splice(inArrayRequireMorePos, 1);
+            var inArrayPos = getAnswerIndex(storageArray, name, !!isMultiChoice && value);
+            if (inArrayPos >= 0) storageArray.splice(inArrayPos, 1), (isMultiChoice && fieldEl.checked || !isMultiChoice && "" !== value) && storageArray.push({
+                name: name,
+                value: value
+            }); else if ("" !== value) {
+                if (isRequiredFrom && "" !== value) {
+                    var reqMorePos = getAnswerIndex(storageArray, reqMoreEl.name);
+                    reqMorePos >= 0 && storageArray.splice(reqMorePos, 1), storageArray.push({
                         name: reqMoreEl.name,
                         value: reqMoreEl.value
                     });
                 }
                 if (storageArray.push({
-                    name: fieldEl.name,
-                    value: fieldValue
+                    name: name,
+                    value: value
                 }), isRequireMore) {
-                    var elReqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
+                    var reqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
                     storageArray.push({
-                        name: elReqFromEl.name,
-                        value: elReqFromEl.value
+                        name: reqFromEl.name,
+                        value: reqFromEl.value
                     });
                 }
             }
-            sessionStorage.setObject(internals.storageName, storageArray);
+            sessionStorage.setObject(storageName, storageArray);
         }
         !questionObj.required || fieldEl.required || fieldEl.matches("[data-required-from]") || (fieldEl.required = !0, 
         instance.validateField(fieldEl));
@@ -431,7 +430,7 @@ var Survey = function(Form) {
         var WS = sessionStorage.getObject(internals.storageName);
         if (WS) {
             var surveyContEl = formEl.closest("[data-surveyjs-wrapper]");
-            internals.storageArray = WS, WS.forEach((function(item) {
+            WS.forEach((function(item) {
                 var fieldFirst = surveyContEl.querySelector('[name="' + item.name + '"]'), isRadioOrCheckbox = fieldFirst.matches('[type="radio"], [type="checkbox"]'), fieldEl = isRadioOrCheckbox ? surveyContEl.querySelector('[name="' + item.name + '"][value="' + item.value + '"]') : fieldFirst;
                 isRadioOrCheckbox ? fieldEl.checked = !0 : fieldEl.value = item.value;
             }));

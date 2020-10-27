@@ -24,13 +24,15 @@
     margin: 0;
 }
 
-.surveyjs-form .surveyjs-question-header,
-.surveyjs-form .surveyjs-question-body {
-    padding: 15px;
+.surveyjs-form .surveyjs-question-wrapper {
+    padding-bottom: 30px;
 }
 
-.surveyjs-form .surveyjs-question-header {
-    text-transform: uppercase;
+.surveyjs-form .surveyjs-question-text,
+.surveyjs-form .surveyjs-answers-wrapper {
+    padding: 15px;
+}
+.surveyjs-form .surveyjs-question-text {
     background-color: #06d6a0;
     color: #fff;
     border-radius: 8px;
@@ -87,6 +89,10 @@
 .surveyjs-wrapper .has-error .surveyjs-errors-wrapper,
 .surveyjs-wrapper.surveyjs-init-success .surveyjs-footer {
     display: block;
+}
+
+.surveyjs-wrapper .surveyjs-errors-wrapper {
+    padding: 0 15px;
 }
 
 /* SURVEY WITH CUSTOM INPUTS */

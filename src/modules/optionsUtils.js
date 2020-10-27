@@ -48,7 +48,7 @@ export const optionsUtils = {
                 if(
                     fieldEl.matches('[data-required-from]') || 
                     questionId === '' || 
-                    isEmptyObject( getQuestionObject(instance.data, questionId) )
+                    isEmptyObject( getQuestionObject(instance.data.questions, questionId) )
                 ){ return; }
 
                 if( type === 'radio' ){
