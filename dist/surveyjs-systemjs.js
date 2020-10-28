@@ -275,23 +275,17 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         name: name,
                         value: value
                     }); else if ("" !== value) {
-                        if (isRequiredFrom && "" !== value) {
+                        if (isRequiredFrom) {
                             var reqMorePos = getAnswerIndex(storageArray, reqMoreEl.name);
                             reqMorePos >= 0 && storageArray.splice(reqMorePos, 1), storageArray.push({
                                 name: reqMoreEl.name,
                                 value: reqMoreEl.value
                             });
                         }
-                        if (storageArray.push({
+                        storageArray.push({
                             name: name,
                             value: value
-                        }), isRequireMore) {
-                            var reqFromEl = fieldEl.closest("form").querySelector('[data-required-from="#' + fieldEl.id + '"]');
-                            storageArray.push({
-                                name: reqFromEl.name,
-                                value: reqFromEl.value
-                            });
-                        }
+                        });
                     }
                     sessionStorage.setObject(storageName, storageArray);
                 }

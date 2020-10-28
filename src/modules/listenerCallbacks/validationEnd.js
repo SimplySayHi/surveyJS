@@ -59,21 +59,15 @@ export function validationEnd( event ){
                 // ADD ITEM TO LS
                 storageArray.push( { name, value } );
             }
-        } else {
-            if( value !== '' ){
-                if( isRequiredFrom && value !== '' ){
-                    const reqMorePos = getAnswerIndex( storageArray, reqMoreEl.name );
-                    if( reqMorePos >= 0 ){
-                        storageArray.splice(reqMorePos, 1);
-                    }
-                    storageArray.push( { name: reqMoreEl.name, value: reqMoreEl.value } );
+        } else if( value !== '' ){
+            if( isRequiredFrom ){
+                const reqMorePos = getAnswerIndex( storageArray, reqMoreEl.name );
+                if( reqMorePos >= 0 ){
+                    storageArray.splice(reqMorePos, 1);
                 }
-                storageArray.push( { name, value } );
-                if( isRequireMore ){
-                    const reqFromEl = fieldEl.closest('form').querySelector( '[data-required-from="#' + fieldEl.id + '"]' );
-                    storageArray.push( { name: reqFromEl.name, value: reqFromEl.value } );
-                }
+                storageArray.push( { name: reqMoreEl.name, value: reqMoreEl.value } );
             }
+            storageArray.push( { name, value } );
         }
 
         sessionStorage.setObject( storageName, storageArray );
