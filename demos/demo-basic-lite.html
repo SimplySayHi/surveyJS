@@ -119,8 +119,17 @@
 <code class="language-js">// FULL CODE: /js/demos/demo-basic-lite.js
 const formEl = document.querySelector('[data-surveyjs-form]');
 const options = { url: '../json/survey.json' };
+
+formEl.addEventListener('fjs.form:submit', event => {
+    event.data
+        .then(response => {
+            // FORM VALIDATION AND SUBMIT ARE UP TO YOU :)
+        })
+        .catch(error => {...})
+        .finally(() => {...});
+});
+
 const mySurvey = new Survey( formEl, options );
-// FORM VALIDATION AND SUBMIT ARE UP TO YOU :)
 </code></pre>
                             </div>
                         </div>
