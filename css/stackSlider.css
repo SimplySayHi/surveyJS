@@ -15,14 +15,7 @@
 	position: absolute;
 	height: 10px;
 	bottom: 0px;
-	background-image: url(../images/gradient.png);
-	background-image: -webkit-linear-gradient(top, #fff 50%, #e7ae38 50%);
-	background-image: -moz-linear-gradient(top, #fff 50%, #e7ae38 50%);
-	background-image: -o-linear-gradient(top, #fff 50%, #e7ae38 50%);
-	background-image: -ms-linear-gradient(top, #fff 50%, #e7ae38 50%);
 	background-image: linear-gradient(to bottom, #fff 50%, #e7ae38 50%);
-	-webkit-background-size: 5px 5px;
-	-moz-background-size: 5px 5px;
 	background-size: 5px 5px;
 	background-position: bottom center;
 }
@@ -35,10 +28,6 @@
 	bottom: -10px;
 	height: 20px;
 	z-index: -1;
-	background: -webkit-radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
-	background: -moz-radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
-	background: -o-radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
-	background: -ms-radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
 	background: radial-gradient(center, ellipse cover, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0) 60%);
 }
 
@@ -83,9 +72,6 @@
 
 .st-wrapper .st-container {
     position: relative;
-    -webkit-transition: all 0.4s linear;
-    -moz-transition: all 0.4s linear;
-    -o-transition: all 0.4s linear;
     transition: all 0.4s linear;
     z-index: 1;
 }
@@ -114,8 +100,6 @@
 	font-style: normal;
 	speak: none;
 	font-weight: normal;
-	line-height: 1;
-	font-size: 20px;
 	line-height: 40px;
 	text-align: center;
 	-webkit-font-smoothing: antialiased;
@@ -142,33 +126,10 @@
 }
 
 .st-wrapper .st-item {
-    -webkit-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
-    -moz-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
-    -o-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
-    -ms-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
     transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
-    
-    -webkit-transform-origin: 50% 0;
-    -moz-transform-origin: 50% 0;
-    -ms-transform-origin: 50% 0;
-    -o-transform-origin: 50% 0;
     transform-origin: 50% 0;
-    
-    -webkit-transform-style : preserve-3d;
-	-moz-transform-style : preserve-3d;
-	-o-transform-style : preserve-3d;
-	-ms-transform-style : preserve-3d;
 	transform-style : preserve-3d;
-    
-	-webkit-backface-visibility: hidden;
-	-moz-backface-visibility: hidden;
-	-o-backface-visibility: hidden;
-	-ms-backface-visibility: hidden;
 	backface-visibility: hidden;
-    
-    -webkit-transition: all 0.4s linear;
-    -moz-transition: all 0.4s linear;
-    -o-transition: all 0.4s linear;
     transition: all 0.4s linear;
     
     position: absolute;
@@ -183,29 +144,17 @@
 
 .st-wrapper .st-item.st-center {
     opacity: 1;
-    -webkit-transform: rotate(0deg) translateX(-50%) rotateX(0deg);
-    -moz-transform: rotate(0deg) translateX(-50%) rotateX(0deg);
-    -o-transform: rotate(0deg) translateX(-50%) rotateX(0deg);
-    -ms-transform: rotate(0deg) translateX(-50%) rotateX(0deg);
     transform: rotate(0deg) translateX(-50%) rotateX(0deg);
     z-index: 10;
 }
 
 .st-wrapper .st-item.st-leftflow-in {
-     -webkit-transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
-    -moz-transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
-    -o-transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
-    -ms-transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
     transform: rotate(-90deg) translateX(-50%) rotateX(0deg);
     pointer-events: none;
     opacity: 0;
 }
 
 .st-wrapper .st-item.st-rightflow-in {
-    -webkit-transform: rotate(90deg) translateX(-50%) rotateX(0deg);
-    -moz-transform: rotate(90deg) translateX(-50%) rotateX(0deg);
-    -o-transform: rotate(90deg) translateX(-50%) rotateX(0deg);
-    -ms-transform: rotate(90deg) translateX(-50%) rotateX(0deg);
     transform: rotate(90deg) translateX(-50%) rotateX(0deg);
     pointer-events: none;
     opacity: 0;
@@ -213,10 +162,6 @@
 
 .st-wrapper .st-item.st-left,
 .st-wrapper .st-item.st-leftflow {
-    -webkit-transform: rotate(90deg) translateX(-50%) rotateX(90deg);
-    -moz-transform: rotate(90deg) translateX(-50%) rotateX(90deg);
-    -o-transform: rotate(90deg) translateX(-50%) rotateX(90deg);
-    -ms-transform: rotate(90deg) translateX(-50%) rotateX(90deg);
     transform: rotate(90deg) translateX(-50%) rotateX(90deg);
     pointer-events: none;
     opacity: 0;
@@ -224,10 +169,6 @@
 
 .st-wrapper .st-item.st-right,
 .st-wrapper .st-item.st-rightflow {
-    -webkit-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
-    -moz-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
-    -o-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
-    -ms-transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
     transform: rotate(-90deg) translateX(-50%) rotateX(90deg);
     pointer-events: none;
     opacity: 0;
@@ -238,60 +179,34 @@
     transition-duration: 0.001s !important;
 }
 
-/*.st-wrapper .st-item.st-rightflow,
-.st-wrapper .st-item.st-leftflow,*/
 .st-wrapper .st-item.st-center {
 	opacity: 1;
 }
 
 .surveyjs-cards .st-wrapper .st-item {
-    -webkit-transform: translateX(10%) rotate(7deg) rotateY(90deg);
-    -moz-transform: translateX(10%) rotate(7deg) rotateY(90deg);
-    -o-transform: translateX(10%) rotate(7deg) rotateY(90deg);
-    -ms-transform: translateX(10%) rotate(7deg) rotateY(90deg);
     transform: translateX(10%) rotate(7deg) rotateY(90deg);
-    
-    -webkit-transition: opacity 0.45s linear, -webkit-transform 0.3s linear;
-    -moz-transition: opacity 0.45s linear, -moz-transform 0.3s linear;
-    -o-transition: opacity 0.45s linear, -o-transform 0.3s linear;
     transition: opacity 0.45s linear, transform 0.3s linear;
 }
 
 .surveyjs-cards .st-wrapper .st-item.st-center {
     transition-delay: 0.15s;
     opacity: 1;
-    -webkit-transform: translateX(-50%) rotate(0deg) rotateY(0deg);
-    -moz-transform: translateX(-50%) rotate(0deg) rotateY(0deg);
-    -o-transform: translateX(-50%) rotate(0deg) rotateY(0deg);
-    -ms-transform: translateX(-50%) rotate(0deg) rotateY(0deg);
     transform: translateX(-50%) rotate(0deg) rotateY(0deg);
 }
 
 .surveyjs-cards .st-wrapper .st-item.st-leftflow-in {
-    -webkit-transform: translateX(10%) rotate(7deg) rotateY(0deg);
-    -moz-transform: translateX(10%) rotate(7deg) rotateY(0deg);
-    -o-transform: translateX(10%) rotate(7deg) rotateY(0deg);
-    -ms-transform: translateX(10%) rotate(7deg) rotateY(0deg);
     transform: translateX(10%) rotate(7deg) rotateY(0deg);
     pointer-events: none;
     opacity: 0;
 }
 
 .surveyjs-cards .st-wrapper .st-item.st-rightflow-in {
-    -webkit-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
-    -moz-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
-    -o-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
-    -ms-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
     transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
     pointer-events: none;
     opacity: 0;
 }
 
 .surveyjs-cards .st-wrapper .st-item.st-leftflow {
-    -webkit-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
-    -moz-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
-    -o-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
-    -ms-transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
     transform: translateX(-110%) rotate(-7deg) rotateY(0deg);
     pointer-events: none;
     opacity: 0;
@@ -299,20 +214,12 @@
 
 .surveyjs-cards .st-wrapper .st-item.st-left {
     transition-duration: 0.15s;
-    -webkit-transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
-    -moz-transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
-    -o-transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
-    -ms-transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
     transform: translateX(-110%) rotate(-7deg) rotateY(90deg);
     pointer-events: none;
     opacity: 0;
 }
 
 .surveyjs-cards .st-wrapper .st-item.st-rightflow {
-    -webkit-transform: translateX(10%) rotate(7deg) rotateY(0deg);
-    -moz-transform: translateX(10%) rotate(7deg) rotateY(0deg);
-    -o-transform: translateX(10%) rotate(7deg) rotateY(0deg);
-    -ms-transform: translateX(10%) rotate(7deg) rotateY(0deg);
     transform: translateX(10%) rotate(7deg) rotateY(0deg);
     pointer-events: none;
     opacity: 0;
@@ -320,10 +227,6 @@
 
 .surveyjs-cards .st-wrapper .st-item.st-right {
     transition-duration: 0.15s;
-    -webkit-transform: translateX(10%) rotate(7deg) rotateY(90deg);
-    -moz-transform: translateX(10%) rotate(7deg) rotateY(90deg);
-    -o-transform: translateX(10%) rotate(7deg) rotateY(90deg);
-    -ms-transform: translateX(10%) rotate(7deg) rotateY(90deg);
     transform: translateX(10%) rotate(7deg) rotateY(90deg);
     pointer-events: none;
     opacity: 0;

@@ -152,9 +152,3 @@ html, body, .input-group-addon, .input-group-prepend, .form-control {
 .modal-body p {
     margin-bottom: 0;
 }
-
-/* @media (max-width: 600px){
-    .surveyjs-form .input-group .form-control {
-        width: 100%;
-    }
-} */
