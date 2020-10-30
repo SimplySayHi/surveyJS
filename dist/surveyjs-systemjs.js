@@ -252,7 +252,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 return -1;
             };
             function validationEnd(event) {
-                var array, from, to, fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, options = instance.options, errorsWrapper = fieldEl.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), isFormSubmitting = fieldEl.closest("form").classList.contains(options.formOptions.cssClasses.submit), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data.questions, questionId);
+                var array, from, to, fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, options = instance.options, errorsWrapper = fieldEl.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data.questions, questionId);
                 if (isEmptyObject(questionObj)) return !0;
                 if (errorsWrapper && errors && isPlainObject(questionObj.errorMessage)) {
                     var errorsList = Object.keys(errors);
@@ -267,7 +267,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     }), "");
                     errorsWrapper.innerHTML = errorsHTML;
                 }
-                if (!isFormSubmitting && options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
+                if (!event.data.isCheckingForm && options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
                     var storageName = instance.internals.storageName, storageArray = sessionStorage.getObject(storageName) || [], name = fieldEl.name, value = fieldEl.value, isRequiredFrom = fieldEl.matches("[data-required-from]"), isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), reqMoreEl = isRequiredFrom ? document.querySelector(fieldEl.getAttribute("data-required-from")) : null, inArrayRequireMorePos = getAnswerIndex(storageArray, name + "-more");
                     !isRequireMore && !isRequiredFrom && inArrayRequireMorePos >= 0 && storageArray.splice(inArrayRequireMorePos, 1);
                     var inArrayPos = getAnswerIndex(storageArray, name, !!isMultiChoice && value);

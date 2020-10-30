@@ -149,7 +149,7 @@ const getAnswerIndex = (list, fieldName, multiChoiceValue = "") => {
 };
 
 function validationEnd(event) {
-    const fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, options = instance.options, errorsWrapper = fieldEl.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), isFormSubmitting = fieldEl.closest("form").classList.contains(options.formOptions.cssClasses.submit), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data.questions, questionId);
+    const fieldEl = event.data.fieldEl, errors = event.data.errors, instance = fieldEl.closest("form").formjs, options = instance.options, errorsWrapper = fieldEl.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId(fieldEl), questionObj = getQuestionObject(instance.data.questions, questionId);
     if (isEmptyObject(questionObj)) return !0;
     if (errorsWrapper && errors && isPlainObject(questionObj.errorMessage)) {
         let errorsList = Object.keys(errors);
@@ -165,7 +165,7 @@ function validationEnd(event) {
         errorsWrapper.innerHTML = errorsHTML;
     }
     var array, from, to;
-    if (!isFormSubmitting && options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
+    if (!event.data.isCheckingForm && options.useWebStorage && !fieldEl.matches("[data-exclude-storage]")) {
         const storageName = instance.internals.storageName;
         let storageArray = sessionStorage.getObject(storageName) || [];
         const name = fieldEl.name, value = fieldEl.value, isRequiredFrom = fieldEl.matches("[data-required-from]"), isMultiChoice = fieldEl.matches("[data-checks]"), isRequireMore = fieldEl.matches("[data-require-more]"), reqMoreEl = isRequiredFrom ? document.querySelector(fieldEl.getAttribute("data-required-from")) : null, inArrayRequireMorePos = getAnswerIndex(storageArray, name + "-more");

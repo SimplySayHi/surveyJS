@@ -9,7 +9,6 @@ export function validationEnd( event ){
     const instance = fieldEl.closest('form').formjs;
     const options = instance.options;
     const errorsWrapper = fieldEl.closest( options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
-    const isFormSubmitting = fieldEl.closest('form').classList.contains( options.formOptions.cssClasses.submit );
     
     const questionId = getQuestionId(fieldEl);
     const questionObj = getQuestionObject(instance.data.questions, questionId);
@@ -34,7 +33,7 @@ export function validationEnd( event ){
     }
 
     // MANAGE ITEMS IN LOCAL STORAGE ( IF AVAILABLE AND ACTIVE )
-    if( !isFormSubmitting && options.useWebStorage && !fieldEl.matches('[data-exclude-storage]') ){
+    if( !event.data.isCheckingForm && options.useWebStorage && !fieldEl.matches('[data-exclude-storage]') ){
         const storageName = instance.internals.storageName;
         let storageArray = sessionStorage.getObject( storageName ) || [];
 

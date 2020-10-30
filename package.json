@@ -39,7 +39,7 @@
         "rollup-plugin-terser": "^7.0.2"
     },
     "peerDependencies": {
-        "formjs-plugin": ">= 4.2.3 < 5"
+        "formjs-plugin": ">= 4.3.0 < 5"
     },
     "customData": {
         "libraryNamespace": "Survey",
