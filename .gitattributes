@@ -1,14 +1,14 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-index.html linguist-documentation
-example-base.html linguist-documentation
-example-1.html linguist-documentation
-example-2.html linguist-documentation
+*.html linguist-documentation
 css/* linguist-documentation
+demos/* linguist-documentation
 fonts/* linguist-documentation
 img/* linguist-documentation
 json/* linguist-documentation
 js/demo.js linguist-documentation
 js/include.js linguist-documentation
+js/prism.js linguist-documentation
+js/demos/* linguist-vendored
 js/vendors/* linguist-vendored
 dist/* linguist-generated=true

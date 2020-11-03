@@ -1,8 +1,10 @@
 css
+demos
 fonts
 js
 json
 *.html
 *.config.js
+*.config.*.js
 *.zip
 .gitattributes
