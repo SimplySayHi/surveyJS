@@ -58,7 +58,7 @@ export const options = {
                                 '</div>'+
                             '</div>',
 
-            question:       '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}" data-formjs-question>'+
+            question:       '<div class="surveyjs-question-wrapper" data-question-id="{{questionId}}">'+
                                 '<div class="surveyjs-question-text">{{questionText}}</div>'+
                                 '<div class="surveyjs-answers-wrapper">'+
                                     '{{answersHTML}}'+
