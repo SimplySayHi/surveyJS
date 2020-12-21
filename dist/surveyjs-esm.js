@@ -1,4 +1,4 @@
-/* surveyJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS v3.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 import Form from "formjs-plugin";
 
 const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
@@ -328,7 +328,12 @@ class Survey extends Form {
                     controller.abort();
                 }, options.timeout);
             }
-            return fetch(url, options).then(response => response.ok ? response.json() : Promise.reject(response)).catch(error => Promise.reject(error)).finally(() => {
+            return fetch(url, options).then(response => {
+                if (!response.ok) throw new Error(response.statusText);
+                return response.json();
+            }).catch(error => {
+                throw new Error(error.message);
+            }).finally(() => {
                 timeoutTimer && window.clearTimeout(timeoutTimer);
             });
         })(optionsObj.url, optionsObj.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : new Promise(resolve => {
@@ -372,6 +377,6 @@ class Survey extends Form {
     }
 }
 
-Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "3.0.0";
+Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "3.0.1";
 
 export default Survey;

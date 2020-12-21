@@ -200,40 +200,7 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Added Lite version
-                            </li>
-                            <li>
-                                Huge refactoring of survey creation and related options
-                            </li>
-                            <li>
-                                Survey class now extends Form class so it inherits all features
-                            </li>
-                            <li>
-                                Updated dependency: formJS v4.3.0+
-                            </li>
-                            <li>
-                                Switched bundler, from Webpack to Rollup and exported lib also as ES &amp; SystemJS Modules
-                            </li>
-                            <li>
-                                Switched "useLocalStorage" with "useWebStorage" option in "options". Now using session storage instead of local storage
-                            </li>
-                            <li>
-                                Removed "hidden-privacy" in JSON data, and added "external": true, to set external questions
-                            </li>
-                            <li>
-                                Removed method "init". It now runs inside instance call and emits event
-                            </li>
-                            <li>
-                                Removed options.fieldOptions.validateOnEvents since it uses formJS default value
-                            </li>
-                            <li>
-                                Removed some props from instance "internals"
-                            </li>
-                            <li>
-                                Removed title and subtitle from JSON data and core functionality ( can be done manually )
-                            </li>
-                            <li>
-                                Minor improvements and bugfixes
+                                Fixed bug on fetch response not ok on ajax call during initalization
                             </li>
                         </ul>
                     </div>
@@ -248,6 +215,49 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">3.0.0</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Added Lite version
+                                    </li>
+                                    <li>
+                                        Huge refactoring of survey creation and related options
+                                    </li>
+                                    <li>
+                                        Survey class now extends Form class so it inherits all features
+                                    </li>
+                                    <li>
+                                        Updated dependency: formJS v4.3.0+
+                                    </li>
+                                    <li>
+                                        Switched bundler, from Webpack to Rollup and exported lib also as ES &amp; SystemJS Modules
+                                    </li>
+                                    <li>
+                                        Switched "useLocalStorage" with "useWebStorage" option in "options". Now using session storage instead of local storage
+                                    </li>
+                                    <li>
+                                        Removed "hidden-privacy" in JSON data, and added "external": true, to set external questions
+                                    </li>
+                                    <li>
+                                        Removed method "init". It now runs inside instance call and emits event
+                                    </li>
+                                    <li>
+                                        Removed options.fieldOptions.validateOnEvents since it uses formJS default value
+                                    </li>
+                                    <li>
+                                        Removed some props from instance "internals"
+                                    </li>
+                                    <li>
+                                        Removed title and subtitle from JSON data and core functionality ( can be done manually )
+                                    </li>
+                                    <li>
+                                        Minor improvements and bugfixes
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">2.0.4</div>
                             <div class="media-body pl-2">

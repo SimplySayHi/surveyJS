@@ -20,12 +20,12 @@ export const ajaxCall = ( url = location.href, options = {} ) => {
     return fetch( url, options )
         .then(response => {
             if( !response.ok ){
-                return Promise.reject(response);
+                throw new Error(response.statusText);
             }
             return response.json();
         })
         .catch(error => {
-            return Promise.reject(error);
+            throw new Error(error.message);
         })
         .finally(() => {
             if( timeoutTimer ){

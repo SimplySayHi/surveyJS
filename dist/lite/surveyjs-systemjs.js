@@ -1,4 +1,4 @@
-/* surveyJS Lite v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS Lite v3.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -29,9 +29,10 @@ System.register([], (function(exports) {
                     }), options.timeout);
                 }
                 return fetch(url, options).then((function(response) {
-                    return response.ok ? response.json() : Promise.reject(response);
+                    if (!response.ok) throw new Error(response.statusText);
+                    return response.json();
                 })).catch((function(error) {
-                    return Promise.reject(error);
+                    throw new Error(error.message);
                 })).finally((function() {
                     timeoutTimer && window.clearTimeout(timeoutTimer);
                 }));
@@ -283,7 +284,7 @@ System.register([], (function(exports) {
                         related: '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group"><div class="input-group-prepend"><div class="surveyjs-radio-wrapper input-group-text form-check">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
                     }
                 }
-            }, Survey.prototype.version = "3.0.0";
+            }, Survey.prototype.version = "3.0.1";
         }
     };
 }));

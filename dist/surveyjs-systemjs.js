@@ -1,4 +1,4 @@
-/* surveyJS v3.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS v3.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 System.register([ "formjs-plugin" ], (function(exports) {
     "use strict";
     var Form;
@@ -83,9 +83,10 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     }), options.timeout);
                 }
                 return fetch(url, options).then((function(response) {
-                    return response.ok ? response.json() : Promise.reject(response);
+                    if (!response.ok) throw new Error(response.statusText);
+                    return response.json();
                 })).catch((function(error) {
-                    return Promise.reject(error);
+                    throw new Error(error.message);
                 })).finally((function() {
                     timeoutTimer && window.clearTimeout(timeoutTimer);
                 }));
@@ -483,7 +484,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
                 Survey;
             }(Form));
-            Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "3.0.0";
+            Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "3.0.1";
         }
     };
 }));
