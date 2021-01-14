@@ -1,4 +1,4 @@
-/* surveyJS v3.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS v3.0.2 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 import Form from "formjs-plugin";
 
 const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
@@ -377,6 +377,6 @@ class Survey extends Form {
     }
 }
 
-Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "3.0.1";
+Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "3.0.2";
 
 export default Survey;

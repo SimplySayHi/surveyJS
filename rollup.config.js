@@ -91,15 +91,15 @@ optionsSYS = {
     plugins: [ nodeResolve(), babel({babelHelpers: 'bundled'}) ]
 },
 
-optionsIIFE = {
+optionsUMD = {
     input: 'src/index.js',
     external: ['formjs-plugin'],
     output: [
 
-        // IIFE TRANSPILED SCRIPT
+        // UMD TRANSPILED SCRIPT
         {
             file: `dist/${libraryFileName}.js`,
-            format: 'iife',
+            format: 'umd',
             name: libraryNamespace,
             sourcemap: false,
             globals: {
@@ -116,10 +116,10 @@ optionsIIFE = {
             ]
         },
 
-        // IIFE TRANSPILED SCRIPT MINIFIED
+        // UMD TRANSPILED SCRIPT MINIFIED
         {
             file: `dist/${libraryFileName}.min.js`,
-            format: 'iife',
+            format: 'umd',
             name: libraryNamespace,
             sourcemap: true,
             globals: {
@@ -141,4 +141,4 @@ optionsIIFE = {
 
 ;
 
-export default [ optionsESM, optionsSYS, optionsIIFE ]
+export default [ optionsESM, optionsSYS, optionsUMD ]

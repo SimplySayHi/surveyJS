@@ -184,7 +184,7 @@
             </ul>
             <hr />
             <p>
-                <span class="text-yellow">*</span> for compatibility with IE 10/11, old versions of Edge and/or other old browsers you need to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
+                <span class="text-yellow">*</span> for compatibility with IE, old versions of Edge and/or other old browsers you may need to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
                 <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code> <code>Event</code>
             </p>
             <pre>
@@ -200,7 +200,7 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Fixed bug on fetch response not ok on ajax call during initalization
+                                Exported main versions as UMD instead of IIFE for better environments compatibility
                             </li>
                         </ul>
                     </div>
@@ -215,6 +215,16 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">3.0.1</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Fixed bug on fetch response not ok on ajax call during initalization
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">3.0.0</div>
                             <div class="media-body pl-2">

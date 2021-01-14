@@ -1,5 +1,7 @@
-/* surveyJS v3.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
-var Survey = function(Form) {
+/* surveyJS v3.0.2 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+!function(global, factory) {
+    "object" == typeof exports && "undefined" != typeof module ? module.exports = factory(require("formjs-plugin")) : "function" == typeof define && define.amd ? define([ "formjs-plugin" ], factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Survey = factory(global.Form);
+}(this, (function(Form) {
     "use strict";
     function _interopDefaultLegacy(e) {
         return e && "object" == typeof e && "default" in e ? e : {
@@ -485,5 +487,5 @@ var Survey = function(Form) {
         Survey;
     }(Form__default.default);
     return Survey.prototype.isInitialized = !1, Survey.prototype.options = options, 
-    Survey.prototype.version = "3.0.1", Survey;
-}(Form);
+    Survey.prototype.version = "3.0.2", Survey;
+}));

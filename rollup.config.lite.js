@@ -88,14 +88,14 @@ optionsSYS = {
     plugins: [ resolve(), babel({babelHelpers: 'bundled'}) ]
 },
 
-optionsIIFE = {
+optionsUMD = {
     input: 'src/index-lite.js',
     output: [
 
-        // IIFE TRANSPILED SCRIPT
+        // UMD TRANSPILED SCRIPT
         {
             file: `dist/lite/${libraryFileName}.js`,
-            format: 'iife',
+            format: 'umd',
             name: libraryNamespace,
             sourcemap: false,
             plugins: [
@@ -109,10 +109,10 @@ optionsIIFE = {
             ]
         },
 
-        // IIFE TRANSPILED SCRIPT MINIFIED
+        // UMD TRANSPILED SCRIPT MINIFIED
         {
             file: `dist/lite/${libraryFileName}.min.js`,
-            format: 'iife',
+            format: 'umd',
             name: libraryNamespace,
             sourcemap: true,
             plugins: [
@@ -131,4 +131,4 @@ optionsIIFE = {
 
 ;
 
-export default [ optionsESM, optionsSYS, optionsIIFE ]
+export default [ optionsESM, optionsSYS, optionsUMD ]
