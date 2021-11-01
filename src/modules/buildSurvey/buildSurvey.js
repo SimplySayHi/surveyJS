@@ -1,15 +1,15 @@
 
 import { generateQAcode } from './generateQAcode';
 
-export const buildSurvey = ( data, formEl, options ) => {
+export const buildSurvey = ( data, $form, options ) => {
     
     const qaHtmlAll = generateQAcode( data.questions, data.id, options );
-    formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforeend', qaHtmlAll );
+    $form.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforeend', qaHtmlAll );
 
     // MANAGE EXTERNAL QUESTION
     const extQuestions = data.questions.filter(obj => obj.external);
     if( extQuestions.length > 0 ){
-        const surveyWrapperEl = formEl.closest('[data-surveyjs-wrapper]');
+        const surveyWrapperEl = $form.closest('[data-surveyjs-wrapper]');
         extQuestions.forEach((question, qIndex) => {
 
             const externalCont = surveyWrapperEl.querySelector('[data-surveyjs-external="'+ (qIndex+1) +'"]');

@@ -1,9 +1,9 @@
 
 import { submit, validationEnd } from './listenerCallbacks';
 
-export const destroy = formEl => {
+export const destroy = $form => {
 
-    formEl.removeEventListener('fjs.field:validation', validationEnd);
-    formEl.removeEventListener('fjs.form:submit', submit);
+    $form.removeEventListener('fjs.field:validation', validationEnd);
+    $form.removeEventListener('fjs.form:submit', submit);
     
 }

@@ -7,8 +7,8 @@ export const optionsUtils = {
 
         getFormData: function getFormData_surveyDefault(){
             const instance = this;
-            const formEl = instance.formEl;
-            const fieldsList = Array.from( formEl.closest('[data-surveyjs-wrapper]').querySelectorAll(fieldsStringSelectorSurvey) );
+            const $form = instance.$form;
+            const fieldsList = Array.from( $form.closest('[data-surveyjs-wrapper]').querySelectorAll(fieldsStringSelectorSurvey) );
             const obj = {
                     answers: [],
                     id: instance.data.id
@@ -52,20 +52,20 @@ export const optionsUtils = {
                 ){ return; }
 
                 if( type === 'radio' ){
-                    const containerEl = fieldEl.closest('form') ? formEl : fieldEl.closest(instance.options.fieldOptions.questionContainer);
+                    const containerEl = fieldEl.closest('form') ? $form : fieldEl.closest(instance.options.fieldOptions.questionContainer);
                     const checkedEl = containerEl.querySelector('[name="'+ name +'"]:checked');
 
                     qaObj.answer.value = (checkedEl && checkedEl.value) || '';
 
                     // FOR RADIO THAT REQUIRE THE USER TO GIVE ONE MORE ANSWER
                     if( checkedEl && checkedEl.matches('[data-require-more]') ){
-                        qaObj.answer.related = formEl.querySelector('[data-required-from="#'+ checkedEl.id +'"]').value;
+                        qaObj.answer.related = $form.querySelector('[data-required-from="#'+ checkedEl.id +'"]').value;
                     }
                 }
 
                 if( type === 'checkbox' && fieldEl.matches('[data-checks]') ){
                     qaObj.answer.value = [];
-                    Array.from(formEl.querySelectorAll('[name="'+ name +'"]:checked')).forEach(el => {
+                    Array.from($form.querySelectorAll('[name="'+ name +'"]:checked')).forEach(el => {
                         qaObj.answer.value.push( el.value );
                     });
                 }
