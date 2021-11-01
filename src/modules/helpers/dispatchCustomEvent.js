@@ -1,9 +1,8 @@
 
 import { mergeObjects } from './mergeObjects';
 
-export const dispatchCustomEvent = ( elem, eventName, data = {}, eventOptions = {} ) => {
+export const dispatchCustomEvent = ( elem, eventName, eventOptions ) => {
     eventOptions = mergeObjects({}, { bubbles: true }, eventOptions);
-    const eventObj = new Event(eventName, eventOptions);
-    eventObj.data = data;
+    const eventObj = new CustomEvent(eventName, eventOptions);
     elem.dispatchEvent( eventObj );
 }

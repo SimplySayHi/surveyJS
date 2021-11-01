@@ -12,7 +12,7 @@ import Form from 'formjs-plugin';
 
 class Survey extends Form {
 
-    constructor( formEl, optionsObj = {} ){
+    constructor( form, optionsObj = {} ){
         if( !optionsObj.url || typeof optionsObj.url !== 'string' ){
             throw new Error('"options.url" is missing or not a string!');
         }
@@ -24,14 +24,15 @@ class Survey extends Form {
         }
 
         // CREATE FORM INSTANCE FOR SURVEY
-        super( formEl, optionsObj );
+        super( form, optionsObj );
         const self = this;
         self.internals = internals;
-        formEl = self.formEl;
+        const $form = self.$form;
         optionsObj = self.options;
         const selfInternals = self.internals;
 
-        formEl.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', optionsObj.templates.loading );
+        $form.surveyjs = self;
+        $form.querySelector('[data-surveyjs-body]').insertAdjacentHTML( 'beforebegin', optionsObj.templates.loading );
 
         // CREATE SURVEY
         const retrieveSurvey = ajaxCall(optionsObj.url, optionsObj.initAjaxOptions)
@@ -39,45 +40,39 @@ class Survey extends Form {
                 if( response.status.toLowerCase() !== 'success' ){
                     return Promise.reject(response);
                 }
-                return new Promise(resolve => {
-                    if( response.data.questions && response.data.questions.length > 0 ){
-    
-                        // REPLACE SURVEY ID AND FORM NAME IN WEB STORAGE NAME
-                        selfInternals.storageName = selfInternals.storageName.replace( /{{surveyId}}/, response.data.id );
-                        selfInternals.storageName = selfInternals.storageName.replace( /{{surveyFormName}}/, (formEl.getAttribute('name') || '') );
 
-                        buildSurvey(response.data, formEl, optionsObj);
-                        if( optionsObj.useWebStorage ){
-                            populateAnswers(formEl, selfInternals);
-                        }
-                        Object.defineProperty(self, 'data', {
-                            value: deepFreeze(response.data)
-                        });
-                        formEl.addEventListener('fjs.field:validation', validationEnd);
-                        formEl.addEventListener('fjs.form:submit', submit);
-                        super.init().then(() => {
-                            self.isInitialized = true;
-                            formEl.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
-                            resolve(response);
-                        });
+                if( response.data.questions && response.data.questions.length > 0 ){
+                    // REPLACE SURVEY ID AND FORM NAME IN WEB STORAGE NAME
+                    selfInternals.storageName = selfInternals.storageName.replace( /{{surveyId}}/, response.data.id );
+                    selfInternals.storageName = selfInternals.storageName.replace( /{{surveyFormName}}/, ($form.getAttribute('name') || '') );
 
-                    } else {
-                        resolve(response);
+                    buildSurvey(response.data, $form, optionsObj);
+                    if( optionsObj.useWebStorage ){
+                        populateAnswers($form, selfInternals);
                     }
-                });
+                    Object.defineProperty(self, 'data', {
+                        value: deepFreeze(response.data)
+                    });
+                    $form.addEventListener('fjs.field:validation', validationEnd);
+                    $form.addEventListener('fjs.form:submit', submit);
+                    $form.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
+                    self.isInitialized = true;
+                }
+                
+                return response;
             })
             .finally(() => {
-                const loadingBoxEl = formEl.querySelector('[data-surveyjs-loading]');
+                const loadingBoxEl = $form.querySelector('[data-surveyjs-loading]');
                 if( loadingBoxEl ){
                     loadingBoxEl.parentNode.removeChild(loadingBoxEl);
                 }
             });
         
-        dispatchCustomEvent( formEl, customEvents.init, retrieveSurvey );
+        dispatchCustomEvent( $form, customEvents.init, { detail: retrieveSurvey } );
     }
 
     destroy(){
-        destroy(this.formEl);
+        destroy(this.$form);
         super.destroy();
     }
 

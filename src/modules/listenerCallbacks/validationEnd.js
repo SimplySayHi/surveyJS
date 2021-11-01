@@ -4,13 +4,13 @@ import { getQuestionObject }                        from '../utils/getQuestionOb
 import { getAnswerIndex }                           from '../utils/getAnswerIndex';
 
 export function validationEnd( event ){
-    const fieldEl = event.data.fieldEl;
-    const errors = event.data.errors;
-    const instance = fieldEl.closest('form').formjs;
+    const $field = event.detail.$field;
+    const errors = event.detail.errors;
+    const instance = $field.closest('form').formjs;
     const options = instance.options;
-    const errorsWrapper = fieldEl.closest( options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
+    const errorsWrapper = $field.closest( options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
     
-    const questionId = getQuestionId(fieldEl);
+    const questionId = getQuestionId($field);
     const questionObj = getQuestionObject(instance.data.questions, questionId);
 
     // IF IT'S NOT A SURVEY QUESTION -> SKIP
@@ -33,16 +33,16 @@ export function validationEnd( event ){
     }
 
     // MANAGE ITEMS IN LOCAL STORAGE ( IF AVAILABLE AND ACTIVE )
-    if( !event.data.isCheckingForm && options.useWebStorage && !fieldEl.matches('[data-exclude-storage]') ){
+    if( !event.detail.isCheckingForm && options.useWebStorage && !$field.matches('[data-exclude-storage]') ){
         const storageName = instance.internals.storageName;
         let storageArray = sessionStorage.getObject( storageName ) || [];
 
-        const name = fieldEl.name;
-        const value = fieldEl.value;
-        const isRequiredFrom = fieldEl.matches('[data-required-from]');
-        const isMultiChoice = fieldEl.matches('[data-checks]');
-        const isRequireMore = fieldEl.matches('[data-require-more]');
-        const reqMoreEl = isRequiredFrom ? document.querySelector(fieldEl.getAttribute('data-required-from')) : null;
+        const name = $field.name;
+        const value = $field.value;
+        const isRequiredFrom = $field.matches('[data-required-from]');
+        const isMultiChoice = $field.matches('[data-checks]');
+        const isRequireMore = $field.matches('[data-require-more]');
+        const reqMoreEl = isRequiredFrom ? document.querySelector($field.getAttribute('data-required-from')) : null;
 
         const inArrayRequireMorePos = getAnswerIndex( storageArray, name + '-more' );            
         if( !isRequireMore && !isRequiredFrom && inArrayRequireMorePos >= 0 ){
@@ -54,7 +54,7 @@ export function validationEnd( event ){
         if( inArrayPos >= 0 ){
             // REMOVE ITEM FROM LS
             storageArray.splice(inArrayPos, 1);
-            if( (isMultiChoice && fieldEl.checked) || (!isMultiChoice && value !== '') ){
+            if( (isMultiChoice && $field.checked) || (!isMultiChoice && value !== '') ){
                 // ADD ITEM TO LS
                 storageArray.push( { name, value } );
             }
@@ -73,8 +73,8 @@ export function validationEnd( event ){
     }
 
     // BASED ON JSON DATA, FORCE REQUIRED FIELDS TO BE VALIDATED
-    if( questionObj.required && !fieldEl.required && !fieldEl.matches('[data-required-from]') ){
-        fieldEl.required = true;
-        instance.validateField(fieldEl);
+    if( questionObj.required && !$field.required && !$field.matches('[data-required-from]') ){
+        $field.required = true;
+        instance.validateField($field);
     }
 }
