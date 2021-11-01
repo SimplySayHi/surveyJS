@@ -103,6 +103,7 @@
                         <div class="dropdown d-inline-block ml-1">
                             <button class="btn dropdown-toggle dropdown-red-outline py-0 px-2 bg-transparent" data-toggle="dropdown" type="button" data-print-current-version></button>
                             <span class="dropdown-menu w-100 py-1">
+                                <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/3.0.2/" target="_blank">3.0.2</a>
                                 <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/2.0.4/" target="_blank">2.0.4</a>
                                 <a class="dropdown-item px-2" href="https://www.valeriodipunzio.com/plugins/surveyJS/1.6.1/" target="_blank">1.6.1</a>
                             </span>
@@ -185,10 +186,10 @@
             <hr />
             <p>
                 <span class="text-yellow">*</span> for compatibility with IE, old versions of Edge and/or other old browsers you may need to load some JS polyfills ( from <a href="https://polyfill.io" target="_blank">polyfill.io</a> or else ):<br />
-                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code> <code>Event</code>
+                <code>Array.from</code> <code>Element.prototype.closest</code> <code>Element.prototype.matches</code> <code>Promise</code> <code>Promise.prototype.finally</code> <code>AbortController</code> <code>fetch</code> <code>CustomEvent</code>
             </p>
             <pre>
-<code class="language-html">&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,Event"&gt;&lt;/script&gt;</code></pre>
+<code class="language-html">&lt;script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=Array.from,Element.prototype.closest,Element.prototype.matches,Promise,Promise.prototype.finally,AbortController,fetch,CustomEvent"&gt;&lt;/script&gt;</code></pre>
         </div>
 
         <!-- Changelog -->
@@ -200,7 +201,10 @@
                     <div class="media-body pl-2">
                         <ul>
                             <li>
-                                Exported main versions as UMD instead of IIFE for better environments compatibility
+                                Updated dependency: formJS v5.0.0+ 
+                            </li>
+                            <li>
+                                Switched usage of JS Event with CustomEvent
                             </li>
                         </ul>
                     </div>
@@ -215,6 +219,16 @@
                 <div class="toggable-content">
                     <ul class="p-0">
 
+                        <li class="media my-3">
+                            <div class="version-num text-red">3.0.2</div>
+                            <div class="media-body pl-2">
+                                <ul>
+                                    <li>
+                                        Exported main versions as UMD instead of IIFE for better environments compatibility
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="media my-3">
                             <div class="version-num text-red">3.0.1</div>
                             <div class="media-body pl-2">

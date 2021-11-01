@@ -70,7 +70,7 @@
                 </p>
                 <ul>
                     <li>
-                        <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> ( version 4.3.0 or higher - for survey form validation and submit - NOT for <span class="badge badge-pill badge-yellow">Lite</span> version )
+                        <a href="https://github.com/SimplySayHi/formJS" target="_blank">formJS</a> ( version 5.0.0 or higher - for survey form validation and submit - NOT for <span class="badge badge-pill badge-yellow">Lite</span> version )
                     </li>
                     <li>
                         Bootstrap 4 CSS ( Optional - only form CSS ) but you can write the CSS by yourself ;)
@@ -87,12 +87,12 @@
                             Include these scripts in your page:
                         </p>
                         <pre>
-<code class="language-html">&lt;script src="https://unpkg.com/formjs-plugin@4"&gt;&lt;/script&gt;
-&lt;script src="https://unpkg.com/surveyjs@3"&gt;&lt;/script&gt;
+<code class="language-html">&lt;script src="https://unpkg.com/formjs-plugin@5"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/surveyjs@4"&gt;&lt;/script&gt;
 </code></pre>
                         <pre>
-<code class="language-html">&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@4/dist/formjs.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS@3/dist/surveyjs.min.js"&gt;&lt;/script&gt;
+<code class="language-html">&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/formJS@5/dist/formjs.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/simplysayhi/surveyJS@4/dist/surveyjs.min.js"&gt;&lt;/script&gt;
 </code></pre>
                     </div>
                     <div class="col-lg-auto align-self-center d-none d-lg-block mt-3 pt-3">
@@ -103,7 +103,7 @@
                             <span class="d-inline d-lg-none">or</span> Install via NPM and import as ES Module:
                         </p>
                         <pre>
-<code class="language-markup">npm install formjs-plugin@4 surveyjs
+<code class="language-markup">npm install formjs-plugin@5 surveyjs
 </code></pre>
                         <pre>
 <code class="language-js">import Survey from 'surveyjs';
@@ -336,9 +336,9 @@
                 <div class="row">
                     <div class="col-lg-6">
                     <pre>
-<code class="language-js">const formEl = document.querySelector('[data-surveyjs-form]');
+<code class="language-js">const $form = document.querySelector('[data-surveyjs-form]');
 const options = { url: 'json/survey.json' };
-const mySurvey = new Survey( formEl, options );
+const mySurvey = new Survey( $form, options );
 </code></pre>
                     </div>
                     <div class="col-lg-6">
@@ -347,7 +347,7 @@ const mySurvey = new Survey( formEl, options );
                         </p>
                         <ul>
                             <li>
-                                <code>formEl</code> ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>const formEl = '.my-container .my-form';</code>
+                                <code>$form</code> ( required ) must be a <u>single form node</u> ( not a nodelist! ) or a <u>CSS string selector</u> <code>const $form = '.my-container .my-form';</code>
                             </li>
                             <li>
                                 <code>options</code> ( required ) a JS object as defined in <a href="api.html#options-list">Options section</a> with at least <code>url</code>
@@ -355,17 +355,20 @@ const mySurvey = new Survey( formEl, options );
                         </ul>
                         <hr />
                         <p>
-                            surveyJS has some more properties:
+                            You can also access to:
                         </p>
                         <ul>
                             <li>
-                                <code>data</code> the survey data structure returned from the AJAX call.
+                                Survey version: via <code>Survey.prototype.version</code> or <code>$form.surveyjs.version</code>
                             </li>
                             <li>
-                                <code>isInitialized</code> set to true after retrieving the JSON data and completing initialization.
+                                Survey instance: once the instance is created, via <code>$form.surveyjs</code>
                             </li>
                             <li>
-                                <code>version</code> the version number.
+                                Survey initialization: boolean via <code>$form.surveyjs.isInitialized</code>
+                            </li>
+                            <li>
+                                Survey data: the survey data structure returned from the AJAX call. Accessible via <code>$form.surveyjs.data</code>
                             </li>
                         </ul>
                 </div>

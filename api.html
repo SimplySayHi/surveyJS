@@ -547,8 +547,7 @@
         <div id="builtin-events">
             <h3 class="sticky-title">Built-in Events</h3>
             <p>
-                surveyJS inherits all formJS built-in events and has its own.<br />
-                Each built-in event has the extra object <code>data</code> attahched to the event object as defined in "additional event data" ( eg. <code>event.data.result</code> ). By default all built-in events will bubble.
+                surveyJS inherits all formJS built-in events and has its own. By default all built-in events will bubble.
             </p>
             <div class="panel panel-default panel-transparent no-bg">
                 <div class="sticky-header card-header bg-white text-dark clearfix d-none d-lg-block">
@@ -557,7 +556,7 @@
                             name, description
                         </div>
                         <div class="col-lg-6">
-                            additional event data
+                            event detail object
                         </div>
                     </div>
                 </div>
@@ -572,10 +571,10 @@
                         </div>
                         <div class="col-lg-6">
                             <p class="d-lg-none">
-                                additional event data
+                                event detail object
                             </p>
                             <p>
-                                In this case, the Promise returned by the AJAX call ( to retrieve JSON data ) will be assigned to <code>event.data</code>, to which will be passed the ajax response.
+                                In this case, the Promise returned by the AJAX call ( to retrieve JSON data ) will be assigned to <code>event.detail</code>, to which will be passed the ajax response.
                             </p>
                         </div>
                     </div>
