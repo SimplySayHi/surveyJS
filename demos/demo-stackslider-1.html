@@ -175,7 +175,7 @@
                             <div class="card-body p-0">
                                 <pre class="m-0">
 <code class="language-js">// FULL CODE: /js/demos/demo-stackslider-1.js
-const formEl = document.querySelector('[data-surveyjs-form]');
+const $form = document.querySelector('[data-surveyjs-form]');
 const options = {
     url: '../json/survey.json',
     cssClasses: {
@@ -223,43 +223,43 @@ const options = {
 const onValidation = fields => {...};
 
 const onInitSuccess = function( ajaxData ){
-    const surveyFormEl = this.formEl,
-          surveyBody = surveyFormEl.querySelector('.surveyjs-body'),
+    const $surveyForm = this.$form,
+          surveyBody = $surveyForm.querySelector('.surveyjs-body'),
           initStatus = ajaxData.status;
     
     if( initStatus === 'success' ){
         $('.stackSlider').stackslider({ piles : false });
     } else {
-        const elemToRemove = surveyFormEl.querySelector('.surveyjs-footer');
+        const elemToRemove = $surveyForm.querySelector('.surveyjs-footer');
         elemToRemove.parentNode.removeChild(elemToRemove);
         surveyBody.innerHTML = '&lt;div class="surveyjs-message"&gt;Loading Error. Please, reload the page.&lt;/div&gt;';
     }
 };
 
-formEl.addEventListener('fjs.field:validation', event => {
-    onValidation([event.data]);
+$form.addEventListener('fjs.field:validation', event => {
+    onValidation([event.detail]);
 }, false);
 
-formEl.addEventListener('fjs.form:validation', event => {
-    onValidation(event.data.fields);
+$form.addEventListener('fjs.form:validation', event => {
+    onValidation(event.detail.fields);
 }, false);
 
-formEl.addEventListener('fjs.form:submit', event => {
-    event.data
+$form.addEventListener('fjs.form:submit', event => {
+    event.detail
         .then(ajaxData => {...})
         .catch(error => {...})
         .finally(() => {...});
 }, false);
 
-formEl.addEventListener('sjs:init', event => {
-    event.data
+$form.addEventListener('sjs:init', event => {
+    event.detail
         .then(data => {
             onInitSuccess.call(mySurvey, data);
         })
         .catch(error => {...});
 }, false);
 
-const mySurvey = new Survey( formEl, options );
+const mySurvey = new Survey( $form, options );
 
 </code></pre>
                             </div>

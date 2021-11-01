@@ -2,7 +2,7 @@ var $surveyCont = $('[data-surveyjs-wrapper]'),
     $surveyForm = $surveyCont.find('[data-surveyjs-form]'),
     $surveyBtn = $surveyForm.find('.surveyjs-submit-btn');
 
-var formEl = document.querySelector('[data-surveyjs-form]');
+var $form = document.querySelector('[data-surveyjs-form]');
 var options = {
         url: '../json/survey.json',
         cssClasses: {
@@ -59,7 +59,7 @@ var options = {
 var onInitSuccess = function( ajaxData ){
         console.log('onInitSuccess', ajaxData);
 
-        var surveyFormEl = this.formEl,
+        var surveyFormEl = this.$form,
             surveyBody = surveyFormEl.querySelector('.surveyjs-body'),
             initStatus = ajaxData.status;
         
@@ -72,7 +72,7 @@ var onInitSuccess = function( ajaxData ){
         }
     },
     onInitError = function( error ){
-        var surveyFormEl = this.formEl;
+        var surveyFormEl = this.$form;
 
         console.log('onInitError', error);
         console.log('SURVEY init(\''+ surveyFormEl.getAttribute('action') +'\') RETURNED AN ERROR:');
@@ -82,7 +82,7 @@ var onInitSuccess = function( ajaxData ){
     onValidation = function( fields ){
         console.log( 'onValidation', fields );
         if( fields.length > 1 ){
-            if( !formEl.querySelector('[type="submit"]').disabled ){
+            if( !$form.querySelector('[type="submit"]').disabled ){
                 return;
             }
             // GO TO THE FIRST UNANSWERED QUESTION
@@ -91,8 +91,8 @@ var onInitSuccess = function( ajaxData ){
                 $invalidField = (function(){
                     for( var f=0; f<fields.length; f++ ){
                         var obj = fields[f];
-                        if( !obj.result && !$(obj.fieldEl).is('[data-field]') ){
-                            return $(obj.fieldEl);
+                        if( !obj.result && !$(obj.$field).is('[data-field]') ){
+                            return $(obj.$field);
                         }
                     }
                     return $();
@@ -116,19 +116,19 @@ var onInitSuccess = function( ajaxData ){
     }
 ;
 
-formEl.addEventListener('fjs.field:validation', function(event){
+$form.addEventListener('fjs.field:validation', function(event){
     console.log(event.type);
-    onValidation([event.data]);
+    onValidation([event.detail]);
 }, false);
 
-formEl.addEventListener('fjs.form:validation', function(event){
+$form.addEventListener('fjs.form:validation', function(event){
     console.log(event.type);
-    onValidation(event.data.fields);
+    onValidation(event.detail.fields);
 }, false);
 
-formEl.addEventListener('fjs.form:submit', function(event){
+$form.addEventListener('fjs.form:submit', function(event){
     console.log(event.type);
-    event.data
+    event.detail
         .then(function(ajaxData){
             console.log('then', ajaxData);
             if( typeof ajaxData === 'string' ){
@@ -154,18 +154,18 @@ formEl.addEventListener('fjs.form:submit', function(event){
         .catch(function(error){
             console.log('catch', error);
             // PRINT THE ERROR MESSAGE AFTER THE FORM
-            var surveyContEl = formEl.closest('[data-surveyjs-wrapper]');
+            var surveyContEl = $form.closest('[data-surveyjs-wrapper]');
             surveyContEl.innerHTML = surveyContEl.innerHTML + '<div class="alert alert-danger text-center" role="alert"><p class="my-3">Generic error, please retry.</p></div>';
         })
         .finally(function(){
             console.log('finally');
-            formEl.querySelector('button[type="submit"]').classList.remove('surveyjs-submit-sending');
+            $form.querySelector('button[type="submit"]').classList.remove('surveyjs-submit-sending');
         });
 }, false);
 
-formEl.addEventListener('sjs:init', function(event){
+$form.addEventListener('sjs:init', function(event){
     console.log(event.type);
-    event.data
+    event.detail
         .then(function( data ){
             console.log('Survey init then');
             console.log(data);
@@ -178,4 +178,4 @@ formEl.addEventListener('sjs:init', function(event){
         });
 }, false);
 
-var mySurvey = new Survey( formEl, options );
+var mySurvey = new Survey( $form, options );

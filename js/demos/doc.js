@@ -3,7 +3,7 @@ var $surveyCont = $('[data-surveyjs-wrapper]'),
     $surveyForm = $surveyCont.find('[data-surveyjs-form]'),
     $surveyBtn = $surveyForm.find('.surveyjs-submit-btn');
 
-var formEl = document.querySelector('[data-surveyjs-form]');
+var $form = document.querySelector('[data-surveyjs-form]');
 var options = {
         url: 'json/survey.json',
         cssClasses: {
@@ -59,13 +59,13 @@ var onInitSuccess = function( ajaxData ){
         }
     },
     onInitError = function( error ){
-        var surveyFormEl = this.formEl;
-        surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Loading Error. Please, reload the page.</div>';
+        var survey$form = this.$form;
+        survey$form.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Loading Error. Please, reload the page.</div>';
     },
     onValidation = function( fields ){
         console.log( 'onValidation', fields );
         if( fields.length > 1 ){
-            if( !formEl.querySelector('[type="submit"]').disabled ){
+            if( !$form.querySelector('[type="submit"]').disabled ){
                 return;
             }
             // GO TO THE FIRST UNANSWERED QUESTION
@@ -74,8 +74,8 @@ var onInitSuccess = function( ajaxData ){
                 $invalidField = (function(){
                     for( var f=0; f<fields.length; f++ ){
                         var obj = fields[f];
-                        if( !obj.result && !$(obj.fieldEl).is('[data-field]') ){
-                            return $(obj.fieldEl);
+                        if( !obj.result && !$(obj.$field).is('[data-field]') ){
+                            return $(obj.$field);
                         }
                     }
                     return $();
@@ -99,19 +99,19 @@ var onInitSuccess = function( ajaxData ){
     }
 ;
 
-formEl.addEventListener('fjs.field:validation', function(event){
+$form.addEventListener('fjs.field:validation', function(event){
     console.log(event.type);
-    onValidation([event.data]);
+    onValidation([event.detail]);
 });
 
-formEl.addEventListener('fjs.form:validation', function(event){
+$form.addEventListener('fjs.form:validation', function(event){
     console.log(event.type);
-    onValidation(event.data.fields);
+    onValidation(event.detail.fields);
 });
 
-formEl.addEventListener('fjs.form:submit', function(event){
+$form.addEventListener('fjs.form:submit', function(event){
     console.log(event.type);
-    event.data
+    event.detail
         .then(function(ajaxData){
             console.log('then', ajaxData);
             if( typeof ajaxData === 'string' ){
@@ -145,9 +145,9 @@ formEl.addEventListener('fjs.form:submit', function(event){
         });
 });
 
-formEl.addEventListener('sjs:init', function(event){
+$form.addEventListener('sjs:init', function(event){
     console.log(event.type);
-    event.data
+    event.detail
         .then(function( data ){
             console.log('Survey init then');
             console.log(data);
@@ -160,4 +160,55 @@ formEl.addEventListener('sjs:init', function(event){
         });
 }, false);
 
-var mySurvey = new Survey( formEl, options );
+var mySurvey = new Survey( $form, options );
+
+/* Form.addValidationErrors({
+    email: function ( string ) {
+        var obj = {};
+
+        if( string.indexOf('@') === -1 ){
+
+            // @ IS MISSING
+            obj.missingAtChar = true;
+
+        } else {
+
+            var splitAt_at = string.split('@');
+            if( splitAt_at[0].length === 0 ){
+
+                // USER NAME IS MISSING
+                obj.missingUserName = true;
+
+            }
+
+            if( splitAt_at[1].length === 0 ){
+
+                // IS EMPTY AFTER @
+                obj.missingDomain = true;
+                obj.missingExtensionDot = true;
+                obj.missingExtension = true;
+
+            } else if( splitAt_at[1].indexOf('.') === -1 ) {
+
+                // DOT IS MISSING
+                obj.missingExtensionDot = true;
+                obj.missingExtension = true;
+
+            } else {
+
+                // EXTENSION MISSING OR NOT LONG ENOUGH
+                var splitAt_dot = splitAt_at[1].split('.'),
+                    extLength = splitAt_dot[1].length;
+                if( extLength === 0 ) {
+                    obj.missingExtension = true;
+                } else if( extLength < 2 ){
+                    obj.minlengthExtension = true;
+                }
+
+            }
+        }
+
+        return obj;
+
+    }
+}); */

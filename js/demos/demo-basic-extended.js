@@ -1,6 +1,6 @@
 
 var $surveyCont = $('[data-surveyjs-wrapper]');
-var formEl = document.querySelector('[data-surveyjs-form]');
+var $form = document.querySelector('[data-surveyjs-form]');
 var options = {
         url: '../json/survey.json',
         cssClasses: {
@@ -10,8 +10,8 @@ var options = {
             beforeSend: function beforeSend_surveyDemo_1( data ){
                 console.log('Survey beforeSend_surveyDemo_1', data);
 
-                var surveyContEl = this.formEl.closest('[data-surveyjs-wrapper]');
-                var surveyBtn = this.formEl.querySelector('button[type="submit"]');
+                var surveyContEl = this.$form.closest('[data-surveyjs-wrapper]');
+                var surveyBtn = this.$form.querySelector('button[type="submit"]');
 
                 if( !data.stopExecution ){
                     surveyBtn.classList.add('surveyjs-submit-sending');
@@ -32,14 +32,14 @@ var onInitSuccess = function( response ){
         }
     },
     onInitError = function( error ){
-        var surveyFormEl = this.formEl;                
-        surveyFormEl.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Loading Error. Please, reload the page.</div>';
+        var $surveyForm = this.$form;                
+        $surveyForm.querySelector('.surveyjs-body').innerHTML = '<div class="surveyjs-message">Loading Error. Please, reload the page.</div>';
     },
     onValidation = function( fields ){
         console.log( 'onValidation', fields );
         if( fields.length > 1 ){
-            var isFormSubmitting = formEl.classList.contains('is-submitting');
-            var submitDisabled = formEl.querySelector('[type="submit"]').disabled;
+            var isFormSubmitting = $form.classList.contains('is-submitting');
+            var submitDisabled = $form.querySelector('[type="submit"]').disabled;
 
             if( (submitDisabled && !isFormSubmitting) || !isFormSubmitting ){
                 return;
@@ -49,15 +49,15 @@ var onInitSuccess = function( response ){
                 return !obj.result
             });
             if( unanswered.length > 0 ){
-                var contEl = unanswered[0].fieldEl.closest('[data-formjs-question]');
+                var contEl = unanswered[0].$field.closest('[data-formjs-question]');
                 scrollToElement(contEl);
             }
             
         } else {
             var fieldObj = fields[0];
-            if( fieldObj.fieldEl.name === 'prova-00' ){
-                var btn = fieldObj.fieldEl.closest('form').querySelector('[type="submit"]'),
-                    isValidValue = fieldObj.fieldEl.value.trim().length > 0;
+            if( fieldObj.$field.name === 'prova-00' ){
+                var btn = fieldObj.$field.closest('form').querySelector('[type="submit"]'),
+                    isValidValue = fieldObj.$field.value.trim().length > 0;
 
                 btn.disabled = !isValidValue;
             }
@@ -65,19 +65,19 @@ var onInitSuccess = function( response ){
     }
 ;
 
-formEl.addEventListener('fjs.field:validation', function(event){
+$form.addEventListener('fjs.field:validation', function(event){
     console.log(event.type);
-    onValidation([event.data]);
+    onValidation([event.detail]);
 });
 
-formEl.addEventListener('fjs.form:validation', function(event){
+$form.addEventListener('fjs.form:validation', function(event){
     console.log(event.type);
-    onValidation(event.data.fields);
+    onValidation(event.detail.fields);
 });
 
-formEl.addEventListener('fjs.form:submit', function(event){
+$form.addEventListener('fjs.form:submit', function(event){
     console.log(event.type);
-    event.data
+    event.detail
         .then(function(response){
             console.log('then', response);
             if( response.status !== 'success' ){
@@ -91,18 +91,18 @@ formEl.addEventListener('fjs.form:submit', function(event){
         .catch(function(error){
             console.log('catch', error);
             // PRINT THE ERROR MESSAGE AFTER THE FORM
-            var surveyContEl = formEl.closest('[data-surveyjs-wrapper]');
+            var surveyContEl = $form.closest('[data-surveyjs-wrapper]');
             surveyContEl.innerHTML = surveyContEl.innerHTML + '<div class="alert alert-danger text-center mx-3 mb-2" role="alert"><p class="my-3">Generic error, please retry.</p></div>';
         })
         .finally(function(){
             console.log('finally');
-            formEl.querySelector('button[type="submit"]').classList.remove('surveyjs-submit-sending');
+            $form.querySelector('button[type="submit"]').classList.remove('surveyjs-submit-sending');
         });
 });
 
-formEl.addEventListener('sjs:init', function(event){
+$form.addEventListener('sjs:init', function(event){
     console.log(event.type);
-    event.data
+    event.detail
         .then(function( data ){
             console.log('Survey init then');
             console.log(data);
@@ -115,4 +115,4 @@ formEl.addEventListener('sjs:init', function(event){
         });
 });
 
-var mySurvey = new Survey( formEl, options );
+var mySurvey = new Survey( $form, options );

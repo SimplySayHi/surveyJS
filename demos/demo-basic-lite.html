@@ -117,19 +117,16 @@
                             <div class="card-body p-0">
                                 <pre class="m-0">
 <code class="language-js">// FULL CODE: /js/demos/demo-basic-lite.js
-const formEl = document.querySelector('[data-surveyjs-form]');
+const $form = document.querySelector('[data-surveyjs-form]');
 const options = { url: '../json/survey.json' };
 
-formEl.addEventListener('fjs.form:submit', event => {
-    event.data
-        .then(response => {
-            // FORM VALIDATION AND SUBMIT ARE UP TO YOU :)
-        })
-        .catch(error => {...})
-        .finally(() => {...});
+$form.addEventListener('submit', event => {
+    event.preventDefault();
+    console.log('FORM SUBMIT');
+    // FORM VALIDATION IS UP TO YOU :)
 });
 
-const mySurvey = new Survey( formEl, options );
+const mySurvey = new Survey( $form, options );
 </code></pre>
                             </div>
                         </div>
