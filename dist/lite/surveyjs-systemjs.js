@@ -1,4 +1,4 @@
-/* surveyJS Lite v3.0.2 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS Lite v4.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -60,13 +60,12 @@ System.register([], (function(exports) {
                         Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
                     }));
                 })), out;
-            }, dispatchCustomEvent = function(elem, eventName) {
-                var data = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {}, eventOptions = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {};
+            }, dispatchCustomEvent = function(elem, eventName, eventOptions) {
                 eventOptions = mergeObjects({}, {
                     bubbles: !0
                 }, eventOptions);
-                var eventObj = new Event(eventName, eventOptions);
-                eventObj.data = data, elem.dispatchEvent(eventObj);
+                var eventObj = new CustomEvent(eventName, eventOptions);
+                elem.dispatchEvent(eventObj);
             }, isNodeList = function(nodeList) {
                 return NodeList.prototype.isPrototypeOf(nodeList);
             }, replaceObjectKeysInString = function(obj, stringHTML) {
@@ -180,14 +179,14 @@ System.register([], (function(exports) {
                         checksMax: checksMax
                     }, questionHTML);
                 }), "");
-            }, buildSurvey = function(data, formEl, options) {
+            }, buildSurvey = function(data, $form, options) {
                 var qaHtmlAll = generateQAcode(data.questions, data.id, options);
-                formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
+                $form.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
                 var extQuestions = data.questions.filter((function(obj) {
                     return obj.external;
                 }));
                 if (extQuestions.length > 0) {
-                    var surveyWrapperEl = formEl.closest("[data-surveyjs-wrapper]");
+                    var surveyWrapperEl = $form.closest("[data-surveyjs-wrapper]");
                     extQuestions.forEach((function(question, qIndex) {
                         var externalCont = surveyWrapperEl.querySelector('[data-surveyjs-external="' + (qIndex + 1) + '"]');
                         externalCont.setAttribute("data-question-id", question.id), question.answers.forEach((function(answer, aIndex) {
@@ -207,28 +206,30 @@ System.register([], (function(exports) {
                     }));
                 }
             }, Survey = exports("default", function() {
-                function Survey(formEl) {
+                function Survey($form) {
                     var optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
                     _classCallCheck(this, Survey);
-                    var argsL = arguments.length, checkFormElem = checkFormEl(formEl);
-                    if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
-                    if (isNodeList(formEl)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
-                    if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+                    var argsL = arguments.length, checkFormElem = checkFormEl($form);
+                    if (0 === argsL || argsL > 0 && !$form) throw new Error('First argument "$form" is missing or falsy!');
+                    if (isNodeList($form)) throw new Error('First argument "$form" must be a single DOM node or a form CSS selector, not a NodeList!');
+                    if (!checkFormElem.result) throw new Error('First argument "$form" is not a DOM node nor a form CSS selector!');
                     if (!optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
                     var self = this;
-                    self.formEl = checkFormElem.element, self.options = mergeObjects({}, Survey.prototype.options, optionsObj), 
-                    formEl = self.formEl, optionsObj = self.options, formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", optionsObj.templates.loading);
+                    self.$form = checkFormElem.element, self.options = mergeObjects({}, Survey.prototype.options, optionsObj), 
+                    $form = self.$form, optionsObj = self.options, $form.surveyjs = self, $form.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", optionsObj.templates.loading);
                     var retrieveSurvey = ajaxCall(optionsObj.url, optionsObj.initAjaxOptions).then((function(response) {
-                        return "success" !== response.status.toLowerCase() ? Promise.reject(response) : (response.data.questions && response.data.questions.length > 0 && (buildSurvey(response.data, formEl, optionsObj), 
+                        return "success" !== response.status.toLowerCase() ? Promise.reject(response) : (response.data.questions && response.data.questions.length > 0 && (buildSurvey(response.data, $form, optionsObj), 
                         Object.defineProperty(self, "data", {
                             value: deepFreeze(response.data)
-                        }), self.isInitialized = !0, formEl.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success")), 
+                        }), self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success")), 
                         response);
                     })).finally((function() {
-                        var loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
+                        var loadingBoxEl = $form.querySelector("[data-surveyjs-loading]");
                         loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
                     }));
-                    dispatchCustomEvent(formEl, customEvents_init, retrieveSurvey);
+                    dispatchCustomEvent($form, customEvents_init, {
+                        detail: retrieveSurvey
+                    });
                 }
                 var Constructor, protoProps, staticProps;
                 return Constructor = Survey, staticProps = [ {
@@ -284,7 +285,7 @@ System.register([], (function(exports) {
                         related: '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group"><div class="input-group-prepend"><div class="surveyjs-radio-wrapper input-group-text form-check">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
                     }
                 }
-            }, Survey.prototype.version = "3.0.2";
+            }, Survey.prototype.version = "4.0.0";
         }
     };
 }));

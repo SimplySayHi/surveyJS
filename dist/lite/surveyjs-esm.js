@@ -1,4 +1,4 @@
-/* surveyJS Lite v3.0.2 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS Lite v4.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 const isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
     const prop = obj[name];
     "object" == typeof prop && null !== prop && deepFreeze(prop);
@@ -78,7 +78,7 @@ list), generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((
         "select" === answerType && (optionsHtml = generateOptionTags(answersList)), answerHTML = templates.wrapper.replace("{{relatedFieldHTML}}", relatedFieldHTML).replace("{{fieldTemplate}}", templates.field).replace("{{optionsHtml}}", optionsHtml).replace("{{labelTemplate}}", templates.label).replace("{{nestedFieldsHTML}}", nestedFieldsHTML), 
         allAnswersHTML += replaceObjectKeysInString(answerData, answerHTML);
     }), allAnswersHTML;
-}, buildSurvey = (data, formEl, options) => {
+}, buildSurvey = (data, $form, options) => {
     const qaHtmlAll = ((questions, surveyId, options) => sortList(questions).reduce((accCode, questionObj, index) => {
         if (questionObj.external) return accCode;
         let questionHTML = options.templates.wrapper.question;
@@ -106,10 +106,10 @@ list), generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((
             checksMax: checksMax
         }, questionHTML);
     }, ""))(data.questions, data.id, options);
-    formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
+    $form.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
     const extQuestions = data.questions.filter(obj => obj.external);
     if (extQuestions.length > 0) {
-        const surveyWrapperEl = formEl.closest("[data-surveyjs-wrapper]");
+        const surveyWrapperEl = $form.closest("[data-surveyjs-wrapper]");
         extQuestions.forEach((question, qIndex) => {
             const externalCont = surveyWrapperEl.querySelector('[data-surveyjs-external="' + (qIndex + 1) + '"]');
             externalCont.setAttribute("data-question-id", question.id), question.answers.forEach((answer, aIndex) => {
@@ -131,22 +131,22 @@ list), generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((
 };
 
 class Survey {
-    constructor(formEl, optionsObj = {}) {
+    constructor($form, optionsObj = {}) {
         const argsL = arguments.length, checkFormElem = (formEl => {
             const isString = typeof formEl, isFormSelector = "string" === isString && isDOMNode(document.querySelector(formEl)) && "form" === document.querySelector(formEl).tagName.toLowerCase();
             return {
                 result: isDOMNode(formEl) || isFormSelector,
                 element: "string" === isString ? document.querySelector(formEl) : formEl
             };
-        })(formEl);
-        if (0 === argsL || argsL > 0 && !formEl) throw new Error('First argument "formEl" is missing or falsy!');
-        if (nodeList = formEl, NodeList.prototype.isPrototypeOf(nodeList)) throw new Error('First argument "formEl" must be a single DOM node or a form CSS selector, not a NodeList!');
+        })($form);
+        if (0 === argsL || argsL > 0 && !$form) throw new Error('First argument "$form" is missing or falsy!');
+        if (nodeList = $form, NodeList.prototype.isPrototypeOf(nodeList)) throw new Error('First argument "$form" must be a single DOM node or a form CSS selector, not a NodeList!');
         var nodeList;
-        if (!checkFormElem.result) throw new Error('First argument "formEl" is not a DOM node nor a form CSS selector!');
+        if (!checkFormElem.result) throw new Error('First argument "$form" is not a DOM node nor a form CSS selector!');
         if (!optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
         const self = this;
-        self.formEl = checkFormElem.element, self.options = mergeObjects({}, Survey.prototype.options, optionsObj), 
-        formEl = self.formEl, optionsObj = self.options, formEl.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", optionsObj.templates.loading);
+        self.$form = checkFormElem.element, self.options = mergeObjects({}, Survey.prototype.options, optionsObj), 
+        $form = self.$form, optionsObj = self.options, $form.surveyjs = self, $form.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", optionsObj.templates.loading);
         const retrieveSurvey = ((url = location.href, options = {}) => {
             let timeoutTimer;
             if (options.headers = new Headers(options.headers), options.timeout > 0) {
@@ -163,21 +163,23 @@ class Survey {
             }).finally(() => {
                 timeoutTimer && window.clearTimeout(timeoutTimer);
             });
-        })(optionsObj.url, optionsObj.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : (response.data.questions && response.data.questions.length > 0 && (buildSurvey(response.data, formEl, optionsObj), 
+        })(optionsObj.url, optionsObj.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : (response.data.questions && response.data.questions.length > 0 && (buildSurvey(response.data, $form, optionsObj), 
         Object.defineProperty(self, "data", {
             value: deepFreeze(response.data)
-        }), self.isInitialized = !0, formEl.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success")), 
+        }), self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success")), 
         response)).finally(() => {
-            const loadingBoxEl = formEl.querySelector("[data-surveyjs-loading]");
+            const loadingBoxEl = $form.querySelector("[data-surveyjs-loading]");
             loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
         });
-        ((elem, eventName, data = {}, eventOptions = {}) => {
+        ((elem, eventName, eventOptions) => {
             eventOptions = mergeObjects({}, {
                 bubbles: !0
             }, eventOptions);
-            const eventObj = new Event(eventName, eventOptions);
-            eventObj.data = data, elem.dispatchEvent(eventObj);
-        })(formEl, customEvents_init, retrieveSurvey);
+            const eventObj = new CustomEvent(eventName, eventOptions);
+            elem.dispatchEvent(eventObj);
+        })($form, customEvents_init, {
+            detail: retrieveSurvey
+        });
     }
     static setOptions(optionsObj) {
         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);
@@ -229,6 +231,6 @@ Survey.prototype.isInitialized = !1, Survey.prototype.options = {
             related: '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group"><div class="input-group-prepend"><div class="surveyjs-radio-wrapper input-group-text form-check">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
         }
     }
-}, Survey.prototype.version = "3.0.2";
+}, Survey.prototype.version = "4.0.0";
 
 export default Survey;
