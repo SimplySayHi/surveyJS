@@ -58,6 +58,10 @@ class Survey {
         dispatchCustomEvent( $form, customEvents.init, { detail: retrieveSurvey } );
     }
 
+    destroy(){
+        delete this.$form.surveyjs;
+    }
+
     static setOptions( optionsObj ){
         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);
     }

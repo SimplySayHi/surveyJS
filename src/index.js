@@ -47,16 +47,24 @@ class Survey extends Form {
                     selfInternals.storageName = selfInternals.storageName.replace( /{{surveyFormName}}/, ($form.getAttribute('name') || '') );
 
                     buildSurvey(response.data, $form, optionsObj);
+                    
                     if( optionsObj.useWebStorage ){
                         populateAnswers($form, selfInternals);
                     }
+                    
                     Object.defineProperty(self, 'data', {
                         value: deepFreeze(response.data)
                     });
+                    
                     $form.addEventListener('fjs.field:validation', validationEnd);
                     $form.addEventListener('fjs.form:submit', submit);
                     $form.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
-                    self.isInitialized = true;
+
+                    return super.validateFilledFields().then(fields => {
+                        self.isInitialized = true;
+                        $form.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
+                        return response
+                    });
                 }
                 
                 return response;
@@ -72,8 +80,9 @@ class Survey extends Form {
     }
 
     destroy(){
-        destroy(this.$form);
         super.destroy();
+        destroy(this.$form);
+        dispatchCustomEvent( this.$form, customEvents.destroy );
     }
 
     static setOptions( optionsObj ){

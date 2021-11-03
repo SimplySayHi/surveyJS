@@ -6,7 +6,7 @@ import { getAnswerIndex }                           from '../utils/getAnswerInde
 export function validationEnd( event ){
     const $field = event.detail.$field;
     const errors = event.detail.errors;
-    const instance = $field.closest('form').formjs;
+    const instance = $field.closest('form').surveyjs;
     const options = instance.options;
     const errorsWrapper = $field.closest( options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
     
