@@ -1,4 +1,4 @@
-/* formJS v5.1.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v5.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 !function(global, factory) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define(factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Form = factory();
 }(this, (function() {
@@ -41,6 +41,7 @@
     }, customEvents_field = {
         validation: "fjs.field:validation"
     }, customEvents_form = {
+        destroy: "fjs.form:destroy",
         init: "fjs.form:init",
         submit: "fjs.form:submit",
         validation: "fjs.form:validation"
@@ -451,23 +452,6 @@
         $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), 
         $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
     }
-    var checkFilledFields = function($form) {
-        var formFields = function($form) {
-            return getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map((function($field) {
-                var name = $field.name, type = $field.type, isCheckboxOrRadio = "checkbox" === type || "radio" === type, fieldChecked = $form.querySelector('[name="' + name + '"]:checked'), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $form.querySelector($field.getAttribute("data-required-from")) : null;
-                return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
-            })).filter((function($field) {
-                return null !== $field;
-            }));
-        }($form);
-        return Promise.all(formFields.map((function($field) {
-            var isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
-            return validation({
-                target: $field,
-                type: isFieldForChangeEventBoolean ? "change" : ""
-            });
-        })));
-    };
     function checkFieldValidity($field, fieldOptions, validationRules, validationErrors) {
         if (!isDOMNode($field)) {
             var obj = mergeValidateFieldDefault({
@@ -562,7 +546,23 @@
             });
         }));
     }
-    var Form = function() {
+    var checkFilledFields = function($form) {
+        var formFields = function($form) {
+            return getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map((function($field) {
+                var name = $field.name, type = $field.type, isCheckboxOrRadio = "checkbox" === type || "radio" === type, fieldChecked = $form.querySelector('[name="' + name + '"]:checked'), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $form.querySelector($field.getAttribute("data-required-from")) : null;
+                return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
+            })).filter((function($field) {
+                return null !== $field;
+            }));
+        }($form);
+        return Promise.all(formFields.map((function($field) {
+            var isFieldForChangeEventBoolean = isFieldForChangeEvent($field);
+            return validation({
+                target: $field,
+                type: isFieldForChangeEventBoolean ? "change" : ""
+            });
+        })));
+    }, Form = function() {
         function Form(form, optionsObj) {
             _classCallCheck(this, Form);
             var argsL = arguments.length, checkFormElem = checkFormEl(form);
@@ -579,12 +579,7 @@
                 })) : cbOpt.bind(self));
             })), formStartup(self.$form, self.options);
             var initOptions = {};
-            if (self.options.formOptions.onInitCheckFilled) {
-                var focusOnRelated = self.options.fieldOptions.focusOnRelated;
-                self.options.fieldOptions.focusOnRelated = !1, initOptions.detail = checkFilledFields(self.$form).then((function(fields) {
-                    return self.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
-                }));
-            }
+            self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields()), 
             dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
         }
         var Constructor, protoProps, staticProps;
@@ -616,7 +611,7 @@
                     })), $form.removeEventListener(customEvents_field.validation, validationEnd, !1), 
                     $form.removeEventListener(customEvents_form.validation, formValidationEnd, !1), 
                     delete $form.formjs;
-                }(this.$form, this.options);
+                }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents_form.destroy);
             }
         }, {
             key: "getFormData",
@@ -644,6 +639,14 @@
                 })).then(finalizeFieldPromise);
             }
         }, {
+            key: "validateFilledFields",
+            value: function() {
+                var _this = this, focusOnRelated = this.options.fieldOptions.focusOnRelated;
+                return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then((function(fields) {
+                    return _this.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
+                }));
+            }
+        }, {
             key: "validateForm",
             value: function(fieldOptions) {
                 fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
@@ -662,5 +665,5 @@
         Form;
     }();
     return Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-    Form.prototype.version = "5.1.0", Form;
+    Form.prototype.version = "5.2.0", Form;
 }));
