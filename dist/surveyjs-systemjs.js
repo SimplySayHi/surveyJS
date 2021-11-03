@@ -90,7 +90,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 })).finally((function() {
                     timeoutTimer && window.clearTimeout(timeoutTimer);
                 }));
-            }, customEvents_init = "sjs:init", deepFreeze = function deepFreeze(obj) {
+            }, customEvents_destroy = "sjs:destroy", customEvents_init = "sjs:init", deepFreeze = function deepFreeze(obj) {
                 return Object.getOwnPropertyNames(obj).forEach((function(name) {
                     var prop = obj[name];
                     "object" === _typeof(prop) && null !== prop && deepFreeze(prop);
@@ -236,7 +236,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 storageName: "Survey_" + location.href + "_{{surveyFormName}}_surveyId[{{surveyId}}]"
             };
             function submit(event) {
-                var self = event.target.formjs;
+                var self = event.target.surveyjs;
                 event.detail.then((function() {
                     self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
                 }));
@@ -252,7 +252,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 return -1;
             };
             function validationEnd(event) {
-                var array, from, to, $field = event.detail.$field, errors = event.detail.errors, instance = $field.closest("form").formjs, options = instance.options, errorsWrapper = $field.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId($field), questionObj = getQuestionObject(instance.data.questions, questionId);
+                var array, from, to, $field = event.detail.$field, errors = event.detail.errors, instance = $field.closest("form").surveyjs, options = instance.options, errorsWrapper = $field.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId($field), questionObj = getQuestionObject(instance.data.questions, questionId);
                 if (isEmptyObject(questionObj)) return !0;
                 if (errorsWrapper && errors && isPlainObject(questionObj.errorMessage)) {
                     var errorsList = Object.keys(errors);
@@ -442,7 +442,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 }(Survey, _Form);
                 var Constructor, protoProps, staticProps, _super = _createSuper(Survey);
                 function Survey(form) {
-                    var _this, optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
+                    var _thisSuper, _this, optionsObj = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
                     if (_classCallCheck(this, Survey), !optionsObj.url || "string" != typeof optionsObj.url) throw new Error('"options.url" is missing or not a string!');
                     optionsObj = mergeObjects({}, Survey.prototype.options, optionsObj), webStorage().isAvailable || (optionsObj.useWebStorage = !1);
                     var self = _assertThisInitialized(_this = _super.call(this, form, optionsObj));
@@ -452,14 +452,17 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     var selfInternals = self.internals;
                     $form.surveyjs = self, $form.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforebegin", optionsObj.templates.loading);
                     var retrieveSurvey = ajaxCall(optionsObj.url, optionsObj.initAjaxOptions).then((function(response) {
-                        return "success" !== response.status.toLowerCase() ? Promise.reject(response) : (response.data.questions && response.data.questions.length > 0 && (selfInternals.storageName = selfInternals.storageName.replace(/{{surveyId}}/, response.data.id), 
+                        return "success" !== response.status.toLowerCase() ? Promise.reject(response) : response.data.questions && response.data.questions.length > 0 ? (selfInternals.storageName = selfInternals.storageName.replace(/{{surveyId}}/, response.data.id), 
                         selfInternals.storageName = selfInternals.storageName.replace(/{{surveyFormName}}/, $form.getAttribute("name") || ""), 
                         buildSurvey(response.data, $form, optionsObj), optionsObj.useWebStorage && populateAnswers($form, selfInternals), 
                         Object.defineProperty(self, "data", {
                             value: deepFreeze(response.data)
                         }), $form.addEventListener("fjs.field:validation", validationEnd), $form.addEventListener("fjs.form:submit", submit), 
                         $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
-                        self.isInitialized = !0), response);
+                        _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Survey.prototype)), "validateFilledFields", _thisSuper).call(_thisSuper).then((function(fields) {
+                            return self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
+                            response;
+                        }))) : response;
                     })).finally((function() {
                         var loadingBoxEl = $form.querySelector("[data-surveyjs-loading]");
                         loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
@@ -477,8 +480,8 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     key: "destroy",
                     value: function() {
                         var $form;
-                        ($form = this.$form).removeEventListener("fjs.field:validation", validationEnd), 
-                        $form.removeEventListener("fjs.form:submit", submit), _get(_getPrototypeOf(Survey.prototype), "destroy", this).call(this);
+                        _get(_getPrototypeOf(Survey.prototype), "destroy", this).call(this), ($form = this.$form).removeEventListener("fjs.field:validation", validationEnd), 
+                        $form.removeEventListener("fjs.form:submit", submit), delete $form.surveyjs, dispatchCustomEvent(this.$form, customEvents_destroy);
                     }
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
                 Survey;

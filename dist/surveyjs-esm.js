@@ -1,7 +1,7 @@
 /* surveyJS v4.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 import Form from "formjs-plugin";
 
-const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
+const customEvents_destroy = "sjs:destroy", customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
     const prop = obj[name];
     "object" == typeof prop && null !== prop && deepFreeze(prop);
 }), Object.freeze(obj)), isPlainObject$1 = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
@@ -10,6 +10,12 @@ const customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnProperty
             Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject$1(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
         });
     }), out;
+}, dispatchCustomEvent = (elem, eventName, eventOptions) => {
+    eventOptions = mergeObjects({}, {
+        bubbles: !0
+    }, eventOptions);
+    const eventObj = new CustomEvent(eventName, eventOptions);
+    elem.dispatchEvent(eventObj);
 }, getQuestionId = fieldEl => {
     const containerEl = fieldEl.closest("[data-question-id]");
     return containerEl && containerEl.getAttribute("data-question-id") || "";
@@ -130,7 +136,7 @@ list), webStorage = () => {
 };
 
 function submit(event) {
-    const self = event.target.formjs;
+    const self = event.target.surveyjs;
     event.detail.then(() => {
         self.options.useWebStorage && sessionStorage.removeItem(self.internals.storageName);
     });
@@ -149,7 +155,7 @@ const getAnswerIndex = (list, fieldName, multiChoiceValue = "") => {
 };
 
 function validationEnd(event) {
-    const $field = event.detail.$field, errors = event.detail.errors, instance = $field.closest("form").formjs, options = instance.options, errorsWrapper = $field.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId($field), questionObj = getQuestionObject(instance.data.questions, questionId);
+    const $field = event.detail.$field, errors = event.detail.errors, instance = $field.closest("form").surveyjs, options = instance.options, errorsWrapper = $field.closest(options.fieldOptions.questionContainer).querySelector("[data-surveyjs-errors]"), questionId = getQuestionId($field), questionObj = getQuestionObject(instance.data.questions, questionId);
     if (isEmptyObject(questionObj)) return !0;
     if (errorsWrapper && errors && isPlainObject(questionObj.errorMessage)) {
         let errorsList = Object.keys(errors);
@@ -338,7 +344,7 @@ class Survey extends Form {
             }).finally(() => {
                 timeoutTimer && window.clearTimeout(timeoutTimer);
             });
-        })(optionsObj.url, optionsObj.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : (response.data.questions && response.data.questions.length > 0 && (selfInternals.storageName = selfInternals.storageName.replace(/{{surveyId}}/, response.data.id), 
+        })(optionsObj.url, optionsObj.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : response.data.questions && response.data.questions.length > 0 ? (selfInternals.storageName = selfInternals.storageName.replace(/{{surveyId}}/, response.data.id), 
         selfInternals.storageName = selfInternals.storageName.replace(/{{surveyFormName}}/, $form.getAttribute("name") || ""), 
         buildSurvey(response.data, $form, optionsObj), optionsObj.useWebStorage && (($form, internals) => {
             const WS = sessionStorage.getObject(internals.storageName);
@@ -353,24 +359,19 @@ class Survey extends Form {
             value: deepFreeze(response.data)
         }), $form.addEventListener("fjs.field:validation", validationEnd), $form.addEventListener("fjs.form:submit", submit), 
         $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
-        self.isInitialized = !0), response)).finally(() => {
+        super.validateFilledFields().then(fields => (self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
+        response))) : response).finally(() => {
             const loadingBoxEl = $form.querySelector("[data-surveyjs-loading]");
             loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
         });
-        ((elem, eventName, eventOptions) => {
-            eventOptions = mergeObjects({}, {
-                bubbles: !0
-            }, eventOptions);
-            const eventObj = new CustomEvent(eventName, eventOptions);
-            elem.dispatchEvent(eventObj);
-        })($form, customEvents_init, {
+        dispatchCustomEvent($form, customEvents_init, {
             detail: retrieveSurvey
         });
     }
     destroy() {
         var $form;
-        ($form = this.$form).removeEventListener("fjs.field:validation", validationEnd), 
-        $form.removeEventListener("fjs.form:submit", submit), super.destroy();
+        super.destroy(), ($form = this.$form).removeEventListener("fjs.field:validation", validationEnd), 
+        $form.removeEventListener("fjs.form:submit", submit), delete $form.surveyjs, dispatchCustomEvent(this.$form, customEvents_destroy);
     }
     static setOptions(optionsObj) {
         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);

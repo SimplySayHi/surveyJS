@@ -237,8 +237,13 @@ System.register([], (function(exports) {
                     value: function(optionsObj) {
                         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);
                     }
-                } ], (protoProps = null) && _defineProperties(Constructor.prototype, protoProps), 
-                staticProps && _defineProperties(Constructor, staticProps), Survey;
+                } ], (protoProps = [ {
+                    key: "destroy",
+                    value: function() {
+                        delete this.$form.surveyjs;
+                    }
+                } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
+                Survey;
             }());
             Survey.prototype.isInitialized = !1, Survey.prototype.options = {
                 cssClasses: {
