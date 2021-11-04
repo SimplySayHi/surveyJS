@@ -21,7 +21,7 @@ var options = {
                     }
                 }
 
-                return Promise.resolve(data);
+                return data;
             }
         }
     };

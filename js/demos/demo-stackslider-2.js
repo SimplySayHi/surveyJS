@@ -44,7 +44,7 @@ var options = {
                     $surveyCont.find('.alert').remove();
                 }
 
-                return Promise.resolve(data);
+                return data;
             }
         }
 };
