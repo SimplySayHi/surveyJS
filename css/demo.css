@@ -96,6 +96,11 @@
 }
 
 /* SURVEY WITH CUSTOM INPUTS */
+.surveyjs-wrapper.surveyjs-custom-inputs .form-check.abc-checkbox,
+.surveyjs-wrapper.surveyjs-custom-inputs .form-check.abc-radio {
+    padding-left: 0;
+}
+
 .surveyjs-wrapper.surveyjs-custom-inputs .form-check .surveyjs-input[type="checkbox"],
 .surveyjs-wrapper.surveyjs-custom-inputs .form-check .surveyjs-input[type="radio"] {
     width: 17px;
