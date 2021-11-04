@@ -1,5 +1,5 @@
 /* surveyJS Lite v4.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
-const isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
+const isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_destroy = "sjs:destroy", customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
     const prop = obj[name];
     "object" == typeof prop && null !== prop && deepFreeze(prop);
 }), Object.freeze(obj)), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
@@ -8,6 +8,12 @@ const isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_in
             Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
         });
     }), out;
+}, dispatchCustomEvent = (elem, eventName, eventOptions) => {
+    eventOptions = mergeObjects({}, {
+        bubbles: !0
+    }, eventOptions);
+    const eventObj = new CustomEvent(eventName, eventOptions);
+    elem.dispatchEvent(eventObj);
 }, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce((accString, name) => {
     const regexStr = new RegExp("{{" + name + "}}", "g");
     return accString.replace(regexStr, obj[name]);
@@ -171,18 +177,12 @@ class Survey {
             const loadingBoxEl = $form.querySelector("[data-surveyjs-loading]");
             loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
         });
-        ((elem, eventName, eventOptions) => {
-            eventOptions = mergeObjects({}, {
-                bubbles: !0
-            }, eventOptions);
-            const eventObj = new CustomEvent(eventName, eventOptions);
-            elem.dispatchEvent(eventObj);
-        })($form, customEvents_init, {
+        dispatchCustomEvent($form, customEvents_init, {
             detail: retrieveSurvey
         });
     }
     destroy() {
-        delete this.$form.surveyjs;
+        delete this.$form.surveyjs, dispatchCustomEvent(this.$form, customEvents_destroy);
     }
     static setOptions(optionsObj) {
         Survey.prototype.options = mergeObjects({}, Survey.prototype.options, optionsObj);

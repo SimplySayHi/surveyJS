@@ -44,7 +44,7 @@ System.register([], (function(exports) {
                     result: isDOMNode(formEl) || isFormSelector,
                     element: "string" === isString ? document.querySelector(formEl) : formEl
                 };
-            }, customEvents_init = "sjs:init", deepFreeze = function deepFreeze(obj) {
+            }, customEvents_destroy = "sjs:destroy", customEvents_init = "sjs:init", deepFreeze = function deepFreeze(obj) {
                 return Object.getOwnPropertyNames(obj).forEach((function(name) {
                     var prop = obj[name];
                     "object" === _typeof(prop) && null !== prop && deepFreeze(prop);
@@ -240,7 +240,7 @@ System.register([], (function(exports) {
                 } ], (protoProps = [ {
                     key: "destroy",
                     value: function() {
-                        delete this.$form.surveyjs;
+                        delete this.$form.surveyjs, dispatchCustomEvent(this.$form, customEvents_destroy);
                     }
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
                 Survey;

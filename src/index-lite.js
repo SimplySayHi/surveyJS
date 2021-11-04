@@ -60,6 +60,7 @@ class Survey {
 
     destroy(){
         delete this.$form.surveyjs;
+        dispatchCustomEvent( this.$form, customEvents.destroy );
     }
 
     static setOptions( optionsObj ){
