@@ -9,15 +9,15 @@ export const buildSurvey = ( data, $form, options ) => {
     // MANAGE EXTERNAL QUESTION
     const extQuestions = data.questions.filter(obj => obj.external);
     if( extQuestions.length > 0 ){
-        const surveyWrapperEl = $form.closest('[data-surveyjs-wrapper]');
+        const $surveyWrapper = $form.closest('[data-surveyjs-wrapper]');
         extQuestions.forEach((question, qIndex) => {
 
-            const externalCont = surveyWrapperEl.querySelector('[data-surveyjs-external="'+ (qIndex+1) +'"]');
+            const $externalCont = $surveyWrapper.querySelector('[data-surveyjs-external="'+ (qIndex+1) +'"]');
             
-            externalCont.setAttribute('data-question-id', question.id);
+            $externalCont.setAttribute('data-question-id', question.id);
 
             question.answers.forEach((answer, aIndex) => {
-                const externalField = externalCont.querySelectorAll('[data-field]')[aIndex];
+                const $externalField = $externalCont.querySelectorAll('[data-field]')[aIndex];
                 const fieldProps = {
                         id: `${answer.type}-${data.id}-${question.id}-${answer.id}`,
                         type: answer.type,
@@ -26,13 +26,13 @@ export const buildSurvey = ( data, $form, options ) => {
                     };
                 
                 Object.keys(fieldProps).forEach(name => {
-                    externalField[name] = fieldProps[name];
+                    $externalField[name] = fieldProps[name];
                 });
 
-                const answerCont = externalField.closest('[data-answer]');
-                answerCont.querySelector('label').setAttribute('for', fieldProps.id);
-                answerCont.querySelector('[data-label]').innerHTML = answer.label;
-                externalCont.querySelector('[data-question]').innerHTML = question.question;
+                const $answerCont = $externalField.closest('[data-answer]');
+                $answerCont.querySelector('label').setAttribute('for', fieldProps.id);
+                $answerCont.querySelector('[data-label]').innerHTML = answer.label;
+                $externalCont.querySelector('[data-question]').innerHTML = question.question;
             });
 
         });

@@ -49,9 +49,9 @@ class Survey {
                 return response;
             })
             .finally(() => {
-                const loadingBoxEl = $form.querySelector('[data-surveyjs-loading]');
-                if( loadingBoxEl ){
-                    loadingBoxEl.parentNode.removeChild(loadingBoxEl);
+                const $loadingBox = $form.querySelector('[data-surveyjs-loading]');
+                if( $loadingBox ){
+                    $loadingBox.parentNode.removeChild($loadingBox);
                 }
             });
         

@@ -8,7 +8,7 @@ export function validationEnd( event ){
     const errors = event.detail.errors;
     const instance = $field.closest('form').surveyjs;
     const options = instance.options;
-    const errorsWrapper = $field.closest( options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
+    const $errorsWrapper = $field.closest( options.fieldOptions.questionContainer ).querySelector('[data-surveyjs-errors]');
     
     const questionId = getQuestionId($field);
     const questionObj = getQuestionObject(instance.data.questions, questionId);
@@ -17,7 +17,7 @@ export function validationEnd( event ){
     if( isEmptyObject(questionObj) ){ return true; }
 
     // MANAGE MULTIPLE ERROR MESSAGES
-    if( errorsWrapper && errors && isPlainObject(questionObj.errorMessage) ){
+    if( $errorsWrapper && errors && isPlainObject(questionObj.errorMessage) ){
         let errorsList = Object.keys(errors);
         if( errors.rule ){
             // PUT ERROR "rule" AS FIRST, SO THAT A GENERIC ERROR IS SHOWN BEFORE ALL OTHERS
@@ -29,7 +29,7 @@ export function validationEnd( event ){
             return accHTML += errorMessage ? options.templates.error.replace('{{errorMessage}}', errorMessage) : '';
         }, '');
 
-        errorsWrapper.innerHTML = errorsHTML;
+        $errorsWrapper.innerHTML = errorsHTML;
     }
 
     // MANAGE ITEMS IN LOCAL STORAGE ( IF AVAILABLE AND ACTIVE )
@@ -42,7 +42,7 @@ export function validationEnd( event ){
         const isRequiredFrom = $field.matches('[data-required-from]');
         const isMultiChoice = $field.matches('[data-checks]');
         const isRequireMore = $field.matches('[data-require-more]');
-        const reqMoreEl = isRequiredFrom ? document.querySelector($field.getAttribute('data-required-from')) : null;
+        const $reqMore = isRequiredFrom ? document.querySelector($field.getAttribute('data-required-from')) : null;
 
         const inArrayRequireMorePos = getAnswerIndex( storageArray, name + '-more' );            
         if( !isRequireMore && !isRequiredFrom && inArrayRequireMorePos >= 0 ){
@@ -60,11 +60,11 @@ export function validationEnd( event ){
             }
         } else if( value !== '' ){
             if( isRequiredFrom ){
-                const reqMorePos = getAnswerIndex( storageArray, reqMoreEl.name );
+                const reqMorePos = getAnswerIndex( storageArray, $reqMore.name );
                 if( reqMorePos >= 0 ){
                     storageArray.splice(reqMorePos, 1);
                 }
-                storageArray.push( { name: reqMoreEl.name, value: reqMoreEl.value } );
+                storageArray.push( { name: $reqMore.name, value: $reqMore.value } );
             }
             storageArray.push( { name, value } );
         }

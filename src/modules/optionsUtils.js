@@ -17,15 +17,15 @@ export const optionsUtils = {
             let fieldNameCheck = '',
                 fieldTypeCheck = '';
 
-            fieldsList.forEach(fieldEl => {
-                const type = fieldEl.type,
-                      name = fieldEl.name;
+            fieldsList.forEach($field => {
+                const type = $field.type,
+                      name = $field.name;
 
                 // IF A FIELD HAS THE SAME NAME ATTRIBUTE AND IT IS OF THE SAME TYPE
                 // SKIP THE REST OF THE CODE FOR THIS FIELD AND GO TO THE NEXT
                 if( (name === fieldNameCheck && type === fieldTypeCheck) ){ return; }
                 
-                if( !fieldEl.matches('[data-required-from]') ){
+                if( !$field.matches('[data-required-from]') ){
                     fieldNameCheck = name;
                     fieldTypeCheck = type;
                 }
@@ -35,38 +35,38 @@ export const optionsUtils = {
                 // answer       AN OBJECT THAT CONTAINS THE FOLLOWS:
                 //                  value:      THE ANSWER VALUE
                 //                  related:    IF THE ANSWER IS REQUIRED FROM ANOTHER ANSWER (SEE BELOW)
-                const questionId = getQuestionId(fieldEl),
+                const questionId = getQuestionId($field),
                       qaObj = {
                         question: questionId,
                         answer: {
-                            value: fieldEl.value || ''
+                            value: $field.value || ''
                         }
                     };
 
                 // A FIELD WITH ATTRIBUTE 'data-required-from' IS MANAGED TOGETHER WITH ITS RELATED FIELD ( WHICH HAS ATTRIBUTE 'data-require-more' )
                 // IF QUESTION ID IS EMPTY -> SKIP THE FIELD ( USEFUL FOR FORM FIELDS OUTSIDE THE SURVEY BODY )
                 if(
-                    fieldEl.matches('[data-required-from]') || 
+                    $field.matches('[data-required-from]') || 
                     questionId === '' || 
                     isEmptyObject( getQuestionObject(instance.data.questions, questionId) )
                 ){ return; }
 
                 if( type === 'radio' ){
-                    const containerEl = fieldEl.closest('form') ? $form : fieldEl.closest(instance.options.fieldOptions.questionContainer);
-                    const checkedEl = containerEl.querySelector('[name="'+ name +'"]:checked');
+                    const $container = $field.closest('form') ? $form : $field.closest(instance.options.fieldOptions.questionContainer);
+                    const $checked = $container.querySelector('[name="'+ name +'"]:checked');
 
-                    qaObj.answer.value = (checkedEl && checkedEl.value) || '';
+                    qaObj.answer.value = ($checked && $checked.value) || '';
 
                     // FOR RADIO THAT REQUIRE THE USER TO GIVE ONE MORE ANSWER
-                    if( checkedEl && checkedEl.matches('[data-require-more]') ){
-                        qaObj.answer.related = $form.querySelector('[data-required-from="#'+ checkedEl.id +'"]').value;
+                    if( $checked && $checked.matches('[data-require-more]') ){
+                        qaObj.answer.related = $form.querySelector('[data-required-from="#'+ $checked.id +'"]').value;
                     }
                 }
 
-                if( type === 'checkbox' && fieldEl.matches('[data-checks]') ){
+                if( type === 'checkbox' && $field.matches('[data-checks]') ){
                     qaObj.answer.value = [];
-                    Array.from($form.querySelectorAll('[name="'+ name +'"]:checked')).forEach(el => {
-                        qaObj.answer.value.push( el.value );
+                    Array.from($form.querySelectorAll('[name="'+ name +'"]:checked')).forEach($el => {
+                        qaObj.answer.value.push( $el.value );
                     });
                 }
                 
