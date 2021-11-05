@@ -115,22 +115,22 @@ list), generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((
     $form.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
     const extQuestions = data.questions.filter(obj => obj.external);
     if (extQuestions.length > 0) {
-        const surveyWrapperEl = $form.closest("[data-surveyjs-wrapper]");
+        const $surveyWrapper = $form.closest("[data-surveyjs-wrapper]");
         extQuestions.forEach((question, qIndex) => {
-            const externalCont = surveyWrapperEl.querySelector('[data-surveyjs-external="' + (qIndex + 1) + '"]');
-            externalCont.setAttribute("data-question-id", question.id), question.answers.forEach((answer, aIndex) => {
-                const externalField = externalCont.querySelectorAll("[data-field]")[aIndex], fieldProps = {
+            const $externalCont = $surveyWrapper.querySelector('[data-surveyjs-external="' + (qIndex + 1) + '"]');
+            $externalCont.setAttribute("data-question-id", question.id), question.answers.forEach((answer, aIndex) => {
+                const $externalField = $externalCont.querySelectorAll("[data-field]")[aIndex], fieldProps = {
                     id: `${answer.type}-${data.id}-${question.id}-${answer.id}`,
                     type: answer.type,
                     value: answer.value,
                     required: !!question.required
                 };
                 Object.keys(fieldProps).forEach(name => {
-                    externalField[name] = fieldProps[name];
+                    $externalField[name] = fieldProps[name];
                 });
-                const answerCont = externalField.closest("[data-answer]");
-                answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
-                externalCont.querySelector("[data-question]").innerHTML = question.question;
+                const $answerCont = $externalField.closest("[data-answer]");
+                $answerCont.querySelector("label").setAttribute("for", fieldProps.id), $answerCont.querySelector("[data-label]").innerHTML = answer.label, 
+                $externalCont.querySelector("[data-question]").innerHTML = question.question;
             });
         });
     }
@@ -174,8 +174,8 @@ class Survey {
             value: deepFreeze(response.data)
         }), self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success")), 
         response)).finally(() => {
-            const loadingBoxEl = $form.querySelector("[data-surveyjs-loading]");
-            loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
+            const $loadingBox = $form.querySelector("[data-surveyjs-loading]");
+            $loadingBox && $loadingBox.parentNode.removeChild($loadingBox);
         });
         dispatchCustomEvent($form, customEvents_init, {
             detail: retrieveSurvey

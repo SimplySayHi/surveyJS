@@ -186,22 +186,22 @@
             return obj.external;
         }));
         if (extQuestions.length > 0) {
-            var surveyWrapperEl = $form.closest("[data-surveyjs-wrapper]");
+            var $surveyWrapper = $form.closest("[data-surveyjs-wrapper]");
             extQuestions.forEach((function(question, qIndex) {
-                var externalCont = surveyWrapperEl.querySelector('[data-surveyjs-external="' + (qIndex + 1) + '"]');
-                externalCont.setAttribute("data-question-id", question.id), question.answers.forEach((function(answer, aIndex) {
-                    var externalField = externalCont.querySelectorAll("[data-field]")[aIndex], fieldProps = {
+                var $externalCont = $surveyWrapper.querySelector('[data-surveyjs-external="' + (qIndex + 1) + '"]');
+                $externalCont.setAttribute("data-question-id", question.id), question.answers.forEach((function(answer, aIndex) {
+                    var $externalField = $externalCont.querySelectorAll("[data-field]")[aIndex], fieldProps = {
                         id: "".concat(answer.type, "-").concat(data.id, "-").concat(question.id, "-").concat(answer.id),
                         type: answer.type,
                         value: answer.value,
                         required: !!question.required
                     };
                     Object.keys(fieldProps).forEach((function(name) {
-                        externalField[name] = fieldProps[name];
+                        $externalField[name] = fieldProps[name];
                     }));
-                    var answerCont = externalField.closest("[data-answer]");
-                    answerCont.querySelector("label").setAttribute("for", fieldProps.id), answerCont.querySelector("[data-label]").innerHTML = answer.label, 
-                    externalCont.querySelector("[data-question]").innerHTML = question.question;
+                    var $answerCont = $externalField.closest("[data-answer]");
+                    $answerCont.querySelector("label").setAttribute("for", fieldProps.id), $answerCont.querySelector("[data-label]").innerHTML = answer.label, 
+                    $externalCont.querySelector("[data-question]").innerHTML = question.question;
                 }));
             }));
         }
@@ -224,8 +224,8 @@
                 }), self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success")), 
                 response);
             })).finally((function() {
-                var loadingBoxEl = $form.querySelector("[data-surveyjs-loading]");
-                loadingBoxEl && loadingBoxEl.parentNode.removeChild(loadingBoxEl);
+                var $loadingBox = $form.querySelector("[data-surveyjs-loading]");
+                $loadingBox && $loadingBox.parentNode.removeChild($loadingBox);
             }));
             dispatchCustomEvent($form, customEvents_init, {
                 detail: retrieveSurvey
