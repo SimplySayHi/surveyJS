@@ -233,18 +233,18 @@ const onInitSuccess = function( ajaxData ){
 
 $form.addEventListener('fjs.field:validation', event => {
     onValidation([event.detail]);
-}, false);
+});
 
 $form.addEventListener('fjs.form:validation', event => {
     onValidation(event.detail.fields);
-}, false);
+});
 
 $form.addEventListener('fjs.form:submit', event => {
     event.detail
         .then(ajaxData => {...})
         .catch(error => {...})
         .finally(() => {...});
-}, false);
+});
 
 $form.addEventListener('sjs:init', event => {
     event.detail
@@ -252,7 +252,7 @@ $form.addEventListener('sjs:init', event => {
             onInitSuccess.call(mySurvey, data);
         })
         .catch(error => {...});
-}, false);
+});
 
 const mySurvey = new Survey( $form, options );
 

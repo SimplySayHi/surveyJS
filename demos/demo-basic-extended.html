@@ -176,24 +176,24 @@ const onValidation = fields => {...};
 
 $form.addEventListener('fjs.field:validation', event => {
     onValidation([event.detail]);
-}, false);
+});
 
 $form.addEventListener('fjs.form:validation', event => {
     onValidation(event.detail.fields);
-}, false);
+});
 
 $form.addEventListener('fjs.form:submit', event => {
     event.detail
         .then(ajaxData => {...})
         .catch(error => {...})
         .finally(() => {...});
-}, false);
+});
 
 $form.addEventListener('sjs:init', event => {
     event.detail
         .then(data => {...})
         .catch(error => {...});
-}, false);
+});
 
 const mySurvey = new Survey( $form, options );
 

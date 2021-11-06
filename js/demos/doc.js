@@ -158,6 +158,6 @@ $form.addEventListener('sjs:init', function(event){
             console.log(error);
             onInitError.call(mySurvey, error);
         });
-}, false);
+});
 
 var mySurvey = new Survey( $form, options );

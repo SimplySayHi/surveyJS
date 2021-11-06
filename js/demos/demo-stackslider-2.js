@@ -111,12 +111,12 @@ var onInitSuccess = function( ajaxData ){
 $form.addEventListener('fjs.field:validation', function(event){
     console.log(event.type);
     onValidation([event.detail]);
-}, false);
+});
 
 $form.addEventListener('fjs.form:validation', function(event){
     console.log(event.type);
     onValidation(event.detail.fields);
-}, false);
+});
 
 $form.addEventListener('fjs.form:submit', function(event){
     console.log(event.type);
@@ -153,7 +153,7 @@ $form.addEventListener('fjs.form:submit', function(event){
             console.log('finally');
             $form.querySelector('button[type="submit"]').classList.remove('surveyjs-submit-sending');
         });
-}, false);
+});
 
 $form.addEventListener('sjs:init', function(event){
     console.log(event.type);
@@ -168,6 +168,6 @@ $form.addEventListener('sjs:init', function(event){
             console.log(error);
             onInitError.call(mySurvey, error);
         });
-}, false);
+});
 
 var mySurvey = new Survey( $form, options );
