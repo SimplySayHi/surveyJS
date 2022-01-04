@@ -5,7 +5,7 @@ import { getQuestionObject } from './utils/getQuestionObject';
 export const optionsUtils = {
     formOptions: {
 
-        getFormData: function getFormData_surveyDefault(){
+        getFormData: function getFormData_surveyDefault( $filteredFields, trimValues ){
             const instance = this;
             const $form = instance.$form;
             const fieldsList = Array.from( $form.closest('[data-surveyjs-wrapper]').querySelectorAll(fieldsStringSelectorSurvey) );
@@ -14,16 +14,14 @@ export const optionsUtils = {
                     id: instance.data.id
                 };
             
-            let fieldNameCheck = '',
-                fieldTypeCheck = '';
+            let fieldNameCheck = '';
+            let fieldTypeCheck = '';
 
             fieldsList.forEach($field => {
-                const type = $field.type,
-                      name = $field.name;
+                const type = $field.type;
+                const name = $field.name;
 
-                // IF A FIELD HAS THE SAME NAME ATTRIBUTE AND IT IS OF THE SAME TYPE
-                // SKIP THE REST OF THE CODE FOR THIS FIELD AND GO TO THE NEXT
-                if( (name === fieldNameCheck && type === fieldTypeCheck) ){ return; }
+                if( name === fieldNameCheck && type === fieldTypeCheck ){ return; }
                 
                 if( !$field.matches('[data-required-from]') ){
                     fieldNameCheck = name;
@@ -35,11 +33,11 @@ export const optionsUtils = {
                 // answer       AN OBJECT THAT CONTAINS THE FOLLOWS:
                 //                  value:      THE ANSWER VALUE
                 //                  related:    IF THE ANSWER IS REQUIRED FROM ANOTHER ANSWER (SEE BELOW)
-                const questionId = getQuestionId($field),
-                      qaObj = {
+                const questionId = getQuestionId($field);
+                const qaObj = {
                         question: questionId,
                         answer: {
-                            value: $field.value || ''
+                            value: trimValues ? $field.value.trim() : ($field.value || '')
                         }
                     };
 

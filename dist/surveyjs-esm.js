@@ -67,7 +67,7 @@ list), webStorage = () => {
     formOptions: {
         getFormData: {
             formOptions: {
-                getFormData: function() {
+                getFormData: function($filteredFields, trimValues) {
                     const instance = this, $form = instance.$form, fieldsList = Array.from($form.closest("[data-surveyjs-wrapper]").querySelectorAll('[data-surveyjs-form] input:not([type="reset"]):not([type="submit"]):not([type="button"]), [data-surveyjs-form] select, [data-surveyjs-form] textarea, [data-surveyjs-external] [data-field]')), obj = {
                         answers: [],
                         id: instance.data.id
@@ -80,7 +80,7 @@ list), webStorage = () => {
                         const questionId = getQuestionId($field), qaObj = {
                             question: questionId,
                             answer: {
-                                value: $field.value || ""
+                                value: trimValues ? $field.value.trim() : $field.value || ""
                             }
                         };
                         if (!$field.matches("[data-required-from]") && "" !== questionId && !isEmptyObject(getQuestionObject(instance.data.questions, questionId))) {
