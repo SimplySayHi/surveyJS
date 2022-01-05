@@ -58,7 +58,6 @@ class Survey extends Form {
                     
                     $form.addEventListener('fjs.field:validation', validationEnd);
                     $form.addEventListener('fjs.form:submit', submit);
-                    $form.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
 
                     if( optionsObj.formOptions.onInitCheckFilled ){
                         return super.validateFilledFields().then(fields => {
@@ -69,6 +68,7 @@ class Survey extends Form {
                     }
 
                     self.isInitialized = true;
+                    $form.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
                     return response
                 }
                 

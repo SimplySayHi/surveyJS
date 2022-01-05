@@ -460,12 +460,12 @@
                 Object.defineProperty(self, "data", {
                     value: deepFreeze(response.data)
                 }), $form.addEventListener("fjs.field:validation", validationEnd), $form.addEventListener("fjs.form:submit", submit), 
-                $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
                 optionsObj.formOptions.onInitCheckFilled ? _get((_thisSuper = _assertThisInitialized(_this), 
                 _getPrototypeOf(Survey.prototype)), "validateFilledFields", _thisSuper).call(_thisSuper).then((function(fields) {
                     return self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
                     response;
-                })) : (self.isInitialized = !0, response)) : response;
+                })) : (self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
+                response)) : response;
             })).finally((function() {
                 var $loadingBox = $form.querySelector("[data-surveyjs-loading]");
                 $loadingBox && $loadingBox.parentNode.removeChild($loadingBox);
