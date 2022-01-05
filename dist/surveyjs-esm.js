@@ -359,8 +359,9 @@ class Survey extends Form {
             value: deepFreeze(response.data)
         }), $form.addEventListener("fjs.field:validation", validationEnd), $form.addEventListener("fjs.form:submit", submit), 
         $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
-        super.validateFilledFields().then(fields => (self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
-        response))) : response).finally(() => {
+        optionsObj.formOptions.onInitCheckFilled ? super.validateFilledFields().then(fields => (self.isInitialized = !0, 
+        $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
+        response)) : (self.isInitialized = !0, response)) : response).finally(() => {
             const $loadingBox = $form.querySelector("[data-surveyjs-loading]");
             $loadingBox && $loadingBox.parentNode.removeChild($loadingBox);
         });

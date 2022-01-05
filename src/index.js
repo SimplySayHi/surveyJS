@@ -60,11 +60,16 @@ class Survey extends Form {
                     $form.addEventListener('fjs.form:submit', submit);
                     $form.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
 
-                    return super.validateFilledFields().then(fields => {
-                        self.isInitialized = true;
-                        $form.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
-                        return response
-                    });
+                    if( optionsObj.formOptions.onInitCheckFilled ){
+                        return super.validateFilledFields().then(fields => {
+                            self.isInitialized = true;
+                            $form.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
+                            return response
+                        });
+                    }
+
+                    self.isInitialized = true;
+                    return response
                 }
                 
                 return response;
