@@ -1,13 +1,13 @@
-/* surveyJS v4.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS v4.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 import Form from "formjs-plugin";
 
 const customEvents_destroy = "sjs:destroy", customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
     const prop = obj[name];
     "object" == typeof prop && null !== prop && deepFreeze(prop);
-}), Object.freeze(obj)), isPlainObject$1 = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
+}), Object.freeze(obj)), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
     return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
         Object.keys(arg).forEach(key => {
-            Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject$1(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+            Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
         });
     }), out;
 }, dispatchCustomEvent = (elem, eventName, eventOptions) => {
@@ -19,7 +19,7 @@ const customEvents_destroy = "sjs:destroy", customEvents_init = "sjs:init", deep
 }, getQuestionId = fieldEl => {
     const containerEl = fieldEl.closest("[data-question-id]");
     return containerEl && containerEl.getAttribute("data-question-id") || "";
-}, isEmptyObject = object => isPlainObject$1(object) && 0 === Object.getOwnPropertyNames(object).length, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce((accString, name) => {
+}, isEmptyObject = object => isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce((accString, name) => {
     const regexStr = new RegExp("{{" + name + "}}", "g");
     return accString.replace(regexStr, obj[name]);
 }, stringHTML), sortList = list => (list[0].sort && list.sort((a, b) => a.sort > b.sort), 
@@ -286,7 +286,7 @@ const generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((o
         };
         if (questionHTML = replaceObjectKeysInString(questionData, questionHTML), options.showErrorMessage) {
             let errorMessage = "" !== maxChoice ? options.messages.errorMultiChoice : questionObj.errorMessage || options.messages.error;
-            isPlainObject$1(errorMessage) && (errorMessage = ""), questionHTML = questionHTML.replace(/{{errorTemplates}}/g, errorMessage);
+            isPlainObject(errorMessage) && (errorMessage = ""), questionHTML = questionHTML.replace(/{{errorTemplates}}/g, errorMessage);
         }
         return accCode + replaceObjectKeysInString({
             checksMin: checksMin,
@@ -358,7 +358,7 @@ class Survey extends Form {
         })($form, selfInternals), Object.defineProperty(self, "data", {
             value: deepFreeze(response.data)
         }), $form.addEventListener("fjs.field:validation", validationEnd), $form.addEventListener("fjs.form:submit", submit), 
-        optionsObj.formOptions.onInitCheckFilled ? super.validateFilledFields().then(fields => (self.isInitialized = !0, 
+        optionsObj.formOptions.onInitCheckFilled ? super.validateFilledFields().then(() => (self.isInitialized = !0, 
         $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
         response)) : (self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
         response)) : response).finally(() => {
@@ -379,6 +379,6 @@ class Survey extends Form {
     }
 }
 
-Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "4.0.0";
+Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "4.0.1";
 
 export default Survey;

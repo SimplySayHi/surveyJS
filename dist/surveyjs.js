@@ -1,4 +1,4 @@
-/* surveyJS v4.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS v4.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 !function(global, factory) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = factory(require("formjs-plugin")) : "function" == typeof define && define.amd ? define([ "formjs-plugin" ], factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Survey = factory(global.Form);
 }(this, (function(Form) {
@@ -97,7 +97,7 @@
             var prop = obj[name];
             "object" === _typeof(prop) && null !== prop && deepFreeze(prop);
         })), Object.freeze(obj);
-    }, isPlainObject$1 = function(object) {
+    }, isPlainObject = function(object) {
         return "[object Object]" === Object.prototype.toString.call(object);
     }, mergeObjects = function mergeObjects() {
         var out = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
@@ -105,7 +105,7 @@
             return !!arg;
         })).forEach((function(arg) {
             Object.keys(arg).forEach((function(key) {
-                Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject$1(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
+                Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
             }));
         })), out;
     }, dispatchCustomEvent = function(elem, eventName, eventOptions) {
@@ -118,7 +118,7 @@
         var containerEl = fieldEl.closest("[data-question-id]");
         return containerEl && containerEl.getAttribute("data-question-id") || "";
     }, isEmptyObject = function(object) {
-        return isPlainObject$1(object) && 0 === Object.getOwnPropertyNames(object).length;
+        return isPlainObject(object) && 0 === Object.getOwnPropertyNames(object).length;
     }, replaceObjectKeysInString = function(obj, stringHTML) {
         return Object.keys(obj).reduce((function(accString, name) {
             var regexStr = new RegExp("{{" + name + "}}", "g");
@@ -389,7 +389,7 @@
             };
             if (questionHTML = replaceObjectKeysInString(questionData, questionHTML), options.showErrorMessage) {
                 var errorMessage = "" !== maxChoice ? options.messages.errorMultiChoice : questionObj.errorMessage || options.messages.error;
-                isPlainObject$1(errorMessage) && (errorMessage = ""), questionHTML = questionHTML.replace(/{{errorTemplates}}/g, errorMessage);
+                isPlainObject(errorMessage) && (errorMessage = ""), questionHTML = questionHTML.replace(/{{errorTemplates}}/g, errorMessage);
             }
             return accCode + replaceObjectKeysInString({
                 checksMin: checksMin,
@@ -461,7 +461,7 @@
                     value: deepFreeze(response.data)
                 }), $form.addEventListener("fjs.field:validation", validationEnd), $form.addEventListener("fjs.form:submit", submit), 
                 optionsObj.formOptions.onInitCheckFilled ? _get((_thisSuper = _assertThisInitialized(_this), 
-                _getPrototypeOf(Survey.prototype)), "validateFilledFields", _thisSuper).call(_thisSuper).then((function(fields) {
+                _getPrototypeOf(Survey.prototype)), "validateFilledFields", _thisSuper).call(_thisSuper).then((function() {
                     return self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
                     response;
                 })) : (self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
@@ -490,5 +490,5 @@
         Survey;
     }(Form__default.default);
     return Survey.prototype.isInitialized = !1, Survey.prototype.options = options, 
-    Survey.prototype.version = "4.0.0", Survey;
+    Survey.prototype.version = "4.0.1", Survey;
 }));

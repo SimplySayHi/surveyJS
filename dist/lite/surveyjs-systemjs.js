@@ -1,4 +1,4 @@
-/* surveyJS Lite v4.0.0 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS Lite v4.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 System.register([], (function(exports) {
     "use strict";
     return {
@@ -290,7 +290,7 @@ System.register([], (function(exports) {
                         related: '<div class="surveyjs-field-wrapper surveyjs-related-wrapper input-group"><div class="input-group-prepend"><div class="surveyjs-radio-wrapper input-group-text form-check">{{fieldTemplate}}{{labelTemplate}}</div></div>{{relatedFieldHTML}}</div>'
                     }
                 }
-            }, Survey.prototype.version = "4.0.0";
+            }, Survey.prototype.version = "4.0.1";
         }
     };
 }));
