@@ -29,13 +29,16 @@
     "scripts": {
         "build": "BABEL_ENV=build rollup --config",
         "build-lite": "BABEL_ENV=build rollup --config rollup.config.lite.js",
-        "serve": "BABEL_ENV=build rollup --config rollup.config.server.js"
+        "serve": "BABEL_ENV=build rollup --config rollup.config.server.js",
+        "lint": "eslint 'src/**/*.js'"
     },
     "devDependencies": {
         "@babel/core": "^7.12.10",
         "@babel/preset-env": "^7.12.11",
         "@rollup/plugin-babel": "^5.2.2",
+        "@rollup/plugin-json": "^5.0.1",
         "@rollup/plugin-node-resolve": "^9.0.0",
+        "eslint": "^8.27.0",
         "rollup": "^2.36.1",
         "rollup-plugin-serve": "^1.1.0",
         "rollup-plugin-terser": "^7.0.2"
