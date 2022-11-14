@@ -1,5 +1,5 @@
 
-import { arrayMove, getQuestionId, isEmptyObject }  from '../helpers';
+import { arrayMove, getQuestionId, isEmptyObject, isPlainObject }  from '../helpers';
 import { getQuestionObject }                        from '../utils/getQuestionObject';
 import { getAnswerIndex }                           from '../utils/getAnswerIndex';
 
