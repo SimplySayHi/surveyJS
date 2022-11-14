@@ -1,5 +1,5 @@
 
-import { version }      from './modules/version';
+import { version }      from '../package.json';
 import { ajaxCall, checkFormEl, customEvents, deepFreeze, dispatchCustomEvent, isNodeList, mergeObjects } from './modules/helpers';
 import { options }      from './modules-lite/options';
 import { buildSurvey }  from './modules/buildSurvey/buildSurvey';

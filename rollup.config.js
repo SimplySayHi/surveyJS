@@ -1,4 +1,5 @@
 
+import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
@@ -48,7 +49,8 @@ optionsESM = {
             ],
         }
 
-    ]
+    ],
+    plugins: [ json() ]
 },
 
 optionsSYS = {
@@ -88,7 +90,7 @@ optionsSYS = {
         }
 
     ],
-    plugins: [ nodeResolve(), babel({babelHelpers: 'bundled'}) ]
+    plugins: [ json(), nodeResolve(), babel({babelHelpers: 'bundled'}) ]
 },
 
 optionsUMD = {
@@ -136,7 +138,7 @@ optionsUMD = {
         }
 
     ],
-    plugins: [ nodeResolve(), babel({babelHelpers: 'bundled'}) ]
+    plugins: [ json(), nodeResolve(), babel({babelHelpers: 'bundled'}) ]
 }
 
 ;

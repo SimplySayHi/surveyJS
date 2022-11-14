@@ -1,5 +1,5 @@
 
-import { version }          from './modules/version';
+import { version }          from '../package.json';
 import { ajaxCall, customEvents, deepFreeze, dispatchCustomEvent, mergeObjects, webStorage } from './modules/helpers';
 import { options }          from './modules/options';
 import { internals }        from './modules/internals';
@@ -60,7 +60,7 @@ class Survey extends Form {
                     $form.addEventListener('fjs.form:submit', submit);
 
                     if( optionsObj.formOptions.onInitCheckFilled ){
-                        return super.validateFilledFields().then(fields => {
+                        return super.validateFilledFields().then(() => {
                             self.isInitialized = true;
                             $form.closest('[data-surveyjs-wrapper]').classList.add('surveyjs-init-success');
                             return response
