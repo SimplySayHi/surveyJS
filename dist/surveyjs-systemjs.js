@@ -8,11 +8,11 @@ System.register([ "formjs-plugin" ], (function(exports) {
         } ],
         execute: function() {
             function _typeof(obj) {
-                return (_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+                return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
                     return typeof obj;
                 } : function(obj) {
                     return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-                })(obj);
+                }, _typeof(obj);
             }
             function _classCallCheck(instance, Constructor) {
                 if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
@@ -25,21 +25,23 @@ System.register([ "formjs-plugin" ], (function(exports) {
                 }
             }
             function _getPrototypeOf(o) {
-                return (_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function(o) {
+                return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function(o) {
                     return o.__proto__ || Object.getPrototypeOf(o);
-                })(o);
+                }, _getPrototypeOf(o);
             }
             function _setPrototypeOf(o, p) {
-                return (_setPrototypeOf = Object.setPrototypeOf || function(o, p) {
+                return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(o, p) {
                     return o.__proto__ = p, o;
-                })(o, p);
+                }, _setPrototypeOf(o, p);
             }
             function _assertThisInitialized(self) {
                 if (void 0 === self) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
                 return self;
             }
             function _possibleConstructorReturn(self, call) {
-                return !call || "object" != typeof call && "function" != typeof call ? _assertThisInitialized(self) : call;
+                if (call && ("object" == typeof call || "function" == typeof call)) return call;
+                if (void 0 !== call) throw new TypeError("Derived constructors may only return object or undefined");
+                return _assertThisInitialized(self);
             }
             function _createSuper(Derived) {
                 var hasNativeReflectConstruct = function() {
@@ -47,7 +49,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     if (Reflect.construct.sham) return !1;
                     if ("function" == typeof Proxy) return !0;
                     try {
-                        return Date.prototype.toString.call(Reflect.construct(Date, [], (function() {}))), 
+                        return Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], (function() {}))), 
                         !0;
                     } catch (e) {
                         return !1;
@@ -62,17 +64,18 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     return _possibleConstructorReturn(this, result);
                 };
             }
-            function _get(target, property, receiver) {
-                return (_get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get : function(target, property, receiver) {
-                    var base = function(object, property) {
-                        for (;!Object.prototype.hasOwnProperty.call(object, property) && null !== (object = _getPrototypeOf(object)); ) ;
-                        return object;
-                    }(target, property);
+            function _superPropBase(object, property) {
+                for (;!Object.prototype.hasOwnProperty.call(object, property) && null !== (object = _getPrototypeOf(object)); ) ;
+                return object;
+            }
+            function _get() {
+                return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function(target, property, receiver) {
+                    var base = _superPropBase(target, property);
                     if (base) {
                         var desc = Object.getOwnPropertyDescriptor(base, property);
-                        return desc.get ? desc.get.call(receiver) : desc.value;
+                        return desc.get ? desc.get.call(arguments.length < 3 ? target : receiver) : desc.value;
                     }
-                })(target, property, receiver || target);
+                }, _get.apply(this, arguments);
             }
             var ajaxCall = function() {
                 var timeoutTimer, url = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : location.href, options = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
@@ -438,6 +441,8 @@ System.register([ "formjs-plugin" ], (function(exports) {
                             writable: !0,
                             configurable: !0
                         }
+                    }), Object.defineProperty(subClass, "prototype", {
+                        writable: !1
                     }), superClass && _setPrototypeOf(subClass, superClass);
                 }(Survey, _Form);
                 var Constructor, protoProps, staticProps, _super = _createSuper(Survey);
@@ -485,7 +490,9 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         $form.removeEventListener("fjs.form:submit", submit), delete $form.surveyjs, dispatchCustomEvent(this.$form, customEvents_destroy);
                     }
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
-                Survey;
+                Object.defineProperty(Constructor, "prototype", {
+                    writable: !1
+                }), Survey;
             }(Form));
             Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "4.0.1";
         }

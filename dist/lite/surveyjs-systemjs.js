@@ -4,11 +4,11 @@ System.register([], (function(exports) {
     return {
         execute: function() {
             function _typeof(obj) {
-                return (_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+                return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
                     return typeof obj;
                 } : function(obj) {
                     return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-                })(obj);
+                }, _typeof(obj);
             }
             function _classCallCheck(instance, Constructor) {
                 if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
@@ -243,7 +243,9 @@ System.register([], (function(exports) {
                         delete this.$form.surveyjs, dispatchCustomEvent(this.$form, customEvents_destroy);
                     }
                 } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
-                Survey;
+                Object.defineProperty(Constructor, "prototype", {
+                    writable: !1
+                }), Survey;
             }());
             Survey.prototype.isInitialized = !1, Survey.prototype.options = {
                 cssClasses: {

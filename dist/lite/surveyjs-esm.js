@@ -1,39 +1,39 @@
 /* surveyJS Lite v4.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
-const isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_destroy = "sjs:destroy", customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach(name => {
+const isDOMNode = node => Element.prototype.isPrototypeOf(node), customEvents_destroy = "sjs:destroy", customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach((name => {
     const prop = obj[name];
     "object" == typeof prop && null !== prop && deepFreeze(prop);
-}), Object.freeze(obj)), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
-    return Array.from(arguments).slice(1).filter(arg => !!arg).forEach(arg => {
-        Object.keys(arg).forEach(key => {
+})), Object.freeze(obj)), isPlainObject = object => "[object Object]" === Object.prototype.toString.call(object), mergeObjects = function(out = {}) {
+    return Array.from(arguments).slice(1).filter((arg => !!arg)).forEach((arg => {
+        Object.keys(arg).forEach((key => {
             Array.isArray(arg[key]) ? out[key] = (out[key] || []).concat(arg[key].slice(0)) : isPlainObject(arg[key]) ? out[key] = mergeObjects(out[key] || {}, arg[key]) : Array.isArray(out[key]) ? out[key].push(arg[key]) : out[key] = arg[key];
-        });
-    }), out;
+        }));
+    })), out;
 }, dispatchCustomEvent = (elem, eventName, eventOptions) => {
     eventOptions = mergeObjects({}, {
         bubbles: !0
     }, eventOptions);
     const eventObj = new CustomEvent(eventName, eventOptions);
     elem.dispatchEvent(eventObj);
-}, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce((accString, name) => {
+}, replaceObjectKeysInString = (obj, stringHTML) => Object.keys(obj).reduce(((accString, name) => {
     const regexStr = new RegExp("{{" + name + "}}", "g");
     return accString.replace(regexStr, obj[name]);
-}, stringHTML), sortList = list => (list[0].sort && list.sort((a, b) => a.sort > b.sort), 
-list), generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((optionsHTML, opt) => optionsHTML + `<option value="${opt.value}">${opt.label}</option>`, ""), getAttributesStringHTML = (answerObj, answerCode, isRequired) => {
+}), stringHTML), sortList = list => (list[0].sort && list.sort(((a, b) => a.sort > b.sort)), 
+list), generateOptionTags = (optionsList = []) => sortList(optionsList).reduce(((optionsHTML, opt) => optionsHTML + `<option value="${opt.value}">${opt.label}</option>`), ""), getAttributesStringHTML = (answerObj, answerCode, isRequired) => {
     const excludedAttrs = [ "data", "id", "label", "nested", "related", "sort" ];
     /^(option|textarea)$/.test(answerObj.type) && excludedAttrs.push("type", "value");
     let string = "";
-    return Object.keys(answerObj).filter(name => -1 === excludedAttrs.indexOf(name)).forEach(name => {
+    return Object.keys(answerObj).filter((name => -1 === excludedAttrs.indexOf(name))).forEach((name => {
         string += ` ${name}="${answerObj[name]}"`;
-    }), answerObj.data && Object.keys(answerObj.data).forEach(name => {
+    })), answerObj.data && Object.keys(answerObj.data).forEach((name => {
         string += ` data-${((string = "", useAllCaps = !1) => {
-            let newString = string.trim().replace(/(([_ ])([a-z]))|(([a-z])?([A-Z]))/g, (match, p1, p2, p3, p4, p5, p6) => (p3 ? "-" + p3 : (p5 || "") + "-" + p6).toLowerCase());
+            let newString = string.trim().replace(/(([_ ])([a-z]))|(([a-z])?([A-Z]))/g, ((match, p1, p2, p3, p4, p5, p6) => (p3 ? "-" + p3 : (p5 || "") + "-" + p6).toLowerCase()));
             return useAllCaps ? newString.toUpperCase() : newString;
         })(name)}="${answerObj.data[name]}"`;
-    }), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
+    })), isRequired && (string += " required"), answerObj.related && (string += " data-require-more"), 
     string += ` id="${answerCode}"`, string.trim();
 }, generateAnswers = (answersList, extraData, options) => {
     let allAnswersHTML = "", previousType = "";
-    return sortList(answersList).forEach((answer, index) => {
+    return sortList(answersList).forEach(((answer, index) => {
         let answerHTML = "";
         const answerType = "option" === answer.type ? "select" : answer.type;
         if ("select" === answerType && previousType === answerType) return;
@@ -83,9 +83,9 @@ list), generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((
         let optionsHtml = "";
         "select" === answerType && (optionsHtml = generateOptionTags(answersList)), answerHTML = templates.wrapper.replace("{{relatedFieldHTML}}", relatedFieldHTML).replace("{{fieldTemplate}}", templates.field).replace("{{optionsHtml}}", optionsHtml).replace("{{labelTemplate}}", templates.label).replace("{{nestedFieldsHTML}}", nestedFieldsHTML), 
         allAnswersHTML += replaceObjectKeysInString(answerData, answerHTML);
-    }), allAnswersHTML;
+    })), allAnswersHTML;
 }, buildSurvey = (data, $form, options) => {
-    const qaHtmlAll = ((questions, surveyId, options) => sortList(questions).reduce((accCode, questionObj, index) => {
+    const qaHtmlAll = ((questions, surveyId, options) => sortList(questions).reduce(((accCode, questionObj, index) => {
         if (questionObj.external) return accCode;
         let questionHTML = options.templates.wrapper.question;
         const questionId = questionObj.id, questionNumber = index + 1, extraData = {
@@ -111,28 +111,28 @@ list), generateOptionTags = (optionsList = []) => sortList(optionsList).reduce((
             checksMin: checksMin,
             checksMax: checksMax
         }, questionHTML);
-    }, ""))(data.questions, data.id, options);
+    }), ""))(data.questions, data.id, options);
     $form.querySelector("[data-surveyjs-body]").insertAdjacentHTML("beforeend", qaHtmlAll);
-    const extQuestions = data.questions.filter(obj => obj.external);
+    const extQuestions = data.questions.filter((obj => obj.external));
     if (extQuestions.length > 0) {
         const $surveyWrapper = $form.closest("[data-surveyjs-wrapper]");
-        extQuestions.forEach((question, qIndex) => {
+        extQuestions.forEach(((question, qIndex) => {
             const $externalCont = $surveyWrapper.querySelector('[data-surveyjs-external="' + (qIndex + 1) + '"]');
-            $externalCont.setAttribute("data-question-id", question.id), question.answers.forEach((answer, aIndex) => {
+            $externalCont.setAttribute("data-question-id", question.id), question.answers.forEach(((answer, aIndex) => {
                 const $externalField = $externalCont.querySelectorAll("[data-field]")[aIndex], fieldProps = {
                     id: `${answer.type}-${data.id}-${question.id}-${answer.id}`,
                     type: answer.type,
                     value: answer.value,
                     required: !!question.required
                 };
-                Object.keys(fieldProps).forEach(name => {
+                Object.keys(fieldProps).forEach((name => {
                     $externalField[name] = fieldProps[name];
-                });
+                }));
                 const $answerCont = $externalField.closest("[data-answer]");
                 $answerCont.querySelector("label").setAttribute("for", fieldProps.id), $answerCont.querySelector("[data-label]").innerHTML = answer.label, 
                 $externalCont.querySelector("[data-question]").innerHTML = question.question;
-            });
-        });
+            }));
+        }));
     }
 };
 
@@ -157,26 +157,26 @@ class Survey {
             let timeoutTimer;
             if (options.headers = new Headers(options.headers), options.timeout > 0) {
                 const controller = new AbortController, signal = controller.signal;
-                options.signal = signal, timeoutTimer = window.setTimeout(() => {
+                options.signal = signal, timeoutTimer = window.setTimeout((() => {
                     controller.abort();
-                }, options.timeout);
+                }), options.timeout);
             }
-            return fetch(url, options).then(response => {
+            return fetch(url, options).then((response => {
                 if (!response.ok) throw new Error(response.statusText);
                 return response.json();
-            }).catch(error => {
+            })).catch((error => {
                 throw new Error(error.message);
-            }).finally(() => {
+            })).finally((() => {
                 timeoutTimer && window.clearTimeout(timeoutTimer);
-            });
-        })(optionsObj.url, optionsObj.initAjaxOptions).then(response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : (response.data.questions && response.data.questions.length > 0 && (buildSurvey(response.data, $form, optionsObj), 
+            }));
+        })(optionsObj.url, optionsObj.initAjaxOptions).then((response => "success" !== response.status.toLowerCase() ? Promise.reject(response) : (response.data.questions && response.data.questions.length > 0 && (buildSurvey(response.data, $form, optionsObj), 
         Object.defineProperty(self, "data", {
             value: deepFreeze(response.data)
         }), self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success")), 
-        response)).finally(() => {
+        response))).finally((() => {
             const $loadingBox = $form.querySelector("[data-surveyjs-loading]");
             $loadingBox && $loadingBox.parentNode.removeChild($loadingBox);
-        });
+        }));
         dispatchCustomEvent($form, customEvents_init, {
             detail: retrieveSurvey
         });
@@ -236,4 +236,4 @@ Survey.prototype.isInitialized = !1, Survey.prototype.options = {
     }
 }, Survey.prototype.version = "4.0.1";
 
-export default Survey;
+export { Survey as default };
