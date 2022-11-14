@@ -1,4 +1,4 @@
-/* formJS v5.2.0 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
+/* formJS v5.3.2 | Valerio Di Punzio (@SimplySayHi) | https://valeriodipunzio.com/plugins/formJS/ | https://github.com/SimplySayHi/formJS | MIT license */
 !function(global, factory) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define(factory) : (global = "undefined" != typeof globalThis ? globalThis : global || self).Form = factory();
 }(this, (function() {
@@ -45,6 +45,8 @@
         init: "fjs.form:init",
         submit: "fjs.form:submit",
         validation: "fjs.form:validation"
+    }, customEvents_group = {
+        validation: "fjs.group:validation"
     }, isPlainObject = function(object) {
         return "[object Object]" === Object.prototype.toString.call(object);
     }, mergeObjects = function mergeObjects() {
@@ -62,10 +64,22 @@
         }, eventOptions);
         var eventObj = new CustomEvent(eventName, eventOptions);
         elem.dispatchEvent(eventObj);
-    }, excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])', fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', finalizeFieldPromise = function(obj) {
-        return obj.result ? Promise.resolve() : Promise.reject(obj.errors);
-    }, finalizeFormPromise = function(obj) {
-        return obj.result ? Promise.resolve(obj.fields) : Promise.reject(obj.fields);
+    }, excludeSelector = ':not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="file"]):not([data-exclude-data])', fieldsStringSelector = 'input:not([type="reset"]):not([type="submit"]):not([type="button"]):not([type="hidden"]), select, textarea', finalizeFieldPromise = function(_ref) {
+        var errors = _ref.errors;
+        return _ref.result ? Promise.resolve() : Promise.reject(errors);
+    }, finalizeFieldsGroupPromise = function(_ref) {
+        var canSubmit = _ref.canSubmit, fields = _ref.fields, group = _ref.group;
+        return _ref.result ? Promise.resolve({
+            canSubmit: canSubmit,
+            fields: fields,
+            group: group
+        }) : Promise.reject({
+            fields: fields,
+            group: group
+        });
+    }, finalizeFormPromise = function(_ref) {
+        var fields = _ref.fields;
+        return _ref.result ? Promise.resolve(fields) : Promise.reject(fields);
     }, formatMap = {
         "YYYY-MM-DD": function(dateArray) {
             return dateArray;
@@ -221,6 +235,7 @@
                     }));
                 })), formData;
             },
+            groups: [],
             handleFileUpload: !0,
             handleSubmit: !0,
             onInitCheckFilled: !0
@@ -391,7 +406,10 @@
             $btn.disabled = !0;
         }
         removeClass($form, formCssClasses.ajaxComplete + " " + formCssClasses.ajaxError + " " + formCssClasses.ajaxSuccess), 
-        addClass($form, formCssClasses.submit), instance.validateForm().then((function(fields) {
+        addClass($form, formCssClasses.submit), instance.validateForm().then((function(data) {
+            if (void 0 !== data.group && !data.canSubmit) return [ {
+                stopExecution: !0
+            } ];
             var beforeSendData = {
                 stopExecution: !1,
                 formData: isAjaxForm ? instance.getFormData() : null
@@ -404,9 +422,9 @@
             };
             return runFunctionsSequence(rfsObject);
         })).then((function(dataList) {
-            if (dataList.filter((function(data) {
-                return data.stopExecution;
-            })).length > 0) return eventPreventDefault(), !1;
+            if (dataList.some((function(_ref) {
+                return _ref.stopExecution;
+            }))) return eventPreventDefault(), !1;
             if (isAjaxForm) {
                 var formData = dataList.pop().formData;
                 addClass($form, formCssClasses.ajaxPending), dispatchCustomEvent($form, customEvents_form.submit, {
@@ -417,7 +435,10 @@
             eventPreventDefault(), removeClass($form, formCssClasses.submit);
         }));
     }
-    var validation = function(event) {
+    var groupValidationEnd = function(event) {
+        var detail = event.detail;
+        detail.result && (event.target.formjs.currentGroup = detail.group.next);
+    }, validation = function(event) {
         var isChangeEvent = "change" === event.type, $field = event.target, self = $field.closest("form").formjs;
         if ($field.matches(fieldsStringSelector)) {
             var isFieldForChangeEventBoolean = isFieldForChangeEvent($field), hasOnlyChangeEvent = "change" === self.options.fieldOptions.validateOnEvents;
@@ -449,8 +470,9 @@
         fieldOptions.validateOnEvents.split(" ").forEach((function(eventName) {
             var useCapture = /^(blur|focus)$/.test(eventName);
             $form.addEventListener(eventName, validation, useCapture);
-        })), $form.addEventListener(customEvents_field.validation, validationEnd, !1), $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), 
-        formOptions.handleSubmit && ($form.addEventListener("submit", submit), formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), 
+        })), $form.addEventListener(customEvents_field.validation, validationEnd, !1), formOptions.groups.length > 0 && $form.addEventListener(customEvents_group.validation, groupValidationEnd, !1), 
+        $form.addEventListener(customEvents_form.validation, formValidationEnd, !1), formOptions.handleSubmit && ($form.addEventListener("submit", submit), 
+        formOptions.ajaxSubmit && ($form.getAttribute("enctype") && (formOptions.ajaxOptions.headers["Content-Type"] = $form.getAttribute("enctype")), 
         $form.getAttribute("method") && (formOptions.ajaxOptions.method = $form.getAttribute("method").toUpperCase()), 
         $form.getAttribute("action") && (formOptions.ajaxOptions.url = $form.getAttribute("action"))));
     }
@@ -523,12 +545,12 @@
             return $container && removeClass($container, fieldOptions.cssClasses.pending), data;
         }));
     }
-    function checkFormValidity($form, fieldOptions, validationRules, validationErrors) {
+    function checkFieldsValidity($fields, fieldOptions, validationRules, validationErrors) {
         var fieldToSkip = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : null;
         fieldOptions = mergeObjects({}, fieldOptions, {
             focusOnRelated: !1
         });
-        var $fieldsList = getUniqueFields($form.querySelectorAll(fieldsStringSelector));
+        var $fieldsList = getUniqueFields($fields);
         return Promise.all($fieldsList.map((function($field) {
             if (fieldToSkip && $field === fieldToSkip) {
                 var obj = mergeValidateFieldDefault({
@@ -539,38 +561,16 @@
             }
             return checkFieldValidity($field, fieldOptions, validationRules, validationErrors);
         }))).then((function(fields) {
-            var areAllFieldsValid = 0 === fields.filter((function(fieldObj) {
-                return !fieldObj.result;
-            })).length;
+            var areAllFieldsValid = fields.every((function(_ref) {
+                return _ref.result;
+            }));
             return mergeValidateFormDefault({
                 result: areAllFieldsValid,
                 fields: fields
             });
         }));
     }
-    var checkFilledFields = function($form) {
-        var formFields = function($form) {
-            return getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map((function($field) {
-                var name = $field.name, type = $field.type, isCheckboxOrRadio = "checkbox" === type || "radio" === type, fieldChecked = $form.querySelector('[name="' + name + '"]:checked'), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $form.querySelector($field.getAttribute("data-required-from")) : null;
-                return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
-            })).filter((function($field) {
-                return null !== $field;
-            }));
-        }($form);
-        return Promise.all(formFields.map((function($field) {
-            return $form.formjs.validateField($field).then((function() {
-                return mergeValidateFieldDefault({
-                    result: !0,
-                    $field: $field
-                });
-            })).catch((function(errors) {
-                return mergeValidateFieldDefault({
-                    $field: $field,
-                    errors: errors
-                });
-            }));
-        })));
-    }, Form = function() {
+    var Form = function() {
         function Form(form, optionsObj) {
             _classCallCheck(this, Form);
             var argsL = arguments.length, checkFormElem = checkFormEl(form);
@@ -578,7 +578,8 @@
             if (isNodeList(form)) throw new Error('First argument "form" must be a single DOM node or a form CSS selector, not a NodeList!');
             if (!checkFormElem.result) throw new Error('First argument "form" is not a DOM node nor a form CSS selector!');
             var self = this;
-            self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj);
+            self.$form = checkFormElem.$el, self.$form.formjs = self, self.options = mergeObjects({}, Form.prototype.options, optionsObj), 
+            self.currentGroup = self.options.formOptions.groups[0];
             var cbList = [ "beforeValidation", "beforeSend", "getFormData" ];
             cbList.forEach((function(cbName) {
                 var optionType = self.options.formOptions[cbName] ? "formOptions" : "fieldOptions", cbOpt = self.options[optionType][cbName];
@@ -587,7 +588,7 @@
                 })) : cbOpt.bind(self));
             })), formStartup(self.$form, self.options);
             var initOptions = {};
-            self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields()), 
+            self.options.formOptions.onInitCheckFilled && (initOptions.detail = self.validateFilledFields().catch((function(fields) {}))), 
             dispatchCustomEvent(self.$form, customEvents_form.init, initOptions);
         }
         var Constructor, protoProps, staticProps;
@@ -617,6 +618,7 @@
                         var useCapturing = "blur" === eventName;
                         $form.removeEventListener(eventName, validation, useCapturing);
                     })), $form.removeEventListener(customEvents_field.validation, validationEnd, !1), 
+                    options.formOptions.groups.length > 0 && $form.removeEventListener(customEvents_group.validation, groupValidationEnd, !1), 
                     $form.removeEventListener(customEvents_form.validation, formValidationEnd, !1), 
                     delete $form.formjs;
                 }(this.$form, this.options), dispatchCustomEvent(this.$form, customEvents_form.destroy);
@@ -632,34 +634,73 @@
         }, {
             key: "validateField",
             value: function(field, fieldOptions) {
-                var self = this, $field = "string" == typeof field ? self.$form.querySelector(field) : field;
-                fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
-                var $form = self.$form;
-                return checkFieldValidity($field, fieldOptions, self.validationRules, self.validationErrors).then((function(obj) {
-                    return dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                var self = this, $form = self.$form;
+                return checkFieldValidity("string" == typeof field ? $form.querySelector(field) : field, fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions), self.validationRules, self.validationErrors).then((function(obj) {
+                    if (dispatchCustomEvent(obj.$field, customEvents_field.validation, {
                         detail: obj
-                    }), obj.result && fieldOptions.onValidationCheckAll ? checkFormValidity($form, fieldOptions, self.validationRules, self.validationErrors, obj.$field).then((function(dataForm) {
-                        dispatchCustomEvent($form, customEvents_form.validation, {
-                            detail: dataForm
-                        });
-                    })) : obj.result || removeClass($form, self.options.formOptions.cssClasses.valid), 
-                    obj;
+                    }), obj.result) {
+                        if (fieldOptions.onValidationCheckAll) {
+                            var selector = self.currentGroup || fieldsStringSelector;
+                            checkFieldsValidity($form.querySelectorAll(selector), fieldOptions, self.validationRules, self.validationErrors, obj.$field).then((function(dataForm) {
+                                var groups = self.options.formOptions.groups, validationEventName = self.currentGroup ? customEvents_group.validation : customEvents_form.validation;
+                                groups.length > 0 && (dataForm.group = {
+                                    prev: groups[groups.indexOf(selector) - 1],
+                                    current: selector,
+                                    next: groups[groups.indexOf(selector) + 1]
+                                }, dataForm.canSubmit = dataForm.result && !dataForm.group.next), dispatchCustomEvent($form, validationEventName, {
+                                    detail: dataForm
+                                });
+                            }));
+                        }
+                    } else removeClass($form, self.options.formOptions.cssClasses.valid);
+                    return obj;
                 })).then(finalizeFieldPromise);
             }
         }, {
-            key: "validateFilledFields",
+            key: "validateFieldsGroup",
             value: function() {
-                var _this = this, focusOnRelated = this.options.fieldOptions.focusOnRelated;
-                return this.options.fieldOptions.focusOnRelated = !1, checkFilledFields(this.$form).then((function(fields) {
-                    return _this.options.fieldOptions.focusOnRelated = focusOnRelated, fields;
-                }));
+                var group = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : this.currentGroup, fieldOptions = arguments.length > 1 ? arguments[1] : void 0, self = this;
+                fieldOptions = mergeObjects({}, self.options.fieldOptions, fieldOptions);
+                var $fields = self.$form.querySelectorAll(group);
+                return checkFieldsValidity($fields, fieldOptions, self.validationRules, self.validationErrors).then((function(data) {
+                    data.fields.forEach((function(obj) {
+                        obj.isCheckingGroup = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                            detail: obj
+                        });
+                    }));
+                    var groups = self.options.formOptions.groups;
+                    return groups.length > 0 && (data.group = {
+                        prev: groups[groups.indexOf(group) - 1],
+                        current: group,
+                        next: groups[groups.indexOf(group) + 1]
+                    }, data.canSubmit = data.result && !data.group.next), dispatchCustomEvent(self.$form, customEvents_group.validation, {
+                        detail: data
+                    }), data;
+                })).then(finalizeFieldsGroupPromise);
+            }
+        }, {
+            key: "validateFilledFields",
+            value: function(fieldOptions) {
+                var $form;
+                return checkFieldsValidity(($form = this.$form, getUniqueFields($form.querySelectorAll(fieldsStringSelector)).map((function($field) {
+                    var name = $field.name, type = $field.type, isCheckboxOrRadio = "checkbox" === type || "radio" === type, fieldChecked = $form.querySelector('[name="' + name + '"]:checked'), isReqFrom = $field.matches("[data-required-from]"), $reqMore = isReqFrom ? $form.querySelector($field.getAttribute("data-required-from")) : null;
+                    return isCheckboxOrRadio ? fieldChecked || null : isReqFrom && $reqMore.checked || !isReqFrom && $field.value ? $field : null;
+                })).filter((function($field) {
+                    return null !== $field;
+                }))), fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.validationRules, this.validationErrors).then((function(data) {
+                    return data.fields.forEach((function(obj) {
+                        dispatchCustomEvent(obj.$field, customEvents_field.validation, {
+                            detail: obj
+                        });
+                    })), data;
+                })).then(finalizeFormPromise);
             }
         }, {
             key: "validateForm",
             value: function(fieldOptions) {
-                fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions);
+                if (fieldOptions = mergeObjects({}, this.options.fieldOptions, fieldOptions), this.currentGroup) return this.validateFieldsGroup(this.currentGroup, fieldOptions);
                 var $form = this.$form;
-                return checkFormValidity($form, fieldOptions, this.validationRules, this.validationErrors).then((function(data) {
+                return checkFieldsValidity($form.querySelectorAll(fieldsStringSelector), fieldOptions, this.validationRules, this.validationErrors).then((function(data) {
                     return data.fields.forEach((function(obj) {
                         obj.isCheckingForm = !0, dispatchCustomEvent(obj.$field, customEvents_field.validation, {
                             detail: obj
@@ -670,8 +711,10 @@
                 })).then(finalizeFormPromise);
             }
         } ]) && _defineProperties(Constructor.prototype, protoProps), staticProps && _defineProperties(Constructor, staticProps), 
-        Form;
+        Object.defineProperty(Constructor, "prototype", {
+            writable: !1
+        }), Form;
     }();
     return Form.prototype.options = options, Form.prototype.validationErrors = {}, Form.prototype.validationRules = validationRules, 
-    Form.prototype.version = "5.2.0", Form;
+    Form.prototype.version = "5.3.2", Form;
 }));
