@@ -3,8 +3,11 @@
     "title": "surveyJS",
     "description": "Javascript Survey Creation & Management. Made Easy",
     "version": "4.0.1",
-    "main": "dist/surveyjs.min.js",
-    "module": "dist/surveyjs-esm.min.js",
+    "jsdelivr": "dist/surveyjs.min.js",
+    "unpkg": "dist/surveyjs.min.js",
+    "main": "dist/surveyjs.js",
+    "module": "dist/surveyjs-esm.js",
+    "jsnext:main": "dist/surveyjs-esm.js",
     "homepage": "https://www.valeriodipunzio.com/plugins/surveyJS/",
     "author": {
         "email": "sayhi@valeriodipunzio.com",
