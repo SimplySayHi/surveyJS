@@ -1,4 +1,4 @@
-/* surveyJS v4.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS v4.0.2 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 System.register([ "formjs-plugin" ], (function(exports) {
     "use strict";
     var Form;
@@ -463,8 +463,10 @@ System.register([ "formjs-plugin" ], (function(exports) {
                         Object.defineProperty(self, "data", {
                             value: deepFreeze(response.data)
                         }), $form.addEventListener("fjs.field:validation", validationEnd), $form.addEventListener("fjs.form:submit", submit), 
-                        optionsObj.formOptions.onInitCheckFilled ? _get((_thisSuper = _assertThisInitialized(_this), 
-                        _getPrototypeOf(Survey.prototype)), "validateFilledFields", _thisSuper).call(_thisSuper).then((function() {
+                        optionsObj.formOptions.onInitCheckFilled ? self._ && "function" == typeof self._.asyncInitEnd ? self._.asyncInitEnd().then((function() {
+                            return self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
+                            response;
+                        })) : _get((_thisSuper = _assertThisInitialized(_this), _getPrototypeOf(Survey.prototype)), "validateFilledFields", _thisSuper).call(_thisSuper).then((function() {
                             return self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
                             response;
                         })) : (self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
@@ -494,7 +496,7 @@ System.register([ "formjs-plugin" ], (function(exports) {
                     writable: !1
                 }), Survey;
             }(Form));
-            Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "4.0.1";
+            Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "4.0.2";
         }
     };
 }));

@@ -2,7 +2,7 @@
     "name": "surveyjs",
     "title": "surveyJS",
     "description": "Javascript Survey Creation & Management. Made Easy",
-    "version": "4.1.0",
+    "version": "4.0.2",
     "jsdelivr": "dist/surveyjs.min.js",
     "unpkg": "dist/surveyjs.min.js",
     "main": "dist/surveyjs.js",

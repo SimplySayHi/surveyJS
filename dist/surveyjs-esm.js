@@ -1,4 +1,4 @@
-/* surveyJS v4.0.1 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
+/* surveyJS v4.0.2 | Valerio Di Punzio (@SimplySayHi) | https://www.valeriodipunzio.com/plugins/surveyJS/ | https://github.com/SimplySayHi/surveyJS | MIT license */
 import Form from "formjs-plugin";
 
 const customEvents_destroy = "sjs:destroy", customEvents_init = "sjs:init", deepFreeze = obj => (Object.getOwnPropertyNames(obj).forEach((name => {
@@ -358,7 +358,9 @@ class Survey extends Form {
         })($form, selfInternals), Object.defineProperty(self, "data", {
             value: deepFreeze(response.data)
         }), $form.addEventListener("fjs.field:validation", validationEnd), $form.addEventListener("fjs.form:submit", submit), 
-        optionsObj.formOptions.onInitCheckFilled ? super.validateFilledFields().then((() => (self.isInitialized = !0, 
+        optionsObj.formOptions.onInitCheckFilled ? self._ && "function" == typeof self._.asyncInitEnd ? self._.asyncInitEnd().then((() => (self.isInitialized = !0, 
+        $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
+        response))) : super.validateFilledFields().then((() => (self.isInitialized = !0, 
         $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
         response))) : (self.isInitialized = !0, $form.closest("[data-surveyjs-wrapper]").classList.add("surveyjs-init-success"), 
         response)) : response)).finally((() => {
@@ -379,6 +381,6 @@ class Survey extends Form {
     }
 }
 
-Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "4.0.1";
+Survey.prototype.isInitialized = !1, Survey.prototype.options = options, Survey.prototype.version = "4.0.2";
 
 export { Survey as default };
